@@ -27,4 +27,5 @@ PLAY AND HAVE FUN!
 
 
 Many thanks to Creature for his original game version. This game would not have been possible without the work he put in.
+
 This version was made by Lottarend (me).
