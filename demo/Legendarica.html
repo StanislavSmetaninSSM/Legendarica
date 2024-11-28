@@ -1,0 +1,690 @@
+<!-- Legendarica html
+The html of Legendarica Absolute game.
+
+By Lottarend
+
+License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE (MIT)-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Legendarica Absolute v1.1 - Neural Sandbox</title>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="https://rawcdn.githack.com/StanislavSmetaninSSM/Legendarica/bddd2e27e18ee5353badeff78166a9b3cfd2019b/src/css/Legendarica.css">
+</head>
+
+<body>
+    <img id="floating" src="https://i.imgur.com/BD5zPmF.jpeg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 9999;">
+
+    <div class="container">
+        <div class="game-area">
+            <div class="chat-area">
+                <div id="chat-box" class="chat-box" style="border-radius: 10px;"></div>
+                <div class="input-area">
+                    <textarea type="text" id="user-input" placeholder="Говори свое действие, отважный искатель приключений..." oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                    <div style="display: flex; gap: 10px; border-radius: 10px;">
+                        <button id="send-button" style="width: 100%; border-radius: 10px;">Отправить</button>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-button" id="action-1" style="border-radius: 10px;"></button>
+                        <button class="action-button" id="action-2" style="border-radius: 10px;"></button>
+                        <button class="action-button" id="action-3" style="border-radius: 10px;"></button>
+                        <button class="action-button" id="action-4" style="border-radius: 10px;"></button>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                        <button id="resend-button" style="background-color: #800000; color: white; width: 100%; position: relative; border-radius: 10px;">Отправить сообщение повторно</button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; flex: 1; gap: 20px;">
+                <div id="info-panel" class="player-info">                    
+                    <div id="player-stats-and-status" class="infoData">
+                        <div id="player-stats">
+                            <button id="stats-button-label" class="infoDataLabel" onclick="toggleElementVisible('stats-container')">Характеристики</button>
+                            <div id="stats-container" class="infoDataList">
+                                <div class="statsGroup">
+                                    <button id="statsGroup-general-button-label" class="infoDataLabelSmall" onclick="toggleElementVisible('statsGroup-general')">Общие</button>
+                                    <div id="statsGroup-general">
+                                        <div class="stat">
+                                            <span class="stat-name" id="level-label"></span>
+                                            <span id="level-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="health-label"></span>
+                                            <span id="health-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="energy-label"></span>
+                                            <span id="energy-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="exp-label"></span>
+                                            <span id="exp-value" style="display: flex; align-items: baseline;"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="money-label"></span>
+                                            <span id="money-value"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="statsGroup">
+                                    <button id="statsGroup-main-button-label" class="infoDataLabelSmall" onclick="toggleElementVisible('statsGroup-main')">Основные</button>
+                                    <div id="statsGroup-main">
+                                        <div class="stat">
+                                            <span class="stat-name" id="strength-label"></span>
+                                            <span id="strength-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="dexterity-label"></span>
+                                            <span id="dexterity-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="constitution-label"></span>
+                                            <span id="constitution-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="attractiveness-label"></span>
+                                            <span id="attractiveness-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="intelligence-label"></span>
+                                            <span id="intelligence-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="wisdom-label"></span>
+                                            <span id="wisdom-value"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="statsGroup">
+                                    <button id="statsGroup-secondary-button-label" class="infoDataLabelSmall" onclick="toggleElementVisible('statsGroup-secondary')">Вторичные</button>
+                                    <div id="statsGroup-secondary">
+                                        <div class="stat">
+                                            <span class="stat-name" id="speed-label"></span>
+                                            <span id="speed-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="perception-label"></span>
+                                            <span id="perception-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="trade-label"></span>
+                                            <span id="trade-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="luck-label"></span>
+                                            <span id="luck-value"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flexNewLine"></div>
+
+                        <div id="player-status">
+                            <button id="player-status-label" class="infoDataLabel" onclick="toggleElementVisible('status-data')">Статус</button>
+                            <div id="status-data" class="infoDataList">
+                                <div id="status-info"></div>
+                                <div id="status-purposes"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="player-inventory" class="infoData displayNone">
+                        <button id="inventory-button-label" class="infoDataLabel" onclick="toggleElementVisible('inventory-list')">Инвентарь</button>
+                        <ul id="inventory-list" class="infoDataList" onmouseover="this.style.scrollbarWidth='thin'" onmouseout="this.style.scrollbarWidth='none'"></ul>
+                    </div>
+
+                    <div id="visited-locations" class="infoData displayNone">
+                        <button id="locations-button-label" class="infoDataLabel" onclick="toggleElementVisible('locations-list')">Локации</button>
+                        <ul id="locations-list" class="infoDataList"></ul>
+                    </div>
+
+                    <div id="player-passive-skills" class="infoData displayNone listContainer">
+                        <button id="passive-skills-button-label" class="infoDataLabel" onclick="toggleElementVisible('passive-skills-list')">Пассивные навыки</button>
+                        <ul id="passive-skills-list" class="infoDataList listWithInheritedList"></ul>
+                    </div>
+
+                    <div id="player-active-skills" class="infoData displayNone listContainer">
+                        <button id="active-skills-button-label" class="infoDataLabel" onclick="toggleElementVisible('active-skills-list')">Активные навыки</button>
+                        <ul id="active-skills-list" class="infoDataList listWithInheritedList"></ul>
+                    </div>
+
+                    <div id="player-npc" class="infoData displayNone">
+                        <button id="player-npc-button-label" class="infoDataLabel" onclick="toggleElementVisible('player-npc-list')">Персонажи</button>
+                        <ul id="player-npc-list" class="infoDataList"></ul>
+                    </div>
+
+                    <div id="player-quests" class="infoData listContainer displayNone">
+                        <button id="player-quests-button-label" class="infoDataLabel" onclick="toggleElementVisible('player-quests-list')">Задания</button>
+                        <ul id="player-quests-list" class="infoDataList listWithInheritedList"></ul>
+                    </div>
+
+                    <div id="playerInfoButtonsWrapper">
+                        <div id="playerInfoButtons" class="" style="">
+                            <button id="buttonInfoExpandToggler" class="buttonInfo" onclick="playerInfoButtonsExpandToggle()">⎗</button>
+                            <button id="buttonInfoAdjust" class="buttonInfo" onclick="togglePlayerInfoWidth()"><i class="uil uil-align-center-h"></i></button>
+                            <button id="buttonInfoStats" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-stats-and-status'])"><i class="uil uil-user-square"></i></button>
+                            <button id="buttonInfoMain" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-inventory', 'visited-locations'])"><i class="uil uil-globe"></i></button>
+                            <button id="buttonInfoSkills" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-passive-skills', 'player-active-skills'])"><i class="uil uil-book-open"></i></button>
+                            <button id="buttonInfoStatus" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-npc', 'player-quests'])"><i class="uil uil-users-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="settings-info">
+                    <div style="display: flex; justify-content: space-between; background: rgba(30, 30, 30, 0.7); width: 101%; margin-right: 19px; flex-wrap: wrap; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                        <button id="button-display-label" style="flex: 1 1 0%; background-color: #d4af37; color: #2c2c2c; border: none; box-sizing: border-box; padding: 2px 10px; margin: 0px 1px 0px 0px; cursor: pointer; border-top-left-radius: 10px; font-size: 25px;" onclick="toggleButtonsVisibility()">⎗</button>
+                        <button class="tab-button1 tab-mainButton" onclick="toggleRollUpBox()">⇩⇧</button>
+                        <button class="tab-button1 tab-mainButton" onclick="toggleSettingsWidth()"><i class="uil uil-align-center-h"></i></button>
+                        <button id="log-button-label" class="tab-button1" onclick="toggleLogVisibility()">Лог расчётов действий</button>
+                        <button id="save-box-button-lable" class="tab-button1" onclick="clickSaveGame()">Сохранить игру</button>
+                        <button id="load-box-button-label" class="tab-button1" onclick="clickLoadGame()">Загрузить игру</button>
+                        <button id="settings-button-label" class="tab-button1" onclick="toggleSettingsVisibility()">Настройки</button>
+                        <button id="my-rules-button-label" class="tab-button1" onclick="toggleMyRulesVisibility()">Свои правила (промпт)</button>
+                        <button id="antilag-button-label" class="tab-button1" onclick="clickClearLag()">Уменьшить лаги</button>
+                    </div>
+
+                    <div id="bottom-box" class="chat-box" style="height:30vh">
+                        <div id="log-box"
+                             style="flex-grow: 1; border: none; margin-top: 5px; margin-bottom: 0px; margin-left: 3px; scrollbar-width: thin; scrollbar-color: #d4af37 #2c2c2c; white-space: pre-line; top: 33px; background: rgba(30, 30, 30, 0.7); font-size: 14px; text-align:justify;padding-top: 20px;">
+                        </div>
+
+                        <div id="lag-box"
+                             style="flex-grow: 1; display: none; border: none; margin-top: 5px; margin-bottom: 0px; margin-left: 3px; scrollbar-width: thin; scrollbar-color: #d4af37 #2c2c2c; white-space: pre-line; top: 33px; background: rgba(30, 30, 30, 0.7); font-size: 14px; text-align:justify; gap: 30px;padding-top: 20px;">
+                            <button id="clear-half-chat" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Очистить половину чата. Подробности из удаленного чата забудутся гейммастером. Сжатая информация, хранящаяся в описаниях локаций и предметов, не забудется. Вы можете записать отдельные события или сжатую историю приключений на отдельные листы бумаги в инвентаре перед удалением чата.</button>
+                            <button id="clear-system-chat" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Удалить все красные сообщения из чата. Никак не влияет на память гейммастера.</button>
+                            <button id="clear-log" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Очистить лог. Почти не влияет на память гейммастера, так как он помнит только последние 5 сообщений лога</button>
+                            <button id="clear-item-descriptions" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;" onclick="clearItemDescriptions()" w-tid="89">Очистить базу данных описаний тех предметов, которых нет в данный момент в инвентаре. Для чего это? Если вы выкладываете куда-то предмет или продаете, то предмет и его описание не исчезает из мира, для того чтобы его потом можно было забрать обратно. Но информация о таких предметах отсылается гейммастеру каждый запрос, что расходует токены. Вы можете использовать данную функцию в случае, если не собираетесь ничего выкупать или забирать что-то откуда-то обратно. Примечание: если предмет удалить через окно описания предмета в инвентаре, то предмет удалится и из базы данных описаний автоматически.</button>
+                        </div>
+
+                        <div id="system-instructions-box" class="chat-box rulesBox" data-show="false" style="display:none">
+                            <span id="system-instructions-explanaition">Это системные инструкции для выбранного провайдера нейросети. Они имеют высший приоритет для нейросети.</span><br>
+                            <textarea id="system-instructions" class="instructionsArea" placeholder="Введите свои системные инструкции и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                            <br>
+                            <button id="download-system-instructions-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="saveSystemInstructions()">Скачать системные инструкции в файл</button>
+                            <button id="load-system-instructions-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="loadSystemInstructions()">Загрузить системные инструкции из файла</button>
+                        </div>
+
+                        <div id="my-rules-box" class="chat-box rulesBox" style="display: none;">
+                            <span id="my-rules-explanaition">Здесь вы можете изменить или дополнить правила игры или просто повлиять на поведение ведущего. Просто введите тут инструкцию и оставьте. Например: "В инвентаре персонажа должен быть список в виде отдельного предмета, в котором указаны вообще все бонусы в сумме со всех предметов в инвентаре, а если такого списка в инвентаре нет, то добавить его" или "пусть в каждой локации будут монстры". Предупреждение: внесённые изменения могут сломать какие-нибудь механики игры. А могут и не сломать. Дерзайте!</span><br>
+                            <textarea id="my-rules" class="instructionsArea" placeholder="Введите свои правила и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                            <br>
+                            <button id="download-my-rules-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="saveMyRules()">Скачать правила в файл</button>
+                            <button id="load-my-rules-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="loadMyRules()">Загрузить правила из файла</button>
+                        </div>
+
+                        <div id="settings-box" class="chat-box" style="display: none;">
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useStatus" name="useStatus" checked />
+                                <label for="useStatus" id="use-status-label">Использовать статус (отключите для экономии токенов)</label>
+                                <button type="button" id="clear-status-label" style="margin-left: 10px;">Очистить статус</button>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useNpcList" name="useNpcList" checked />
+                                <label for="useNpcList" id="use-npc-list-label">Использовать список персонажей (отключите для экономии токенов)</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useNpcJournal" name="useNpcJournal" checked />
+                                <label for="useNpcJournal" id="use-npc-journal-label">Использовать дневники персонажей (отключите для экономии токенов). Работает только при включенном списке персонажей.</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useQuestsList" name="useQuestsList" checked />
+                                <label for="useQuestsList" id="use-quests-list-label">Использовать список квестов (отключите для экономии токенов)</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="makeGameQuestOriented" name="makeGameQuestOriented" />
+                                <label for="useQuestsList" id="make-game-quest-oriented-label">Сделать сюжет более квестоориентированным (необходимо включить список квестов)</label>
+                            </div>
+
+                            <div class="aiProvidersList">
+                                <span id="ai-provider-label">Провайдер нейросети</span>
+                                <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai" style="white-space: pre-wrap;"></span></span><br />
+                                <input type="radio" id="ai-Cohere" name="ai-provider" value="Cohere" onchange="setAiProvider(this.value)">
+                                <label for="ai-Cohere">Cohere</label><br>
+                                <input type="radio" id="ai-googleAiStudio" name="ai-provider" value="Google AI Studio" onchange="setAiProvider(this.value)">
+                                <label for="ai-googleAiStudio">Google AI Studio</label><br>
+                                <input type="radio" id="ai-groq" name="ai-provider" value="Groq" onchange="setAiProvider(this.value)">
+                                <label for="ai-groq">Groq</label><br>
+                                <input type="radio" id="ai-Hugging Face" name="ai-provider" value="Hugging Face" onchange="setAiProvider(this.value)">
+                                <label for="ai-Hugging Face">Hugging Face</label><br>
+                                <input type="radio" id="ai-mistralAi" name="ai-provider" value="Mistral AI" onchange="setAiProvider(this.value)">
+                                <label for="ai-mistralAi">Mistral AI</label><br>
+                                <input type="radio" id="ai-openAI01" name="ai-provider" value="OpenAI01" onchange="setAiProvider(this.value)">
+                                <label for="ai-openAI01">OpenAI01</label><br>
+                                <input type="radio" id="ai-openrouter" name="ai-provider" value="OpenRouter" onchange="setAiProvider(this.value)">
+                                <label for="ai-openrouter">OpenRouter</label><br>
+                                <input type="radio" id="ai-websim" name="ai-provider" value="Websim" onchange="setAiProvider(this.value)">
+                                <label for="ai-websim" id="ai-websim-label">Websim</label><br id="ai-websim-br">
+                                <input type="radio" id="ai-none" name="ai-provider" value="None" onchange="setAiProvider(this.value)" checked>
+                                <label for="ai-none" id="ai-none-label">None</label>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; margin-bottom: 11px;">
+                                <span id="ai-model-label">Модель нейросети</span>
+                                <input type="text" id="ai-model" placeholder="Введите название модели нейросети" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                                <span id="api-key-label">Ваш API ключ</span><button class="tab-button" id="api-key-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="showAPIKeyInput()">Показать на 10 секунд</button>
+                                <input type="text" id="api-key" placeholder="В целях безопасности убедитесь, что используете АПИ ключ с низким лимитом по расходу" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37; display: none">
+                            </div>
+
+                            <div id="temperature-ai-container" class="parameterContainer"
+                                 style="display: none">
+                                <span id="temperature-ai-label" class="marginRight10px">Temperature</span>
+                                <input type="text" id="temperature-ai" value="" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+                            <div id="top-p-ai-container" class="parameterContainer"
+                                 style="display: none">
+                                <span id="top-p-ai-label" class="marginRight10px">Top p</span>
+                                <input type="text" id="top-p-ai" value="" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+                            <div id="top-k-ai-container" class="parameterContainer"
+                                 style="display: none">
+                                <span id="top-k-ai-label" class="marginRight10px">Top k</span>
+                                <input type="text" id="top-k-ai" value="" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+                            <div id="frequency-penalty-ai-container" class="parameterContainer"
+                                 style="display: none">
+                                <span id="frequency-penalty-ai-label">Frequency penalty</span>
+                                <input type="text" id="frequency-penalty-ai" value="" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+                            <div id="presence-penalty-ai-container" class="parameterContainer"
+                                 style="display: none">
+                                <span id="presence-penalty-ai-label">Presence penalty</span>
+                                <input type="text" id="presence-penalty-ai" value="" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+                            <div id="repetition-penalty-ai-container" class="parameterContainer"
+                                 style="display: none">
+                                <span id="repetition-penalty-ai-label">Repetition penalty</span>
+                                <input type="text" id="repetition-penalty-ai" value="" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+                            <div id="max-tokens-ai-container" class="parameterContainer"
+                                 style="display: none">
+                                <span id="max-tokens-ai-label">Max tokens</span>
+                                <input type="text" id="max-tokens-ai" value="" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                                <span id="image-mode-settings-label">Генерация картинок (не влияет на количество запросов, так как используется бесплатный сервис)</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="image-mode-settings" checked="">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                                <span id="style-of-image-label">Стиль генерируемых картинок</span>
+                                <input type="text" id="style-of-image-input" placeholder="Например: medieval, fantasy, neuropunk" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                                <span id="interface-language2">Язык игры</span>
+                                <select id="choose-language" style="background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37;">
+                                    <option value="english-language">English</option>
+                                    <option value="spanish-language">Español</option>
+                                    <option value="portuguese-language">Português</option>
+                                    <option value="hindi-language">हिन्दी</option>
+                                    <option value="russian-language">Русский</option>
+                                    <option value="german-language">Deutsch</option>
+                                    <option value="french-language">Français</option>
+                                </select>
+                            </div>
+
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                                <span id="tts-mode-label">Озвучка текста (работает не во всех браузерах)</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="tts-mode-settings" checked="">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                                <span id="max-gm-symbols-label">Максимальное количество символов в сообщении гейммастера</span>
+                                <input type="text" id="max-gm-symbols" placeholder="10000 по умолчанию" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="character-creation-modal" class="modal">
+            <div class="modal-content">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                    <span id="interface-language">Язык игры</span><br>
+                    <select id="choose-language-menu" style="background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37;">
+                        <option value="english-language">English</option>
+                        <option value="spanish-language">Español</option>
+                        <option value="portuguese-language">Português</option>
+                        <option value="hindi-language">हिन्दी</option>
+                        <option value="russian-language">Русский</option>
+                        <option value="german-language">Deutsch</option>
+                        <option value="french-language">Français</option>
+                    </select>
+                </div>
+
+                <h2 id="create-character-label">Создайте своего персонажа</h2>
+                <input type="text" id="character-name" placeholder="Введите имя персонажа">
+                <select id="character-gender">
+                    <option value="" data-translate-key="no-choosed-gender">Выберите пол</option>
+                    <option value="male" data-translate-key="male">Мужской</option>
+                    <option value="female" data-translate-key="female">Женский</option>
+                </select>
+
+                <div class="select-container">
+                    <select id="character-race">
+                        <option value="" data-translate-key="no-choosed-race">Выберите расу</option>
+                        <option value="human" data-translate-key="human">Человек</option>
+                        <option value="elf" data-translate-key="elf">Эльф</option>
+                        <option value="dwarf" data-translate-key="dwarf">Гном</option>
+                        <option value="orc" data-translate-key="orc">Орк</option>
+                        <option value="lizardman" data-translate-key="lizardman">Ящер</option>
+                        <option value="vampire" data-translate-key="vampire">Вампир</option>
+                        <option value="golem" data-translate-key="golem">Голем</option>
+                    </select>
+
+                    <span class="tooltip">???<span class="tooltiptext" id="tooltip-race" style="white-space: pre-wrap;"></span></span>
+                </div>
+
+                <div class="select-container">
+                    <select id="character-class">
+                        <option value="" data-translate-key="no-choosed-class">Выберите класс</option>
+                        <option value="barbarian" data-translate-key="barbarian">Варвар</option>
+                        <option value="bard" data-translate-key="bard">Бард</option>
+                        <option value="cleric" data-translate-key="cleric">Жрец</option>
+                        <option value="druid" data-translate-key="druid">Друид</option>
+                        <option value="fighter" data-translate-key="fighter">Воин</option>
+                        <option value="monk" data-translate-key="monk">Монах</option>
+                        <option value="paladin" data-translate-key="paladin">Паладин</option>
+                        <option value="ranger" data-translate-key="ranger">Следопыт</option>
+                        <option value="rogue" data-translate-key="rogue">Плут</option>
+                        <option value="sorcerer" data-translate-key="sorcerer">Чародей</option>
+                        <option value="warlock" data-translate-key="warlock">Колдун</option>
+                        <option value="wizard" data-translate-key="wizard">Волшебник</option>
+                    </select>
+
+                    <span class="tooltip">???<span class="tooltiptext" id="tooltip-class" style="white-space: pre-wrap;"></span></span>
+                </div>
+
+                <select id="campaign-select">
+                    <option value="free-roam" data-translate-key="free-roam">Свободное исследование (Делай что хочешь)</option>
+                    <option value="mysterious-plague" data-translate-key="mysterious-plague">Таинственная чума</option>
+                    <option value="missing-nobles" data-translate-key="missing-nobles">Пропавшие дворяне</option>
+                    <option value="haunted-village" data-translate-key="haunted-village">Проклятая деревня</option>
+                    <option value="bandit-uprising" data-translate-key="bandit-uprising">Восстание бандитов</option>
+                    <option value="ancient-ruins" data-translate-key="ancient-ruins">Древние руины</option>
+                    <option value="political-intrigue" data-translate-key="political-intrigue">Политические интриги</option>
+                    <option value="dragon-threat" data-translate-key="dragon-threat">Угроза дракона</option>
+                    <option value="cursed-artifact" data-translate-key="cursed-artifact">Проклятый артефакт</option>
+                    <option value="lost-expedition" data-translate-key="lost-expedition">Потерянная экспедиция</option>
+                    <option value="merchant-caravan" data-translate-key="merchant-caravan">Торговый караван</option>
+                    <option value="rebellion" data-translate-key="rebellion">Восстание</option>
+                    <option value="prophecy" data-translate-key="prophecy">Пророчество</option>
+                    <option value="seaside-terror" data-translate-key="seaside-terror">Ужас на побережье</option>
+                    <option value="festival-sabotage" data-translate-key="festival-sabotage">Саботаж фестиваля</option>
+                    <option value="hidden-cult" data-translate-key="hidden-cult">Тайный культ</option>
+                    <option value="elemental-chaos" data-translate-key="elemental-chaos">Стихийный хаос</option>
+                    <option value="magical-academy" data-translate-key="magical-academy">Магическая академия</option>
+                    <option value="royal-escort" data-translate-key="royal-escort">Королевский эскорт</option>
+                    <option value="giant-invasion" data-translate-key="giant-invasion">Вторжение великанов</option>
+                    <option value="random" data-translate-key="random">Случайная кампания из списка</option>
+                </select>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                    <span>RPG </span><span class="tooltip" style="margin-left: auto;"> (?)<span id="tooltip-rpg" class="tooltiptext">Если слайдер красного цвета - то включено. RPG - игровой режим. В RPG режиме геймплей заключается в прокачке персонажа, а навыки и инвентарь имеют ключевое значение. Если выключен, то игра проходит в режиме Roleplay, который заключается в выстраивании интересной художественной истории, а навыки и инвентарь имеют второстепенное значение. </span></span>
+                    <label class="switch">
+                        <input type="checkbox" id="rpg-mode" checked="">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                    <span id="tts-mode-label2">Озвучка текста (работает не во всех браузерах)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="tts-mode" checked="">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="aiProvidersList">
+                    <span id="ai-provider-label2">Провайдер нейросети</span>
+                    <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai2" style="white-space: pre-wrap;"></span></span><br />
+                    <input type="radio" id="ai-Cohere2" name="ai-provider2" value="Cohere" onchange="setAiProvider(this.value)">
+                    <label for="ai-Cohere2">Cohere</label><br>
+                    <input type="radio" id="ai-googleAiStudio2" name="ai-provider2" value="Google AI Studio" onchange="setAiProvider(this.value)">
+                    <label for="ai-googleAiStudio2">Google AI Studio</label><br>
+                    <input type="radio" id="ai-groq2" name="ai-provider2" value="Groq" onchange="setAiProvider(this.value)">
+                    <label for="ai-groq2">Groq</label><br>
+                    <input type="radio" id="ai-Hugging Face2" name="ai-provider2" value="Hugging Face" onchange="setAiProvider(this.value)">
+                    <label for="ai-Hugging Face2">Hugging Face</label><br>
+                    <input type="radio" id="ai-mistralAi2" name="ai-provider2" value="Mistral AI" onchange="setAiProvider(this.value)">
+                    <label for="ai-mistralAi2">Mistral AI</label><br>
+                    <input type="radio" id="ai-openAI012" name="ai-provider2" value="OpenAI01" onchange="setAiProvider(this.value)">
+                    <label for="ai-openAI012">OpenAI01</label><br>
+                    <input type="radio" id="ai-openrouter2" name="ai-provider2" value="OpenRouter" onchange="setAiProvider(this.value)">
+                    <label for="ai-openrouter2">OpenRouter</label><br>
+                    <input type="radio" id="ai-websim2" name="ai-provider2" value="Websim" onchange="setAiProvider(this.value)">
+                    <label for="ai-websim2" id="ai-websim2-label">Websim</label><br id="ai-websim2-br">
+                    <input type="radio" id="ai-none2" name="ai-provider2" value="None" onchange="setAiProvider(this.value)" checked>
+                    <label for="ai-none2" id="ai-none2-label">None</label>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; margin-bottom: 11px;">
+                    <span id="ai-model-label2">Модель нейросети</span>
+                    <input type="text" id="ai-model2" placeholder="Введите название модели нейросети" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                    <span id="api-key-label2">Ваш API ключ</span><button class="tab-button" id="api-key-button2" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="showAPIKeyInput()">Показать на 10 секунд</button>
+                    <input type="text" id="api-key2" placeholder="В целях безопасности убедитесь, что используете АПИ ключ с низким лимитом по расходу" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37; display: none">
+                </div>
+
+                <span id="additional-settings-label2" class="additionalSettingsLabel">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
+
+                <div style="display: flex; justify-content: center; align-items: center; gap: 5px;">
+                    <button style="width: auto" id="create-character">Начать игру</button>
+                    <button style="width: auto" id="random-character">Случайный персонаж</button>
+                    <button style="width: auto" id="load-character">Загрузить автосейв</button>
+                    <button style="width: auto" id="load-savefile" onclick="clickLoadGame()">Загрузить файл</button>
+                    <button style="width: auto" id="my-game">Свой сеттинг</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="setting-creation-modal" class="modal">
+            <div class="modal-content" style="margin: auto;">
+                <h3 id="my-world-label">Выдумайте свой мир или опишите один из известных существующих</h3>
+                <textarea type="text" id="world-description" placeholder="Введите описание мира и инструкции гейммастеру" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="world-system-instructions" placeholder="Введите системные инструкции для нейросети (не обязательно)" style="display:none; background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="character-name-my-game" placeholder="Имя персонажа" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="character-description" placeholder="Описание персонажа (не обязательно)" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="character-gender2" placeholder="Пол персонажа" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="character-race2" placeholder="Раса персонажа" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="character-race-description" placeholder="Описание расы (не обязательно)" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="character-class2" placeholder="Класс персонажа" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="character-class-description" placeholder="Описание класса (не обязательно)" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="character-prehistory" placeholder="Введите предысторию персонажа (не обязательно)" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="character-starting-inventory" placeholder="Опишите стартовый инвентарь (не обязательно)" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="start-location" placeholder="Введите название стартовой локации (не обязательно)" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <textarea type="text" id="start-location-description" placeholder="Опишите стартовую локацию (не обязательно)" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                <h3 id="starting-parameters-label">Стартовые параметры персонажа: </h3>
+                <input type="text" id="start-str" placeholder="Сила" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-dex" placeholder="Ловкость" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-intl" placeholder="Интеллект" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-con" placeholder="Выносливость" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-spd" placeholder="Скорость" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-wis" placeholder="Мудрость" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-atr" placeholder="Привлекательность" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-per" placeholder="Восприятие" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-money" placeholder="Деньги" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-trd" placeholder="Торговля" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-luck" placeholder="Удача" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-exp" placeholder="Опыт" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                    <span id="nonmagic-mode-name">В мире нет магии </span><span class="tooltip" style="margin-left: auto;"> (?)<span class="tooltiptext" id="tooltip-noMagic">Если включено (красный цвет), то гейммастер выстраивает мир без магии и только с реалистичными способностями. Если выключено, то в мире будет магия и нереалистичные способности. </span></span>
+                    <label class="switch">
+                        <input type="checkbox" id="non-magic-mode" checked="">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                    <span>RPG </span><span class="tooltip" style="margin-left: auto;"> (?)<span class="tooltiptext" id="tooltip-rpg2">Если слайдер красного цвета - то включено. RPG - игровой режим. В RPG режиме геймплей заключается в прокачке персонажа, а навыки и инвентарь имеют ключевое значение. Если выключен, то игра проходит в режиме Roleplay, который заключается в выстраивании интересной художественной истории, а навыки и инвентарь имеют второстепенное значение. </span></span>
+                    <label class="switch">
+                        <input type="checkbox" id="rpg-mode2" checked="">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                    <span id="tts-mode-label3">Озвучка текста (работает не во всех браузерах)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="tts-mode2" checked="">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="aiProvidersList">
+                    <span id="ai-provider-label3">Провайдер нейросети</span>
+                    <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai3" style="white-space: pre-wrap;"></span></span><br />
+                    <input type="radio" id="ai-Cohere3" name="ai-provider3" value="Cohere" onchange="setAiProvider(this.value)">
+                    <label for="ai-Cohere3">Cohere</label><br>
+                    <input type="radio" id="ai-googleAiStudio3" name="ai-provider3" value="Google AI Studio" onchange="setAiProvider(this.value)">
+                    <label for="ai-googleAiStudio3">Google AI Studio</label><br>
+                    <input type="radio" id="ai-groq3" name="ai-provider3" value="Groq" onchange="setAiProvider(this.value)">
+                    <label for="ai-groq3">Groq</label><br>
+                    <input type="radio" id="ai-Hugging Face3" name="ai-provider3" value="Hugging Face" onchange="setAiProvider(this.value)">
+                    <label for="ai-Hugging Face3">Hugging Face</label><br>
+                    <input type="radio" id="ai-mistralAi3" name="ai-provider3" value="Mistral AI" onchange="setAiProvider(this.value)">
+                    <label for="ai-mistralAi3">Mistral AI</label><br>
+                    <input type="radio" id="ai-openAI013" name="ai-provider3" value="OpenAI01" onchange="setAiProvider(this.value)">
+                    <label for="ai-openAI013">OpenAI01</label><br>
+                    <input type="radio" id="ai-openrouter3" name="ai-provider3" value="OpenRouter" onchange="setAiProvider(this.value)">
+                    <label for="ai-openrouter3">OpenRouter</label><br>
+                    <input type="radio" id="ai-websim3" name="ai-provider3" value="Websim" onchange="setAiProvider(this.value)">
+                    <label for="ai-websim3" id="ai-websim3-label">Websim</label><br id="ai-websim3-br">
+                    <input type="radio" id="ai-none3" name="ai-provider3" value="None" onchange="setAiProvider(this.value)" checked>
+                    <label for="ai-none3" id="ai-none3-label">None</label>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; margin-bottom: 11px;">
+                    <span id="ai-model-label3">Модель нейросети</span>
+                    <input type="text" id="ai-model3" placeholder="Введите название модели нейросети" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                    <span id="api-key-label3">Ваш API ключ</span><button class="tab-button" id="api-key-button3" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="showAPIKeyInput()">Показать на 10 секунд</button>
+                    <input type="text" id="api-key3" placeholder="В целях безопасности убедитесь, что используете АПИ ключ с низким лимитом по расходу" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37; display: none">
+                </div>
+
+                <span id="additional-settings-label3" class="additionalSettingsLabel">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
+
+                <div style="display: flex; justify-content: center; align-items: center; gap: 5px;">
+                    <button style="width: auto" id="create-setting" style="flex: 1">Начать игру</button>
+                    <button style="width: auto" id="load-created-setting" style="flex: 2" onclick="clickLoadSetting()">Загрузить сеттинг из файла</button>
+                    <button style="width: auto" id="save-created-setting" style="flex: 2" onclick="clickSaveSetting()">Сохранить сеттинг в файл</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="location-info" class="infoWindow">
+            <span id="location-info-close" class="infoClose">×</span>
+            <span id="location-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
+            <span id="location-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <span id="location-info-img" class="adjustButton"><i class="uil uil-image-search"></i></span>
+            <h4 id="location-info-name"></h4>
+            <p id="location-info-description"></p>
+            <h4 id="location-delete" class="infoDelete">Забыть эту локацию</h4>
+            <input type="hidden" id="location-info-id" name="location-info-id">
+        </div>
+
+        <div id="npc-info" class="infoWindow">
+            <span id="npc-info-close" class="infoClose">×</span>
+            <span id="npc-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
+            <span id="npc-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <span id="npc-info-img" class="adjustButton"><i class="uil uil-image-search"></i></span>
+            <h4 id="npc-info-name"></h4>
+            <p id="npc-info-description"></p>
+            <h4 id="npc-info-journal-label">Дневник</h4>
+            <p id="npc-info-journal"></p>
+            <h4 id="npc-delete" class="infoDelete">Забыть этого персонажа</h4>
+            <h4 id="npc-delete-journal" style="cursor: pointer">Забыть дневник этого персонажа</h4>
+            <input type="hidden" id="npc-info-id" name="npc-info-id">
+        </div>
+
+        <div id="skill-info" class="infoWindow">
+            <span id="skill-info-close" class="infoClose">×</span>
+            <span id="skill-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
+            <span id="skill-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <h4 id="skill-info-name"></h4>
+            <p id="skill-info-description"></p>
+            <h4 id="skill-info-delete" class="infoDelete" style="display:none">Забыть этот навык</h4>
+            <input type="hidden" id="skill-info-id" name="skill-info-id">
+        </div>
+
+        <div id="inventory-info" class="infoWindow">
+            <span id="inventory-info-close" class="infoClose">×</span>
+            <span id="inventory-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
+            <span id="inventory-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <h4 id="inventory-info-name"></h4>
+            <p id="inventory-info-description"></p>
+            <h4 id="inventory-delete" class="infoDelete">Выбросить этот предмет</h4>
+            <input type="hidden" id="inventory-info-id" name="inventory-info-id">
+        </div>
+
+        <div id="quest-info" class="infoWindow">
+            <span id="quest-info-close" class="infoClose">×</span>
+            <span id="quest-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
+            <span id="quest-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <h4 id="quest-info-name"></h4>
+            <p id="quest-info-reward"></p>
+            <p id="quest-info-punishment"></p>
+            <p id="quest-info-description"></p>
+            <div id="quest-info-purposes"></div>
+            <p id="quest-info-details"></p>
+            <h4 id="quest-delete" class="infoDelete">Забыть это задание</h4>
+            <input type="hidden" id="quest-info-id" name="quest-info-id">
+        </div>
+
+        <div id="image-info" class="infoWindow" data-prompt="">
+            <span id="image-info-close" class="infoClose">×</span>
+            <span id="image-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28])"><i class="uil uil-align-center-h"></i></span>
+            <span id="image-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <h4 id="image-info-name"></h4>
+            <p id="image-info-warning"></p>
+            <a id="image-info-image" data-fslightbox="gallery" href="https://i.imgur.com/fsyrScY.jpg"><img id="image-info-thumbnail" class="rounded-corners" src="" /></a>
+            <textarea type="text" id="image-info-prompt" class="gameTextarea" placeholder="Промпт для генерации изображения" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"></textarea>
+            <h4 id="image-generate" class="infoDelete">Генерировать изображение</h4>
+        </div>
+
+        <button id="collapseButtonMain" class="collapse-button main" style="display:none">
+            <span class="arrow-icon">⬅</span>
+        </button>
+
+        <button id="collapseButtonSettings" class="collapse-button settings">
+            <span class="arrow-icon">⮕</span>
+        </button>
+
+        <button id="collapseButtonInputArea" class="collapse-button inputAreaButton" style="display:none">
+            <span class="arrow-icon">⮕</span>
+        </button>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.1.3/marked.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.4.2/index.min.js"></script>
+        <script src="https://rawcdn.githack.com/StanislavSmetaninSSM/Legendarica/bddd2e27e18ee5353badeff78166a9b3cfd2019b/src/js/Translations.js"></script>
+        <script src="https://rawcdn.githack.com/StanislavSmetaninSSM/Legendarica/bddd2e27e18ee5353badeff78166a9b3cfd2019b/src/js/Legendarica.js"></script>
+        <script src="https://rawcdn.githack.com/StanislavSmetaninSSM/Legendarica/bddd2e27e18ee5353badeff78166a9b3cfd2019b/src/js/LegendaricaAPI.js"></script>
+</body>
+</html>
