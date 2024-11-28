@@ -30,7 +30,7 @@ const ELEMENTS = {
 
     //setting creation
     modalSetting: document.getElementById('setting-creation-modal'),
-    nonMagicModeToggle: document.getElementsByClassName('non-magic-mode'),
+    nonMagicModeToggle: document.getElementById('non-magic-mode'),
 
     //window with player character information
     modal: document.getElementById('character-creation-modal'),
@@ -196,9 +196,9 @@ const CHARACTER_INFO = {
     raceDescription: 'special race description is absent',
     classOfCharacter: '',
     classDescription: 'special class description is absent',
-    nonMagicMode: '',
-    rpgMode: '',
-    ttsMode: '',
+    nonMagicMode: false,
+    rpgMode: false,
+    ttsMode: false,
     campaign: 'free roam',
 };
 
@@ -1809,22 +1809,22 @@ function loadGameInternal(savedData) {
             } else {
                 console.warn(`Property ${prop} not found in loaded data`);
             }
-
-            itemDescriptions = loadedCharacterInfo.itemDescriptions;
-            inventory = loadedCharacterInfo.inventory;
-            characterStats = loadedCharacterInfo.characterStats;
-            visitedLocations = loadedCharacterInfo.visitedLocations;
-            encounteredNPCs = loadedCharacterInfo.encounteredNPCs;
-            statusData = loadedCharacterInfo.statusData;
-            passiveSkills = loadedCharacterInfo.passiveSkills;
-            activeSkills = loadedCharacterInfo.activeSkills;
-            npcJournals = loadedCharacterInfo.npcJournals;
-            quests = loadedCharacterInfo.quests;
-            turn = loadedCharacterInfo.turn;
-            ELEMENTS.myRules.value = loadedCharacterInfo.myRules ? loadedCharacterInfo.myRules : '';
-            ELEMENTS.systemInstructions.value = loadedCharacterInfo.systemInstructions ? loadedCharacterInfo.systemInstructions : '';
-            ELEMENTS.ttsModeToggleSettings.checked = loadedCharacterInfo.CHARACTER_INFO.ttsMode;
         });
+
+        itemDescriptions = loadedCharacterInfo.itemDescriptions;
+        inventory = loadedCharacterInfo.inventory;
+        characterStats = loadedCharacterInfo.characterStats;
+        visitedLocations = loadedCharacterInfo.visitedLocations;
+        encounteredNPCs = loadedCharacterInfo.encounteredNPCs;
+        statusData = loadedCharacterInfo.statusData;
+        passiveSkills = loadedCharacterInfo.passiveSkills;
+        activeSkills = loadedCharacterInfo.activeSkills;
+        npcJournals = loadedCharacterInfo.npcJournals;
+        quests = loadedCharacterInfo.quests;
+        turn = loadedCharacterInfo.turn;
+        ELEMENTS.myRules.value = loadedCharacterInfo.myRules ? loadedCharacterInfo.myRules : '';
+        ELEMENTS.systemInstructions.value = loadedCharacterInfo.systemInstructions ? loadedCharacterInfo.systemInstructions : '';
+        ELEMENTS.ttsModeToggleSettings.checked = loadedCharacterInfo.CHARACTER_INFO.ttsMode;
 
         console.log("Game loaded successfully");
     } catch (error) {
