@@ -8,7 +8,7 @@ This is a role-playing game with a neural network (AI).
 There are inventory, skills, characters and their diaries, status, and a log of action calculations.
 The game requires an API key and a neural network model. Available models are listed in the game.
 
-You can play it using this link (github version from master branch): https://rawcdn.githack.com/StanislavSmetaninSSM/Legendarica/929b4e3159f2db7d73a64bc6343d9c3193f2cda6/demo/Legendarica.html
+You can play it using this link (github version from master branch): https://raw.githack.com/StanislavSmetaninSSM/Legendarica/main/demo/Legendarica.html
 
 Or websim version: 
 
