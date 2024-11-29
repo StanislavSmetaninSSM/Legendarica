@@ -614,17 +614,20 @@ const APIModule = (function getAPIModule() {
                 content: prompt
             });
 
-            const request = await fetch("/api/claude", {
+            const settings = {
+                model: model,
+                messages: messages,
+                response_format: { type: "json_object" }
+            };
+
+            const request = await fetch(`/api/${model}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ messages: messages })
+                body: JSON.stringify(settings)
             });
-
-            if (!request.ok)
-                throw new Error(`HTTP error ${request.status}`);            
-
+            
             const response = await request.json();
             console.log(response);
 
