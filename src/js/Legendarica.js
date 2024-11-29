@@ -1661,7 +1661,7 @@ function showAPIKeyInput() {
 
 function checkGameSource() {
     const currentURL = window.location.href;
-    isGameStartedFromWebsim = currentURL.contains("websim.ai");
+    isGameStartedFromWebsim = currentURL.includes("websim.ai");
 
     if (isGameStartedFromWebsim)
         return;
