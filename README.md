@@ -10,6 +10,8 @@ The game requires an API key and a neural network model. Available models are li
 
 You can play it using this link (github version from master branch): https://raw.githack.com/StanislavSmetaninSSM/Legendarica/main/demo/Legendarica.html
 
+Or in the websim: https://websim.ai/@Lottarend/LegendaricaAbsolute
+
 PLAY AND HAVE FUN!
 
 ⠄⠄⠄⠄⠄⠄⠄⠄⠄⣀⡀⠄⢶⣄⡘⣶⣄⠄⠄⠄⠄⠄⠄⠄                           
