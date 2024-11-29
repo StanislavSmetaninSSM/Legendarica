@@ -600,24 +600,51 @@ const APIModule = (function getAPIModule() {
             throw emptyResponseErrorMessage;
         },
 
-        sendWebsimRequest: async function () {
-            const request = await fetch('/api/gamemaster', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: `${prompt}` })
+        sendWebsimRequest: async function () {            
+            const messages = [];
+
+            if (systemInstructions) {
+                messages.push({
+                    role: "system",
+                    content: systemInstructions
+                });
+            }
+            messages.push({
+                role: "user",
+                content: prompt
+            });
+
+            const request = await fetch("/api/claude", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ messages: messages })
             });
 
             if (!request.ok)
-                throw new Error(`HTTP error ${request.status}`);
+                throw new Error(`HTTP error ${request.status}`);            
 
-            const response = await request.text();
+            const response = await request.json();
             console.log(response);
-            const sanitizedString = sanitizeResponse(response);
 
-            try {
-                return JSON.parse(sanitizedString);
-            } catch {
-                throw messageParseErrorMessage + sanitizedString;
+            if (response.error)
+                throw response.error;
+
+            if (response.usage) {
+                tokenCostCurrent = JSON.stringify(response.usage);
+                tokenCostSum.prompt_tokens = tokenCostSum.prompt_tokens + response.usage.prompt_tokens;
+                tokenCostSum.completion_tokens = tokenCostSum.completion_tokens + response.usage.completion_tokens;
+                tokenCostSum.total_tokens = tokenCostSum.total_tokens + response.usage.total_tokens;
+            }
+
+            if (response.choices) {
+                const sanitizedString = sanitizeResponse(response.choices[0]?.message?.content);
+                try {
+                    return JSON.parse(sanitizedString);
+                } catch {
+                    throw messageParseErrorMessage + sanitizedString;
+                }
             }
 
             throw emptyResponseErrorMessage;
