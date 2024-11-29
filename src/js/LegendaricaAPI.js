@@ -615,12 +615,11 @@ const APIModule = (function getAPIModule() {
             });
 
             const settings = {
-                model: model,
-                messages: messages,
-                response_format: { type: "json_object" }
+                messages: messages
             };
 
-            const request = await fetch(`/api/${model}`, {
+            const apiRequest = model ? model : "gamemaster";
+            const request = await fetch(`/api/${apiRequest}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
