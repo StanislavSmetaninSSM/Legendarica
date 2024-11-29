@@ -1510,18 +1510,27 @@ function initializeDraggableObject(draggableObject) {
     let offsetX, offsetY;
 
     function moveDraggableObject(e) {
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
+        let clientX, clientY;
+
+        if (e.type.startsWith('touch')) {
+            // Touch event
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            // Mouse event
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
 
         if (isDragging) {
-            const left = e.clientX - offsetX;
+            const left = clientX - offsetX;
             const maxLeft = document.documentElement.clientWidth - draggableObject.offsetWidth;
-            if (left >= 0 && left < maxLeft)
+            if (left >= 0 && left <= maxLeft)
                 draggableObject.style.left = left + 'px';
 
-            const top = e.clientY - offsetY;
+            const top = clientY - offsetY;
             const maxTop = document.documentElement.clientHeight - draggableObject.offsetHeight;
-            if (top >= 0 && top < maxTop)
+            if (top >= 0 && top <= maxTop)
                 draggableObject.style.top = top + 'px';
         }
     }
@@ -1532,17 +1541,38 @@ function initializeDraggableObject(draggableObject) {
         isDragging = false;
         document.removeEventListener('mousemove', moveDraggableObject, true);
         document.removeEventListener('mouseup', stopDragging, true);
+        document.removeEventListener('touchmove', moveDraggableObject, true);
+        document.removeEventListener('touchend', stopDragging, true);
     }
 
-    moveButton.addEventListener('mousedown', (e) => {
-        if (e.button !== 0) return;
+    function startDragging(e) {
+        if (e.type === 'mousedown' && e.button !== 0) return;
 
         isDragging = true;
-        offsetX = e.clientX - draggableObject.offsetLeft;
-        offsetY = e.clientY - draggableObject.offsetTop;
+
+        let clientX, clientY;
+
+        if (e.type.startsWith('touch')) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+
+        offsetX = clientX - draggableObject.offsetLeft;
+        offsetY = clientY - draggableObject.offsetTop;
+
         document.addEventListener('mousemove', moveDraggableObject, true);
         document.addEventListener('mouseup', stopDragging, true);
-    });
+        document.addEventListener('touchmove', moveDraggableObject, true);
+        document.addEventListener('touchend', stopDragging, true);
+
+        e.preventDefault();
+    }
+
+    moveButton.addEventListener('mousedown', startDragging, false);
+    moveButton.addEventListener('touchstart', startDragging, false);
 }
 
 function sanitizeString(str) {
