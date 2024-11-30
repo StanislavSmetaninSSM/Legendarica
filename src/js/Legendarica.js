@@ -16,6 +16,8 @@ let styleOfImage;
 let turn = 0;
 let imageHeight = 610;
 let imageWidth = 530;
+let imageComponentHeight = 1220;
+let imageComponentWidth = 1060;
 let isGameStartedFromWebsim = false;
 
 //DOM elements
@@ -1693,7 +1695,7 @@ function checkGameSource() {
 
 async function generateBackgroundImage(prompt) {
     try {
-        const backgroundUrl = getImageUrl(prompt);
+        const backgroundUrl = getImageUrl(prompt, imageWidth, imageHeight);
         const img = new Image();
 
         img.onload = () => {
@@ -1715,7 +1717,7 @@ async function generateBackgroundImage(prompt) {
 async function generateImageForComponent(element) {
     try {
         const prompt = ELEMENTS.imageInfoPrompt.value;
-        const imageUrl = getImageUrl(prompt);
+        const imageUrl = getImageUrl(prompt, imageComponentWidth, imageComponentHeight);
         const img = new Image();
         img.src = imageUrl;
 
@@ -1740,7 +1742,7 @@ async function generateImageForComponent(element) {
     }
 }
 
-function getImageUrl(prompt) {
+function getImageUrl(prompt, imageWidth, imageHeight) {
     const styleOfImageInput = document.getElementById('style-of-image-input');
     const imageStyle = styleOfImageInput.value ? styleOfImageInput.value : styleOfImage;
 
