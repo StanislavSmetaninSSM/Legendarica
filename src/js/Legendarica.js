@@ -2803,6 +2803,10 @@ function setAiProvider(providerName, setAlways) {
             ELEMENTS.maxTokens
         );
         ELEMENTS.systemInstructionsBox.dataset.show = "false";
+    } else if (providerName == "OpenRouter") {
+        inputsToHide.push(          
+            ELEMENTS.maxTokens
+        );
     } else if (providerName == "None") {
         inputsToHide.push(
             ELEMENTS.temperature,
