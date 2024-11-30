@@ -2883,6 +2883,7 @@ function hideElements(elementsArray, parentSelector) {
 
 //--------------------------------------------------------------------START ACTIONS------------------------------------------------------------------//
 
+fsLightbox.props.type = "image";
 setTimeout(removeFloatingImage, 20000);
 setInterval(autoSave, 300000);
 
