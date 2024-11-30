@@ -664,7 +664,7 @@ function logMessage(message, currentHealthChange, currentEnergyChange, moneyChan
 
     const countTurn = document.createElement('span');
     countTurn.classList.add('message-turn-and-close-button');
-    countTurn.textContent = `\n current turn token cost: ${turn == 0 ? '{"prompt_tokens":0,"completion_tokens":0,"total_tokens":0}' : tokenCostCurrent}\n current session token cost: ${JSON.stringify(tokenCostSum)}\n health change this turn: ${currentHealthChange} , energy change this turn: ${currentEnergyChange} , money change this turn: ${moneyChange} ; ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["turn_log_name"]} #${turn} `;
+    countTurn.textContent = `\n current turn token cost: ${turn == 0 ? '{"prompt_tokens":0,"completion_tokens":0,"total_tokens":0}' : tokenCostCurrent}\n current session token cost: ${JSON.stringify(tokenCostSum)}\n health change this turn: ${currentHealthChange} , energy change this turn: ${currentEnergyChange} , money change this turn: ${moneyChange} ;\n ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["turn_log_name"]} #${turn} `;
     messageContainer.appendChild(countTurn);
 
     //Create a delete button.
@@ -1646,6 +1646,17 @@ function setGameInputsSynch() {
     }
     ELEMENTS.worldSystemInstructions.addEventListener("input", onInputSystemInstructionsFunction);
     ELEMENTS.systemInstructions.addEventListener("input", onInputSystemInstructionsFunction);
+
+    const onChangeTTSFunction = function (e) {
+        const checked = e.target.checked;
+
+        ELEMENTS.ttsModeToggleSettings.checked = checked;
+        ELEMENTS.ttsModeToggle.checked = checked;
+        ELEMENTS.ttsModeToggle2.checked = checked;
+    }
+    ELEMENTS.ttsModeToggleSettings.addEventListener("change", onChangeTTSFunction);
+    ELEMENTS.ttsModeToggle.addEventListener("change", onChangeTTSFunction);
+    ELEMENTS.ttsModeToggle2.addEventListener("change", onChangeTTSFunction);
 }
 
 function showAPIKeyInput() {

@@ -2893,18 +2893,22 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
     (function setDefaultDataAndHandlers() {
         const currentLanguage = getCurrentLanguage();
         setLanguage(currentLanguage);
-        const languageMenu = document.getElementById('choose-language-menu');
-        languageMenu.value = currentLanguage;
+
+        const newGameLanguageMenu = document.getElementById('choose-language-menu');
+        const settingsLanguageMenu = document.getElementById('choose-language');
+        newGameLanguageMenu.value = currentLanguage;
+        settingsLanguageMenu.value = currentLanguage;
 
         //Add event listener to change language
-        languageMenu.addEventListener('change', function () {
+        newGameLanguageMenu.addEventListener('change', function () {
             setLanguage(this.value);
+            settingsLanguageMenu.value = this.value;
         });
 
-        document.getElementById('choose-language').addEventListener('change', function () {
+        settingsLanguageMenu.addEventListener('change', function () {
             setLanguage(this.value);
+            newGameLanguageMenu.value = this.value;
         });
-
     })();
 
     return {

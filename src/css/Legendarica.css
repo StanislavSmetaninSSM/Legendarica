@@ -200,6 +200,10 @@ input:checked + .slider {
     text-align: right;
 }
 
+#log-box .message .message-turn-and-close-button {
+    display: block !important;
+}
+
 .message:hover .message-turn-and-close-button {
     display: block;
 }
