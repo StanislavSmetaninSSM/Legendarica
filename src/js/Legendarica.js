@@ -2106,7 +2106,7 @@ async function sendRequest(currentMessage) {
                 responseTemplate += ` , \n "NPCJournals": []`;
         }
         if (ELEMENTS.useQuestsList.checked)
-            responseTemplate += ` , \n "newQuest": { "name": "", "description": "", "purposes": [], "reward": "", "punishmentForFailingQuest": "",  "details": "", "isCompleted" : false }`;
+            responseTemplate += ` , \n "newQuests": []`;
 
         responseTemplate += ' }'
 
@@ -2189,18 +2189,18 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #3.12.5. The active skills should not be related with magic or spells, since in this world the magic is absent. Do not include such magic abilities to the value of newActiveSkills key and do not create the situations where such magic powers are available.
 ` : ''} ] ]
 
-#4  **Important: This instruction should only be followed if the player receives an item (receives means: to take in hand, put on wear, or place in pockets or backpack or bag) in this turn. Otherwise, skip to instruction #4.8** 
-The 'inventory and itemDescriptions which character had on previous turn' is checked for compliance with the data for this turn - if not, then follow the instruction : [
-#4.1. If the player receives an item (receive means to take in hand, put on wear, or place in pockets or backpack or bag) in this turn, then generate the item description and bonuses in strict accordance with the following instruction : [ Let's think step by step : [ 
-#4.2. ${turn !== 1 && characterStats.experience != 0 ? `Here is the original list of item templates available to the player in the current turn: items_list = ${JSON.stringify(loot)} . To assign a new item to the player, the gamemaster extracts the first item (template) from this list that has not yet been assigned in the current turn. Use item templates only from the original list of items in order, starting with the very first one in the items_list. It is forbidden to assign to the player any other items whose structure does not correspond to the template from the original list
-#4.2.1. It is necessary to rename the received item from the original list of items (rename thing_[number] using ${translationModule.currentLanguage}) in accordance with the plot and form a brief description. ${CHARACTER_INFO.nonMagicMode ? ' Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.)' : ' '}
-#4.2.2. The quality of the item received must strictly correspond to the item template extracted from the original list. It is forbidden to assign any other quality to the item.
-#4.2.3. The number of bonuses and type of bonuses must strictly correspond to the number of bonuses on extracted item template from the original list. It is forbidden to assign any other number and type of bonuses to the item. Rename bonus_[number] using ${translationModule.currentLanguage}
-#4.2.4. Based on the pre-calculated types of bonuses for items from the original list (based on the item template), generate each bonus at the gamemaster's choice and its value. The bonus cannot be an increase in maximum health or maximum energy. Rename generate_interesting_effect with generated interesting effect name using ${translationModule.currentLanguage}. Rename generate_bonus_to_random_stat_from_1_to_[number] with generated bonus text using ${translationModule.currentLanguage}
-#4.2.5. Each item from the original list can be assigned to the player only once
-#4.2.6. If all items from the original list have already been assigned in the current turn, then the player can no longer receive an item in the current turn
+#4  If the player receives an item (receives means: to take in hand, put on wear, or place in pockets or backpack or bag) in current turn, or removes (or discards) an item from the inventory in current turn, then: [ 
+#4.1. The 'inventory and itemDescriptions which character had on previous turn' is checked for compliance with the inventory and itemDescriptions for this turn - if not, then follow the instruction : [
+#4.2. If the player receives an item (receive means to take in hand, put on wear, or place in pockets or backpack or bag) in this turn, then generate the item description and bonuses in strict accordance with the following instruction : [ Let's think step by step : [ 
+#4.3. ${turn !== 1 && characterStats.experience != 0 ? `Here is the original list of item templates available to the player in the current turn: items_list = ${JSON.stringify(loot)} . To assign a new item to the player, the gamemaster extracts the first item (template) from this list that has not yet been assigned in the current turn. Use item templates only from the original list of items in order, starting with the very first one in the items_list. It is forbidden to assign to the player any other items whose structure does not correspond to the template from the original list
+#4.3.1. It is necessary to rename the received item from the original list of items (rename thing_[number] using ${translationModule.currentLanguage}) in accordance with the plot and form a brief description. ${CHARACTER_INFO.nonMagicMode ? ' Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.)' : ' '}
+#4.3.2. The quality of the item received must strictly correspond to the item template extracted from the original list. It is forbidden to assign any other quality to the item.
+#4.3.3. The number of bonuses and type of bonuses must strictly correspond to the number of bonuses on extracted item template from the original list. It is forbidden to assign any other number and type of bonuses to the item. Rename bonus_[number] using ${translationModule.currentLanguage}
+#4.3.4. Based on the pre-calculated types of bonuses for items from the original list (based on the item template), generate each bonus at the gamemaster's choice and its value. The bonus cannot be an increase in maximum health or maximum energy. Rename generate_interesting_effect with generated interesting effect name using ${translationModule.currentLanguage}. Rename generate_bonus_to_random_stat_from_1_to_[number] with generated bonus text using ${translationModule.currentLanguage}
+#4.3.5. Each item from the original list can be assigned to the player only once
+#4.3.6. If all items from the original list have already been assigned in the current turn, then the player can no longer receive an item in the current turn
 `: `Each item in the inventory receives ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"]} quality and each item has no bonuses. Immediately form a description of each item and record it in itemDescriptions`}
-#4.3. Generated item description text formatting ${CHARACTER_INFO.nonMagicMode ? '(Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values. Use double quotes at the start and at the end of keys and values.):' : ' '}: 
+#4.4. Generated item description text formatting ${CHARACTER_INFO.nonMagicMode ? '(Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values. Use double quotes at the start and at the end of keys and values.):' : ' '}: 
 [
 Brief description of the item \n\n
 Item quality \n\n
@@ -2208,12 +2208,12 @@ List of bonuses on the item (number of bonuses in accordance with the extracted 
 (If any:) ${CHARACTER_INFO.nonMagicMode ? 'abilities' : 'spells or abilities'} indicating energy consumption for use and recovery duration in turns \n\n
 (When buying:) price
 ]
-#4.4. If the player receives an item (receive means to take in hand, wear, or place in pockets or backpack or bag) then add this item to the character's inventory (value of the inventory key, array type) in addition to the existing set of items in the inventory array and record information about this event in items_and_stat_calculation
-#4.5. Each element of the inventory array should consist of primitive of type 'text' and should be the name of the item.
-#4.6. Record in the value of the itemDescriptions key an object { "generated_item_name" : "generated item description" } .
-#4.7. The actions described in this block must be performed on the same turn in which the character received the item.
-] ] ], otherwise, if the player has not received items in this turn : [ 
-#4.8. Do not include 'inventory' and 'itemDescriptions' values of keys to the response.
+#4.5. If the player receives an item (receive means to take in hand, wear, or place in pockets or backpack or bag) then add this item to the character's inventory (value of the inventory key, array type) in addition to the existing set of items in the inventory array and record information about this event in "items_and_stat_calculations"
+#4.6. Each element of the inventory array should consist of primitive of type 'text' and should be the name of the item.
+#4.7. Record in the value of the itemDescriptions key an object { "generated_item_name" : "generated item description" } .
+#4.8. The actions described in this block must be performed on the same turn in which the character received the item.
+] ] ] ], otherwise, then: [ 
+#4.9. Do not include 'inventory' and 'itemDescriptions' values of keys to the response.
 ]
 	
 #5 Checking player actions: steps and requirements. [ Let's think step by step: ${CHARACTER_INFO.rpgMode ? `
@@ -2223,21 +2223,21 @@ List of bonuses on the item (number of bonuses in accordance with the extracted 
 #5.1.3. On any dialogues not related to trade - the affect of characteristics is secondary. The result of dialogue is mainly related to the content of what the player character said.
 #5.1.4. The 'trade' characteristic check is done only when trading about prices for deals.
 #5.1.5. The 'attractiveness' characteristic is used to seduce or charm the NPC (for example, to get a discount or important information). Attractiveness reflects the physical beauty of the character. It is important to note that not all NPCs care about physical beauty.
-#5.1.6. Never use the 'charisma' characteristic - it doesn't exist in the game and you should not use it.
-#5.2. Select the necessary digital value of the associated characteristic for success and output it in items_and_stat_calculations using the formula:
+#5.1.6. Never use the 'charisma' characteristic - it doesn't exist in the game and you must not use it.
+#5.2. Select the necessary digital value of the associated characteristic for success and output it in "items_and_stat_calculations" using the formula:
 (Current location difficulty) * (1 + NPC Difficulty + Situation Difficulty + Action Rationality), where
 • Action Rationality is a fractional number from 0 to 1 (chosen by the gamemaster depending on the logic of actions, the more logical - the closer to zero)
 • Situation Difficulty is a fractional number from 0 to 1 (chosen by the gamemaster depending on the complexity of the situation, the more difficult the circumstances - the closer to one)
-• NPC Difficulty is a fractional number from 0 to 1 (chosen by the gamemaster depending on the complexity of the NPC with which the player interacts during the action, the more complex the NPC - the closer to one)
+• NPC Difficulty is a fractional number from 0 to 1 (chosen by the gamemaster depending on the complexity of the NPC with which the player interacts during the action, the more complex the NPC - the closer to 1)
 #5.2.1. Be fair in selecting the right characteristic and fractional numbers. Do not adjust their values to the success of the check deliberately.
-#5.3. Compare with the sum of the current base value of the characteristic and the bonuses associated with it from the first 10 items in the inventory ${JSON.stringify(inventory.slice(0, 10))}, all current buffs and skills. If the current total value of the characteristic is greater than needed, then success. Otherwise - not success. Output the comparison process and result in items_and_stat_calculations .
-#5.4. If not success: if a random number from the list of generated numbers is less than 150000, then a new action check is performed, but now on 'luck', while the needed 'luck' value is chosen randomly from 1 to the needed skill value from the previous check and is compared with the current player's 'luck' value plus bonuses from the first ten items in the inventory array .
+#5.3. Compare with the sum of the current base value of the characteristic and the bonuses associated with it from the first 10 items in the inventory ${JSON.stringify(inventory.slice(0, 10))}, all current buffs and skills. If the current total value of the characteristic is greater than needed, then success. Otherwise - not success. Output the comparison process and result in "items_and_stat_calculations" .
+#5.4. If not success: if a random number from the list of generated numbers is less than 150000, then a new action check is performed, but now on 'luck', while the needed 'luck' value is chosen randomly from 1 to the needed skill value from the previous check and is compared with the current player's 'luck' value plus bonuses from the first 10 items in the inventory array .
 #5.5. The further plot is formed depending on the result of the check
-#5.6. For recording in items_and_stat_calculations, translate the names of characteristics into natural language
+#5.6. For recording in "items_and_stat_calculations", translate the names of characteristics into natural language
 ` : `
 #5.1. It will be good if not everything planned will succeed in checks
 #5.2. Determine the difficulty of the roll based on the situation
-#5.3. Having preliminarily determined the difficulty of the roll, use d20 + characteristic, output the process of checking the action and the result in items_and_stat_calculations .
+#5.3. Having preliminarily determined the difficulty of the roll, use d20 + characteristic, output the process of checking the action and the result in "items_and_stat_calculations" .
 #5.4. Rely not only on stats, but also on the logic of what's happening
 #5.5. The further story is formed depending on the result of the check
 #5.6. The 'trade' characteristic check is done only when trading about prices for deals
@@ -2311,23 +2311,24 @@ ${ELEMENTS.useNpcJournal.checked ? `
 ] ` : ''}
 ${ELEMENTS.useQuestsList.checked ? `
 #6.10. If an NPC and a player made an agreement, where the player is expected to perform a "quest" (in terms of computer role-playing games) — which involves completing a specific task and receiving a reward upon completion — then: [
-#6.10.1. The 'Quest information the player has' is checked for compliance with the current quest information from Context: [
-	Compare quest descriptions
-	Compare quest rewards
-	Compare quest purposes
-	Check for any changes in quest details, including completion status ] - if not, then the response includes the newQuest key with the current quest according to the following instruction: [ Let's think step by step :
-#6.10.2. Mandatory format for recording the value in the newQuest key: {'name': 'full_name_of_current_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
-#6.10.3. To the value of 'description' key, include the following data about the quest and describe the data in as much detail and artistic language as possible (all text of 'description' should be translated to user's chosen language): [
+#6.10.1. The 'Quests information the player has' is checked for compliance with the current quests information from Context: [
+	Compare quests descriptions
+	Compare quests rewards
+	Compare quests purposes
+	Check for any changes in quests details, including completion status ] - if not, then the response includes the newQuests key with the information about current quests according to the following instruction: [ Let's think step by step :
+#6.10.2. The value of 'newQuests' key is an array of objects, each of which contains the complete information about specific quest.
+#6.10.3. Mandatory format for recording the value of each item of 'newQuests' array: {'name': 'full_name_of_current_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
+#6.10.4. To the value of 'description' key, include the following data about the quest and describe the data in as much detail and artistic language as possible (all text of 'description' should be translated to user's chosen language): [
 	Quest giver information in the format: "{NPC name which gave the quest to player label}: {NPC Name}"\n\n
 	Quest background in the format: "{Quest background label}: {why the quest giver needs the player to complete this quest}."\n\n
 	Detailed quest description in the format: "{Description label}: {full and detailed quest description}."\n\n ]
-#6.10.4. The value of 'purposes' key is an array of strings, describes what player should do during quest to complete it. 
-#6.10.5. To the value of 'reward' key, include the description of reward which player will receive for completing the quest. The reward must be specific. For example, if the reward is money, then indicate a specific amount of money.
-#6.10.6. To the value of 'punishmentForFailingQuest' key, include the description of the punishment the player will suffer for failing the quest.
-#6.10.7. To the value of 'details' key, include information about quest details and notes. Do not include information contained in the value of 'description' key. This field is only for new quest data: any notes or details about the quest that the player learned during the quest.
-#6.10.8. Set the value of 'isCompleted' key to false or true. Set true if quest is completed. A quest is considered complete when the quest-giving NPC acknowledges its completion.
-#6.10.9. If the quest is completed, the quest-giving NPC should provide the player with the quest reward. 
-#6.10.10. If the player fails the quest, the quest is marked as completed and the player must suffer the punishment described in the value of 'punishmentForFailingQuest' key.
+#6.10.5. The value of 'purposes' key is an array of strings, describes what player should do during quest to complete it. Purposes should be logical tasks, each of which must have at least one correct solution.
+#6.10.6. To the value of 'reward' key, include the description of reward which player will receive for completing the quest. The reward must be specific. For example, if the reward is money, then indicate a specific amount of money.
+#6.10.7. To the value of 'punishmentForFailingQuest' key, include the description of the punishment the player will suffer for failing the quest.
+#6.10.8. To the value of 'details' key, include information about quest details and notes. Do not include information contained in the value of 'description' key. This field is only for new quest data: any notes or details about the quest that the player learned during the quest.
+#6.10.9. Set the value of 'isCompleted' key to false or true. Set true if quest is completed. A quest is considered complete when the quest-giving NPC acknowledges its completion.
+#6.10.10. If the quest is completed, the quest-giving NPC should provide the player with the quest reward. 
+#6.10.11. If the player fails the quest, the quest is marked as completed and the player must suffer the punishment described in the value of 'punishmentForFailingQuest' key.
 ] ] ` : ''}
 	 
 #7 The 'location where the character was on the previous turn' is checked for compliance with the current location - if not, then the response includes the newLocation key with the current location according to the following instruction: [ Let's think step by step :
@@ -2472,26 +2473,23 @@ ${ELEMENTS.useQuestsList.checked ? `
 14.1. Be smart.${CHARACTER_INFO.nonMagicMode ? ' (Important! When generating items, bonuses, abilities, locations, and enemies: consider that in this world magic is absent.)' : ' '}
 14.2. Resources: energy/money cannot be negative
 14.3. If the player has current health less than 1 (current health ${characterStats.currentHealth}), then they have died and cannot continue playing unless someone resurrects them.
-14.4. Quests: 
-14.4.1. Contain logical tasks with one correct solution
-14.4.2. Should not be prolonged or tedious. The duration of quests should be less than 15 turns and quests should be dangerous
-14.4.3. The lower the character's level, the fewer turns the quest lasts. The reward should correspond to the character's level.
-14.5. Epic quests and any ancient entities: appear in the world only after the character reaches level 50. The player cannot encounter anything ancient before level 50 (no ancient tablets, no ancient runes, no ancient trees, no ancient ruins, THEY CANNOT ENCOUNTER ANYTHING ANCIENT AT ALL UNTIL THEIR LEVEL IS BELOW 50)
-14.6. Artifacts: appear in the world only after the character reaches level 75
-14.7. Any crystals are encountered by the player only after level 25
-14.8. Currency: only money
-14.9. Each turn should be a substantial development of the plot
-14.10. The plot should not cycle on the same thing, even if the player's action is the same
-14.11. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
-14.12. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
-14.13. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
-14.14. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in items_and_stat_calculations
-14.15. Each generation of item description in itemsDescriptions is accompanied by a detailed text of the generation calculation in items_and_stat_calculation
-14.16. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
-14.17. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
-14.18. The player is not the epicenter of the world, the world lives an independent life
-14.19. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
-14.20. The character should not pick up items unless the player indicated to do so
+14.4. Epic quests and any ancient entities: appear in the world only after the character reaches level 50. The player cannot encounter anything ancient before level 50 (no ancient tablets, no ancient runes, no ancient trees, no ancient ruins, THEY CANNOT ENCOUNTER ANYTHING ANCIENT AT ALL UNTIL THEIR LEVEL IS BELOW 50)
+14.5. Artifacts: appear in the world only after the character reaches level 75
+14.6. Any crystals are encountered by the player only after level 25
+14.7. Currency: only money
+14.8. Each turn should be a substantial development of the plot
+14.9. The plot should not cycle on the same thing, even if the player's action is the same
+14.10. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
+14.11. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
+14.12. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
+14.13. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
+14.14. Each generation of item description in itemsDescriptions is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
+14.15. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
+14.16. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
+14.17. The player is not the epicenter of the world, the world lives an independent life
+14.18. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
+14.19. The character should not pick up items unless the player indicated to do so
+14.20. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
 ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 14.21. The game's narrative should be based on the currently active quests (known from the Context).
 14.22. Each subsequent plot twist should move the player closer to completing the active quests.
@@ -2649,8 +2647,11 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 setOrChangeSkills(passiveSkills, data.newPassiveSkills);
             }
 
-            if (data.newQuest && Object.keys(data.newQuest).length > 0 && data.newQuest.name) {
-                addQuest(data.newQuest.name, data.newQuest.description, data.newQuest.purposes, data.newQuest.reward, data.newQuest.punishmentForFailingQuest, data.newQuest.details, data.newQuest.isCompleted);
+            if (data.newQuests && data.newQuests.length > 0) {
+                for (const newQuest of data.newQuests) {
+                    if (newQuest.name)
+                        addQuest(newQuest.name, newQuest.description, newQuest.purposes, newQuest.reward, newQuest.punishmentForFailingQuest, newQuest.details, newQuest.isCompleted);
+                }
             }
 
             if (data.items_and_stat_calculations)
