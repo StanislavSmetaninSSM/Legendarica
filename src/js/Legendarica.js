@@ -2247,7 +2247,7 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.9. To the value of the 'image_prompt' key, include an extensive detailed prompt for generating an image that will illustrate the item based on it description. It is necessary to form it only in English. The number of characters in the value of this key should not exceed 150 characters.
 #4.10. To the value of the 'price' key include the approximate price of the current item, which will be used by the game if it is sold.
 #4.11. To the value of the 'durability' key include the item durability as a percentage value, where 100% - maximum durability. Durability that equals to 0% means that item is broken and its 'count' must be decreased.
-#4.11.1. Use the durability rule to determinate the item durability: ${itemsBreakRulesTemplate}
+#4.11.1. Use the durability rule to determinate the item durability: [ ${itemsBreakRulesTemplate} ] .
 #4.11.2. Based on the item's durability rule, set the value of durability by your choice.
 #4.12. The value of 'customProperty' should be filled only if player asks for it. Do not fill it otherwise.
 #4.13. Mandatory record information about this event in "items_and_stat_calculations".
