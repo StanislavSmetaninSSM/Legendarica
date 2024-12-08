@@ -2210,7 +2210,7 @@ ${CHARACTER_INFO.nonMagicMode ? `
 
 #4  If one of these conditions are true: [
 - The player receives an item (receives means: to take in hand, put on wear, or place in pockets, backpack or bag) in current turn.
-- For each item in the player's inventory in the current turn, find an item with the same name in the Context. If such an item is found, compare the values of its properties ['bonuses', 'description, 'quality', 'count', 'price'] with the current values. The rule returns 'true' if at least one difference in the properties is found. If there is no item with the same name in the Context (i.e., the item is new), the rule is not applied to this item and continues checking the rest.
+- For each item in the player's inventory in the current turn, find an item with the same name in the Context. If such an item is found, compare the values of its properties ['bonuses', 'description, 'quality', 'count', 'price', 'durability', 'customProperty' ] with the current values. The rule returns 'true' if at least one difference in the properties is found. If there is no item with the same name in the Context (i.e., the item is new), the rule is not applied to this item and continues checking the rest.
 ], then strictly follow the instructions: [ Let's think step by step : [ 
 #4.1. Include to the response the 'inventoryItemsData' key, the value of which is the array of objects, and each object of the array represents the inventory item information.
 #4.2. Mandatory the format for each object of 'inventoryItemsData' array: ${inventoryTemplate} . 
@@ -2239,7 +2239,7 @@ ${CHARACTER_INFO.nonMagicMode ? `
 - The permanent bonus to one of player stats. You must mandatory add this bonus to specified player stat. It's forbidden use 'random characteristic' as a bonus. It's forbidden to use stats that are not in the list: ${statsList} .
 - The bonus to one of player stats, but only for certain situations. The bonus is not permanent and used only if described conditions are met. It's forbidden to use stats that are not in the list: ${statsList} .
 ]
-#4.8.2. It's forbidden to numerically describe damage or defensive properties for a bonus effect.
+#4.8.2. It's forbidden to numerically describe damage or defensive properties for a bonus effect. Never do that!
 #4.8.3. If the bonus has a numerical value, it must be related to one of the following: [
     - The player's existing stats. It's forbidden to use stats that are not in the list: ${statsList} .
     - Skills of the player ] .
@@ -2247,7 +2247,7 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.9. To the value of the 'image_prompt' key, include an extensive detailed prompt for generating an image that will illustrate the item based on it description. It is necessary to form it only in English. The number of characters in the value of this key should not exceed 150 characters.
 #4.10. To the value of the 'price' key include the approximate price of the current item, which will be used by the game if it is sold.
 #4.11. To the value of the 'durability' key include the item durability as a percentage value, where 100% - maximum durability. Durability that equals to 0% means that item is broken and its 'count' must be decreased.
-#4.11.1. Use the durability rule to determinate the item durability: ${itemsBreakRulesTemplate} .
+#4.11.1. Use the durability rule to determinate the item durability: ${itemsBreakRulesTemplate}
 #4.11.2. Based on the item's durability rule, set the value of durability by your choice.
 #4.12. The value of 'customProperty' should be filled only if player asks for it. Do not fill it otherwise.
 #4.13. Mandatory record information about this event in "items_and_stat_calculations".
@@ -2522,24 +2522,25 @@ ${ELEMENTS.useQuestsList.checked ? `
 13.4. Epic quests and any ancient entities: appear in the world only after the character reaches level 50. The player cannot encounter anything ancient before level 50 (no ancient tablets, no ancient runes, no ancient trees, no ancient ruins, THEY CANNOT ENCOUNTER ANYTHING ANCIENT AT ALL UNTIL THEIR LEVEL IS BELOW 50)
 13.5. Artifacts: appear in the world only after the character reaches level 75
 13.6. Any crystals are encountered by the player only after level 25
-13.7. Currency: only money
-13.8. Each turn should be a substantial development of the plot
-13.9. The plot should not cycle on the same thing, even if the player's action is the same
-13.10. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
-13.11. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
-13.12. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
-13.13. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
-13.14. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
-13.15. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
-13.16. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
-13.17. The player is not the epicenter of the world, the world lives an independent life
-13.18. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
-13.19. The character should not pick up items unless the player indicated to do so
-13.20. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
+13.7. ${itemsBreakRulesTemplate}
+13.8. Currency: only money
+13.9. Each turn should be a substantial development of the plot
+13.10. The plot should not cycle on the same thing, even if the player's action is the same
+13.11. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
+13.12. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
+13.13. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
+13.14. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
+13.15. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
+13.16. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
+13.17. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
+13.18. The player is not the epicenter of the world, the world lives an independent life
+13.19. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
+13.20. The character should not pick up items unless the player indicated to do so
+13.21. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
 ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
-13.21. The game's narrative should be based on the currently active quests (known from the Context).
-13.22. Each subsequent plot twist should move the player closer to completing the active quests.
-13.23. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
+13.22. The game's narrative should be based on the currently active quests (known from the Context).
+13.23. Each subsequent plot twist should move the player closer to completing the active quests.
+13.24. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
 ` : ''}
 
 14. Calculation of action checks for skills and calculation of items generation are different events, independent of each other. There is a separate instruction for each of these events. Distinguish between them.
