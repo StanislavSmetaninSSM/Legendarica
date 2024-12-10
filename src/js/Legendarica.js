@@ -684,11 +684,11 @@ function logMessage(message, currentHealthChange, currentEnergyChange, moneyChan
 
 function generateLoot(arr, numberOfItems) {
     const coefficients = {
-        searchCoefficient: arr[0],
-        locationCoefficient: arr[1],
-        dangerCoefficient: arr[2],
-        logicCoefficient: arr[3],
-        characterCoefficient: arr[4]
+        searchCoefficient: Number(arr[0]),
+        locationCoefficient: Number(arr[1]),
+        dangerCoefficient: Number(arr[2]),
+        logicCoefficient: Number(arr[3]),
+        characterCoefficient: Number(arr[4])
     };
 
     //General formula for the coefficient.
