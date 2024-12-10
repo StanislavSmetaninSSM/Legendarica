@@ -819,7 +819,7 @@ function showInventoryInfo(id) {
     ELEMENTS.inventoryInfoCount.innerHTML = `${countLabel}: ${currentItem.count ?? '-'}`;
     ELEMENTS.inventoryInfoQuality.innerHTML = `${qualityLabel}: ${currentItem.quality ?? '-'}`;
     ELEMENTS.inventoryInfoDurability.innerHTML = `${durabilityLabel}: ${durablityValue ?? '-'}`;
-    ELEMENTS.inventoryInfoPrice.innerHTML = `${priceLabel}: ${currentItem.price}`;
+    ELEMENTS.inventoryInfoPrice.innerHTML = `${priceLabel}: ${currentItem.price ?? '-'}`;
 
     ELEMENTS.inventoryInfoCustomProperty.innerHTML = markdown(currentItem.customProperty);
     if (!currentItem.customProperty) {
@@ -872,23 +872,21 @@ function deleteItem(currentItem, throwItem) {
         return;
 
     if (throwItem) {
-        const countText = currentItem.count > 1 ? `${currentItem.count} ` : "";
-        const nameAndCount = countText + currentItem.name;
+        const countText = currentItem.count > 1 ? `(${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-count-label"]}: ${currentItem.count})` : "";
+        const nameAndCount = `${currentItem.name} ${countText}`;
         removeItemString += `${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"]} ${nameAndCount}. `;
     }
     inventory = inventory.filter(item => currentItem.id !== item.id);
     updateInventoryList();
 }
 
-function addInventoryItem(name, description, count, quality, price, durability, bonuses, image_prompt) {
+function addInventoryItem(name, description, count, quality, price, durability, bonuses, image_prompt, customProperty) {
     const existingItemIndex = inventory.findIndex(item => item.name === name);
 
     if (existingItemIndex !== -1) {
         //If the item already exists, move it to the top of the list.
         const existingItem = inventory[existingItemIndex];
 
-        if (count != "")
-            existingItem.count = count;
         if (quality)
             existingItem.quality = quality;
         if (durability != "")
@@ -896,15 +894,17 @@ function addInventoryItem(name, description, count, quality, price, durability, 
         if (image_prompt)
             existingItem.image_prompt = image_prompt;
 
+        existingItem.count = count;
         existingItem.price = price;
         existingItem.bonuses = bonuses;
         existingItem.description = description;
-        
+        existingItem.customProperty = customProperty;
+
         inventory.splice(existingItemIndex, 1);
         inventory.unshift(existingItem);
     } else {
         //Add a new item to the top of the list.
-        inventory.unshift({ name, description, count, quality, price, durability, bonuses, image_prompt });
+        inventory.unshift({ name, description, count, quality, price, durability, bonuses, image_prompt, customProperty });
     }
     updateInventoryList();
     if (ELEMENTS.inventoryInfo.style.display !== 'block')
@@ -2731,7 +2731,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (data.inventoryItemsData && data.inventoryItemsData.length > 0) {
                 for (const item of data.inventoryItemsData) {
                     if (item.name)
-                        addInventoryItem(item.name, item.description, item.count, item.quality, item.price, item.durability, item.bonuses, item.image_prompt);
+                        addInventoryItem(item.name, item.description, Number(item.count), item.quality, item.price, item.durability, item.bonuses, item.image_prompt, item.customProperty);
                 }
             }
 
