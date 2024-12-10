@@ -158,7 +158,6 @@ const translationModule = (function getTranslationModule() {
             "my-rules-explanaition": "Here you can modify or add game rules or simply influence the behavior of the game master. Just enter an instruction here and leave it. For example: 'The character's inventory should have a list as a separate item, which indicates all bonuses in total from all items in the inventory, and if there is no such list in the inventory, add it' or 'let there be monsters in every location'. Warning: changes made may break some game mechanics. Or they may not. Go for it!",
             "clear-log": "Clear log. Almost does not affect the game master's memory, as he only remembers the last 5 log messages",
             "clear-system-chat": "Delete all red messages from the chat. Does not affect the game master's memory at all",
-            "clear-item-descriptions": "Clear the database of descriptions for items that are not currently in the inventory. Why? If you place an item somewhere or sell it, the item and its description don't disappear from the world, so you can retrieve it later. But information about such items is sent to the gamemaster with each request, which consumes tokens. You can use this function if you don't plan to buy anything back or retrieve something from somewhere. Note: if you delete an item through the item description window in the inventory, the item will automatically be deleted from the descriptions database as well.",
             "clear-half-chat": "Clear half of the chat. Details from the deleted chat will be forgotten by the game master. Compressed information stored in location and item descriptions will not be forgotten. You can write down individual events or a compressed history of adventures on separate sheets of paper in the inventory before deleting the chat.",
             "settings-button-label": "Settings",
             "load-box-button-label": "Load game",
@@ -407,6 +406,12 @@ const translationModule = (function getTranslationModule() {
             "load-system-instructions-button-label": "Load system instructions from file",
             "skill-info-delete": "Forget this skill",
             "empty-ai-key-label": "API key is not set. Please enter the API key.",
+            "inventory-count-label": "Quantity",
+            "inventory-quality-label": "Quality",
+            "inventory-durability-label": "Durability",
+            "inventory-bonuses-label": "Bonuses",
+            "inventory-delete-message": "Are you sure you want to discard this item? Look at the quantity – all items will be discarded, even if there is more than one. You can discard n items out of the total by typing this text in the game. Please confirm your action.",
+            "inventory-price-label": "Price",
         },
         "russian-language": {
             // placeholders
@@ -553,7 +558,6 @@ const translationModule = (function getTranslationModule() {
             "my-rules-explanaition": "Здесь вы можете изменить или дополнить правила игры или просто повлиять на поведение ведущего. Просто введите тут инструкцию и оставьте. Например: 'В инвентаре персонажа должен быть список в виде отдельного предмета, в котором указаны вообще все бонусы в сумме со всех предметов в инвентаре, а если такого списка в инвентаре нет, то добавить его' или 'пусть в каждой локации будут монстры'. Предупреждение: внесённые изменения могут сломать какие-нибудь механики игры. А могут и не сломать. Дерзайте!",
             "clear-log": "Очистить лог. Почти не влияет на память гейммастера, так как он помнит только последние 5 сообщений лога",
             "clear-system-chat": "Удалить все красные сообщения из чата. Никак не влияет на память гейммастера",
-            "clear-item-descriptions": "Очистить базу данных описаний тех предметов, которых нет в данный момент в инвентаре. Для чего это? Если вы выкладываете куда-то предмет или продаете, то предмет и его описание не исчезает из мира, для того чтобы его потом можно было забрать обратно. Но информация о таких предметах отсылается гейммастеру каждый запрос, что расходует токены. Вы можете использовать данную функцию в случае, если не собираетесь ничего выкупать или забирать что-то откуда-то обратно. Примечание: если предмет удалить через окно описания предмета в инвентаре, то предмет удалится и из базы данных описаний автоматически.",
             "clear-half-chat": "Очистить половину чата. Подробности из удаленного чата забудутся гейммастером. Сжатая информация, хранящаяся в описаниях локаций и предметов, не забудется. Вы можете записать отдельные события или сжатую историю приключений на отдельные листы бумаги в инвентаре перед удалением чата.",
             "settings-button-label": "Настройки",
             "load-box-button-label": "Загрузить игру",
@@ -799,6 +803,12 @@ Websim. Зависит от нейросети, которую использу�
             "load-system-instructions-button-label": "Загрузить системные инструкции из файла",
             "skill-info-delete": "Забыть этот навык",
             "empty-ai-key-label": "Не задан API ключ. Введите API ключ.",
+            "inventory-count-label": "Количество",
+            "inventory-quality-label": "Качество",
+            "inventory-durability-label": "Прочность",
+            "inventory-bonuses-label": "Эффекты",
+            "inventory-delete-message": "Вы уверены, что хотите выбросить этот предмет? Посмотрите на количество - будут выброшены все предметы, даже если их больше одного. Вы можете выбросить n предметов из общего количества, написав это текстом в игре. Подтвердите ваше действие.",
+            "inventory-price-label": "Цена",
         },
         "spanish-language": {
             // placeholders
@@ -945,7 +955,6 @@ Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, 
             "my-rules-explanaition": "Aquí puedes modificar o complementar las reglas del juego o simplemente influir en el comportamiento del maestro. Simplemente ingresa una instrucción aquí y déjala. Por ejemplo: 'En el inventario del personaje debe haber una lista como un elemento separado que enumere todos los bonos en total de todos los elementos en el inventario, y si no hay tal lista en el inventario, agrégala' o 'que haya monstruos en cada ubicación'. Advertencia: los cambios realizados pueden romper algunas mecánicas del juego. O pueden no romperlas. ¡Atrévete!",
             "clear-log": "Limpiar registro. Casi no afecta la memoria del maestro del juego, ya que solo recuerda los últimos 5 mensajes del registro",
             "clear-system-chat": "Eliminar todos los mensajes rojos del chat. No afecta en absoluto la memoria del maestro del juego",
-            "clear-item-descriptions": "Limpiar la base de datos de descripciones de aquellos objetos que no están actualmente en el inventario. ¿Para qué? Si colocas un objeto en algún lugar o lo vendes, el objeto y su descripción no desaparecen del mundo, para que puedas recuperarlo más tarde. Pero la información sobre estos objetos se envía al maestro del juego en cada solicitud, lo que consume tokens. Puedes usar esta función si no planeas comprar nada de vuelta o recuperar algo de algún lugar. Nota: si eliminas un objeto a través de la ventana de descripción del objeto en el inventario, el objeto se eliminará automáticamente de la base de datos de descripciones también.",
             "clear-half-chat": "Limpiar la mitad del chat. Los detalles del chat eliminado serán olvidados por el maestro del juego. La información condensada almacenada en las descripciones de ubicaciones y objetos no se olvidará. Puedes escribir eventos individuales o una historia condensada de las aventuras en hojas de papel separadas en el inventario antes de eliminar el chat.",
             "settings-button-label": "Configuración",
             "load-box-button-label": "Cargar juego",
@@ -1194,6 +1203,12 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "load-system-instructions-button-label": "Cargar instrucciones del sistema desde archivo",
             "skill-info-delete": "Olvidar esta habilidad",
             "empty-ai-key-label": "No se ha establecido la clave API. Por favor, introduce la clave API.",
+            "inventory-count-label": "Cantidad",
+            "inventory-quality-label": "Calidad",
+            "inventory-durability-label": "Durabilidad",
+            "inventory-bonuses-label": "Bonificaciones",
+            "inventory-delete-message": "¿Está seguro de que desea desechar este artículo? Observe la cantidad: se desecharán todos los artículos, incluso si hay más de uno. Puede desechar n artículos del total escribiendo este texto en el juego. Por favor, confirme su acción.",
+            "inventory-price-label": "Precio",
         },
         "portuguese-language": {
             // placeholders
@@ -1340,7 +1355,6 @@ Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria 
             "my-rules-explanaition": "Aqui você pode alterar ou complementar as regras do jogo ou simplesmente influenciar o comportamento do mestre. Basta inserir sua instrução aqui e deixá-la. Por exemplo: 'No inventário do personagem deve haver uma lista como um item separado, que lista todos os bônus de todos os itens no inventário, e se não houver tal lista no inventário, adicioná-la' ou 'que haja monstros em cada localização'. Aviso: as alterações feitas podem quebrar alguns mecanismos do jogo. Ou podem não quebrar. Ouse!",
             "clear-log": "Limpar o log. Quase não afeta a memória do mestre, pois ele lembra apenas das últimas 5 mensagens do log",
             "clear-system-chat": "Remover todas as mensagens vermelhas do chat. Não afeta a memória do mestre de forma alguma",
-            "clear-item-descriptions": "Limpar o banco de dados de descrições dos itens que não estão atualmente no inventário. Para quê? Se você coloca um item em algum lugar ou o vende, o item e sua descrição não desaparecem do mundo, para que você possa recuperá-lo mais tarde. Mas as informações sobre esses itens são enviadas ao mestre do jogo a cada solicitação, o que consome tokens. Você pode usar esta função se não planeja comprar nada de volta ou recuperar algo de algum lugar. Observação: se você excluir um item através da janela de descrição do item no inventário, o item será automaticamente excluído do banco de dados de descrições também.",
             "clear-half-chat": "Limpar metade do chat. Detalhes do chat removido serão esquecidos pelo mestre. Informações comprimidas armazenadas nas descrições de localizações e itens não serão esquecidas. Você pode registrar eventos individuais ou uma história comprimida de aventuras em folhas de papel separadas no inventário antes de excluir o chat.",
             "settings-button-label": "Configurações",
             "load-box-button-label": "Carregar jogo",
@@ -1589,6 +1603,12 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "load-system-instructions-button-label": "Carregar instruções do sistema a partir do arquivo",
             "skill-info-delete": "Esquecer esta habilidade",
             "empty-ai-key-label": "A chave API não está definida. Introduza a chave API.",
+            "inventory-count-label": "Quantidade",
+            "inventory-quality-label": "Qualidade",
+            "inventory-durability-label": "Durabilidade",
+            "inventory-bonuses-label": "Bônus",
+            "inventory-delete-message": "Tem certeza de que deseja descartar este item? Veja a quantidade – todos os itens serão descartados, mesmo que haja mais de um. Você pode descartar n itens do total digitando este texto no jogo. Por favor, confirme sua ação.",
+            "inventory-price-label": "Preço",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -1734,7 +1754,6 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "my-rules-explanaition": "यहाँ आप खेल के नियमों को बदल या जोड़ सकते हैं या बस गेममास्टर के व्यवहार को प्रभावित कर सकते हैं। बस यहाँ निर्देश दर्ज करें और छोड़ दें। उदाहरण के लिए: 'चरित्र की इन्वेंटरी में एक अलग वस्तु के रूप में एक सूची होनी चाहिए जिसमें इन्वेंटरी में सभी वस्तुओं से कुल बोनस दिखाया गया हो, और यदि इन्वेंटरी में ऐसी सूची नहीं है, तो इसे जोड़ें' या 'प्रत्येक स्थान में राक्षस हों'। चेतावनी: किए गए परिवर्तन खेल के कुछ तंत्र को तोड़ सकते हैं। या नहीं भी तोड़ सकते। साहस करें!",
             "clear-log": "लॉग साफ़ करें। गेममास्टर की याददाश्त पर लगभग कोई प्रभाव नहीं पड़ता, क्योंकि वह केवल पिछले 5 लॉग संदेशों को याद रखता है",
             "clear-system-chat": "चैट से सभी लाल संदेश हटाएं। गेममास्टर की याददाश्त पर कोई प्रभाव नहीं पड़ता",
-            "clear-item-descriptions": "उन वस्तुओं के विवरणों के डेटाबेस को साफ करें जो वर्तमान में इन्वेंटरी में नहीं हैं। यह क्यों? यदि आप किसी वस्तु को कहीं रखते हैं या बेचते हैं, तो वस्तु और उसका विवरण दुनिया से गायब नहीं होता है, ताकि आप बाद में इसे वापस ले सकें। लेकिन ऐसी वस्तुओं की जानकारी हर अनुरोध पर गेममास्टर को भेजी जाती है, जो टोकन का उपयोग करती है। यदि आप कुछ भी वापस खरीदने या कहीं से कुछ वापस लेने की योजना नहीं बना रहे हैं तो आप इस फ़ंक्शन का उपयोग कर सकते हैं। नोट: यदि आप इन्वेंटरी में वस्तु विवरण विंडो के माध्यम से किसी वस्तु को हटाते हैं, तो वस्तु स्वचालित रूप से विवरण डेटाबेस से भी हट जाएगी।",
             "clear-half-chat": "आधी चैट साफ़ करें। हटाई गई चैट से विवरण गेममास्टर द्वारा भूल जाएंगे। स्थानों और वस्तुओं के विवरण में संग्रहीत संक्षिप्त जानकारी नहीं भूली जाएगी। चैट हटाने से पहले आप अलग-अलग घटनाओं या संक्षिप्त साहसिक कहानी को इन्वेंटरी में अलग कागज पर लिख सकते हैं।",
             "settings-button-label": "सेटिंग्स",
             "load-box-button-label": "गेम लोड करें",
@@ -1981,6 +2000,12 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "load-system-instructions-button-label": "फ़ाइल से सिस्टम निर्देश लोड करें",
             "skill-info-delete": "इस कौशल को भूल जाओ",
             "empty-ai-key-label": "API कुंजी सेट नहीं है। कृपया API कुंजी दर्ज करें।",
+            "inventory-count-label": "मात्रा",
+            "inventory-quality-label": "गुणवत्ता",
+            "inventory-durability-label": "टिकाऊपन",
+            "inventory-bonuses-label": "बोनस",
+            "inventory-delete-message": "क्या आप सुनिश्चित हैं कि आप इस वस्तु को फेंकना चाहते हैं? मात्रा देखें – सभी वस्तुएं फेंकी जाएंगी, भले ही उनमें से एक से अधिक हों। आप खेल में यह पाठ लिखकर कुल में से n वस्तुएं फेंक सकते हैं। कृपया अपने क्रिया की पुष्टि करें।",
+            "inventory-price-label": "मूल्य",
         },
         "german-language": {
             // placeholders
@@ -2127,7 +2152,6 @@ Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, 
             "my-rules-explanaition": "Hier können Sie die Spielregeln ändern oder ergänzen oder einfach das Verhalten des Spielleiters beeinflussen. Geben Sie einfach hier eine Anweisung ein und lassen Sie sie stehen. Zum Beispiel: 'Im Inventar des Charakters sollte eine Liste als separater Gegenstand sein, in der alle Boni von allen Gegenständen im Inventar zusammengefasst sind, und wenn es keine solche Liste im Inventar gibt, füge sie hinzu' oder 'Lass in jeder Location Monster sein'. Warnung: Die vorgenommenen Änderungen können einige Spielmechaniken kaputt machen. Oder auch nicht. Seien Sie mutig!",
             "clear-log": "Log löschen. Hat kaum Einfluss auf das Gedächtnis des Spielleiters, da er sich nur an die letzten 5 Log-Nachrichten erinnert",
             "clear-system-chat": "Alle roten Nachrichten aus dem Chat entfernen. Hat keinen Einfluss auf das Gedächtnis des Spielleiters",
-            "clear-item-descriptions": "Löschen Sie die Datenbank der Beschreibungen von Gegenständen, die sich derzeit nicht im Inventar befinden. Wozu? Wenn Sie einen Gegenstand irgendwo ablegen oder verkaufen, verschwinden der Gegenstand und seine Beschreibung nicht aus der Welt, damit Sie ihn später zurückholen können. Aber Informationen über solche Gegenstände werden bei jeder Anfrage an den Spielleiter gesendet, was Token verbraucht. Sie können diese Funktion verwenden, wenn Sie nicht vorhaben, etwas zurückzukaufen oder etwas von irgendwo zurückzuholen. Hinweis: Wenn Sie einen Gegenstand über das Gegenstandsbeschreibungsfenster im Inventar löschen, wird der Gegenstand automatisch auch aus der Beschreibungsdatenbank gelöscht.",
             "clear-half-chat": "Hälfte des Chats löschen. Details aus dem gelöschten Chat werden vom Spielleiter vergessen. Komprimierte Informationen, die in Locations- und Gegenstandsbeschreibungen gespeichert sind, werden nicht vergessen. Sie können einzelne Ereignisse oder eine komprimierte Abenteuergeschichte auf separate Papierblätter im Inventar schreiben, bevor Sie den Chat löschen.",
             "settings-button-label": "Einstellungen",
             "load-box-button-label": "Spiel laden",
@@ -2376,6 +2400,12 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "load-system-instructions-button-label": "Systemanweisungen aus Datei laden",
             "skill-info-delete": "Diese Fähigkeit vergessen",
             "empty-ai-key-label": "API-Schlüssel ist nicht festgelegt. Bitte geben Sie den API-Schlüssel ein.",
+            "inventory-count-label": "Anzahl",
+            "inventory-quality-label": "Qualität",
+            "inventory-durability-label": "Haltbarkeit",
+            "inventory-bonuses-label": "Bonus",
+            "inventory-delete-message": "Sind Sie sicher, dass Sie diesen Gegenstand wegwerfen möchten? Schauen Sie sich die Menge an – alle Gegenstände werden weggeworfen, auch wenn es mehr als einen gibt. Sie können n Gegenstände von der Gesamtanzahl wegwerfen, indem Sie diesen Text im Spiel eingeben. Bitte bestätigen Sie Ihre Aktion.",
+            "inventory-price-label": "Preis",
         },
         "french-language": {
             // placeholders
@@ -2523,7 +2553,6 @@ Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau �
             "my-rules-explanaition": "Ici, vous pouvez modifier ou compléter les règles du jeu ou simplement influencer le comportement du maître du jeu. Entrez simplement une instruction ici et laissez-la. Par exemple : 'Dans l'inventaire du personnage, il doit y avoir une liste sous forme d'objet séparé qui indique tous les bonus cumulés de tous les objets de l'inventaire, et s'il n'y a pas une telle liste dans l'inventaire, ajoutez-la' ou 'que chaque lieu ait des monstres'. Avertissement : les modifications apportées peuvent casser certaines mécaniques du jeu. Ou peuvent ne pas les casser. Osez !",
             "clear-log": "Effacer le journal. N'affecte presque pas la mémoire du maître du jeu, car il ne se souvient que des 5 derniers messages du journal",
             "clear-system-chat": "Supprimer tous les messages rouges du chat. N'affecte pas du tout la mémoire du maître du jeu",
-            "clear-item-descriptions": "Nettoyer la base de données des descriptions des objets qui ne sont pas actuellement dans l'inventaire. Pourquoi ? Si vous déposez un objet quelque part ou le vendez, l'objet et sa description ne disparaissent pas du monde, afin que vous puissiez le récupérer plus tard. Mais les informations sur ces objets sont envoyées au maître du jeu à chaque requête, ce qui consomme des tokens. Vous pouvez utiliser cette fonction si vous ne prévoyez pas de racheter quoi que ce soit ou de récupérer quelque chose quelque part. Remarque : si vous supprimez un objet via la fenêtre de description de l'objet dans l'inventaire, l'objet sera automatiquement supprimé de la base de données des descriptions également.",
             "clear-half-chat": "Effacer la moitié du chat. Les détails du chat supprimé seront oubliés par le maître du jeu. Les informations condensées stockées dans les descriptions des lieux et des objets ne seront pas oubliées. Vous pouvez noter des événements spécifiques ou une histoire condensée des aventures sur des feuilles de papier séparées dans l'inventaire avant de supprimer le chat.",
             "settings-button-label": "Paramètres",
             "load-box-button-label": "Charger la partie",
@@ -2772,6 +2801,12 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "load-system-instructions-button-label": "Charger les instructions système à partir du fichier",
             "skill-info-delete": "Oublier cette compétence",
             "empty-ai-key-label": "La clé API n'est pas définie. Veuillez saisir la clé API.",
+            "inventory-count-label": "Quantité",
+            "inventory-quality-label": "Qualité",
+            "inventory-durability-label": "Durabilité",
+            "inventory-bonuses-label": "Bonus",
+            "inventory-delete-message": "Êtes-vous sûr de vouloir jeter cet objet ? Regardez la quantité – tous les objets seront jetés, même s'il y en a plus d'un. Vous pouvez jeter n objets du total en écrivant ce texte dans le jeu. Veuillez confirmer votre action.",
+            "inventory-price-label": "Prix",
         }
     };
 
@@ -2845,7 +2880,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             'ai-model-label', 'ai-model-label2', 'ai-model-label3',
             'interface-language', 'interface-language2', 'image-mode-settings-label',
             'load-my-rules-button-label', 'download-my-rules-button-label',
-            'my-rules-explanaition', 'clear-log', 'clear-system-chat', 'clear-item-descriptions',
+            'my-rules-explanaition', 'clear-log', 'clear-system-chat',
             'clear-half-chat', 'settings-button-label',
             'load-box-button-label', 'save-box-button-lable',
             'my-rules-button-label', 'antilag-button-label',
@@ -3187,28 +3222,29 @@ Openrouter (https://openrouter.ai/). Offers both free and paid models. Free mode
                 );
 
                 // Русский перевод
-                this.setTranslation("russian-language", id, `Провайдеры нейронных сетей
-
-Для всех провайдеров вам нужно зарегистрироваться на соответствующем сайте и создать API-ключ или Access Token. Обратите внимание на значение доступного контекста модели — Legendarica использует очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, используемых Мастером Игры. Требуется контекст не менее 128 000 токенов. Информация, описанная здесь, актуальна на указанную дату (24.11.2024).
+                this.setTranslation("russian-language", id, `Провайдеры нейросетей.
+Для всех провайдеров, кроме Websim, вам нужно зарегистрироваться на соответствующем сайте и создать API ключ или Access Token. Обращайте внимание на контекст нейросети - у Легендарики очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, которые используются ГМ-ом. Нужен контекст как минимум 128 000 токенов. Информация, описанная здесь, актуальна на момент указанной даты (24.11.2024).
 
 Cohere (https://coral.cohere.com/). Предоставляет полностью бесплатный доступ к моделям Command R.
 С чего начать: модель command-r-plus
 
-Google AI Studio (https://ai.google.dev/aistudio). Все модели имеют бесплатный доступ; смотрите сайт Google AI Studio. Попробуйте экспериментальные модели — у них обычно больший лимит бесплатных сообщений в день.
+Google AI Studio (https://ai.google.dev/aistudio). Все модели имеют бесплатный лимит, смотрите на сайте студии. Попробуйте экспериментальные модели - они обычно имеют больший лимит бесплатных сообщений в день.
 С чего начать: модель gemini-1.5-pro
 
-Groq (https://groq.com/). Groq предоставляет доступ к различным бесплатным моделям, но сильно ограничивает их по контексту. В настоящее время на этом сайте нет бесплатных моделей, которые хорошо работают в Legendarica, но это может измениться в будущем. Платные модели, вероятно, будут работать хорошо. Смотрите список моделей здесь: https://console.groq.com/docs/models
+Groq (https://groq.com/). Groq предоставляет доступ к различным бесплатным моделям, но сильно ограничивает их по контексту. Сейчас на этом сайте нет бесплатных моделей, которые бы хорошо работали в Легендарике, но все может измениться в будущем. Платные модели, скорее всего, работают хорошо. Смотрите список моделей здесь: https://console.groq.com/docs/models
 
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Большое хранилище нейронных сетей. Для доступа используется Inference API, и только модели, которые его поддерживают, доступны для игры. Существует ограничение на количество сообщений в день, которое увеличивается с платной подпиской. Если модели отправляют нечитаемый текст в ответ, то либо модель очень слабая, либо температура высокая. В этом случае попробуйте снизить температуру или сменить модель.
-С чего начать: модель Qwen/Qwen2.5-72B-Instruct (температура 0.4)
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Большой репозиторий для нейросетей. Для доступа к нему используется Inference API, и только те модели, которые поддерживают его, доступны для игры. Есть ограничение на количество сообщений в день, которое становится большим с платной подпиской. Если модели посылают нечитаемый текст в качестве ответа, значит либо модель очень слабая, либо температура высокая. В этом случае, попробуйте понизить температуру или сменить модель. 
+С чего начать: модель Qwen/Qwen2.5-72B-Instruct  (температура 0.4)
 
-Mistral AI (https://mistral.ai/). Сайт Mistral AI предлагает участие в "экспериментальном" плане ценообразования, делая все модели Mistral бесплатными для использования.
+Mistral AI (https://mistral.ai/). На сайте Mistral AI есть возможность принять участие в "экспериментальном" тарифном плане, что делает все модели Mistral бесплатными для использования.
 С чего начать: модель mistral-large-latest
 
-OpenAI01 (https://openaio1api.com/ - основной сайт: https://openai01.net/). Доступ к OpenAI o1-preview. Бесплатного доступа нет. При регистрации вы получаете 10 кредитов; 2 кредита списываются за запрос к o1-preview.
-Модель: o1-preview
+OpenAI01 (https://openaio1api.com/ - главный сайт: https://openai01.net/). Доступ к OpenAI o1-preview. Бесплатного тарифа нет. При регистрации дают 10 кредитов, 2 кредита стоит запрос к o1-preview.
+Модель: o1-preview 
 
-Openrouter (https://openrouter.ai/). Предлагает как бесплатные, так и платные модели. У бесплатных моделей есть ежедневный лимит сообщений.`
+Openrouter (https://openrouter.ai/). Есть бесплатные модели, есть платные. У бесплатных моделей есть лимит сообщений в день.
+
+Websim. Зависит от нейросети, которую использует Websim. После того, как Websim изменил AI API с Claude на нечто очень слабое, Websim больше не может гарантировать хорошую игру или вообще её проведение, поскольку используемый AI очень слаб. Но все может измениться в будущем.`
                 );
 
                 // Испанский перевод

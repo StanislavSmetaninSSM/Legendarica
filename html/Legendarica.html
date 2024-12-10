@@ -201,7 +201,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <button id="clear-half-chat" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Очистить половину чата. Подробности из удаленного чата забудутся гейммастером. Сжатая информация, хранящаяся в описаниях локаций и предметов, не забудется. Вы можете записать отдельные события или сжатую историю приключений на отдельные листы бумаги в инвентаре перед удалением чата.</button>
                             <button id="clear-system-chat" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Удалить все красные сообщения из чата. Никак не влияет на память гейммастера.</button>
                             <button id="clear-log" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Очистить лог. Почти не влияет на память гейммастера, так как он помнит только последние 5 сообщений лога</button>
-                            <button id="clear-item-descriptions" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;" onclick="clearItemDescriptions()" w-tid="89">Очистить базу данных описаний тех предметов, которых нет в данный момент в инвентаре. Для чего это? Если вы выкладываете куда-то предмет или продаете, то предмет и его описание не исчезает из мира, для того чтобы его потом можно было забрать обратно. Но информация о таких предметах отсылается гейммастеру каждый запрос, что расходует токены. Вы можете использовать данную функцию в случае, если не собираетесь ничего выкупать или забирать что-то откуда-то обратно. Примечание: если предмет удалить через окно описания предмета в инвентаре, то предмет удалится и из базы данных описаний автоматически.</button>
                         </div>
 
                         <div id="system-instructions-box" class="chat-box rulesBox" data-show="false" style="display:none">
@@ -637,8 +636,15 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <span id="inventory-info-close" class="infoClose">×</span>
             <span id="inventory-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
             <span id="inventory-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <span id="inventory-info-img" class="adjustButton"><i class="uil uil-image-search"></i></span>
             <h4 id="inventory-info-name"></h4>
+            <p id="inventory-info-count"></p>
+            <p id="inventory-info-price"></p>
+            <p id="inventory-info-quality"></p>
+            <p id="inventory-info-durability"></p>
+            <p id="inventory-info-customProperty"></p>
             <p id="inventory-info-description"></p>
+            <div id="inventory-info-bonuses"></div>
             <h4 id="inventory-delete" class="infoDelete">Выбросить этот предмет</h4>
             <input type="hidden" id="inventory-info-id" name="inventory-info-id">
         </div>

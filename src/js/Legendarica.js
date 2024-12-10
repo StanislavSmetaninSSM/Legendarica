@@ -106,6 +106,7 @@ const ELEMENTS = {
     perceptionValue: document.getElementById('perception-value'),
     luckValue: document.getElementById('luck-value'),
     speedValue: document.getElementById('speed-value'),
+
     //inventory
     inventory: document.getElementById('inventory-list'),
     inventoryInfo: document.getElementById('inventory-info'),
@@ -114,6 +115,14 @@ const ELEMENTS = {
     inventoryInfoDescription: document.getElementById('inventory-info-description'),
     inventoryInfoClose: document.getElementById('inventory-info-close'),
     inventoryInfoDelete: document.getElementById('inventory-delete'),
+    inventoryInfoCount: document.getElementById('inventory-info-count'),
+    inventoryInfoPrice: document.getElementById('inventory-info-price'),
+    inventoryInfoQuality: document.getElementById('inventory-info-quality'),
+    inventoryInfoDurability: document.getElementById('inventory-info-durability'),
+    inventoryInfoCustomProperty: document.getElementById('inventory-info-customProperty'),
+    inventoryInfoBonuses: document.getElementById('inventory-info-bonuses'),
+    inventoryInfoImage: document.getElementById('inventory-info-img'),
+
     //locations
     locationsList: document.getElementById('locations-list'),
     locationInfo: document.getElementById('location-info'),
@@ -224,9 +233,6 @@ let characterStats = {
     money: 0,
 };
 
-let itemDescriptions = {
-    [translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_notepad"]]: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_notepad_description"]
-};
 let inventory = [];
 let visitedLocations = [];
 let encounteredNPCs = [];
@@ -578,7 +584,20 @@ function getStartInventory(playerClass, playerRace) {
         golem: translate["Elemental_core"]
     };
 
-    return [translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_notepad"], ...classInventory[playerClass], raceInventory[playerRace]];
+    const itemNames = [translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_notepad"], ...classInventory[playerClass], raceInventory[playerRace]];
+
+    return itemNames.map(name => {
+        return {
+            id: generateGUID(),
+            name: name,
+            description: "",
+            count: 1,
+            quality: null,
+            durability: null,
+            bonuses: [],
+            image_prompt: null
+        }
+    });   
 }
 
 function updateStatsWithoutGm() {
@@ -684,11 +703,11 @@ function logMessage(message, currentHealthChange, currentEnergyChange, moneyChan
 
 function generateLoot(arr, numberOfItems) {
     const coefficients = {
-        searchCoefficient: arr[0],
-        locationCoefficient: arr[1],
-        dangerCoefficient: arr[2],
-        logicCoefficient: arr[3],
-        characterCoefficient: arr[4]
+        searchCoefficient: Number(arr[0]),
+        locationCoefficient: Number(arr[1]),
+        dangerCoefficient: Number(arr[2]),
+        logicCoefficient: Number(arr[3]),
+        characterCoefficient: Number(arr[4])
     };
 
     //General formula for the coefficient.
@@ -751,10 +770,10 @@ function updateElements() {
 
     ELEMENTS.healthValue.textContent = characterStats.currentHealth;
     ELEMENTS.energyValue.textContent = characterStats.currentEnergy;
-    ELEMENTS.inventory.innerHTML = inventory.map(fillInventoryItem).join('');
     ELEMENTS.expValue.textContent = `${characterStats.experience}/${LEVEL_UP_EXP[characterStats.level - 1] || "Max"}`;
     ELEMENTS.moneyValue.textContent = characterStats.money;
 
+    updateInventoryList();
     updateStatus();
     updateLocationsList();
     updateNPCsList();
@@ -765,49 +784,135 @@ function updateElements() {
 
 //---- INVENTORY ----//
 
-function removeItem(index) {
-    if (index < 0)
-        return;
+function updateInventoryList() {
+    ELEMENTS.inventory.innerHTML = inventory.map(item => {
+        if (!item.id)
+            item.id = generateGUID();
 
-    const item = inventory[index];
-    if (!item)
-        return;
-
-    inventory.splice(index, 1);
-    delete itemDescriptions[item];
-}
-
-function fillInventoryItem(item, index) {
-    return `
-	    <li>
-		    <span onclick="showInventoryInfo(${index})">${item}</span>				
-	    </li>
-	`;
+        return `
+            <li>
+	            <span onclick="showInventoryInfo('${item.id}')">${item.name}</span>
+            </li>
+        `;
+    }).join('');
 }
 
 //Show item info.
-function showInventoryInfo(index) {
-    const currentItem = inventory[index];
+function showInventoryInfo(id) {
+    const currentItem = inventory.find(item => item.id === id);
+    if (!currentItem)
+        return;
+    
+    const description = currentItem.description ? markdown(currentItem.description) : translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_not_descripted"];
+    const countLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-count-label"];
+    const qualityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-quality-label"];
+    const durabilityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-durability-label"];
+    const priceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-price-label"];
+
+    let durablityValue = currentItem.durability?.toString();
+    if (durablityValue && !durablityValue.endsWith("%"))
+        durablityValue += "%";
+
+    ELEMENTS.inventoryInfoId.value = id;
+    ELEMENTS.inventoryInfoName.innerHTML = `${markdown(currentItem.name)}`;
+    ELEMENTS.inventoryInfoDescription.innerHTML = description;    
+    ELEMENTS.inventoryInfoCount.innerHTML = `${countLabel}: ${currentItem.count ?? '-'}`;
+    ELEMENTS.inventoryInfoQuality.innerHTML = `${qualityLabel}: ${currentItem.quality ?? '-'}`;
+    ELEMENTS.inventoryInfoDurability.innerHTML = `${durabilityLabel}: ${durablityValue ?? '-'}`;
+    ELEMENTS.inventoryInfoPrice.innerHTML = `${priceLabel}: ${currentItem.price}`;
+
+    ELEMENTS.inventoryInfoCustomProperty.innerHTML = markdown(currentItem.customProperty);
+    if (!currentItem.customProperty) {
+        ELEMENTS.inventoryInfoCustomProperty.classList.add("displayNone");
+    } else {
+        ELEMENTS.inventoryInfoCustomProperty.classList.remove("displayNone");
+    }
+
+    if (currentItem.bonuses?.length > 0) {
+        const listData = currentItem.bonuses.map(bonus => {
+            const parsedBonus = markdown(bonus);
+            return `<li>${parsedBonus}</li>`;
+        }).join('');
+
+        const bonusesLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-bonuses-label"];
+        ELEMENTS.inventoryInfoBonuses.innerHTML = `
+		    <span id="inventory-bonuses-label">${bonusesLabel}:</span>
+		    <ul id="inventory-info-bonuses-list">
+			    ${listData}
+		    </ul>
+		`;
+    } else {
+        ELEMENTS.inventoryInfoBonuses.innerHTML = '';
+    } 
+    
+    ELEMENTS.inventoryInfoDelete.onclick = function () {
+        const deleteMessage = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-delete-message"];
+        if (!confirmDelete(deleteMessage))
+            return;
+
+        deleteItem(currentItem, true);
+        ELEMENTS.inventoryInfo.style.display = 'none';       
+    };
+
+    ELEMENTS.inventoryInfoImage.style.display = ELEMENTS.imageToggleSettings.checked ? "inline-block" : "none";
+    ELEMENTS.inventoryInfoImage.onclick = function () {
+        showImageInfo(currentItem.name, currentItem.imageUrl, currentItem.image_prompt, currentItem);
+    }
+
+    ELEMENTS.inventoryInfo.style.display = 'block';
+}
+
+function deleteItemByNameWithoutThrow(name) {
+    const item = inventory.find(item => item.name.trim() === name?.trim());
+    deleteItem(item, false);
+}
+
+function deleteItem(currentItem, throwItem) {
     if (!currentItem)
         return;
 
-    const description = itemDescriptions[currentItem]
-        ? markdown(itemDescriptions[currentItem])
-        : translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_not_descripted"];
+    if (throwItem) {
+        const countText = currentItem.count > 1 ? `${currentItem.count} ` : "";
+        const nameAndCount = countText + currentItem.name;
+        removeItemString += `${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"]} ${nameAndCount}. `;
+    }
+    inventory = inventory.filter(item => currentItem.id !== item.id);
+    updateInventoryList();
+}
 
-    ELEMENTS.inventoryInfoId.value = index;
-    ELEMENTS.inventoryInfoName.innerHTML = `${markdown(currentItem)}`;
-    ELEMENTS.inventoryInfoDescription.innerHTML = description;
-    ELEMENTS.inventoryInfoDelete.onclick = function () {
-        if (!confirmDelete())
-            return;
+function addInventoryItem(name, description, count, quality, price, durability, bonuses, image_prompt) {
+    const existingItemIndex = inventory.findIndex(item => item.name === name);
 
-        removeItemString += `${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"]} ${currentItem}. `;
-        removeItem(index);
-        ELEMENTS.inventoryInfo.style.display = 'none';
-        ELEMENTS.inventory.innerHTML = inventory.map(fillInventoryItem).join('');
-    };
-    ELEMENTS.inventoryInfo.style.display = 'block';
+    if (existingItemIndex !== -1) {
+        //If the item already exists, move it to the top of the list.
+        const existingItem = inventory[existingItemIndex];
+
+        if (count != "")
+            existingItem.count = count;
+        if (quality)
+            existingItem.quality = quality;
+        if (durability != "")
+            existingItem.durability = durability;
+        if (image_prompt)
+            existingItem.image_prompt = image_prompt;
+
+        existingItem.price = price;
+        existingItem.bonuses = bonuses;
+        existingItem.description = description;
+        
+        inventory.splice(existingItemIndex, 1);
+        inventory.unshift(existingItem);
+    } else {
+        //Add a new item to the top of the list.
+        inventory.unshift({ name, description, count, quality, price, durability, bonuses, image_prompt });
+    }
+    updateInventoryList();
+    if (ELEMENTS.inventoryInfo.style.display !== 'block')
+        return;
+
+    const id = ELEMENTS.inventoryInfoId.value;
+    if (inventory.find(item => item.id === id))
+        showInventoryInfo(id);
 }
 
 //---- SKILLS ----//
@@ -1337,8 +1442,8 @@ ELEMENTS.imageInfoClose.onclick = function () { ELEMENTS.imageInfo.style.display
 
 //--------------------------------------------------------------------UTILITY------------------------------------------------------------------//
 
-function confirmDelete() {
-    const deleteMessage = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["confirm_message_label"];
+function confirmDelete(deleteMessage) {
+    deleteMessage ??= translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["confirm_message_label"];
     if (confirm(deleteMessage))
         return true;
 
@@ -1830,7 +1935,7 @@ function getDataForSave() {
     const myRules = ELEMENTS.myRules.value ? ELEMENTS.myRules.value : '';
     const systemInstructions = ELEMENTS.systemInstructions.value ? ELEMENTS.systemInstructions.value : '';
 
-    return JSON.stringify({ CHARACTER_INFO, itemDescriptions, characterStats, inventory, visitedLocations, myRules, systemInstructions, encounteredNPCs, statusData, passiveSkills, activeSkills, npcJournals, quests, turn }, null, "\t");
+    return JSON.stringify({ CHARACTER_INFO, characterStats, inventory, visitedLocations, myRules, systemInstructions, encounteredNPCs, statusData, passiveSkills, activeSkills, npcJournals, quests, turn }, null, "\t");
 }
 
 function loadGameInternal(savedData) {
@@ -1854,7 +1959,6 @@ function loadGameInternal(savedData) {
             }
         });
 
-        itemDescriptions = loadedCharacterInfo.itemDescriptions;
         inventory = loadedCharacterInfo.inventory;
         characterStats = loadedCharacterInfo.characterStats;
         visitedLocations = loadedCharacterInfo.visitedLocations;
@@ -2057,17 +2161,6 @@ function clickLoadSetting() {
     input.click();
 }
 
-function clearItemDescriptions() {
-    // Get all keys from the itemDescriptions object.
-    const descriptionKeys = Object.keys(itemDescriptions);
-
-    descriptionKeys.forEach(key => {
-        if (!inventory.includes(key)) {
-            delete itemDescriptions[key];
-        }
-    });
-}
-
 //----------------------------------------------------------------API------------------------------------------------------------------------------/
 async function sendRequest(currentMessage) {
     if (currentMessage) {
@@ -2104,7 +2197,7 @@ async function sendRequest(currentMessage) {
 				Detailed description of skill \n\n
 			`;
         const statsList = `['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'attractiveness', 'trade', 'perception', 'luck', 'speed']`;
-        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'description': 'item_description', 'bonuses': 'array_of_item_bonuses', 'durability': 'durability_of_the_item_in_percents', 'image_prompt': 'prompt_to_generate_item_image', 'customProperty': 'custom_property_for_player_data' }`;
+        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'description': 'item_description', 'bonuses': 'array_of_item_bonuses', 'durability': 'durability_of_the_item_in_percents', 'price': 'price_of_item_for_sold', 'image_prompt': 'prompt_to_generate_item_image', 'customProperty': 'custom_property_for_player_data' }`;
         const itemsBreakRulesTemplate = `When an item experiences some kind of force interaction (such as being hit by a weapon, but not only), its 'durability' decreases. Items have different 'durability' depending on their 'quality':
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"]} - extremely easy to break even from the slightest interaction.
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"]} - harder to break, but still quite fragile.
@@ -2218,11 +2311,13 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.4. If player receives the new item, then: [
 #4.4.1. Here is the original list of item templates available to the player in the current turn: items_list = ${JSON.stringify(loot)}. 
 #4.4.2. To assign a new item to the player, the gamemaster extracts the first item (template) from the items_list that has not yet been assigned in the current turn. Use item templates only from the original list of items in order, starting with the very first one in the items_list. It is forbidden to assign to the player any other items whose structure does not correspond to the template from the original list.
-#4.4.3. Get only 'quality' and 'bonuses' information from the items_list template.
-#4.4.4. The quality of the item received must strictly correspond to the item template extracted from the original list. It is forbidden to assign any other quality to the item.
-#4.4.5. The number of bonuses must strictly correspond to the number of bonuses on extracted item template from the original list. It is forbidden to assign any other number and type of bonuses to the item. Rename bonus_[number] using ${translationModule.currentLanguage}.
-#4.4.6. Based on the pre-calculated types of bonuses for items from the original list (based on the item template from items_list), generate each bonus at the gamemaster's choice and its value. The bonus cannot be an increase in maximum health or maximum energy. Rename 'generate_interesting_effect' with generated interesting effect name using ${translationModule.currentLanguage}. Rename generate_bonus_to_random_stat_from_1_to_[number] with generated bonus text using ${translationModule.currentLanguage}.
-#4.4.7. If all items from the original list (items_list) have already been assigned in the current turn, then the player can no longer receive an item in the current turn.
+#4.4.3. It is necessary to rename the received item from the original list of items (rename thing_[number] using ${translationModule.currentLanguage}) in accordance with the plot. ${CHARACTER_INFO.nonMagicMode ? ' Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.)' : ' '}
+#4.4.4. Get only 'quality' and 'bonuses' information from the items_list template.
+#4.4.5. The quality of the item received must strictly correspond to the item template extracted from the original list. It is forbidden to assign any other quality to the item.
+#4.4.6. The number of bonuses must strictly correspond to the number of bonuses on extracted item template from the original list. It is forbidden to assign any other number and type of bonuses to the item. Rename bonus_[number] using ${translationModule.currentLanguage}.
+#4.4.7. Based on the pre-calculated types of bonuses for items from the original list (based on the item template from items_list), generate each bonus at the gamemaster's choice and its value. The bonus cannot be an increase in maximum health or maximum energy. Rename 'generate_interesting_effect' with generated interesting effect name using ${translationModule.currentLanguage}. Rename generate_bonus_to_random_stat_from_1_to_[number] with generated bonus text using ${translationModule.currentLanguage}.
+#4.4.8. Each item from the original list (items_list) can be assigned to the player only once.
+#4.4.9. If all items from the original list (items_list) have already been assigned in the current turn, then the player can no longer receive an item in the current turn.
 ]
 #4.5. Set to the 'description' the description about the item in as much detail and artistic language as possible. ${CHARACTER_INFO.nonMagicMode ? 'Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.' : ''}
 #4.6. Set to the 'quality' one of the selected values: ${JSON.stringify(itemsQualityList)}. If it is the new item, then follow the previous instructions to determinate the item quality.
@@ -2251,8 +2346,10 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.11.2. Based on the item's durability rule, set the value of durability by your choice.
 #4.12. The value of 'customProperty' should be filled only if player asks for it. Do not fill it otherwise.
 #4.13. Mandatory record information about this event in "items_and_stat_calculations".
-${turn == 0 || characterStats.experience == 0 ? `
-#4.14. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above. Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
+${turn == 1 ? `
+#4.14. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
+Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
+It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
 ` : '' }
 #4.15. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
@@ -2262,7 +2359,8 @@ ${turn == 0 || characterStats.experience == 0 ? `
 #5. If some items of the inventory were removed from the player's inventory because of any reason, then mandatory include to the response the key 'removeInventoryItems'.
 #5.1. The value of 'removeInventoryItems' is an array of strings, each of which represents the inventory item name to remove.
 #5.2. If item property 'count' became 0 for any reason, then include its name to the 'removeInventoryItems' array.
-#5.3. Mandatory record information about this event in "items_and_stat_calculations".
+#5.3. If item was renamed, then include its name to the 'removeInventoryItems' array and add new item to 'inventoryItemsData' array.
+#5.4. Mandatory record information about this event in "items_and_stat_calculations".
 
 #6 Checking player actions: steps and requirements. [ Let's think step by step: ${CHARACTER_INFO.rpgMode ? `
 #6.1. Associate each player action (except for generating items) with one suitable characteristic only from the list: ${statsList} and translate this characteristic into ${translationModule.currentLanguage}
@@ -2301,7 +2399,7 @@ ${turn == 0 || characterStats.experience == 0 ? `
 #7.3. NPCs may suspect deception when the player violates formal logic
 #7.4. Trust in the character from non-player characters is calculated from the context of the game history, and initially they are neutral
 #7.5. Non-player characters may try to deceive the player, especially if their trust in the player is low
-#7.6. When selecting prices, the price/quality ratio of the item is very strongly taken into account in relation to the price/quality ratio of other already existing items in itemDescriptions
+#7.6. When selecting prices, the price/quality ratio of the item is very strongly taken into account in relation to the price/quality ratio of other already existing inventory (known from Context).
 #7.7. The player buys an item only if they said in the current action that they are buying the item. If they did not talk about buying, then the GM cannot make a decision about the player buying the item.
 ${ELEMENTS.useNpcList.checked ? `
 #7.8. If the NPC has a proper name (means, that NPC name explicitly includes the "first name" e.g., "King Arthur", "Elara", "Alan Wake", "Christina", "Guard Captain Roric", "Li"), then: [ 
@@ -2545,7 +2643,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
 14. Calculation of action checks for skills and calculation of items generation are different events, independent of each other. There is a separate instruction for each of these events. Distinguish between them.
 
-15. The economy and value of money in the game is built relative to known prices for items that exist in the current world according to itemDescriptions
+15. The economy and value of money in the game is built relative to known prices for items that exist in the current world according to inventory (known from Context).
 
 16. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
  ] ]`;
@@ -2629,17 +2727,17 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             //console.log(data);
             ELEMENTS.chatBox.removeChild(loadingElement);
             sendMessageToChat(data.response, 'gm');
+                      
+            if (data.inventoryItemsData && data.inventoryItemsData.length > 0) {
+                for (const item of data.inventoryItemsData) {
+                    if (item.name)
+                        addInventoryItem(item.name, item.description, item.count, item.quality, item.price, item.durability, item.bonuses, item.image_prompt);
+                }
+            }
 
-            if (data.inventory?.length > 0)
-                inventory = [...data.inventory];
-
-            if (data.itemDescriptions && Object.keys(data.itemDescriptions).length > 0)
-                itemDescriptions = { ...itemDescriptions, ...data.itemDescriptions };
-
-            if (ELEMENTS.inventoryInfo.style.display === 'block') {
-                const index = ELEMENTS.inventoryInfoId.value;
-                if (inventory[index])
-                    showInventoryInfo(index);
+            if (data.removeInventoryItems && data.removeInventoryItems.length > 0) {
+                for (const itemName of data.removeInventoryItems)
+                    deleteItemByNameWithoutThrow(itemName);
             }
 
             if (data.currentHealthChange) {
