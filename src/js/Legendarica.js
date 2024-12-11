@@ -119,6 +119,7 @@ const ELEMENTS = {
     inventoryInfoPrice: document.getElementById('inventory-info-price'),
     inventoryInfoQuality: document.getElementById('inventory-info-quality'),
     inventoryInfoDurability: document.getElementById('inventory-info-durability'),
+    inventoryInfoResource: document.getElementById('inventory-info-resource'),
     inventoryInfoCustomProperty: document.getElementById('inventory-info-customProperty'),
     inventoryInfoBonuses: document.getElementById('inventory-info-bonuses'),
     inventoryInfoImage: document.getElementById('inventory-info-img'),
@@ -802,12 +803,14 @@ function showInventoryInfo(id) {
     const currentItem = inventory.find(item => item.id === id);
     if (!currentItem)
         return;
-    
+
+    const displayNone = "displayNone";
     const description = currentItem.description ? markdown(currentItem.description) : translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_not_descripted"];
     const countLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-count-label"];
     const qualityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-quality-label"];
     const durabilityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-durability-label"];
     const priceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-price-label"];
+    const resourceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-resource-label"];
 
     let durablityValue = currentItem.durability?.toString();
     if (durablityValue && !durablityValue.endsWith("%"))
@@ -822,12 +825,20 @@ function showInventoryInfo(id) {
     ELEMENTS.inventoryInfoPrice.innerHTML = `${priceLabel}: ${currentItem.price ?? '-'}`;
 
     ELEMENTS.inventoryInfoCustomProperty.innerHTML = markdown(currentItem.customProperty);
-    if (!currentItem.customProperty) {
-        ELEMENTS.inventoryInfoCustomProperty.classList.add("displayNone");
-    } else {
-        ELEMENTS.inventoryInfoCustomProperty.classList.remove("displayNone");
-    }
+    if (!currentItem.customProperty)
+        ELEMENTS.inventoryInfoCustomProperty.classList.add(displayNone);
+    else
+        ELEMENTS.inventoryInfoCustomProperty.classList.remove(displayNone);    
 
+    let resourceValue = currentItem.resource ?? '-';
+    if (!currentItem.resource?.includes(':'))
+        resourceValue = `${resourceLabel}: ${resourceValue}`;
+    ELEMENTS.inventoryInfoResource.innerHTML = resourceValue;
+    if (!currentItem.resource)
+        ELEMENTS.inventoryInfoResource.classList.add(displayNone);
+    else
+        ELEMENTS.inventoryInfoResource.classList.remove(displayNone);    
+    
     if (currentItem.bonuses?.length > 0) {
         const listData = currentItem.bonuses.map(bonus => {
             const parsedBonus = markdown(bonus);
@@ -880,32 +891,45 @@ function deleteItem(currentItem, throwItem) {
     updateInventoryList();
 }
 
-function addInventoryItem(name, description, count, quality, price, durability, bonuses, image_prompt, customProperty) {
-    const existingItemIndex = inventory.findIndex(item => item.name === name);
+function addInventoryItem(itemParams) {
+    const existingItemIndex = inventory.findIndex(item => item.name === itemParams.name);
 
     if (existingItemIndex !== -1) {
         //If the item already exists, move it to the top of the list.
         const existingItem = inventory[existingItemIndex];
 
-        if (quality)
-            existingItem.quality = quality;
-        if (durability != "")
-            existingItem.durability = durability;
-        if (image_prompt)
-            existingItem.image_prompt = image_prompt;
+        if (itemParams.quality)
+            existingItem.quality = itemParams.quality;
+        if (itemParams.durability != "")
+            existingItem.durability = itemParams.durability;
+        if (itemParams.image_prompt)
+            existingItem.image_prompt = itemParams.image_prompt;
 
-        existingItem.count = count;
-        existingItem.price = price;
-        existingItem.bonuses = bonuses;
-        existingItem.description = description;
-        existingItem.customProperty = customProperty;
+        existingItem.resource = itemParams.resource;
+        existingItem.count = itemParams.count;
+        existingItem.price = itemParams.price;
+        existingItem.bonuses = itemParams.bonuses;
+        existingItem.description = itemParams.description;
+        existingItem.customProperty = itemParams.customProperty;
 
         inventory.splice(existingItemIndex, 1);
         inventory.unshift(existingItem);
     } else {
         //Add a new item to the top of the list.
-        inventory.unshift({ name, description, count, quality, price, durability, bonuses, image_prompt, customProperty });
+        inventory.unshift({
+            name: itemParams.name,
+            description: itemParams.description,
+            count: itemParams.count,
+            quality: itemParams.quality,
+            price: itemParams.price,
+            durability: itemParams.durability,
+            resource: itemParams.resource,
+            bonuses: itemParams.bonuses,
+            customProperty: itemParams.customProperty,
+            image_prompt: itemParams.image_prompt
+        });
     }
+
     updateInventoryList();
     if (ELEMENTS.inventoryInfo.style.display !== 'block')
         return;
@@ -2197,7 +2221,7 @@ async function sendRequest(currentMessage) {
 				Detailed description of skill \n\n
 			`;
         const statsList = `['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'attractiveness', 'trade', 'perception', 'luck', 'speed']`;
-        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'description': 'item_description', 'bonuses': 'array_of_item_bonuses', 'durability': 'durability_of_the_item_in_percents', 'price': 'price_of_item_for_sold', 'image_prompt': 'prompt_to_generate_item_image', 'customProperty': 'custom_property_for_player_data' }`;
+        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'price': 'price_of_item_for_sold', 'description': 'item_description', 'bonuses': 'array_of_item_bonuses', 'durability': 'durability_of_the_item_in_percents', 'resource': 'count_of_consumable_items_or_charges_inside_item', 'customProperty': 'custom_property_for_player_data', 'image_prompt': 'prompt_to_generate_item_image' }`;
         const itemsBreakRulesTemplate = `When an item experiences some kind of force interaction (such as being hit by a weapon, but not only), its 'durability' decreases. Items have different 'durability' depending on their 'quality':
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"]} - extremely easy to break even from the slightest interaction.
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"]} - harder to break, but still quite fragile.
@@ -2303,7 +2327,7 @@ ${CHARACTER_INFO.nonMagicMode ? `
 
 #4  If one of these conditions are true: [
 - The player receives an item (receives means: to take in hand, put on wear, or place in pockets, backpack or bag) in current turn.
-- For each item in the player's inventory in the current turn, find an item with the same name in the Context. If such an item is found, compare the values of its properties ['bonuses', 'description, 'quality', 'count', 'price', 'durability', 'customProperty' ] with the current values. The rule returns 'true' if at least one difference in the properties is found. If there is no item with the same name in the Context (i.e., the item is new), the rule is not applied to this item and continues checking the rest.
+- For each item in the player's inventory in the current turn, find an item with the same name in the Context. If such an item is found, compare the values of its properties ['bonuses', 'description, 'quality', 'count', 'price', 'durability', 'customProperty' ] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no item with the same name in the Context (i.e., the item is new), the rule is not applied to this item and continues checking the rest.
 ], then strictly follow the instructions: [ Let's think step by step : [ 
 #4.1. Include to the response the 'inventoryItemsData' key, the value of which is the array of objects, and each object of the array represents the inventory item information.
 #4.2. Mandatory the format for each object of 'inventoryItemsData' array: ${inventoryTemplate} . 
@@ -2344,22 +2368,27 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.11. To the value of the 'durability' key include the item durability as a percentage value, where 100% - maximum durability. Durability that equals to 0% means that item is broken and its 'count' must be decreased.
 #4.11.1. Use the durability rule to determinate the item durability: [ ${itemsBreakRulesTemplate} ] .
 #4.11.2. Based on the item's durability rule, set the value of durability by your choice.
-#4.12. The value of 'customProperty' should be filled only if player asks for it. Do not fill it otherwise.
-#4.13. Mandatory record information about this event in "items_and_stat_calculations".
+#4.12. To the value of the 'resource' key include string, which represents the count of expendable charges or units contained within an item. It could be ammunition (e.g. bullets inside the gun, or arrows inside the quiver). It could also be the battery charge value, or magic staff mana value, or number of milliliters in a bottle, etc.
+#4.12.1. It's important to fill not only the count of resource, but also type of resource in the 'resource' value of key. For example, bullets or arrows.
+#4.12.2. Every time the resource count of an item changes (for example, after a gun shot, or after the battery is discharged, or if the player drank water from a bottle, etc.), you need to update the 'resource' value.
+#4.12.3. If the item doesn't have any internal resource, then set the 'resource' value to null.
+#4.13. The value of 'customProperty' should be filled only if player asks for it. Do not fill it otherwise.
+#4.14. Mandatory record information about this event in "items_and_stat_calculations".
 ${turn == 1 ? `
-#4.14. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
+#4.15. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
 It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
 ` : '' }
-#4.15. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#4.16. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
-#4.16. Do not include 'inventoryItemsData' key to the response.
+#4.17. Do not include 'inventoryItemsData' key to the response.
 ]
 
 #5. If some items of the inventory were removed from the player's inventory because of any reason, then mandatory include to the response the key 'removeInventoryItems'.
 #5.1. The value of 'removeInventoryItems' is an array of strings, each of which represents the inventory item name to remove.
 #5.2. If item property 'count' became 0 for any reason, then include its name to the 'removeInventoryItems' array.
 #5.3. If item was renamed, then include its name to the 'removeInventoryItems' array and add new item to 'inventoryItemsData' array.
+#5.3.1. Don't change the quality of an item just because it's been renamed. There must be a reason other than renaming to change item's properties. If there is no reason, then don't change the renamed item's properties.
 #5.4. Mandatory record information about this event in "items_and_stat_calculations".
 
 #6 Checking player actions: steps and requirements. [ Let's think step by step: ${CHARACTER_INFO.rpgMode ? `
@@ -2615,30 +2644,32 @@ ${ELEMENTS.useQuestsList.checked ? `
 
 13. GAME RULES:
 13.1. Be smart.${CHARACTER_INFO.nonMagicMode ? ' (Important! When generating items, bonuses, abilities, locations, and enemies: consider that in this world magic is absent.)' : ' '}
-13.2. Resources: energy/money cannot be negative
+13.2. Energy/money of player cannot be negative
 13.3. If the player has current health less than 1 (current health ${characterStats.currentHealth}), then they have died and cannot continue playing unless someone resurrects them.
 13.4. Epic quests and any ancient entities: appear in the world only after the character reaches level 50. The player cannot encounter anything ancient before level 50 (no ancient tablets, no ancient runes, no ancient trees, no ancient ruins, THEY CANNOT ENCOUNTER ANYTHING ANCIENT AT ALL UNTIL THEIR LEVEL IS BELOW 50)
 13.5. Artifacts: appear in the world only after the character reaches level 75
 13.6. Any crystals are encountered by the player only after level 25
 13.7. ${itemsBreakRulesTemplate}
-13.8. Currency: only money
-13.9. Each turn should be a substantial development of the plot
-13.10. The plot should not cycle on the same thing, even if the player's action is the same
-13.11. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
-13.12. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
-13.13. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
-13.14. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
-13.15. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
-13.16. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
-13.17. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
-13.18. The player is not the epicenter of the world, the world lives an independent life
-13.19. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
-13.20. The character should not pick up items unless the player indicated to do so
-13.21. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
+13.8. Carefully monitor the 'count' property of each inventory item. If the quantity of inventory item has decreased or increased for any reason, you must change the 'count' property of the inventory item.
+13.9. Carefully monitor the 'resource' property of each inventory item. Every time the resource count of an item changes (for example, after a gun shot, or after the battery is discharged), you need to update the 'resource' value.
+13.10. Currency: only money
+13.11. Each turn should be a substantial development of the plot
+13.12. The plot should not cycle on the same thing, even if the player's action is the same
+13.13. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
+13.14. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
+13.15. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
+13.16. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
+13.17. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
+13.18. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
+13.19. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
+13.20. The player is not the epicenter of the world, the world lives an independent life
+13.21. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
+13.22. The character should not pick up items unless the player indicated to do so
+13.23. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
 ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
-13.22. The game's narrative should be based on the currently active quests (known from the Context).
-13.23. Each subsequent plot twist should move the player closer to completing the active quests.
-13.24. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
+13.24. The game's narrative should be based on the currently active quests (known from the Context).
+13.25. Each subsequent plot twist should move the player closer to completing the active quests.
+13.26. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
 ` : ''}
 
 14. Calculation of action checks for skills and calculation of items generation are different events, independent of each other. There is a separate instruction for each of these events. Distinguish between them.
@@ -2730,8 +2761,20 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                       
             if (data.inventoryItemsData && data.inventoryItemsData.length > 0) {
                 for (const item of data.inventoryItemsData) {
-                    if (item.name)
-                        addInventoryItem(item.name, item.description, Number(item.count), item.quality, item.price, item.durability, item.bonuses, item.image_prompt, item.customProperty);
+                    if (item.name) {
+                        addInventoryItem({
+                            name: item.name,
+                            description: item.description,
+                            count: Number(item.count),
+                            quality: item.quality,
+                            price: item.price,
+                            durability: item.durability,
+                            resource: item.resource,
+                            bonuses: item.bonuses,
+                            image_prompt: item.image_prompt,
+                            customProperty: item.customProperty
+                        });
+                    }
                 }
             }
 

@@ -117,7 +117,7 @@ BUDGET MANAGEMENT:
 * You MUST use at least 90% of your step budget
 * NEVER blame “limited budget” - always request more steps if needed
 * It is FORBIDDEN to finish early with unused budget
-* If you’re below 90% usage - you MUST continue thinking or request more
+* If you’re below 90% usage - you MUST continue thinking. Just do it. THINKING more!
 * Each new thought, doubt, correction counts as a step
 * Use [step] tags for each thought unit
 * Track remaining steps with [count] tags

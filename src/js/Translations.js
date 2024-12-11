@@ -412,6 +412,7 @@ const translationModule = (function getTranslationModule() {
             "inventory-bonuses-label": "Bonuses",
             "inventory-delete-message": "Are you sure you want to discard this item? Look at the quantity – all items will be discarded, even if there is more than one. You can discard n items out of the total by typing this text in the game. Please confirm your action.",
             "inventory-price-label": "Price",
+            "inventory-resource-label": "Resource",
         },
         "russian-language": {
             // placeholders
@@ -809,6 +810,7 @@ Websim. Зависит от нейросети, которую использу�
             "inventory-bonuses-label": "Эффекты",
             "inventory-delete-message": "Вы уверены, что хотите выбросить этот предмет? Посмотрите на количество - будут выброшены все предметы, даже если их больше одного. Вы можете выбросить n предметов из общего количества, написав это текстом в игре. Подтвердите ваше действие.",
             "inventory-price-label": "Цена",
+            "inventory-resource-label": "Ресурс",
         },
         "spanish-language": {
             // placeholders
@@ -1209,6 +1211,7 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "inventory-bonuses-label": "Bonificaciones",
             "inventory-delete-message": "¿Está seguro de que desea desechar este artículo? Observe la cantidad: se desecharán todos los artículos, incluso si hay más de uno. Puede desechar n artículos del total escribiendo este texto en el juego. Por favor, confirme su acción.",
             "inventory-price-label": "Precio",
+            "inventory-resource-label": "Recurso",
         },
         "portuguese-language": {
             // placeholders
@@ -1609,6 +1612,7 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "inventory-bonuses-label": "Bônus",
             "inventory-delete-message": "Tem certeza de que deseja descartar este item? Veja a quantidade – todos os itens serão descartados, mesmo que haja mais de um. Você pode descartar n itens do total digitando este texto no jogo. Por favor, confirme sua ação.",
             "inventory-price-label": "Preço",
+            "inventory-resource-label": "Recurso",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -2006,6 +2010,7 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "inventory-bonuses-label": "बोनस",
             "inventory-delete-message": "क्या आप सुनिश्चित हैं कि आप इस वस्तु को फेंकना चाहते हैं? मात्रा देखें – सभी वस्तुएं फेंकी जाएंगी, भले ही उनमें से एक से अधिक हों। आप खेल में यह पाठ लिखकर कुल में से n वस्तुएं फेंक सकते हैं। कृपया अपने क्रिया की पुष्टि करें।",
             "inventory-price-label": "मूल्य",
+            "inventory-resource-label": "संसाधन",
         },
         "german-language": {
             // placeholders
@@ -2406,6 +2411,7 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "inventory-bonuses-label": "Bonus",
             "inventory-delete-message": "Sind Sie sicher, dass Sie diesen Gegenstand wegwerfen möchten? Schauen Sie sich die Menge an – alle Gegenstände werden weggeworfen, auch wenn es mehr als einen gibt. Sie können n Gegenstände von der Gesamtanzahl wegwerfen, indem Sie diesen Text im Spiel eingeben. Bitte bestätigen Sie Ihre Aktion.",
             "inventory-price-label": "Preis",
+            "inventory-resource-label": "Ressource",
         },
         "french-language": {
             // placeholders
@@ -2807,6 +2813,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "inventory-bonuses-label": "Bonus",
             "inventory-delete-message": "Êtes-vous sûr de vouloir jeter cet objet ? Regardez la quantité – tous les objets seront jetés, même s'il y en a plus d'un. Vous pouvez jeter n objets du total en écrivant ce texte dans le jeu. Veuillez confirmer votre action.",
             "inventory-price-label": "Prix",
+            "inventory-resource-label": "Ressource",
         }
     };
 
