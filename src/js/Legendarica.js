@@ -2651,7 +2651,7 @@ ${ELEMENTS.useQuestsList.checked ? `
 13.6. Any crystals are encountered by the player only after level 25
 13.7. ${itemsBreakRulesTemplate}
 13.8. Carefully monitor the 'count' property of each inventory item. If the quantity of inventory item has decreased or increased for any reason, you must change the 'count' property of the inventory item.
-13.9. Carefully monitor the 'resource' property of each inventory item. Every time the resource count of an item changes (for example, after a gun shot, or after the battery is discharged), you need to update the 'resource' value.
+13.9. Carefully monitor the 'resource' property of each inventory item. Every time the resource count of an item changes (for example, after a gun shot, or after the battery is discharged, or if the player drank water from a bottle, etc.), you need to update the 'resource' value.
 13.10. Currency: only money
 13.11. Each turn should be a substantial development of the plot
 13.12. The plot should not cycle on the same thing, even if the player's action is the same
