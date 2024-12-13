@@ -413,6 +413,8 @@ const translationModule = (function getTranslationModule() {
             "inventory-delete-message": "Are you sure you want to discard this item? Look at the quantity – all items will be discarded, even if there is more than one. You can discard n items out of the total by typing this text in the game. Please confirm your action.",
             "inventory-price-label": "Price",
             "inventory-resource-label": "Resource",
+            "throw-from-item": "from container (if the symbol -> is present, it indicates the path to the item, from container to container)",
+            "inventory-container-open": "Open",
         },
         "russian-language": {
             // placeholders
@@ -811,6 +813,8 @@ Websim. Зависит от нейросети, которую использу�
             "inventory-delete-message": "Вы уверены, что хотите выбросить этот предмет? Посмотрите на количество - будут выброшены все предметы, даже если их больше одного. Вы можете выбросить n предметов из общего количества, написав это текстом в игре. Подтвердите ваше действие.",
             "inventory-price-label": "Цена",
             "inventory-resource-label": "Ресурс",
+            "throw-from-item": "из контейнера (если присутствует символ ->, то он указывает путь к предмету, от контейнера к контейнеру)",
+            "inventory-container-open": "Открыть",
         },
         "spanish-language": {
             // placeholders
@@ -1212,6 +1216,8 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "inventory-delete-message": "¿Está seguro de que desea desechar este artículo? Observe la cantidad: se desecharán todos los artículos, incluso si hay más de uno. Puede desechar n artículos del total escribiendo este texto en el juego. Por favor, confirme su acción.",
             "inventory-price-label": "Precio",
             "inventory-resource-label": "Recurso",
+            "throw-from-item": "desde el contenedor (si está presente el símbolo ->, indica el camino al elemento, de contenedor a contenedor)",
+            "inventory-container-open": "Abrir",
         },
         "portuguese-language": {
             // placeholders
@@ -1613,6 +1619,8 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "inventory-delete-message": "Tem certeza de que deseja descartar este item? Veja a quantidade – todos os itens serão descartados, mesmo que haja mais de um. Você pode descartar n itens do total digitando este texto no jogo. Por favor, confirme sua ação.",
             "inventory-price-label": "Preço",
             "inventory-resource-label": "Recurso",
+            "throw-from-item": "do contêiner (se o símbolo -> estiver presente, ele indica o caminho para o item, do contêiner para o contêiner)",
+            "inventory-container-open": "Abrir",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -2011,6 +2019,8 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "inventory-delete-message": "क्या आप सुनिश्चित हैं कि आप इस वस्तु को फेंकना चाहते हैं? मात्रा देखें – सभी वस्तुएं फेंकी जाएंगी, भले ही उनमें से एक से अधिक हों। आप खेल में यह पाठ लिखकर कुल में से n वस्तुएं फेंक सकते हैं। कृपया अपने क्रिया की पुष्टि करें।",
             "inventory-price-label": "मूल्य",
             "inventory-resource-label": "संसाधन",
+            "throw-from-item": "कंटेनर से (यदि प्रतीक -> मौजूद है, तो यह आइटम तक का रास्ता इंगित करता है, कंटेनर से कंटेनर तक)",
+            "inventory-container-open": "खोलें",
         },
         "german-language": {
             // placeholders
@@ -2412,6 +2422,8 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "inventory-delete-message": "Sind Sie sicher, dass Sie diesen Gegenstand wegwerfen möchten? Schauen Sie sich die Menge an – alle Gegenstände werden weggeworfen, auch wenn es mehr als einen gibt. Sie können n Gegenstände von der Gesamtanzahl wegwerfen, indem Sie diesen Text im Spiel eingeben. Bitte bestätigen Sie Ihre Aktion.",
             "inventory-price-label": "Preis",
             "inventory-resource-label": "Ressource",
+            "throw-from-item": "aus dem Container (wenn das Symbol -> vorhanden ist, zeigt es den Pfad zum Element an, vom Container zum Container)",
+            "inventory-container-open": "Öffnen",
         },
         "french-language": {
             // placeholders
@@ -2814,6 +2826,8 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "inventory-delete-message": "Êtes-vous sûr de vouloir jeter cet objet ? Regardez la quantité – tous les objets seront jetés, même s'il y en a plus d'un. Vous pouvez jeter n objets du total en écrivant ce texte dans le jeu. Veuillez confirmer votre action.",
             "inventory-price-label": "Prix",
             "inventory-resource-label": "Ressource",
+            "throw-from-item": "du conteneur (si le symbole -> est présent, il indique le chemin vers l'objet, du conteneur au conteneur)",
+            "inventory-container-open": "Ouvrir",
         }
     };
 
@@ -2901,7 +2915,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             'inventory-delete', 'npc-info-journal-label', 'npc-delete-journal', 'use-npc-journal-label', 'use-quests-list-label', 'make-game-quest-oriented-label',
             'stats-button-label', 'statsGroup-general-button-label', 'statsGroup-main-button-label', 'statsGroup-secondary-button-label', 'player-quests-button-label',
             'system-instructions-explanaition', 'ai-none2-label', 'ai-none-label', 'ai-none3-label', 'additional-settings-label2', 'additional-settings-label3',
-            'download-system-instructions-button-label', 'load-system-instructions-button-label', 'skill-info-delete',
+            'download-system-instructions-button-label', 'load-system-instructions-button-label', 'skill-info-delete', 'inventory-container-open'
         ];
 
         //Update labels

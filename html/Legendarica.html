@@ -138,7 +138,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                     <div id="player-inventory" class="infoData displayNone">
                         <button id="inventory-button-label" class="infoDataLabel" onclick="toggleElementVisible('inventory-list')">Инвентарь</button>
-                        <ul id="inventory-list" class="infoDataList" onmouseover="this.style.scrollbarWidth='thin'" onmouseout="this.style.scrollbarWidth='none'"></ul>
+                        <ul id="inventory-list" class="infoDataList"></ul>
                     </div>
 
                     <div id="visited-locations" class="infoData displayNone">
@@ -646,8 +646,20 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <p id="inventory-info-customProperty"></p>
             <p id="inventory-info-description"></p>
             <div id="inventory-info-bonuses"></div>
+            <h4 id="inventory-container-open" class="infoOpen">Открыть</h4>
             <h4 id="inventory-delete" class="infoDelete">Выбросить этот предмет</h4>
             <input type="hidden" id="inventory-info-id" name="inventory-info-id">
+        </div>
+
+        <div id="inventory-container-info" class="infoWindow">
+            <span id="inventory-container-info-close" class="infoClose">×</span>
+            <span id="inventory-container-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
+            <span id="inventory-container-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <h4 id="inventory-container-info-name"></h4>
+            <div>
+                <ul id="inventory-container-info-items" class="infoDataList"></ul>
+            </div>
+            <input type="hidden" id="inventory-container-info-id" name="inventory-container-info-id">
         </div>
 
         <div id="quest-info" class="infoWindow">

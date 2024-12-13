@@ -115,6 +115,7 @@ const ELEMENTS = {
     inventoryInfoDescription: document.getElementById('inventory-info-description'),
     inventoryInfoClose: document.getElementById('inventory-info-close'),
     inventoryInfoDelete: document.getElementById('inventory-delete'),
+    inventoryContainerOpen: document.getElementById('inventory-container-open'),
     inventoryInfoCount: document.getElementById('inventory-info-count'),
     inventoryInfoPrice: document.getElementById('inventory-info-price'),
     inventoryInfoQuality: document.getElementById('inventory-info-quality'),
@@ -123,6 +124,15 @@ const ELEMENTS = {
     inventoryInfoCustomProperty: document.getElementById('inventory-info-customProperty'),
     inventoryInfoBonuses: document.getElementById('inventory-info-bonuses'),
     inventoryInfoImage: document.getElementById('inventory-info-img'),
+
+    //inventory container
+    inventoryContainerInfo: document.getElementById('inventory-container-info'),
+    inventoryContainerInfoClose: document.getElementById('inventory-container-info-close'),
+    inventoryContainerInfoAdjust: document.getElementById('inventory-container-info-adjust'),
+    inventoryContainerInfoMove: document.getElementById('inventory-container-info-move'),
+    inventoryContainerInfoName: document.getElementById('inventory-container-info-name'),
+    inventoryContainerInfoItems: document.getElementById('inventory-container-info-items'),
+    inventoryContainerInfoId: document.getElementById('inventory-container-info-id'),
 
     //locations
     locationsList: document.getElementById('locations-list'),
@@ -598,7 +608,7 @@ function getStartInventory(playerClass, playerRace) {
             bonuses: [],
             image_prompt: null
         }
-    });   
+    });
 }
 
 function updateStatsWithoutGm() {
@@ -711,6 +721,8 @@ function generateLoot(arr, numberOfItems) {
         characterCoefficient: Number(arr[4])
     };
 
+    const loot = [];
+
     //General formula for the coefficient.
     const baseQualityMultiplier = (1 + coefficients.searchCoefficient + coefficients.characterCoefficient + coefficients.logicCoefficient)
         * coefficients.locationCoefficient * coefficients.dangerCoefficient;
@@ -774,7 +786,7 @@ function updateElements() {
     ELEMENTS.expValue.textContent = `${characterStats.experience}/${LEVEL_UP_EXP[characterStats.level - 1] || "Max"}`;
     ELEMENTS.moneyValue.textContent = characterStats.money;
 
-    updateInventoryList();
+    updateInventoryList(ELEMENTS.inventory, inventory);
     updateStatus();
     updateLocationsList();
     updateNPCsList();
@@ -785,26 +797,32 @@ function updateElements() {
 
 //---- INVENTORY ----//
 
-function updateInventoryList() {
-    ELEMENTS.inventory.innerHTML = inventory.map(item => {
+function updateInventoryList(inventoryListElement, itemsArray) {
+    inventoryListElement.innerHTML = '';
+
+    itemsArray.forEach(item => {
         if (!item.id)
             item.id = generateGUID();
 
-        return `
-            <li>
-	            <span onclick="showInventoryInfo('${item.id}')">${item.name}</span>
-            </li>
-        `;
-    }).join('');
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        span.textContent = item.name;
+        span.onclick = () => showInventoryInfo(item.id, itemsArray);
+
+        li.appendChild(span);
+        inventoryListElement.appendChild(li);
+    });
 }
 
 //Show item info.
-function showInventoryInfo(id) {
-    const currentItem = inventory.find(item => item.id === id);
+function showInventoryInfo(id, itemsArray) {
+    itemsArray ??= inventory;
+
+    const currentItem = itemsArray.find(item => item.id === id);
     if (!currentItem)
         return;
 
-    const displayNone = "displayNone";
+    const displayNoneClass = "displayNone";
     const description = currentItem.description ? markdown(currentItem.description) : translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_not_descripted"];
     const countLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-count-label"];
     const qualityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-quality-label"];
@@ -818,7 +836,7 @@ function showInventoryInfo(id) {
 
     ELEMENTS.inventoryInfoId.value = id;
     ELEMENTS.inventoryInfoName.innerHTML = `${markdown(currentItem.name)}`;
-    ELEMENTS.inventoryInfoDescription.innerHTML = description;    
+    ELEMENTS.inventoryInfoDescription.innerHTML = description;
     ELEMENTS.inventoryInfoCount.innerHTML = `${countLabel}: ${currentItem.count ?? '-'}`;
     ELEMENTS.inventoryInfoQuality.innerHTML = `${qualityLabel}: ${currentItem.quality ?? '-'}`;
     ELEMENTS.inventoryInfoDurability.innerHTML = `${durabilityLabel}: ${durablityValue ?? '-'}`;
@@ -826,19 +844,19 @@ function showInventoryInfo(id) {
 
     ELEMENTS.inventoryInfoCustomProperty.innerHTML = markdown(currentItem.customProperty);
     if (!currentItem.customProperty)
-        ELEMENTS.inventoryInfoCustomProperty.classList.add(displayNone);
+        ELEMENTS.inventoryInfoCustomProperty.classList.add(displayNoneClass);
     else
-        ELEMENTS.inventoryInfoCustomProperty.classList.remove(displayNone);    
+        ELEMENTS.inventoryInfoCustomProperty.classList.remove(displayNoneClass);
 
     let resourceValue = currentItem.resource ?? '-';
     if (!currentItem.resource?.includes(':'))
         resourceValue = `${resourceLabel}: ${resourceValue}`;
     ELEMENTS.inventoryInfoResource.innerHTML = resourceValue;
     if (!currentItem.resource)
-        ELEMENTS.inventoryInfoResource.classList.add(displayNone);
+        ELEMENTS.inventoryInfoResource.classList.add(displayNoneClass);
     else
-        ELEMENTS.inventoryInfoResource.classList.remove(displayNone);    
-    
+        ELEMENTS.inventoryInfoResource.classList.remove(displayNoneClass);
+
     if (currentItem.bonuses?.length > 0) {
         const listData = currentItem.bonuses.map(bonus => {
             const parsedBonus = markdown(bonus);
@@ -854,15 +872,15 @@ function showInventoryInfo(id) {
 		`;
     } else {
         ELEMENTS.inventoryInfoBonuses.innerHTML = '';
-    } 
-    
+    }
+
     ELEMENTS.inventoryInfoDelete.onclick = function () {
         const deleteMessage = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-delete-message"];
         if (!confirmDelete(deleteMessage))
             return;
 
-        deleteItem(currentItem, true);
-        ELEMENTS.inventoryInfo.style.display = 'none';       
+        deleteItem(currentItem, itemsArray, true);
+        ELEMENTS.inventoryInfo.style.display = 'none';
     };
 
     ELEMENTS.inventoryInfoImage.style.display = ELEMENTS.imageToggleSettings.checked ? "inline-block" : "none";
@@ -870,53 +888,87 @@ function showInventoryInfo(id) {
         showImageInfo(currentItem.name, currentItem.imageUrl, currentItem.image_prompt, currentItem);
     }
 
+    if (currentItem.isContainer)
+        ELEMENTS.inventoryContainerOpen.classList.remove(displayNoneClass);
+    else
+        ELEMENTS.inventoryContainerOpen.classList.add(displayNoneClass);
+    ELEMENTS.inventoryContainerOpen.onclick = function () {
+        openInventoryContainer(currentItem);
+    }
+
     ELEMENTS.inventoryInfo.style.display = 'block';
 }
 
-function deleteItemByNameWithoutThrow(name) {
-    const item = inventory.find(item => item.name.trim() === name?.trim());
-    deleteItem(item, false);
-}
-
-function deleteItem(currentItem, throwItem) {
-    if (!currentItem)
+function openInventoryContainer(container) {
+    if (!container || !container.isContainer)
         return;
 
+    updateInventoryList(ELEMENTS.inventoryContainerInfoItems, container.contents ?? []);
+
+    ELEMENTS.inventoryContainerInfo.style.display = 'block';
+}
+
+function findAndDeleteItem(name, contentsPath) {
+    const data = getItemByNameAndPath(name, contentsPath);
+
+    deleteItem(data.item, data.parentItemsArray, false);
+}
+
+function deleteItem(currentItem, itemsArray, throwItem) {
+    if (!currentItem || !itemsArray)
+        return;
+
+    const hasPath = isNestedItem(currentItem);
     if (throwItem) {
         const countText = currentItem.count > 1 ? `(${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-count-label"]}: ${currentItem.count})` : "";
         const nameAndCount = `${currentItem.name} ${countText}`;
-        removeItemString += `${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"]} ${nameAndCount}. `;
+        let itemPath = "";
+        if (hasPath)
+            itemPath = item.contentsPath.join("->");
+
+        removeItemString += `${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"]} ${nameAndCount}`;
+        if (itemPath)
+            removeItemString += ` ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-from-item"]} ${itemPath}`;
+        removeItemString += ".";
     }
-    inventory = inventory.filter(item => currentItem.id !== item.id);
-    updateInventoryList();
+
+    const removeIndex = itemsArray.findIndex(item => currentItem.id === item.id);
+    if (removeIndex > -1)
+        itemsArray.splice(removeIndex, 1);
+
+    const inventoryListElement = hasPath ? ELEMENTS.inventoryContainerInfoItems : ELEMENTS.inventory;
+    updateInventoryList(inventoryListElement, itemsArray);
 }
 
 function addInventoryItem(itemParams) {
-    const existingItemIndex = inventory.findIndex(item => item.name === itemParams.name);
+    const data = getItemByNameAndPath(itemParams.name, itemParams.contentsPath, inventory);
+
+    const inventoryArray = data.parentItemsArray;
+    const existingItemIndex = data.index;
+    const item = data.item;
 
     if (existingItemIndex !== -1) {
         //If the item already exists, move it to the top of the list.
-        const existingItem = inventory[existingItemIndex];
-
         if (itemParams.quality)
-            existingItem.quality = itemParams.quality;
+            item.quality = itemParams.quality;
         if (itemParams.durability != "")
-            existingItem.durability = itemParams.durability;
+            item.durability = itemParams.durability;
         if (itemParams.image_prompt)
-            existingItem.image_prompt = itemParams.image_prompt;
+            item.image_prompt = itemParams.image_prompt;
 
-        existingItem.resource = itemParams.resource;
-        existingItem.count = itemParams.count;
-        existingItem.price = itemParams.price;
-        existingItem.bonuses = itemParams.bonuses;
-        existingItem.description = itemParams.description;
-        existingItem.customProperty = itemParams.customProperty;
+        item.resource = itemParams.resource;
+        item.count = itemParams.count;
+        item.price = itemParams.price;
+        item.bonuses = itemParams.bonuses;
+        item.description = itemParams.description;
+        item.customProperty = itemParams.customProperty;
+        item.isContainer = !!itemParams.isContainer;
 
-        inventory.splice(existingItemIndex, 1);
-        inventory.unshift(existingItem);
+        inventoryArray.splice(existingItemIndex, 1);
+        inventoryArray.unshift(item);
     } else {
         //Add a new item to the top of the list.
-        inventory.unshift({
+        inventoryArray.unshift({
             name: itemParams.name,
             description: itemParams.description,
             count: itemParams.count,
@@ -926,17 +978,75 @@ function addInventoryItem(itemParams) {
             resource: itemParams.resource,
             bonuses: itemParams.bonuses,
             customProperty: itemParams.customProperty,
-            image_prompt: itemParams.image_prompt
+            image_prompt: itemParams.image_prompt,
+            contentsPath: itemParams.contentsPath,
+            isContainer: itemParams.isContainer
         });
     }
 
-    updateInventoryList();
+    if (isNestedItem(itemParams) && ELEMENTS.inventoryContainerInfo.style.display === 'block') {
+        const parentContainerId = ELEMENTS.inventoryContainerInfoId.value;
+        if (parentContainerId === data.parentId)
+            updateInventoryList(ELEMENTS.inventoryContainerInfoItems, itemsArray);
+    }
+
     if (ELEMENTS.inventoryInfo.style.display !== 'block')
         return;
 
     const id = ELEMENTS.inventoryInfoId.value;
-    if (inventory.find(item => item.id === id))
-        showInventoryInfo(id);
+    if (inventoryArray.find(item => item.id === id))
+        showInventoryInfo(id, itemsArray);
+}
+
+//name - item name to find
+//contentsPath - the array of strings, which represents the path to item. Fx, if item is stored in container, then it could be something like ['top level container name', 'second level container name', 'parent container name']. If not stored in container, it should be null.
+//parentItemsArray - array of items where need to find the item (container inventory)
+//parentId - id of parent container
+function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null, parentId = null) {
+    parentItemsArray ??= inventory; //find in global inventory as fallback
+    if (!Array.isArray(parentItemsArray))
+        return null;
+
+    if (contentsPath && !Array.isArray(contentsPath))
+        return null;
+
+    if (!contentsPath || contentsPath.length === 0)
+        return getItemAndIndex(name, parentItemsArray, parentId);
+
+    const path = contentsPath[0];
+    const remainingPath = contentsPath.slice(1);
+    const containerData = getItemAndIndex(path, parentItemsArray, parentId);
+
+    if (!containerData || !containerData.isContainer)
+        return null;
+
+    containerData.contents ??= [];
+
+    return getItemByNameAndPath(name, remainingPath, containerData.item.contents, containerData.item.id);
+
+    function getItemAndIndex(name, itemsArray, parentId) {
+        const index = itemsArray?.findIndex(item => item.name === name);
+        if (index < 0)
+            return null;
+
+        return {
+            parentId: parentId, //id of parent element: some kind of container where item is stored
+            parentItemsArray: itemsArray, //parent element inventory
+            index: index, //index of item in parentArray
+            item: itemsArray[index], //found item
+        };
+    }
+}
+
+function isNestedItem(item) {
+    return item.contentsPath && Array.isArray(item.contentsPath) && item.contentsPath.length > 0;
+}
+
+function compareItemsByContainer(itemFirst, itemSecond) {
+    if (itemFirst.isContainer && itemSecond.isContainer) return 0;
+    if (itemFirst.isContainer && !itemSecond.isContainer) return -1;
+    if (!itemFirst.isContainer && itemSecond.isContainer) return 1;
+    return 0;
 }
 
 //---- SKILLS ----//
@@ -1461,6 +1571,7 @@ ELEMENTS.locationInfoClose.onclick = function () { ELEMENTS.locationInfo.style.d
 ELEMENTS.npcInfoClose.onclick = function () { ELEMENTS.npcInfo.style.display = 'none'; }
 ELEMENTS.skillInfoClose.onclick = function () { ELEMENTS.skillInfo.style.display = 'none'; }
 ELEMENTS.inventoryInfoClose.onclick = function () { ELEMENTS.inventoryInfo.style.display = 'none'; }
+ELEMENTS.inventoryContainerInfoClose.onclick = function () { ELEMENTS.inventoryContainerInfo.style.display = 'none'; }
 ELEMENTS.questInfoClose.onclick = function () { ELEMENTS.questInfo.style.display = 'none'; }
 ELEMENTS.imageInfoClose.onclick = function () { ELEMENTS.imageInfo.style.display = 'none'; }
 
@@ -1906,6 +2017,17 @@ function getMaxGmSymbols() {
     return ELEMENTS.maxGmSymbols.value ? Number(ELEMENTS.maxGmSymbols.value) : 10000;
 }
 
+function getRandomNumber(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+
+    const mathRandomValue = Math.floor(Math.random() * (max - min + 1)) + min;
+    const timestamp = Date.now() % (max - min + 1);
+    const mixedValue = mathRandomValue ^ timestamp;
+
+    return min + (mixedValue % (max - min + 1));
+}
+
 //----------------------------------------------------------------SAVE/LOAD ACTIONS-----------------------------------------------------------------------//
 
 function clickSaveGame() {
@@ -2249,7 +2371,7 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
         if (removeItemString) {
             currentMessage += ` ${removeItemString}`;
             removeItemString = '';
-        }        
+        }
 
         const prompt = `[ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning. 
 
@@ -2378,7 +2500,7 @@ ${turn == 1 ? `
 #4.15. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
 It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
-` : '' }
+` : ''}
 #4.16. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
 #4.17. Do not include 'inventoryItemsData' key to the response.
@@ -2758,9 +2880,9 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             //console.log(data);
             ELEMENTS.chatBox.removeChild(loadingElement);
             sendMessageToChat(data.response, 'gm');
-                      
+
             if (data.inventoryItemsData && data.inventoryItemsData.length > 0) {
-                for (const item of data.inventoryItemsData) {
+                for (const item of data.inventoryItemsData.sort(compareItemsByContainer)) {
                     if (item.name) {
                         addInventoryItem({
                             name: item.name,
@@ -2772,15 +2894,17 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             resource: item.resource,
                             bonuses: item.bonuses,
                             image_prompt: item.image_prompt,
-                            customProperty: item.customProperty
+                            customProperty: item.customProperty,
+                            contentsPath: item.contentsPath,
+                            isContainer: item.isContainer
                         });
                     }
                 }
             }
 
             if (data.removeInventoryItems && data.removeInventoryItems.length > 0) {
-                for (const itemName of data.removeInventoryItems)
-                    deleteItemByNameWithoutThrow(itemName);
+                for (const item of data.removeInventoryItems)
+                    findAndDeleteItem(item.name, item.contentsPath);
             }
 
             if (data.currentHealthChange) {
@@ -2868,7 +2992,8 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             }
 
             if (data.multipliers?.length == 5) {
-                generateLoot(data.multipliers, 3);
+                const numberOfItems = getRandomNumber(1, 10);
+                loot = generateLoot(data.multipliers, numberOfItems);
             }
 
             updateElements();
@@ -2996,7 +3121,7 @@ function setAiProvider(providerName, setAlways) {
         );
         ELEMENTS.systemInstructionsBox.dataset.show = "false";
     } else if (providerName == "OpenRouter") {
-        inputsToHide.push(          
+        inputsToHide.push(
             ELEMENTS.maxTokens
         );
     } else if (providerName == "None") {
@@ -3085,6 +3210,7 @@ initializeDraggableObject(ELEMENTS.locationInfo);
 initializeDraggableObject(ELEMENTS.npcInfo);
 initializeDraggableObject(ELEMENTS.skillInfo);
 initializeDraggableObject(ELEMENTS.inventoryInfo);
+initializeDraggableObject(ELEMENTS.inventoryContainerInfo);
 initializeDraggableObject(ELEMENTS.questInfo);
 initializeDraggableObject(ELEMENTS.imageInfo);
 
@@ -3094,7 +3220,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
     const playerInfo = document.querySelector('.player-info');
     const settingsPanel = document.getElementById('settings-info');
-    const inputArea = document.querySelector('.input-area');
+    const actionButtons = document.querySelector('.action-buttons');
 
     // Добавляем класс settings-panel к контейнеру настроек
     settingsPanel.classList.add('settings-panel', 'collapsed');
@@ -3126,6 +3252,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         isInputAreaCollapsed = !isInputAreaCollapsed;
         collapseButtonInputArea.classList.toggle('collapsed');
-        inputArea.classList.toggle('collapsed');
+        actionButtons.classList.toggle('collapsed');
     });
 });

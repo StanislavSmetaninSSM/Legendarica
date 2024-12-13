@@ -160,9 +160,6 @@ input:checked + .slider {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    transition: max-height 0.2s ease, opacity 0.2s ease;
-    max-height: 1000px;
-    opacity: 1;
 }
 
 .message {
@@ -264,6 +261,9 @@ input:checked + .slider {
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
+    transition: max-height 0.2s ease, opacity 0.2s ease;
+    max-height: 1000px;
+    opacity: 1;
 }
 
 .loading {
@@ -513,7 +513,8 @@ input:checked + .slider {
     cursor: move;
 }
 
-.infoDelete {
+.infoDelete,
+.infoOpen {
     cursor: pointer;
     margin-top: 20px;
 }
@@ -642,7 +643,7 @@ img.rounded-corners {
         width: 0 !important;
     }
 
-.input-area.collapsed {
+.action-buttons.collapsed {
     max-height: 0px;
     opacity: 0;
 }
