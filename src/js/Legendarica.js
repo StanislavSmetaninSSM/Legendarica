@@ -2398,7 +2398,7 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_leg
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_unique"]} - never break.`;
 
 
-        let responseTemplate = `{ "inventoryItemsData": [] , \n "removeInventoryItems": [] , \n "locationData": { "name": "" , "difficulty": "" , "lastEventsDescription": "", "description": "", "image_prompt": "" } , \n "multipliers": [] , \n "response": "" , \n "moneyChange": , \n "currentEnergyChange": , \n "currentHealthChange": , \n "experienceGained": , \n "actions": [] , \n "image_prompt": "" , \n "items_and_stat_calculations": "", \n "newPassiveSkills": [], \n "newActiveSkills": []`;
+        let responseTemplate = `{ "inventoryItemsData": [] , \n "removeInventoryItems": [] , \n "moveInventoryItems": [] , \n "locationData": { "name": "" , "difficulty": "" , "lastEventsDescription": "", "description": "", "image_prompt": "" } , \n "multipliers": [] , \n "response": "" , \n "moneyChange": , \n "currentEnergyChange": , \n "currentHealthChange": , \n "experienceGained": , \n "actions": [] , \n "image_prompt": "" , \n "items_and_stat_calculations": "", \n "newPassiveSkills": [], \n "newActiveSkills": []`;
 
         if (ELEMENTS.useStatus.checked)
             responseTemplate += ` , \n "statusData": { "info": "", "purposes": [], "effects": [] }`;
@@ -2571,16 +2571,17 @@ Example 2 (correct): "This is an emergency first aid kit."
 #4.18.1. If the item is a container, then calculate the total weight of all items inside it and set to the value of the 'weight' key of item this calculated weight value.
 #4.18.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to "0") if it is an item with the appropriate special properties.
 #4.19. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
-#4.20. Mandatory record information about this event in "items_and_stat_calculations".
+#4.20. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
+#4.21. Mandatory record information about this event in "items_and_stat_calculations".
 ${turn == 1 ? `
-#4.21. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
+#4.22. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
 It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
 Mandatory generate items inside containers, which are in the player's inventory. Carefully read the 'description' of containers and generate items inside it based on the description.
 ` : ''}
-#4.22. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#4.23. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
-#4.23. Do not include 'inventoryItemsData' key to the response.
+#4.24. Do not include 'inventoryItemsData' key to the response.
 ]
 
 #5 If any of these conditions are true: [
@@ -2640,26 +2641,30 @@ Mandatory generate items inside containers, which are in the player's inventory.
 #7.4. If not success: if a random number from the list of generated numbers is less than 150000, then a new action check is performed, but now on 'luck', while the needed 'luck' value is chosen randomly from 1 to the needed skill value from the previous check and is compared with the current player's 'luck' value plus bonuses from the items in the inventory array known from Context.
 #7.5. The further plot is formed depending on the result of the check
 #7.6. For recording in "items_and_stat_calculations", translate the names of characteristics into natural language
-#7.7. Before the player receives a new item in the inventory: [
+#7.7. Before the player receives new items in the inventory: [
 #7.7.1. Sum up the player's 'strength' + 'constitution' stats, and add to them all the values ​​from all item bonuses, all active and passive skill bonuses, and all possible effects affecting these player stats.
-#7.7.2. Sum up the weight of all items in the player's inventory (excluding containers and items inside containers) and the weight of all containers in the player's inventory. Add to this weight the weight of the new item the player is trying to take.
+#7.7.2. Sum up the weight of all items in the player's inventory (excluding containers and items inside containers) and the weight of all containers in the player's inventory. Add to this weight the weight of the new items the player is trying to take.
 #7.7.3. Sum up all bonuses that affect the reduction of items weight. These can be spells, player skills, special properties of items, etc.
 #7.7.4. Make the check using this formula:
 (Strength + Constitution + Bonuses) * 3 + 10 >= (Total Weight - Weight Reduction), where
 • Bonuses - all bonuses, which affects the Strength or Constitution of player.
-• Total Weight - the total weight of all items in the inventory, including new one.
-• Weight Reduction - all bonuses that affect the reduction of items weight.
+• Total Weight - the total weight of all items in the inventory + weight of new items.
+• Weight Reduction - all bonuses that affect the reduction of item weights.
 #7.7.5. If the check result is true:
-- Player can receive this item. Add item to the inventory.
+- Player can receive the items. Add items to the inventory.
 If the check result is false:
-- The player cannot receive this item because it's too heavy for them - they are overencumbered by the weight they are carrying. Don't add item to the inventory, and mark in the 'response' the reason.
+- The player cannot receive these items because it's too heavy - player is overencumbered by the total weight. Don't add items to the inventory, and mark in the 'response' the reason.
+- Also it's forbidden to use the 'moveInventoryItems', 'removeInventoryItems' and 'inventoryItemsData' to manipulate these new items. Just note, that nothing has changed with these items in current turn.
 #7.7.6. Output to "items_and_stat_calculations" calculation of this check.
 ]
-#7.8. When item is need to be added inside the container item (in the player's inventory): [
+#7.8. When items are need to be added inside the container item (in the player's inventory): [
 #7.8.1. Check 'capacity' of container. Make the check using this formula:
-• Capacity >= Total count of items inside container (including new item)
-If the check result is true, then item can be placed in the container.
-If the check result is false, then don't add new item to the container and mark in the 'response' the reason.
+• Capacity >= Total count of items inside container + count of new items to add
+#7.8.2. If the check result is true:
+- Items can be placed in the container.
+If the check result is false:
+- Don't add new items to the container and mark in the 'response' the reason. 
+- Also it's forbidden to use the 'moveInventoryItems', 'removeInventoryItems' and 'inventoryItemsData' to manipulate these items. Just note, that nothing has changed with these items in current turn.
 #7.8.2. Output to "items_and_stat_calculations" the calculation of this check.
 ]
 ` : `
@@ -2910,24 +2915,26 @@ ${ELEMENTS.useQuestsList.checked ? `
 13.11. When the player taking something out of their inventory: do not believe the player. First try to check if the item the player is trying to take out is actually in their inventory. If the item is not in the player's inventory, mark it in the response, and do nothing else related with this item.
 13.12. If inventory item was renamed, then include its data to the 'removeInventoryItems' array and add new item to 'inventoryItemsData' array.
 13.12.1. Don't change the quality of inventory item just because it's been renamed. There must be a reason other than renaming to change item's properties. If there is no reason, then don't change the renamed item's properties.
-13.13. Currency: only money
-13.14. Each turn should be a substantial development of the plot
-13.15. The plot should not cycle on the same thing, even if the player's action is the same
-13.16. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
-13.17. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
-13.18. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
-13.19. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
-13.20. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
-13.21. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
-13.22. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
-13.23. The player is not the epicenter of the world, the world lives an independent life
-13.24. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
-13.25. The character should not pick up items unless the player indicated to do so
-13.26. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
+13.13. Carefully monitor the 'capacity' property of inventory container items. When new items need to be added to a container, check whether the new items can fit there.
+13.14. Carefully monitor the 'weight' property of items. When a player tries to pick up a new item, check to see if they are overloaded with the weight of items in their inventory.
+13.15. Currency: only money
+13.16. Each turn should be a substantial development of the plot
+13.17. The plot should not cycle on the same thing, even if the player's action is the same
+13.18. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
+13.19. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
+13.20. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
+13.21. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
+13.22. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
+13.23. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
+13.24. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
+13.25. The player is not the epicenter of the world, the world lives an independent life
+13.26. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
+13.27. The character should not pick up items unless the player indicated to do so
+13.28. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
 ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
-13.27. The game's narrative should be based on the currently active quests (known from the Context).
-13.28. Each subsequent plot twist should move the player closer to completing the active quests.
-13.29. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
+13.29. The game's narrative should be based on the currently active quests (known from the Context).
+13.30. Each subsequent plot twist should move the player closer to completing the active quests.
+13.31. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
 ` : ''}
 
 14. Calculation of action checks for skills and calculation of items generation are different events, independent of each other. There is a separate instruction for each of these events. Distinguish between them.
