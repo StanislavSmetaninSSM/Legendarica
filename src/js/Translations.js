@@ -415,6 +415,8 @@ const translationModule = (function getTranslationModule() {
             "inventory-resource-label": "Resource",
             "throw-from-item": "from container (if the symbol -> is present, it indicates the path to the item, from container to container)",
             "inventory-container-open": "Open",
+            "inventory-weight-label": "Weight (kilograms)",
+            "inventory-capacity-label": "Capacity",
         },
         "russian-language": {
             // placeholders
@@ -815,6 +817,8 @@ Websim. Зависит от нейросети, которую использу�
             "inventory-resource-label": "Ресурс",
             "throw-from-item": "из контейнера (если присутствует символ ->, то он указывает путь к предмету, от контейнера к контейнеру)",
             "inventory-container-open": "Открыть",
+            "inventory-weight-label": "Вес (килограммы)",
+            "inventory-capacity-label": "Вместимость",
         },
         "spanish-language": {
             // placeholders
@@ -1218,6 +1222,8 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "inventory-resource-label": "Recurso",
             "throw-from-item": "desde el contenedor (si está presente el símbolo ->, indica el camino al elemento, de contenedor a contenedor)",
             "inventory-container-open": "Abrir",
+            "inventory-weight-label": "Peso (kilogramos)",
+            "inventory-capacity-label": "Capacidad",
         },
         "portuguese-language": {
             // placeholders
@@ -1621,6 +1627,8 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "inventory-resource-label": "Recurso",
             "throw-from-item": "do contêiner (se o símbolo -> estiver presente, ele indica o caminho para o item, do contêiner para o contêiner)",
             "inventory-container-open": "Abrir",
+            "inventory-weight-label": "Peso (quilogramas)",
+            "inventory-capacity-label": "Capacidade",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -2021,6 +2029,8 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "inventory-resource-label": "संसाधन",
             "throw-from-item": "कंटेनर से (यदि प्रतीक -> मौजूद है, तो यह आइटम तक का रास्ता इंगित करता है, कंटेनर से कंटेनर तक)",
             "inventory-container-open": "खोलें",
+            "inventory-weight-label": "वजन (किलोग्राम)",
+            "inventory-capacity-label": "क्षमता",
         },
         "german-language": {
             // placeholders
@@ -2424,6 +2434,8 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "inventory-resource-label": "Ressource",
             "throw-from-item": "aus dem Container (wenn das Symbol -> vorhanden ist, zeigt es den Pfad zum Element an, vom Container zum Container)",
             "inventory-container-open": "Öffnen",
+            "inventory-weight-label": "Gewicht (Kilogramm)",
+            "inventory-capacity-label": "Kapazität",
         },
         "french-language": {
             // placeholders
@@ -2828,6 +2840,8 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "inventory-resource-label": "Ressource",
             "throw-from-item": "du conteneur (si le symbole -> est présent, il indique le chemin vers l'objet, du conteneur au conteneur)",
             "inventory-container-open": "Ouvrir",
+            "inventory-weight-label": "Poids (kilogrammes)",
+            "inventory-capacity-label": "Capacité",
         }
     };
 

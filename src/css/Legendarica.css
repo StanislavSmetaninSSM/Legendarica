@@ -748,6 +748,7 @@ img.rounded-corners {
     }
 
 #inventory-list li,
+.inventoryList li,
 .listWithInheritedList li {
     margin-bottom: 5px;
     position: relative;
@@ -755,6 +756,7 @@ img.rounded-corners {
 }
 
     #inventory-list li::marker,
+    .inventoryList li::marker,
     .listWithInheritedList li::marker {
         margin-left: 5px;
         width: 40px;
@@ -793,6 +795,7 @@ img.rounded-corners {
 #visited-locations,
 #player-npc,
 #player-quests,
+.inventoryList,
 .listWithInheritedList {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
 }
@@ -882,6 +885,7 @@ img.rounded-corners {
 }
 
 #inventory-list,
+.inventoryList,
 .listWithInheritedList {
     overflow: visible;
     max-height: none !important;

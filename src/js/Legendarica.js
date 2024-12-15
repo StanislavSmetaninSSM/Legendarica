@@ -121,6 +121,8 @@ const ELEMENTS = {
     inventoryInfoQuality: document.getElementById('inventory-info-quality'),
     inventoryInfoDurability: document.getElementById('inventory-info-durability'),
     inventoryInfoResource: document.getElementById('inventory-info-resource'),
+    inventoryInfoWeight: document.getElementById('inventory-info-weight'),
+    inventoryInfoCapacity: document.getElementById('inventory-info-capacity'),
     inventoryInfoCustomProperty: document.getElementById('inventory-info-customProperty'),
     inventoryInfoBonuses: document.getElementById('inventory-info-bonuses'),
     inventoryInfoImage: document.getElementById('inventory-info-img'),
@@ -829,18 +831,22 @@ function showInventoryInfo(id, itemsArray) {
     const durabilityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-durability-label"];
     const priceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-price-label"];
     const resourceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-resource-label"];
+    const weightLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-weight-label"];
+    const capacityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-capacity-label"];
 
     let durablityValue = currentItem.durability?.toString();
     if (durablityValue && !durablityValue.endsWith("%"))
         durablityValue += "%";
 
     ELEMENTS.inventoryInfoId.value = id;
-    ELEMENTS.inventoryInfoName.innerHTML = `${markdown(currentItem.name)}`;
+    ELEMENTS.inventoryInfoName.innerHTML = markdown(currentItem.name);
     ELEMENTS.inventoryInfoDescription.innerHTML = description;
     ELEMENTS.inventoryInfoCount.innerHTML = `${countLabel}: ${currentItem.count ?? '-'}`;
     ELEMENTS.inventoryInfoQuality.innerHTML = `${qualityLabel}: ${currentItem.quality ?? '-'}`;
     ELEMENTS.inventoryInfoDurability.innerHTML = `${durabilityLabel}: ${durablityValue ?? '-'}`;
     ELEMENTS.inventoryInfoPrice.innerHTML = `${priceLabel}: ${currentItem.price ?? '-'}`;
+    ELEMENTS.inventoryInfoWeight.innerHTML = `${weightLabel}: ${currentItem.weight ?? '-'}`;
+    ELEMENTS.inventoryInfoCapacity.innerHTML = `${capacityLabel}: ${currentItem.capacity ?? '-'}`;
 
     ELEMENTS.inventoryInfoCustomProperty.innerHTML = markdown(currentItem.customProperty);
     if (!currentItem.customProperty)
@@ -888,10 +894,16 @@ function showInventoryInfo(id, itemsArray) {
         showImageInfo(currentItem.name, currentItem.imageUrl, currentItem.image_prompt, currentItem);
     }
 
-    if (currentItem.isContainer)
+    if (currentItem.isContainer && currentItem.capacity > 0) {
         ELEMENTS.inventoryContainerOpen.classList.remove(displayNoneClass);
-    else
+        ELEMENTS.inventoryInfoCapacity.classList.remove(displayNoneClass);
+        ELEMENTS.inventoryInfoCount.classList.add(displayNoneClass);
+    } else {
         ELEMENTS.inventoryContainerOpen.classList.add(displayNoneClass);
+        ELEMENTS.inventoryInfoCapacity.classList.add(displayNoneClass);
+        ELEMENTS.inventoryInfoCount.classList.remove(displayNoneClass);
+    }
+
     ELEMENTS.inventoryContainerOpen.onclick = function () {
         openInventoryContainer(currentItem);
     }
@@ -903,14 +915,43 @@ function openInventoryContainer(container) {
     if (!container || !container.isContainer)
         return;
 
+    ELEMENTS.inventoryContainerInfoId.value = container.id;
+    ELEMENTS.inventoryContainerInfoName.innerHTML = markdown(container.name);
     updateInventoryList(ELEMENTS.inventoryContainerInfoItems, container.contents ?? []);
 
     ELEMENTS.inventoryContainerInfo.style.display = 'block';
 }
 
+function findAndMoveItem(name, contentsPath, contentsPathOfDestinationContainer, destinationContainerName) {
+    const dataItemToMove = getItemByNameAndPath(name, contentsPath);
+
+    if (!dataItemToMove?.item)
+        return;
+
+    const currentItem = dataItemToMove.item;
+    const originalItemsArray = dataItemToMove.parentItemsArray ?? inventory;
+    const removeIndex = originalItemsArray.findIndex(item => currentItem.id === item.id);
+    if (removeIndex < 0)
+        return;
+    originalItemsArray.splice(removeIndex, 1);
+
+    let destinationItemsArray = inventory;
+    if (destinationContainerName) {
+        const containerData = getItemByNameAndPath(destinationContainerName, contentsPathOfDestinationContainer);
+        if (containerData.item) {
+            containerData.item.contents ??= [];
+            destinationItemsArray = containerData.item.contents;
+        }
+    }
+    destinationItemsArray.push(currentItem);
+}
+
 function findAndDeleteItem(name, contentsPath) {
     const data = getItemByNameAndPath(name, contentsPath);
 
+    if (!data?.item)
+        return;    
+    
     deleteItem(data.item, data.parentItemsArray, false);
 }
 
@@ -924,7 +965,7 @@ function deleteItem(currentItem, itemsArray, throwItem) {
         const nameAndCount = `${currentItem.name} ${countText}`;
         let itemPath = "";
         if (hasPath)
-            itemPath = item.contentsPath.join("->");
+            itemPath = currentItem.contentsPath.join("->");
 
         removeItemString += `${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"]} ${nameAndCount}`;
         if (itemPath)
@@ -943,11 +984,11 @@ function deleteItem(currentItem, itemsArray, throwItem) {
 function addInventoryItem(itemParams) {
     const data = getItemByNameAndPath(itemParams.name, itemParams.contentsPath, inventory);
 
-    const inventoryArray = data.parentItemsArray;
-    const existingItemIndex = data.index;
-    const item = data.item;
+    const inventoryArray = data?.parentItemsArray ?? inventory;
+    const existingItemIndex = data?.index ?? -1;
 
     if (existingItemIndex !== -1) {
+        const item = data.item;
         //If the item already exists, move it to the top of the list.
         if (itemParams.quality)
             item.quality = itemParams.quality;
@@ -963,6 +1004,8 @@ function addInventoryItem(itemParams) {
         item.description = itemParams.description;
         item.customProperty = itemParams.customProperty;
         item.isContainer = !!itemParams.isContainer;
+        item.weight = itemParams.weight;
+        item.capacity = itemParams.capacity;
 
         inventoryArray.splice(existingItemIndex, 1);
         inventoryArray.unshift(item);
@@ -980,14 +1023,16 @@ function addInventoryItem(itemParams) {
             customProperty: itemParams.customProperty,
             image_prompt: itemParams.image_prompt,
             contentsPath: itemParams.contentsPath,
-            isContainer: itemParams.isContainer
+            isContainer: itemParams.isContainer,
+            weight: itemParams.weight,
+            capacity: itemParams.capacity
         });
     }
 
     if (isNestedItem(itemParams) && ELEMENTS.inventoryContainerInfo.style.display === 'block') {
         const parentContainerId = ELEMENTS.inventoryContainerInfoId.value;
         if (parentContainerId === data.parentId)
-            updateInventoryList(ELEMENTS.inventoryContainerInfoItems, itemsArray);
+            updateInventoryList(ELEMENTS.inventoryContainerInfoItems, inventoryArray);
     }
 
     if (ELEMENTS.inventoryInfo.style.display !== 'block')
@@ -995,7 +1040,7 @@ function addInventoryItem(itemParams) {
 
     const id = ELEMENTS.inventoryInfoId.value;
     if (inventoryArray.find(item => item.id === id))
-        showInventoryInfo(id, itemsArray);
+        showInventoryInfo(id, inventoryArray);
 }
 
 //name - item name to find
@@ -1017,23 +1062,22 @@ function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null
     const remainingPath = contentsPath.slice(1);
     const containerData = getItemAndIndex(path, parentItemsArray, parentId);
 
-    if (!containerData || !containerData.isContainer)
+    if (!containerData?.item || !containerData.item.isContainer)
         return null;
 
-    containerData.contents ??= [];
+    containerData.item.contents ??= [];
 
     return getItemByNameAndPath(name, remainingPath, containerData.item.contents, containerData.item.id);
 
     function getItemAndIndex(name, itemsArray, parentId) {
         const index = itemsArray?.findIndex(item => item.name === name);
-        if (index < 0)
-            return null;
+        const item = index > -1 ? itemsArray[index] : null;      
 
         return {
             parentId: parentId, //id of parent element: some kind of container where item is stored
             parentItemsArray: itemsArray, //parent element inventory
             index: index, //index of item in parentArray
-            item: itemsArray[index], //found item
+            item: item, //found item
         };
     }
 }
@@ -1042,7 +1086,7 @@ function isNestedItem(item) {
     return item.contentsPath && Array.isArray(item.contentsPath) && item.contentsPath.length > 0;
 }
 
-function compareItemsByContainer(itemFirst, itemSecond) {
+function compareItemsByContainerAsc(itemFirst, itemSecond) {
     if (itemFirst.isContainer && itemSecond.isContainer) return 0;
     if (itemFirst.isContainer && !itemSecond.isContainer) return -1;
     if (!itemFirst.isContainer && itemSecond.isContainer) return 1;
@@ -2343,7 +2387,7 @@ async function sendRequest(currentMessage) {
 				Detailed description of skill \n\n
 			`;
         const statsList = `['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'attractiveness', 'trade', 'perception', 'luck', 'speed']`;
-        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'price': 'price_of_item_for_sold', 'description': 'item_description', 'bonuses': 'array_of_item_bonuses', 'durability': 'durability_of_the_item_in_percents', 'resource': 'count_of_consumable_items_or_charges_inside_item', 'customProperty': 'custom_property_for_player_data', 'image_prompt': 'prompt_to_generate_item_image' }`;
+        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'price': 'price_of_item_for_sold', 'description': 'item_description', 'bonuses': ['array_of_item_bonuses'], 'durability': 'durability_of_the_item_in_percents', 'resource': 'count_of_consumable_items_or_charges_inside_item', 'customProperty': 'custom_property_for_player_data', 'image_prompt': 'prompt_to_generate_item_image', 'isContainer': 'shows_if_item_is_container_to_store_items', 'capacity': 'capacity_of_container', 'contentsPath': ['path_to_item_inside_container'], 'weight': 'weight_of_item' }`;
         const itemsBreakRulesTemplate = `When an item experiences some kind of force interaction (such as being hit by a weapon, but not only), its 'durability' decreases. Items have different 'durability' depending on their 'quality':
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"]} - extremely easy to break even from the slightest interaction.
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"]} - harder to break, but still quite fragile.
@@ -2449,7 +2493,7 @@ ${CHARACTER_INFO.nonMagicMode ? `
 
 #4  If one of these conditions are true: [
 - The player receives an item (receives means: to take in hand, put on wear, or place in pockets, backpack or bag) in current turn.
-- For each item in the player's inventory in the current turn, find an item with the same name in the Context. If such an item is found, compare the values of its properties ['bonuses', 'description, 'quality', 'count', 'price', 'durability', 'customProperty' ] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no item with the same name in the Context (i.e., the item is new), the rule is not applied to this item and continues checking the rest.
+- For each item in the player's inventory in the current turn, find an item with the same name in the Context. If such an item is found, compare the values of its properties ['bonuses', 'description, 'quality', 'count', 'price', 'durability', 'customProperty', 'resource', 'isContainer', 'capacity', 'weight' ] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no item with the same name in the Context (i.e., the item is new), the rule is not applied to this item and continues checking the rest.
 ], then strictly follow the instructions: [ Let's think step by step : [ 
 #4.1. Include to the response the 'inventoryItemsData' key, the value of which is the array of objects, and each object of the array represents the inventory item information.
 #4.2. Mandatory the format for each object of 'inventoryItemsData' array: ${inventoryTemplate} . 
@@ -2462,8 +2506,20 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.4.5. The quality of the item received must strictly correspond to the item template extracted from the original list. It is forbidden to assign any other quality to the item.
 #4.4.6. The number of bonuses must strictly correspond to the number of bonuses on extracted item template from the original list. It is forbidden to assign any other number and type of bonuses to the item. Rename bonus_[number] using ${translationModule.currentLanguage}.
 #4.4.7. Based on the pre-calculated types of bonuses for items from the original list (based on the item template from items_list), generate each bonus at the gamemaster's choice and its value. The bonus cannot be an increase in maximum health or maximum energy. Rename 'generate_interesting_effect' with generated interesting effect name using ${translationModule.currentLanguage}. Rename generate_bonus_to_random_stat_from_1_to_[number] with generated bonus text using ${translationModule.currentLanguage}.
-#4.4.8. Each item from the original list (items_list) can be assigned to the player only once.
-#4.4.9. If all items from the original list (items_list) have already been assigned in the current turn, then the player can no longer receive an item in the current turn.
+#4.4.8. If the new item is a container, then: [
+#4.4.8.1. Decide whether the container is empty or not.
+#4.4.8.2. If the container is not empty, then: [
+#4.4.8.3. Decide how many items will be inside the container.
+#4.4.8.4. Sequentially extract the needed count of items (templates) from items_list that has not yet been assigned in the current turn. Use item templates only from the original list of items. It is forbidden to assign to the player any other items whose structure does not correspond to the template from the original list.
+#4.4.8.5. It is necessary to rename the received items from the original list of items (rename thing_[number] using ${translationModule.currentLanguage}) in accordance with the plot. ${CHARACTER_INFO.nonMagicMode ? ' Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.)' : ' '}
+#4.4.8.6. Get only 'quality' and 'bonuses' information from the items_list template.
+#4.4.8.7. The quality of the items received must strictly correspond to the item templates extracted from the original list. It is forbidden to assign any other quality to the items.
+#4.4.8.8. The number of bonuses must strictly correspond to the number of bonuses on extracted item templates from the original list. It is forbidden to assign any other number and type of bonuses to the items. Rename bonus_[number] using ${translationModule.currentLanguage}.
+#4.4.8.9. Based on the pre-calculated types of bonuses for items from the original list (based on the item templates from items_list), generate each bonus at the gamemaster's choice and its value. The bonus cannot be an increase in maximum health or maximum energy. Rename 'generate_interesting_effect' with generated interesting effect name using ${translationModule.currentLanguage}. Rename generate_bonus_to_random_stat_from_1_to_[number] with generated bonus text using ${translationModule.currentLanguage}.
+#4.4.8.10. If the available templates in the original list (items_list) are over, then stop extraction of templates and do not generate container items.
+] ] 
+#4.4.9. Each item from the original list (items_list) can be assigned to the player only once.
+#4.4.10. If all items from the original list (items_list) have already been assigned in the current turn, then the player can no longer receive an item in the current turn.
 ]
 #4.5. Set to the 'description' the description about the item in as much detail and artistic language as possible. ${CHARACTER_INFO.nonMagicMode ? 'Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.' : ''}
 #4.6. Set to the 'quality' one of the selected values: ${JSON.stringify(itemsQualityList)}. If it is the new item, then follow the previous instructions to determinate the item quality.
@@ -2495,66 +2551,141 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.12.2. Every time the resource count of an item changes (for example, after a gun shot, or after the battery is discharged, or if the player drank water from a bottle, etc.), you need to update the 'resource' value.
 #4.12.3. If the item doesn't have any internal resource, then set the 'resource' value to null.
 #4.13. The value of 'customProperty' should be filled only if player asks for it. Do not fill it otherwise.
-#4.14. Mandatory record information about this event in "items_and_stat_calculations".
+#4.14. To the value of the 'contentsPath' include the array of strings. Each string is a container name inside which the item is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
+#4.14.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']). Use this rule to set 'contentsPath' for each item.
+#4.14.2. If the item is only in the player's inventory and not included in a container, set 'contentsPath' to null.
+#4.15. To the value of the 'isContainer' key include boolean value, represents if the item is a container or not.
+#4.15.1. A container is any item that can store other items inside it.
+#4.15.2. To understand, that item is container, you should mandatory make a check for possibility to open an item. If item could be opened and has a space inside it, than it is a container.
+#4.16. If item is container, then use these container rules: [
+#4.16.1 Mandatory set 'isContainer' to true.
+#4.16.2. The description of an item (container) should not include information about its contents.
+Example 1 (incorrect): "This is an emergency first aid kit. Inside are bandages and iodine." The description of this container explicitly states that bandages and iodine are inside. This is an incorrect description.
+Example 2 (correct): "This is an emergency first aid kit."
+#4.16.3. Include to the 'capacity' value of key the numeric value, representing the number of items the container can hold.
+#4.16.4. It's forbidden to add more items to a container than its 'capacity' allows.
+#4.17. The 'count' property of container must always be '1'. Each container is unique one. Instead of combining containers, add the new unique one if needed. It's mandatory to follow this rule for containers.
+]
+#4.17. If 'isContainer' is false, then set the 'capacity' value to null.
+#4.18. To the value of 'weight' key include the numeric value, representing the weight of item. Each item has the weight. Unit of weight: kilogram.
+#4.18.1. If the item is a container, then calculate the total weight of all items inside it and set to the value of the 'weight' key of item this calculated weight value.
+#4.18.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to "0") if it is an item with the appropriate special properties.
+#4.19. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
+#4.20. Mandatory record information about this event in "items_and_stat_calculations".
 ${turn == 1 ? `
-#4.15. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
+#4.21. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
 It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
+Mandatory generate items inside containers, which are in the player's inventory. Carefully read the 'description' of containers and generate items inside it based on the description.
 ` : ''}
-#4.16. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#4.22. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
-#4.17. Do not include 'inventoryItemsData' key to the response.
+#4.23. Do not include 'inventoryItemsData' key to the response.
 ]
 
-#5. If some items of the inventory were removed from the player's inventory because of any reason, then mandatory include to the response the key 'removeInventoryItems'.
-#5.1. The value of 'removeInventoryItems' is an array of strings, each of which represents the inventory item name to remove.
-#5.2. If item property 'count' became 0 for any reason, then include its name to the 'removeInventoryItems' array.
-#5.3. If item was renamed, then include its name to the 'removeInventoryItems' array and add new item to 'inventoryItemsData' array.
-#5.3.1. Don't change the quality of an item just because it's been renamed. There must be a reason other than renaming to change item's properties. If there is no reason, then don't change the renamed item's properties.
-#5.4. Mandatory record information about this event in "items_and_stat_calculations".
+#5 If any of these conditions are true: [
+- Some inventory items were moved from a container in the player's inventory to another place in the player's inventory.
+- Some inventory items were moved to a container in the player's inventory from another place in the player's inventory.
+], then strictly follow the instructions: [ Let's think step by step : [ 
+#5.1. Mandatory include to the response the key 'moveInventoryItems'.
+#5.2. The value of 'moveInventoryItems' is an array of object, each of which represents the information about item to move.
+#5.3. Mandatory the format for each object of 'moveInventoryItems' array: { 'name': 'item_name_to_move', 'contentsPath': ['path_to_item_inside_containers'], 'contentsPathOfDestinationContainer': ['path_to_destination_container_inside_containers'], 'destinationContainerName': 'container_name_where_item_will_be_moved', 'isContainer': 'shows_whether_the_moved_item_is_container_or_not' } .
+#5.3.1. To the value of 'name' key include the item name to move. It's important to use the item name in exactly the same format that you would see in the player's inventory, known from Context.
+#5.3.2. To the value of the 'contentsPath' include the array of strings. Each string is a container name inside which the item to move is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
+#5.3.2.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
+#5.3.2.2. If the item which is needed to move is not located in the container, then set 'contentsPath' to null.
+#5.3.3. To the value of the 'contentsPathOfDestinationContainer' include the array of strings, that describes the contentsPath for destination container. Each string is a container name inside which the destination container is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
+#5.3.3.1. For example, if destination container is located in the container2, and container2 is located in container1, then the 'contentsPathOfDestinationContainer' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
+#5.3.3.2. If the destination container is not located in the container, then set 'contentsPathOfDestinationContainer' to null.
+#5.3.4. The value of 'destinationContainerName' is a string that contains the name of the container into which the item is directly moved.
+#5.3.4.1. If the item is not moved to the container, then set 'destinationContainerName' to null.
+#5.3.4.2. It is important to use the same container names as they appear in the player's inventory, known from the Context.
+#5.4. To the value of 'isContainer' key include the boolean value, that indicates whether the item being moved is a container or not.
+#5.4.1. It's mandatory to set to 'isContainer' the same value, like in the item with same name known from Context. 
+#5.5. If container is moved, then include to 'moveInventoryItems' only container, without its contents, because the contents of container will be moved to a new place automatically by game system.
+#5.6. Mandatory record information about this event in "items_and_stat_calculations".
+] ]
 
-#6 Checking player actions: steps and requirements. [ Let's think step by step: ${CHARACTER_INFO.rpgMode ? `
-#6.1. Associate each player action (except for generating items) with one suitable characteristic only from the list: ${statsList} and translate this characteristic into ${translationModule.currentLanguage}
-#6.1.1. When generating an item, no skill check is performed.
-#6.1.2. When moving from location to location, checks are done rarely.
-#6.1.3. On any dialogues not related to trade - the affect of characteristics is secondary. The result of dialogue is mainly related to the content of what the player character said.
-#6.1.4. The 'trade' characteristic check is done only when trading about prices for deals.
-#6.1.5. The 'attractiveness' characteristic is used to seduce or charm the NPC (for example, to get a discount or important information). Attractiveness reflects the physical beauty of the character. It is important to note that not all NPCs care about physical beauty.
-#6.1.6. Never use the 'charisma' characteristic - it doesn't exist in the game and you must not use it.
-#6.2. Select the necessary digital value of the associated characteristic for success and output it in "items_and_stat_calculations" using the formula:
+#6 If this condition is true: [
+- Some inventory items were removed from player inventory (not moved, but removed).
+], then strictly follow the instructions: [ Let's think step by step : [ 
+#6.1. Mandatory include to the response the key 'removeInventoryItems'.
+#6.2. The value of 'removeInventoryItems' is an array of object, each of which represents the information about item to remove.
+#6.3. Mandatory the format for each object of 'removeInventoryItems' array: { 'name': 'item_name_to_remove', 'contentsPath': ['path_to_item_inside_container'], 'isContainer': 'shows_whether_the_removed_item_is_container_or_not' } .
+#6.3.1. To the value of 'name' key include the item name to remove. It's important to use the item name in exactly the same format that you would see in the player's inventory, known from Context.
+#6.3.2. To the value of the 'contentsPath' include the array of strings. Each string is a container name inside which the item to remove is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
+#6.3.2.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
+#6.3.2.2. If the item which is needed to remove is not located in the container, then set 'contentsPath' to null.
+#6.4. To the value of 'isContainer' key include the boolean value, that indicates whether the item being removed is a container or not.
+#6.4.1. It's mandatory to set to 'isContainer' the same value, like in the item with same name known from Context. 
+#6.5. If container is removed, then include to 'removeInventoryItems' only container, without its contents, because the contents of container will be removed automatically by game system.
+#6.6. Mandatory record information about this event in "items_and_stat_calculations".
+] ]
+
+#7 Checking player actions: steps and requirements. [ Let's think step by step: ${CHARACTER_INFO.rpgMode ? `
+#7.1. Associate each player action (except for generating items) with one suitable characteristic only from the list: ${statsList} and translate this characteristic into ${translationModule.currentLanguage}
+#7.1.1. When generating an item, no skill check is performed.
+#7.1.2. When moving from location to location, checks are done rarely.
+#7.1.3. On any dialogues not related to trade - the affect of characteristics is secondary. The result of dialogue is mainly related to the content of what the player character said.
+#7.1.4. The 'trade' characteristic check is done only when trading about prices for deals.
+#7.1.5. The 'attractiveness' characteristic is used to seduce or charm the NPC (for example, to get a discount or important information). Attractiveness reflects the physical beauty of the character. It is important to note that not all NPCs care about physical beauty.
+#7.1.6. Never use the 'charisma' characteristic - it doesn't exist in the game and you must not use it.
+#7.2. Select the necessary digital value of the associated characteristic for success and output it in "items_and_stat_calculations" using the formula:
 (Current location difficulty) * (1 + NPC Difficulty + Situation Difficulty + Action Rationality), where
 • Action Rationality is a fractional number from 0 to 1 (chosen by the gamemaster depending on the logic of actions, the more logical - the closer to zero)
 • Situation Difficulty is a fractional number from 0 to 1 (chosen by the gamemaster depending on the complexity of the situation, the more difficult the circumstances - the closer to one)
 • NPC Difficulty is a fractional number from 0 to 1 (chosen by the gamemaster depending on the complexity of the NPC with which the player interacts during the action, the more complex the NPC - the closer to 1)
-#6.2.1. Be fair in selecting the right characteristic and fractional numbers. Do not adjust their values to the success of the check deliberately.
-#6.3. Compare with the sum of the current base value of the characteristic and the bonuses associated with it from the inventory items known from Context, all current buffs and skills. If the current total value of the characteristic is greater than needed, then success. Otherwise - not success. Output the comparison process and result in "items_and_stat_calculations" .
-#6.4. If not success: if a random number from the list of generated numbers is less than 150000, then a new action check is performed, but now on 'luck', while the needed 'luck' value is chosen randomly from 1 to the needed skill value from the previous check and is compared with the current player's 'luck' value plus bonuses from the items in the inventory array known from Context.
-#6.5. The further plot is formed depending on the result of the check
-#6.6. For recording in "items_and_stat_calculations", translate the names of characteristics into natural language
+#7.2.1. Be fair in selecting the right characteristic and fractional numbers. Do not adjust their values to the success of the check deliberately.
+#7.3. Compare with the sum of the current base value of the characteristic and the bonuses associated with it from the inventory items known from Context, all current buffs and skills. If the current total value of the characteristic is greater than needed, then success. Otherwise - not success. Output the comparison process and result in "items_and_stat_calculations" .
+#7.4. If not success: if a random number from the list of generated numbers is less than 150000, then a new action check is performed, but now on 'luck', while the needed 'luck' value is chosen randomly from 1 to the needed skill value from the previous check and is compared with the current player's 'luck' value plus bonuses from the items in the inventory array known from Context.
+#7.5. The further plot is formed depending on the result of the check
+#7.6. For recording in "items_and_stat_calculations", translate the names of characteristics into natural language
+#7.7. Before the player receives a new item in the inventory: [
+#7.7.1. Sum up the player's 'strength' + 'constitution' stats, and add to them all the values ​​from all item bonuses, all active and passive skill bonuses, and all possible effects affecting these player stats.
+#7.7.2. Sum up the weight of all items in the player's inventory (excluding containers and items inside containers) and the weight of all containers in the player's inventory. Add to this weight the weight of the new item the player is trying to take.
+#7.7.3. Sum up all bonuses that affect the reduction of items weight. These can be spells, player skills, special properties of items, etc.
+#7.7.4. Make the check using this formula:
+(Strength + Constitution + Bonuses) * 3 + 10 >= (Total Weight - Weight Reduction), where
+• Bonuses - all bonuses, which affects the Strength or Constitution of player.
+• Total Weight - the total weight of all items in the inventory, including new one.
+• Weight Reduction - all bonuses that affect the reduction of items weight.
+#7.7.5. If the check result is true:
+- Player can receive this item. Add item to the inventory.
+If the check result is false:
+- The player cannot receive this item because it's too heavy for them - they are overencumbered by the weight they are carrying. Don't add item to the inventory, and mark in the 'response' the reason.
+#7.7.6. Output to "items_and_stat_calculations" calculation of this check.
+]
+#7.8. When item is need to be added inside the container item (in the player's inventory): [
+#7.8.1. Check 'capacity' of container. Make the check using this formula:
+• Capacity >= Total count of items inside container (including new item)
+If the check result is true, then item can be placed in the container.
+If the check result is false, then don't add new item to the container and mark in the 'response' the reason.
+#7.8.2. Output to "items_and_stat_calculations" the calculation of this check.
+]
 ` : `
-#6.1. It will be good if not everything planned will succeed in checks
-#6.2. Determine the difficulty of the roll based on the situation
-#6.3. Having preliminarily determined the difficulty of the roll, use d20 + characteristic, output the process of checking the action and the result in "items_and_stat_calculations" .
-#6.4. Rely not only on stats, but also on the logic of what's happening
-#6.5. The further story is formed depending on the result of the check
-#6.6. The 'trade' characteristic check is done only when trading about prices for deals
-#6.7. When moving from location to location, checks are not made
-#6.8. On any dialogues not related to trade - no skill checks are made. The process and result of dialogues are built relative to the content of what the player said
-#6.9. More free interpretation of events
-#6.10. For output in the answer, translate the names of characteristics into natural language
+#7.1. It will be good if not everything planned will succeed in checks
+#7.2. Determine the difficulty of the roll based on the situation
+#7.3. Having preliminarily determined the difficulty of the roll, use d20 + characteristic, output the process of checking the action and the result in "items_and_stat_calculations" .
+#7.4. Rely not only on stats, but also on the logic of what's happening
+#7.5. The further story is formed depending on the result of the check
+#7.6. The 'trade' characteristic check is done only when trading about prices for deals
+#7.7. When moving from location to location, checks are not made
+#7.8. On any dialogues not related to trade - no skill checks are made. The process and result of dialogues are built relative to the content of what the player said
+#7.9. More free interpretation of events
+#7.10. For output in the answer, translate the names of characteristics into natural language
 `} ]
 		 
-#7 During dialogue or interaction with NPC: 
-#7.1. The beginning, process, and end of the dialogue should be built based on the current situation, as well as on the content of the player's words and the quality of the player's logic - only the player's logic is checked for compliance with the laws of formal logic
-#7.2. There are no skill checks, except for attempts to bargain for prices and quest rewards
-#7.3. NPCs may suspect deception when the player violates formal logic
-#7.4. Trust in the character from non-player characters is calculated from the context of the game history, and initially they are neutral
-#7.5. Non-player characters may try to deceive the player, especially if their trust in the player is low
-#7.6. When selecting prices, the price/quality ratio of the item is very strongly taken into account in relation to the price/quality ratio of other already existing inventory (known from Context).
-#7.7. The player buys an item only if they said in the current action that they are buying the item. If they did not talk about buying, then the GM cannot make a decision about the player buying the item.
+#8 During dialogue or interaction with NPC: 
+#8.1. The beginning, process, and end of the dialogue should be built based on the current situation, as well as on the content of the player's words and the quality of the player's logic - only the player's logic is checked for compliance with the laws of formal logic
+#8.2. There are no skill checks, except for attempts to bargain for prices and quest rewards
+#8.3. NPCs may suspect deception when the player violates formal logic
+#8.4. Trust in the character from non-player characters is calculated from the context of the game history, and initially they are neutral
+#8.5. Non-player characters may try to deceive the player, especially if their trust in the player is low
+#8.6. When selecting prices, the price/quality ratio of the item is very strongly taken into account in relation to the price/quality ratio of other already existing inventory (known from Context).
+#8.7. The player buys an item only if they said in the current action that they are buying the item. If they did not talk about buying, then the GM cannot make a decision about the player buying the item.
 ${ELEMENTS.useNpcList.checked ? `
-#7.8. If the NPC has a proper name (means, that NPC name explicitly includes the "first name" e.g., "King Arthur", "Elara", "Alan Wake", "Christina", "Guard Captain Roric", "Li"), then: [ 
-#7.8.1. The 'NPCs which interacted with the character on the previous turn' is checked for compliance with the current NPCs: [
+#8.8. If the NPC has a proper name (means, that NPC name explicitly includes the "first name" e.g., "King Arthur", "Elara", "Alan Wake", "Christina", "Guard Captain Roric", "Li"), then: [ 
+#8.8.1. The 'NPCs which interacted with the character on the previous turn' is checked for compliance with the current NPCs: [
 	Compare Name of NPCs
 	Compare NPCs rarity 
 	Compare Age of NPCs
@@ -2567,10 +2698,10 @@ ${ELEMENTS.useNpcList.checked ? `
 	Compare Skills of NPCs
 	Compare Attitude towards the character (written in text manner) of NPCs
 ] - if not, then the response includes the 'NPCsData' key, with the information about current NPCs according to the following instruction: [ Let's think step by step :
-#7.8.2. The value of 'NPCsData' key is an array of objects, each of which contains the complete information about specific NPC.
-#7.8.3. Mandatory format for recording the value of each item of 'NPCsData' array: {'name': 'full_name_of_current_NPC', 'description': 'NPC_description', 'image_prompt': 'prompt_to_generate_NPC_image'} .
-#7.8.4. To the value of the 'image_prompt' key, include an extensive detailed prompt for generating an image that will illustrate the NPC appearance based on their description. It is necessary to form it only in English. The number of characters in the value of this key should not exceed 150 characters.
-#7.8.5. To the value of the 'description' key, include the following data about the NPC and describe the data in as much detail and artistic language as possible (all text should be translated to user's chosen language): [
+#8.8.2. The value of 'NPCsData' key is an array of objects, each of which contains the complete information about specific NPC.
+#8.8.3. Mandatory format for recording the value of each item of 'NPCsData' array: {'name': 'full_name_of_current_NPC', 'description': 'NPC_description', 'image_prompt': 'prompt_to_generate_NPC_image'} .
+#8.8.4. To the value of the 'image_prompt' key, include an extensive detailed prompt for generating an image that will illustrate the NPC appearance based on their description. It is necessary to form it only in English. The number of characters in the value of this key should not exceed 150 characters.
+#8.8.5. To the value of the 'description' key, include the following data about the NPC and describe the data in as much detail and artistic language as possible (all text should be translated to user's chosen language): [
  NPC rarity in the format: "{Rarity label}: {NPC rarity value described as text}" \n\n
  Age in the format: "{Age label}: {age}"\n\n
  Worldview in the format: "{Worldview label}: {Worldview described as text (example: worldview types from D&D rules)}"\n\n
@@ -2581,120 +2712,120 @@ ${ELEMENTS.useNpcList.checked ? `
  Stats in the format: "{Stats label}: {stats described in text manner}"
  Skills in the format: "{Skills label}: {skills list}"\n\n
  Attitude towards the character in the format: "{Attitude towards the character label}: {attitude written in text manner}" ] . 
-#7.8.6. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-#7.8.7. If the character interacts with an already encountered NPC, that is, the 'NPC who interacted with the character on the previous turn' does not correspond to the current NPC, but the current NPC is present in the list of all encountered NPCs, then the description of this current NPC must be updated. The formatting of NPC names should correspond to the formatting of other known NPC names. ]
-#7.8.8. The data of the NPC interacting with the character on the current turn is checked. That is, if 'NPC who interacted with the character on the previous turn' is equal to current NPC, but something of these NPC data [ NPC rarity, Age, Worldview, Race, Class, Appearance, History, Stats, Skills, Attitude towards the character ] are changed in current turn, then description of this current NPC must be updated. 
-#7.8.9. If NPC was killed, mark it in the description. 
-#7.8.10. Carefully look at clothing of NPC when comparing the data. If the NPC changed clothes or undressed, you should note this in the description. If the NPC got dressed, you should update the description of the clothes the NPC is wearing. Don’t forget to write a detailed description of appearance (face, figure, clothing) of NPC for each case.
-#7.8.11. Carefully look at history (key moments) of NPC when comparing the data. If something important has happened with NPC, you should note this in the description.
-#7.8.12. Carefully look at NPC's attitude towards the player character. Note any changes in the NPC's attitude or mood towards the player character in the description. Don't forget to describe the NPC's general attitude towards the player character.
-#7.8.13. Carefully look at characteristics of NPC when comparing the data. If NPC characteristics have changed, you should note this in the description.
-#7.8.14. Carefully look at skills of NPC when comparing the data. If NPC skills have changed, you should note this in the description.
-#7.8.15. Carefully look at race of NPC when comparing the data. If NPC race has changed, you should note this in the description.
-#7.8.16. Carefully look at class of NPC when comparing the data. If NPC class has changed, you should note this in the description.
-#7.8.17. When forming a response, consider the NPC's skills. If the NPC is going to perform a specific action and possesses skills that can help them in this, the NPC should use those skills to accomplish the task.
-#7.8.18. Consider the NPC's stats when forming a response. An intelligent NPC might devise a clever plan, while a strong NPC might rely on their physical strength, and so on. This is important for the game narrative.
+#8.8.6. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#8.8.7. If the character interacts with an already encountered NPC, that is, the 'NPC who interacted with the character on the previous turn' does not correspond to the current NPC, but the current NPC is present in the list of all encountered NPCs, then the description of this current NPC must be updated. The formatting of NPC names should correspond to the formatting of other known NPC names. ]
+#8.8.8. The data of the NPC interacting with the character on the current turn is checked. That is, if 'NPC who interacted with the character on the previous turn' is equal to current NPC, but something of these NPC data [ NPC rarity, Age, Worldview, Race, Class, Appearance, History, Stats, Skills, Attitude towards the character ] are changed in current turn, then description of this current NPC must be updated. 
+#8.8.9. If NPC was killed, mark it in the description. 
+#8.8.10. Carefully look at clothing of NPC when comparing the data. If the NPC changed clothes or undressed, you should note this in the description. If the NPC got dressed, you should update the description of the clothes the NPC is wearing. Don’t forget to write a detailed description of appearance (face, figure, clothing) of NPC for each case.
+#8.8.11. Carefully look at history (key moments) of NPC when comparing the data. If something important has happened with NPC, you should note this in the description.
+#8.8.12. Carefully look at NPC's attitude towards the player character. Note any changes in the NPC's attitude or mood towards the player character in the description. Don't forget to describe the NPC's general attitude towards the player character.
+#8.8.13. Carefully look at characteristics of NPC when comparing the data. If NPC characteristics have changed, you should note this in the description.
+#8.8.14. Carefully look at skills of NPC when comparing the data. If NPC skills have changed, you should note this in the description.
+#8.8.15. Carefully look at race of NPC when comparing the data. If NPC race has changed, you should note this in the description.
+#8.8.16. Carefully look at class of NPC when comparing the data. If NPC class has changed, you should note this in the description.
+#8.8.17. When forming a response, consider the NPC's skills. If the NPC is going to perform a specific action and possesses skills that can help them in this, the NPC should use those skills to accomplish the task.
+#8.8.18. Consider the NPC's stats when forming a response. An intelligent NPC might devise a clever plan, while a strong NPC might rely on their physical strength, and so on. This is important for the game narrative.
 ${ELEMENTS.useNpcJournal.checked ? `
-#7.9 Look at all NPCs present in the location where the player character is on current turn. From these NPCs, find those who can see or hear the player character. For each of these NPCs: [
-#7.9.1 If the NPC name is present in the list of encountered NPCs (encounteredNPCs), then: [
-#7.9.2. Each turn, while the player is interacting with an NPCs, response includes the 'NPCJournals' key with the current NPCs thoughts according to the following instruction: [ Let's think step by step :
-#7.9.3. The value of 'NPCJournals' key is an array of objects, each of which contains the information about NPC thoughts.
-#7.9.4. Mandatory format for recording the value of each item of 'NPCJournals' array: {'name': 'full_name_of_current_NPC', 'lastJournalNote': 'last_NPC_thoughts_and_reactions_for_current_turn'}
-#7.9.5. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
-#7.9.6. Imagine the NPC keeps a personal journal, in which NPC makes personal notes, recording their thoughts in the first person. To the value of 'lastJournalNote' key, include last note of NPC for current turn. This note should include information about NPC thoughts and reactions regarding last events. Describe it in as much detail and artistic language as possible.
-#7.9.7. The value of 'lastJournalNote' must always start with the current turn number. The current turn number is: "${turn}". Mandatory format for recording the text of note: "#${turn}. {Note text}".
-#7.9.8. The data which you recorded in the 'lastJournalNote' should only be related with current turn. Do not copy the notes for previous turn, instead of it always record to 'lastJournalNote' the new data, related with current turn only. 
-#7.9.9. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. ] ] ] ` : ''}
+#8.9 Look at all NPCs present in the location where the player character is on current turn. From these NPCs, find those who can see or hear the player character. For each of these NPCs: [
+#8.9.1 If the NPC name is present in the list of encountered NPCs (encounteredNPCs), then: [
+#8.9.2. Each turn, while the player is interacting with an NPCs, response includes the 'NPCJournals' key with the current NPCs thoughts according to the following instruction: [ Let's think step by step :
+#8.9.3. The value of 'NPCJournals' key is an array of objects, each of which contains the information about NPC thoughts.
+#8.9.4. Mandatory format for recording the value of each item of 'NPCJournals' array: {'name': 'full_name_of_current_NPC', 'lastJournalNote': 'last_NPC_thoughts_and_reactions_for_current_turn'}
+#8.9.5. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
+#8.9.6. Imagine the NPC keeps a personal journal, in which NPC makes personal notes, recording their thoughts in the first person. To the value of 'lastJournalNote' key, include last note of NPC for current turn. This note should include information about NPC thoughts and reactions regarding last events. Describe it in as much detail and artistic language as possible.
+#8.9.7. The value of 'lastJournalNote' must always start with the current turn number. The current turn number is: "${turn}". Mandatory format for recording the text of note: "#${turn}. {Note text}".
+#8.9.8. The data which you recorded in the 'lastJournalNote' should only be related with current turn. Do not copy the notes for previous turn, instead of it always record to 'lastJournalNote' the new data, related with current turn only. 
+#8.9.9. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. ] ] ] ` : ''}
 ] ` : ''}
 ${ELEMENTS.useQuestsList.checked ? `
-#8.10. If an NPC and a player made an agreement, where the player is expected to perform a "quest" (in terms of computer role-playing games) — which involves completing a specific task and receiving a reward upon completion — then: [
-#8.10.1. The 'Quests information the player has' is checked for compliance with the current quests information from Context: [
+#9.10. If an NPC and a player made an agreement, where the player is expected to perform a "quest" (in terms of computer role-playing games) — which involves completing a specific task and receiving a reward upon completion — then: [
+#9.10.1. The 'Quests information the player has' is checked for compliance with the current quests information from Context: [
 	Compare quests descriptions
 	Compare quests rewards
 	Compare quests purposes
 	Check for any changes in quests details, including completion status ] - if not, then the response includes the questsData key with the information about current quests according to the following instruction: [ Let's think step by step :
-#8.10.2. The value of 'questsData' key is an array of objects, each of which contains the complete information about specific quest.
-#8.10.3. Mandatory format for recording the value of each item of 'questsData' array: {'name': 'full_name_of_current_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
-#8.10.4. To the value of 'description' key, include the following data about the quest and describe the data in as much detail and artistic language as possible (all text of 'description' should be translated to user's chosen language): [
+#9.10.2. The value of 'questsData' key is an array of objects, each of which contains the complete information about specific quest.
+#9.10.3. Mandatory format for recording the value of each item of 'questsData' array: {'name': 'full_name_of_current_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
+#9.10.4. To the value of 'description' key, include the following data about the quest and describe the data in as much detail and artistic language as possible (all text of 'description' should be translated to user's chosen language): [
 	Quest giver information in the format: "{NPC name which gave the quest to player label}: {NPC Name}"\n\n
 	Quest background in the format: "{Quest background label}: {why the quest giver needs the player to complete this quest}."\n\n
 	Detailed quest description in the format: "{Description label}: {full and detailed quest description}."\n\n ]
-#8.10.5. The value of 'purposes' key is an array of strings, describes what player should do during quest to complete it. Purposes should be logical tasks, each of which must have at least one correct solution.
-#8.10.6. To the value of 'reward' key, include the description of reward which player will receive for completing the quest. The reward must be specific. For example, if the reward is money, then indicate a specific amount of money.
-#8.10.7. To the value of 'punishmentForFailingQuest' key, include the description of the punishment the player will suffer for failing the quest.
-#8.10.8. To the value of 'details' key, include information about quest details and notes. Do not include information contained in the value of 'description' key. This field is only for new quest data: any notes or details about the quest that the player learned during the quest.
-#8.10.9. Set the value of 'isCompleted' key to false or true. Set true if quest is completed. A quest is considered complete when the quest-giving NPC acknowledges its completion.
-#8.10.10. If the quest is completed, the quest-giving NPC should provide the player with the quest reward. 
-#8.10.11. If the player fails the quest, the quest is marked as completed and the player must suffer the punishment described in the value of 'punishmentForFailingQuest' key.
+#9.10.5. The value of 'purposes' key is an array of strings, describes what player should do during quest to complete it. Purposes should be logical tasks, each of which must have at least one correct solution.
+#9.10.6. To the value of 'reward' key, include the description of reward which player will receive for completing the quest. The reward must be specific. For example, if the reward is money, then indicate a specific amount of money.
+#9.10.7. To the value of 'punishmentForFailingQuest' key, include the description of the punishment the player will suffer for failing the quest.
+#9.10.8. To the value of 'details' key, include information about quest details and notes. Do not include information contained in the value of 'description' key. This field is only for new quest data: any notes or details about the quest that the player learned during the quest.
+#9.10.9. Set the value of 'isCompleted' key to false or true. Set true if quest is completed. A quest is considered complete when the quest-giving NPC acknowledges its completion.
+#9.10.10. If the quest is completed, the quest-giving NPC should provide the player with the quest reward. 
+#9.10.11. If the player fails the quest, the quest is marked as completed and the player must suffer the punishment described in the value of 'punishmentForFailingQuest' key.
 ] ] ` : ''}
 	 
-#9 The 'location where the character was on the previous turn' is checked for compliance with the current location - if not, then the response includes the locationData key with the current location according to the following instruction: [ Let's think step by step :
-#9.1. Mandatory format for recording the value in the locationData key: {'name': 'current_location_name', 'difficulty': 'difficulty_in_numerical_value', 'lastEventsDescription': 'location_last_events_description_for_current_turn', 'description': 'current_location_description', 'image_prompt': 'prompt_to_generate_location_image'} . All this values of keys 'name' , 'difficulty' , 'lastEventsDescription' must never be empty.
-#9.2. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-#9.3. If the character returns to an old existing location, that is, the 'location where the character was on the previous turn' does not correspond to the current location, but the current location is present in the list of all visited locations, then the 'lastEventsDescription' of this current location must be updated. The formatting of location names should correspond to the formatting of other known locations. 
-#9.4. If this is a new location, then give a description of it in the 'description' key, using the most detailed and artistic language as possible.
-#9.5. If the the current location is not new, then leave the 'description' key as empty.
-#9.6. If this is a new location, then to the value of the 'image_prompt' key include an extensive detailed prompt for generating an image, that will illustrate the current location based on its description. It is necessary to form it only in English. The number of characters in the value of this key should not exceed 150 characters.
-#9.7. If the the current location is not new, then leave the 'image_prompt' key as empty. ]
-#10 Each turn, the information about last event for current turn of the location, where the event of the current turn occurred is briefly recorded to the 'lastEventsDescription' value of key for locationData object. Also briefly record the information about all dialogues with the NPC and character for current turn.
-#10.1. The data which you recorded in the 'lastEventsDescription' should only be related with current turn. Do not copy the description of location to 'lastEventsDescription', instead of it always record to 'lastEventsDescription' the new data, related with current turn only.
-#10.2. The value of 'lastEventsDescription' must always start with the current turn number. The current turn number is: "${turn}". Mandatory format for recording the text of this value: "#${turn}. {lastEventsDescription text}".
+#10 The 'location where the character was on the previous turn' is checked for compliance with the current location - if not, then the response includes the locationData key with the current location according to the following instruction: [ Let's think step by step :
+#10.1. Mandatory format for recording the value in the locationData key: {'name': 'current_location_name', 'difficulty': 'difficulty_in_numerical_value', 'lastEventsDescription': 'location_last_events_description_for_current_turn', 'description': 'current_location_description', 'image_prompt': 'prompt_to_generate_location_image'} . All this values of keys 'name' , 'difficulty' , 'lastEventsDescription' must never be empty.
+#10.2. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#10.3. If the character returns to an old existing location, that is, the 'location where the character was on the previous turn' does not correspond to the current location, but the current location is present in the list of all visited locations, then the 'lastEventsDescription' of this current location must be updated. The formatting of location names should correspond to the formatting of other known locations. 
+#10.4. If this is a new location, then give a description of it in the 'description' key, using the most detailed and artistic language as possible.
+#10.5. If the the current location is not new, then leave the 'description' key as empty.
+#10.6. If this is a new location, then to the value of the 'image_prompt' key include an extensive detailed prompt for generating an image, that will illustrate the current location based on its description. It is necessary to form it only in English. The number of characters in the value of this key should not exceed 150 characters.
+#10.7. If the the current location is not new, then leave the 'image_prompt' key as empty. ]
+#11 Each turn, the information about last event for current turn of the location, where the event of the current turn occurred is briefly recorded to the 'lastEventsDescription' value of key for locationData object. Also briefly record the information about all dialogues with the NPC and character for current turn.
+#11.1. The data which you recorded in the 'lastEventsDescription' should only be related with current turn. Do not copy the description of location to 'lastEventsDescription', instead of it always record to 'lastEventsDescription' the new data, related with current turn only.
+#11.2. The value of 'lastEventsDescription' must always start with the current turn number. The current turn number is: "${turn}". Mandatory format for recording the text of this value: "#${turn}. {lastEventsDescription text}".
 
-#11 Calculate the change in energy, experience, and health according to the following instruction: [ Let's think step by step :
-#11.1. All character actions spend or restore their energy, in an amount logically dependent on the action. The amount of energy changed is entered in the value of the currentEnergyChange key (value type: positive or negative integer)
-#11.2. When energy falls, the character begins to receive various debuffs to skill checks and combat for every 10 energy points spent, and if the current energy is less than 20, then the character loses 1 or 2 health each turn
-#11.3. All successful player actions give experience to the character, in an amount logically dependent on the scale of success. The amount of experience is entered in the value of the experienceGained key (value type: positive integer)
-#11.4. Spending or restoring health is recorded in the value of the currentHealthChange key (value type: positive or negative integer) ]
+#12 Calculate the change in energy, experience, and health according to the following instruction: [ Let's think step by step :
+#12.1. All character actions spend or restore their energy, in an amount logically dependent on the action. The amount of energy changed is entered in the value of the currentEnergyChange key (value type: positive or negative integer)
+#12.2. When energy falls, the character begins to receive various debuffs to skill checks and combat for every 10 energy points spent, and if the current energy is less than 20, then the character loses 1 or 2 health each turn
+#12.3. All successful player actions give experience to the character, in an amount logically dependent on the scale of success. The amount of experience is entered in the value of the experienceGained key (value type: positive integer)
+#12.4. Spending or restoring health is recorded in the value of the currentHealthChange key (value type: positive or negative integer) ]
 
-#12 The value of the actions key is passed an array of proposed actions (should not contain nested arrays or other objects)
-#12.1. among the proposed actions, there should not be options for actions that are similar to events that have already recently occurred
-#12.2. proposed actions should not be in the value of the response key, but should only be in actions
+#13 The value of the actions key is passed an array of proposed actions (should not contain nested arrays or other objects)
+#13.1. among the proposed actions, there should not be options for actions that are similar to events that have already recently occurred
+#13.2. proposed actions should not be in the value of the response key, but should only be in actions
 
-#13 In the value of the image_prompt key, it is necessary to form in each answer only in English an extensive detailed prompt for generating an image that will illustrate what the main character sees in your given answer, but the number of characters in the value of this key should not exceed 150 characters, while the prompt for generating the illustration should be formulated in such a way that the main character himself is not in the illustration - it should be a description of what he sees
+#14 In the value of the image_prompt key, it is necessary to form in each answer only in English an extensive detailed prompt for generating an image that will illustrate what the main character sees in your given answer, but the number of characters in the value of this key should not exceed 150 characters, while the prompt for generating the illustration should be formulated in such a way that the main character himself is not in the illustration - it should be a description of what he sees
 
-#14 The value of the key 'response' must always be filled. Formulate the final value of the 'response' key. Use all markdown formatting functions except headings. When formulating the final value of the 'response' key, consider that : [ Let's think step by step :
-#14.1. This value is a description of plot events and should be designed in an artistic style 
-#14.2. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. Any value of 'response' key in the JSON response must not start with the symbol « and must not end with the symbol » .
-#14.3. It is forbidden to invent actions or words of the player
-#14.4. The message should be formulated in such a way that further in meaning, player action would be required, significantly different from the actions they have already taken in the last few turns
-#14.5. The gamemaster should not agree to the proposed deal on behalf of the player
-#14.6. The player cannot use spells without appropriate items or knowledge
-#14.7. The player cannot spend more money than they currently have. Currently, they have ${characterStats.money} money.
-#14.8. The player cannot spend more energy than they currently have. Currently, they have ${characterStats.currentEnergy} energy. The player cannot spend more than 2 energy per turn if the spending is not due to the use of an ability or spell.
-#14.9. All player actions leading to negative energy or money values should be interrupted. 
-#14.10. The player cannot use items that they do not have in their inventory or that are not in the current location
-#14.11. The character should not say what the player did not indicate to say
-#14.12. Spending or adding money is recorded in the value of the moneyChange key only specifically from money (value type: positive or negative integer)
-#14.13. It is not allowed to add or subtract in moneyChange, currentHealthChange and currentEnergyChange if this has already been done for the same event
-#14.14. The value of the response key should significantly develop the events of the general plot. The event from the previous turn should be completed.
-#14.15. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters
-#14.16. This answer should be a logical consequence of the current player action, which is their last prompt: ${currentMessage} and should be absolutely different compared to events from previous turns and recent events from the history of previous communication between you (GM) and the player
-#14.17. Each turn should have a new event that has not yet been in the history of previous communication between you (GM) and the player, even if the player's request is repeated.
-#14.18. Each new event should not only be a logical continuation of the last previous turns of previous actions, but also radically differ from those previously described. Make sure that each plot development offers a new interaction or unpredictable turn, which is a plot consequence of the last turns from the history of communication between the GM and the player.
-#14.19. With each new turn, consider that new roles, locations, or items may be present in the game. Include unexpected elements to create plot variety.
-#14.20. The plot should not go back and repeat itself. It is not allowed to forget events that occurred in the most recent turns.
-#14.21. Seek inspiration from various genres and storytelling styles. Let each new event be unexpected and even extraordinary in the context of the current plot.
-#14.22. When describing a new event, offer the player several alternative ways of responding or interacting with the surrounding world to stimulate diversity in plot development.
-#14.23. If the player's action is repetitive, each new answer should present not only a different event, but its context should also be new, thereby overcoming the pattern.
-#14.24. When forming the answer, consider all the passive skills of the character. 
-#14.25. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
-#14.26. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
-#14.27. The value of key 'response' must never be empty.
+#15 The value of the key 'response' must always be filled. Formulate the final value of the 'response' key. Use all markdown formatting functions except headings. When formulating the final value of the 'response' key, consider that : [ Let's think step by step :
+#15.1. This value is a description of plot events and should be designed in an artistic style 
+#15.2. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. Any value of 'response' key in the JSON response must not start with the symbol « and must not end with the symbol » .
+#15.3. It is forbidden to invent actions or words of the player
+#15.4. The message should be formulated in such a way that further in meaning, player action would be required, significantly different from the actions they have already taken in the last few turns
+#15.5. The gamemaster should not agree to the proposed deal on behalf of the player
+#15.6. The player cannot use spells without appropriate items or knowledge
+#15.7. The player cannot spend more money than they currently have. Currently, they have ${characterStats.money} money.
+#15.8. The player cannot spend more energy than they currently have. Currently, they have ${characterStats.currentEnergy} energy. The player cannot spend more than 2 energy per turn if the spending is not due to the use of an ability or spell.
+#15.9. All player actions leading to negative energy or money values should be interrupted. 
+#15.10. The player cannot use items that they do not have in their inventory or that are not in the current location
+#15.11. The character should not say what the player did not indicate to say
+#15.12. Spending or adding money is recorded in the value of the moneyChange key only specifically from money (value type: positive or negative integer)
+#15.13. It is not allowed to add or subtract in moneyChange, currentHealthChange and currentEnergyChange if this has already been done for the same event
+#15.14. The value of the response key should significantly develop the events of the general plot. The event from the previous turn should be completed.
+#15.15. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters
+#15.16. This answer should be a logical consequence of the current player action, which is their last prompt: ${currentMessage} and should be absolutely different compared to events from previous turns and recent events from the history of previous communication between you (GM) and the player
+#15.17. Each turn should have a new event that has not yet been in the history of previous communication between you (GM) and the player, even if the player's request is repeated.
+#15.18. Each new event should not only be a logical continuation of the last previous turns of previous actions, but also radically differ from those previously described. Make sure that each plot development offers a new interaction or unpredictable turn, which is a plot consequence of the last turns from the history of communication between the GM and the player.
+#15.19. With each new turn, consider that new roles, locations, or items may be present in the game. Include unexpected elements to create plot variety.
+#15.20. The plot should not go back and repeat itself. It is not allowed to forget events that occurred in the most recent turns.
+#15.21. Seek inspiration from various genres and storytelling styles. Let each new event be unexpected and even extraordinary in the context of the current plot.
+#15.22. When describing a new event, offer the player several alternative ways of responding or interacting with the surrounding world to stimulate diversity in plot development.
+#15.23. If the player's action is repetitive, each new answer should present not only a different event, but its context should also be new, thereby overcoming the pattern.
+#15.24. When forming the answer, consider all the passive skills of the character. 
+#15.25. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
+#15.26. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
+#15.27. The value of key 'response' must never be empty.
 ]
 
-#15 Create an array of five elements using the following format:
-#15.1. On equipped items, count the total number of bonuses associated with item searches.
-#15.2. At the gamemaster's discretion, based on the total number of bonuses calculated in the previous step, assign a value between 0 and 1 (inclusive) to the variable 'item_search_coefficient'. This value should reflect the effectiveness of the item search bonuses.
-#15.3. Assign the value of the variable 'location_coefficient' as follows: (current_location_difficulty / 100) + 1.
-#15.4. At the gamemaster's discretion, assign a value between 1 and 2 (inclusive) to the variable 'danger_coefficient' based on the overall danger level of recent events. A higher value represents a more dangerous situation.
-#15.5. At the gamemaster's discretion, assign a value between 1 and 2 (inclusive) to the variable 'logic_coefficient' based on how logical it is to find an item in this situation. A higher value represents a more logical or probable find.
-#15.6. At the gamemaster's discretion, assign a value between 1 and 2 (inclusive) to the variable 'characters_coefficient' based on the complexity or challenge posed by the characters in the environment. A higher value represents a more complex social situation.
-#15.7. Set the value of the 'multipliers' key in the JSON output to the following array:  '[item_search_coefficient, location_coefficient, danger_coefficient, logic_coefficient, characters_coefficient]'.
+#16 Create an array of five elements using the following format:
+#16.1. On equipped items, count the total number of bonuses associated with item searches.
+#16.2. At the gamemaster's discretion, based on the total number of bonuses calculated in the previous step, assign a value between 0 and 1 (inclusive) to the variable 'item_search_coefficient'. This value should reflect the effectiveness of the item search bonuses.
+#16.3. Assign the value of the variable 'location_coefficient' as follows: (current_location_difficulty / 100) + 1.
+#16.4. At the gamemaster's discretion, assign a value between 1 and 2 (inclusive) to the variable 'danger_coefficient' based on the overall danger level of recent events. A higher value represents a more dangerous situation.
+#16.5. At the gamemaster's discretion, assign a value between 1 and 2 (inclusive) to the variable 'logic_coefficient' based on how logical it is to find an item in this situation. A higher value represents a more logical or probable find.
+#16.6. At the gamemaster's discretion, assign a value between 1 and 2 (inclusive) to the variable 'characters_coefficient' based on the complexity or challenge posed by the characters in the environment. A higher value represents a more complex social situation.
+#16.7. Set the value of the 'multipliers' key in the JSON output to the following array:  '[item_search_coefficient, location_coefficient, danger_coefficient, logic_coefficient, characters_coefficient]'.
 
 ${ELEMENTS.useStatus.checked ? `
 ${generateStatus ? `
-#16 The response should include the statusData key with the current character status according to the following instruction:` : `
-#16 The 'status of character on the previous turn' is checked for compliance with the current character status: [
+#17 The response should include the statusData key with the current character status according to the following instruction:` : `
+#17 The 'status of character on the previous turn' is checked for compliance with the current character status: [
 	Compare Names of the character
 	Compare Ages of the character
 	Compare Races of the character
@@ -2705,8 +2836,8 @@ ${generateStatus ? `
 	Compare Affiliations to organizations or groups (if any) of the character
 	Compare Effects list of the character
 ] - if not, then the response includes the statusData key with the current character status according to the following instruction:` } [ Let's think step by step : 
-#16.1. Mandatory format for recording the value in the statusData key: {'info': 'info_about_character', 'purposes': ['possible_game_purpose_hints'], 'effects': ['explicit_character_effects'] } . 
-#16.2. To the value of the 'info' key, include the following data, and describe the data in as much detail and artistic language as possible (each value should be separated from previous by a blank line and translated to user's chosen language): [
+#17.1. Mandatory format for recording the value in the statusData key: {'info': 'info_about_character', 'purposes': ['possible_game_purpose_hints'], 'effects': ['explicit_character_effects'] } . 
+#17.2. To the value of the 'info' key, include the following data, and describe the data in as much detail and artistic language as possible (each value should be separated from previous by a blank line and translated to user's chosen language): [
  Name in the format: "{Name label}: {Name}" \n\n
  Age in the format: "{Age label}: {Age}" \n\n
  Race in the format: "{Race label}: {Race}" \n\n
@@ -2715,20 +2846,20 @@ ${generateStatus ? `
  Position in society (detailed information about how society views the character) in the format: "{Position in society label}: {Position in society description}" \n\n
  Reputation (in various groups or organizations) in the format: "{Reputation label}: {Reputation description}" \n\n
  Affiliations to organizations or groups (if any) in the format: "{Affiliations to organizations or groups label}: {Affiliations to organizations or groups description}" ] .
-#16.3. The value of the 'purposes' key is passed an array of hints about proposed character game purposes for a long game perspective (should not contain nested arrays or other objects).
-#16.4. The value of the 'effects' key is passed an array of descriptions for all explicit effects affecting the character. Explicit effects are conditions that alter the character's stats, abilities, or actions, such as poisoning, curse, disease, blessing or similar.
-#16.4.1. Each element of 'effects' array is a primitive of type 'text', which should not contain nested arrays or other objects. 
-#16.4.2. Each element of 'effects' array is a text value with following data (each value should be separated from previous by a blank line) : [
+#17.3. The value of the 'purposes' key is passed an array of hints about proposed character game purposes for a long game perspective (should not contain nested arrays or other objects).
+#17.4. The value of the 'effects' key is passed an array of descriptions for all explicit effects affecting the character. Explicit effects are conditions that alter the character's stats, abilities, or actions, such as poisoning, curse, disease, blessing or similar.
+#17.4.1. Each element of 'effects' array is a primitive of type 'text', which should not contain nested arrays or other objects. 
+#17.4.2. Each element of 'effects' array is a text value with following data (each value should be separated from previous by a blank line) : [
  Effect name \n\n
  Effect description ] .
-#16.5. Proposed character game purposes and effects should not be in the value of the response key, but should only be in value of statusData key.
-#16.6. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. 
-#16.7. If only effects are changed from previous turn, then you need to fill only 'effects' value of statusData key and do not fill the 'info' and 'purposes' ]
+#17.5. Proposed character game purposes and effects should not be in the value of the response key, but should only be in value of statusData key.
+#17.6. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. 
+#17.7. If only effects are changed from previous turn, then you need to fill only 'effects' value of statusData key and do not fill the 'info' and 'purposes' ]
 ` : ''}
 
-#17 Form the final answer in JSON format according to the structure of the response template, while making sure that all key values have been supplemented, not replaced. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. All keys and string values in nested objects in the final answer should be enclosed in double quotes. The final answer must fully comply with the structure of the response template. There should be no text outside the JSON file. The answer should only be a JSON file. Important: in the values of all objects, the language ${translationModule.currentLanguage} should be used - translate what is not translated (the keys of all objects should not be translated, they should remain the same as in the response template). 
-#18 Test your entire answer for the ability to be parsed by the JSON.parse() command. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " . Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . If this command should raise an error, correct your answer so that there is no error.
-#19 Again test your entire answer for the ability to be parsed by the JSON.parse() command. Carefully check the all locations of symbol { and symbol } to verify that there are no syntax errors. If the JSON.parse() command should raise an error as result of your check, correct your answer so that there are no errors.
+#18 Form the final answer in JSON format according to the structure of the response template, while making sure that all key values have been supplemented, not replaced. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. All keys and string values in nested objects in the final answer should be enclosed in double quotes. The final answer must fully comply with the structure of the response template. There should be no text outside the JSON file. The answer should only be a JSON file. Important: in the values of all objects, the language ${translationModule.currentLanguage} should be used - translate what is not translated (the keys of all objects should not be translated, they should remain the same as in the response template). 
+#19 Test your entire answer for the ability to be parsed by the JSON.parse() command. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " . Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . If this command should raise an error, correct your answer so that there is no error.
+#20 Again test your entire answer for the ability to be parsed by the JSON.parse() command. Carefully check the all locations of symbol { and symbol } to verify that there are no syntax errors. If the JSON.parse() command should raise an error as result of your check, correct your answer so that there are no errors.
 
 ]
 [ ### Context ###
@@ -2773,25 +2904,30 @@ ${ELEMENTS.useQuestsList.checked ? `
 13.6. Any crystals are encountered by the player only after level 25
 13.7. ${itemsBreakRulesTemplate}
 13.8. Carefully monitor the 'count' property of each inventory item. If the quantity of inventory item has decreased or increased for any reason, you must change the 'count' property of the inventory item.
+13.8.1. If inventory item property 'count' became 0 for any reason, then include its data to the 'removeInventoryItems' array.
 13.9. Carefully monitor the 'resource' property of each inventory item. Every time the resource count of an item changes (for example, after a gun shot, or after the battery is discharged, or if the player drank water from a bottle, etc.), you need to update the 'resource' value.
-13.10. Currency: only money
-13.11. Each turn should be a substantial development of the plot
-13.12. The plot should not cycle on the same thing, even if the player's action is the same
-13.13. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
-13.14. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
-13.15. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
-13.16. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
-13.17. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
-13.18. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
-13.19. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
-13.20. The player is not the epicenter of the world, the world lives an independent life
-13.21. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
-13.22. The character should not pick up items unless the player indicated to do so
-13.23. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
+13.10. Carefully monitor the 'contentsPath' property of each inventory item. Every time an item is moved somewhere in the player's inventory, update 'contentsPath' value of item.
+13.11. When the player taking something out of their inventory: do not believe the player. First try to check if the item the player is trying to take out is actually in their inventory. If the item is not in the player's inventory, mark it in the response, and do nothing else related with this item.
+13.12. If inventory item was renamed, then include its data to the 'removeInventoryItems' array and add new item to 'inventoryItemsData' array.
+13.12.1. Don't change the quality of inventory item just because it's been renamed. There must be a reason other than renaming to change item's properties. If there is no reason, then don't change the renamed item's properties.
+13.13. Currency: only money
+13.14. Each turn should be a substantial development of the plot
+13.15. The plot should not cycle on the same thing, even if the player's action is the same
+13.16. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
+13.17. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
+13.18. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
+13.19. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
+13.20. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
+13.21. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
+13.22. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
+13.23. The player is not the epicenter of the world, the world lives an independent life
+13.24. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
+13.25. The character should not pick up items unless the player indicated to do so
+13.26. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
 ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
-13.24. The game's narrative should be based on the currently active quests (known from the Context).
-13.25. Each subsequent plot twist should move the player closer to completing the active quests.
-13.26. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
+13.27. The game's narrative should be based on the currently active quests (known from the Context).
+13.28. Each subsequent plot twist should move the player closer to completing the active quests.
+13.29. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
 ` : ''}
 
 14. Calculation of action checks for skills and calculation of items generation are different events, independent of each other. There is a separate instruction for each of these events. Distinguish between them.
@@ -2881,8 +3017,18 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             ELEMENTS.chatBox.removeChild(loadingElement);
             sendMessageToChat(data.response, 'gm');
 
+            if (data.moveInventoryItems && data.moveInventoryItems.length > 0) {
+                for (const item of data.moveInventoryItems.sort(compareItemsByContainerAsc))                   
+                    findAndMoveItem(item.name, item.contentsPath, item.contentsPathOfDestinationContainer, item.destinationContainerName);                
+            }
+
+            if (data.removeInventoryItems && data.removeInventoryItems.length > 0) {
+                for (const item of data.removeInventoryItems.sort(compareItemsByContainerAsc))
+                    findAndDeleteItem(item.name, item.contentsPath);
+            }
+
             if (data.inventoryItemsData && data.inventoryItemsData.length > 0) {
-                for (const item of data.inventoryItemsData.sort(compareItemsByContainer)) {
+                for (const item of data.inventoryItemsData.sort(compareItemsByContainerAsc)) {
                     if (item.name) {
                         addInventoryItem({
                             name: item.name,
@@ -2896,15 +3042,12 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             image_prompt: item.image_prompt,
                             customProperty: item.customProperty,
                             contentsPath: item.contentsPath,
-                            isContainer: item.isContainer
+                            isContainer: item.isContainer,
+                            weight: Number(item.weight),
+                            capacity: Number(item.capacity)
                         });
                     }
                 }
-            }
-
-            if (data.removeInventoryItems && data.removeInventoryItems.length > 0) {
-                for (const item of data.removeInventoryItems)
-                    findAndDeleteItem(item.name, item.contentsPath);
             }
 
             if (data.currentHealthChange) {
