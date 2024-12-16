@@ -113,6 +113,7 @@ const ELEMENTS = {
     inventoryInfoId: document.getElementById('inventory-info-id'),
     inventoryInfoName: document.getElementById('inventory-info-name'),
     inventoryInfoDescription: document.getElementById('inventory-info-description'),
+    inventoryInfoContentsDescription: document.getElementById('inventory-info-contents-description'),
     inventoryInfoClose: document.getElementById('inventory-info-close'),
     inventoryInfoDelete: document.getElementById('inventory-delete'),
     inventoryContainerOpen: document.getElementById('inventory-container-open'),
@@ -135,6 +136,11 @@ const ELEMENTS = {
     inventoryContainerInfoName: document.getElementById('inventory-container-info-name'),
     inventoryContainerInfoItems: document.getElementById('inventory-container-info-items'),
     inventoryContainerInfoId: document.getElementById('inventory-container-info-id'),
+
+    //inventory menu
+    inventoryItemContextMenu: document.getElementById('inventory-item-context-menu'),
+    inventoryItemContextMenuContainer: document.getElementById('inventoryItemContextMenuContainer'),
+    inventoryItemContextMenuName: document.getElementById('inventory-item-context-menu-name'),
 
     //locations
     locationsList: document.getElementById('locations-list'),
@@ -919,14 +925,67 @@ function updateInventoryList(inventoryListElement, itemsArray) {
         if (!item.id)
             item.id = generateGUID();
 
-        const li = document.createElement('li');
-        const span = document.createElement('span');
-        span.textContent = item.name;
-        span.onclick = () => showInventoryInfo(item.id, itemsArray);
+        const itemListElement = document.createElement('li');
+        const itemSpan = document.createElement('span');
+        itemSpan.textContent = item.name;
+        itemSpan.onclick = () => showInventoryInfo(item.id, itemsArray);
+        itemListElement.appendChild(itemSpan);
+        inventoryListElement.appendChild(itemListElement);
 
-        li.appendChild(span);
-        inventoryListElement.appendChild(li);
+        itemSpan.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+            showItemContextMenu(item, itemsArray, event.clientX, event.clientY);
+        });
+
+        let touchTimer;
+        itemSpan.addEventListener('touchstart', (event) => {
+            touchTimer = setTimeout(() => {
+                showItemContextMenu(item, itemsArray, event.touches[0].clientX, event.touches[0].clientY);
+            }, 500);
+        });
+
+        itemSpan.addEventListener('touchend', () => {
+            clearTimeout(touchTimer);
+        });
     });
+}
+
+function updateInventoryInfoWindows(currentItem, originalItemsArray, destinationItemsArray) {
+    processContainer(originalItemsArray);
+    processContainer(destinationItemsArray);
+
+    updateInventoryList(ELEMENTS.inventory, inventory);
+    if (ELEMENTS.inventoryInfo.style.display == 'block' && ELEMENTS.inventoryInfoId.value == currentItem.id) {
+        if (!showInventoryInfo(currentItem.id, destinationItemsArray))
+            showInventoryInfo(currentItem.id, originalItemsArray)
+    }
+
+    function processContainer(itemsArray) {
+        if (inventory == itemsArray)
+            return;
+
+        const container = findItemContainerByContentsArray(inventory, itemsArray);
+        if (container) {
+            if (ELEMENTS.inventoryContainerInfo.style.display == 'block' && ELEMENTS.inventoryContainerInfoId.value == container.id)
+                updateInventoryList(ELEMENTS.inventoryContainerInfoItems, itemsArray);
+            if (ELEMENTS.inventoryInfo.style.display == 'block' && ELEMENTS.inventoryInfoId.value == container.id) {
+                if (Array.isArray(container.contentsPath)) {
+                    const pathCount = container.contentsPath.length;
+                    const parentName = container.contentsPath.slice(-1, 1);
+                    const parentPath = container.contentsPath.slice(0, pathCount - 1);
+                    showItemWindow(container.id, parentName, parentPath);                    
+                } else {
+                    showItemWindow(container.id, container.name, null);                   
+                }
+            }
+        }
+
+        function showItemWindow(id, name, path) {
+            const data = getItemByNameAndPath(name, path);
+            if (data.item)
+                showInventoryInfo(id, data.parentItemsArray ?? inventory);
+        }
+    }
 }
 
 //Show item info.
@@ -935,8 +994,8 @@ function showInventoryInfo(id, itemsArray) {
 
     const currentItem = itemsArray.find(item => item.id === id);
     if (!currentItem)
-        return;
-
+        return false;
+          
     const displayNoneClass = "displayNone";
     const description = currentItem.description ? markdown(currentItem.description) : translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_not_descripted"];
     const countLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-count-label"];
@@ -947,36 +1006,77 @@ function showInventoryInfo(id, itemsArray) {
     const weightLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-weight-label"];
     const capacityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-capacity-label"];
 
-    let durablityValue = currentItem.durability?.toString();
-    if (durablityValue && !durablityValue.endsWith("%"))
-        durablityValue += "%";
-
     ELEMENTS.inventoryInfoId.value = id;
     ELEMENTS.inventoryInfoName.innerHTML = markdown(currentItem.name);
     ELEMENTS.inventoryInfoDescription.innerHTML = description;
     ELEMENTS.inventoryInfoCount.innerHTML = `${countLabel}: ${currentItem.count ?? '-'}`;
     ELEMENTS.inventoryInfoQuality.innerHTML = `${qualityLabel}: ${currentItem.quality ?? '-'}`;
-    ELEMENTS.inventoryInfoDurability.innerHTML = `${durabilityLabel}: ${durablityValue ?? '-'}`;
     ELEMENTS.inventoryInfoPrice.innerHTML = `${priceLabel}: ${currentItem.price ?? '-'}`;
     ELEMENTS.inventoryInfoWeight.innerHTML = `${weightLabel}: ${currentItem.weight ?? '-'}`;
     ELEMENTS.inventoryInfoCapacity.innerHTML = `${capacityLabel}: ${currentItem.capacity ?? '-'}`;
 
-    ELEMENTS.inventoryInfoCustomProperty.innerHTML = markdown(currentItem.customProperty);
-    if (!currentItem.customProperty)
-        ELEMENTS.inventoryInfoCustomProperty.classList.add(displayNoneClass);
-    else
-        ELEMENTS.inventoryInfoCustomProperty.classList.remove(displayNoneClass);
+    processDurability();
+    processCustomProperties();
+    processResource();
+    processBonuses();
+    processContainerProperties();
 
-    let resourceValue = currentItem.resource ?? '-';
-    if (!currentItem.resource?.includes(':'))
-        resourceValue = `${resourceLabel}: ${resourceValue}`;
-    ELEMENTS.inventoryInfoResource.innerHTML = resourceValue;
-    if (!currentItem.resource)
-        ELEMENTS.inventoryInfoResource.classList.add(displayNoneClass);
-    else
-        ELEMENTS.inventoryInfoResource.classList.remove(displayNoneClass);
+    ELEMENTS.inventoryInfoDelete.onclick = function () {
+        const deleteMessage = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-delete-message"];
+        if (!confirmAction(deleteMessage))
+            return;
 
-    if (currentItem.bonuses?.length > 0) {
+        deleteItem(currentItem, itemsArray, true);
+        ELEMENTS.inventoryInfo.style.display = 'none';
+    };
+
+    ELEMENTS.inventoryInfoImage.style.display = ELEMENTS.imageToggleSettings.checked ? "inline-block" : "none";
+    ELEMENTS.inventoryInfoImage.onclick = function () {
+        showImageInfo(currentItem.name, currentItem.imageUrl, currentItem.image_prompt, currentItem);
+    }   
+
+    ELEMENTS.inventoryContainerOpen.onclick = function () {
+        showInventoryInfoContainer(currentItem);
+    }
+
+    //--- FINAL ---//
+    ELEMENTS.inventoryInfo.style.display = 'block';
+    return true;
+
+    function processDurability() {
+        let durablityValue = currentItem.durability?.toString();
+        if (durablityValue && !durablityValue.endsWith("%"))
+            durablityValue += "%";
+
+        ELEMENTS.inventoryInfoDurability.innerHTML = `${durabilityLabel}: ${durablityValue ?? '-'}`;
+    }
+
+    function processCustomProperties() {
+        ELEMENTS.inventoryInfoCustomProperty.innerHTML = markdown(currentItem.customProperty);
+        if (!currentItem.customProperty)
+            ELEMENTS.inventoryInfoCustomProperty.classList.add(displayNoneClass);
+        else
+            ELEMENTS.inventoryInfoCustomProperty.classList.remove(displayNoneClass);
+    }
+
+    function processResource() {
+        let resourceValue = currentItem.resource ?? '-';
+        if (!currentItem.resource?.includes(':'))
+            resourceValue = `${resourceLabel}: ${resourceValue}`;
+
+        ELEMENTS.inventoryInfoResource.innerHTML = resourceValue;
+        if (!currentItem.resource)
+            ELEMENTS.inventoryInfoResource.classList.add(displayNoneClass);
+        else
+            ELEMENTS.inventoryInfoResource.classList.remove(displayNoneClass);
+    }
+
+    function processBonuses() {
+        if (!currentItem.bonuses || currentItem.bonuses.length < 1) {
+            ELEMENTS.inventoryInfoBonuses.innerHTML = '';
+            return;
+        }
+
         const listData = currentItem.bonuses.map(bonus => {
             const parsedBonus = markdown(bonus);
             return `<li>${parsedBonus}</li>`;
@@ -988,43 +1088,32 @@ function showInventoryInfo(id, itemsArray) {
 		    <ul id="inventory-info-bonuses-list">
 			    ${listData}
 		    </ul>
-		`;
-    } else {
-        ELEMENTS.inventoryInfoBonuses.innerHTML = '';
+	    `;        
     }
 
-    ELEMENTS.inventoryInfoDelete.onclick = function () {
-        const deleteMessage = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-delete-message"];
-        if (!confirmDelete(deleteMessage))
-            return;
+    function processContainerProperties() {
+        if (currentItem.isContainer && currentItem.capacity > 0) {
+            ELEMENTS.inventoryContainerOpen.classList.remove(displayNoneClass);
+            ELEMENTS.inventoryInfoCapacity.classList.remove(displayNoneClass);
+            ELEMENTS.inventoryInfoCount.classList.add(displayNoneClass);
+            ELEMENTS.inventoryInfoContentsDescription.classList.remove(displayNoneClass);
 
-        deleteItem(currentItem, itemsArray, true);
-        ELEMENTS.inventoryInfo.style.display = 'none';
-    };
+            const contentsDescriptionLabel = "Содержимое";
+            let contentsDescription = describeItemContainerContents(currentItem);
+            if (!contentsDescription)
+                contentsDescription = 'Пусто';
+            ELEMENTS.inventoryInfoContentsDescription.innerHTML = `<p>${contentsDescriptionLabel}:</p><p>${markdown(contentsDescription)}</p>`;
 
-    ELEMENTS.inventoryInfoImage.style.display = ELEMENTS.imageToggleSettings.checked ? "inline-block" : "none";
-    ELEMENTS.inventoryInfoImage.onclick = function () {
-        showImageInfo(currentItem.name, currentItem.imageUrl, currentItem.image_prompt, currentItem);
+        } else {
+            ELEMENTS.inventoryContainerOpen.classList.add(displayNoneClass);
+            ELEMENTS.inventoryInfoCapacity.classList.add(displayNoneClass);
+            ELEMENTS.inventoryInfoCount.classList.remove(displayNoneClass);
+            ELEMENTS.inventoryInfoContentsDescription.classList.add(displayNoneClass);
+        }
     }
-
-    if (currentItem.isContainer && currentItem.capacity > 0) {
-        ELEMENTS.inventoryContainerOpen.classList.remove(displayNoneClass);
-        ELEMENTS.inventoryInfoCapacity.classList.remove(displayNoneClass);
-        ELEMENTS.inventoryInfoCount.classList.add(displayNoneClass);
-    } else {
-        ELEMENTS.inventoryContainerOpen.classList.add(displayNoneClass);
-        ELEMENTS.inventoryInfoCapacity.classList.add(displayNoneClass);
-        ELEMENTS.inventoryInfoCount.classList.remove(displayNoneClass);
-    }
-
-    ELEMENTS.inventoryContainerOpen.onclick = function () {
-        openInventoryContainer(currentItem);
-    }
-
-    ELEMENTS.inventoryInfo.style.display = 'block';
 }
 
-function openInventoryContainer(container) {
+function showInventoryInfoContainer(container) {
     if (!container || !container.isContainer)
         return;
 
@@ -1033,55 +1122,6 @@ function openInventoryContainer(container) {
     updateInventoryList(ELEMENTS.inventoryContainerInfoItems, container.contents ?? []);
 
     ELEMENTS.inventoryContainerInfo.style.display = 'block';
-}
-
-function findAndMoveItem(name, contentsPath, contentsPathOfDestinationContainer, destinationContainerName) {
-    const dataItemToMove = getItemByNameAndPath(name, contentsPath);
-
-    if (!dataItemToMove?.item)
-        return;
-
-    const currentItem = dataItemToMove.item;
-    const originalItemsArray = dataItemToMove.parentItemsArray ?? inventory;
-    const removeIndex = originalItemsArray.findIndex(item => currentItem.id === item.id);
-    if (removeIndex < 0)
-        return;
-    originalItemsArray.splice(removeIndex, 1);
-
-    let destinationItemsArray = inventory;
-    if (destinationContainerName) {
-        const containerData = getItemByNameAndPath(destinationContainerName, contentsPathOfDestinationContainer);
-        if (containerData.item) {
-            containerData.item.contents ??= [];
-            destinationItemsArray = containerData.item.contents;
-        }
-    }
-    destinationItemsArray.push(currentItem);
-}
-
-function findAndDeleteItem(name, contentsPath) {
-    const data = getItemByNameAndPath(name, contentsPath);
-
-    if (!data?.item)
-        return;    
-    
-    deleteItem(data.item, data.parentItemsArray, false);
-}
-
-function deleteItem(currentItem, itemsArray, recalculate) {
-    if (!currentItem || !itemsArray)
-        return;
-
-    const hasPath = isNestedItem(currentItem);  
-    const removeIndex = itemsArray.findIndex(item => currentItem.id === item.id);
-    if (removeIndex > -1)
-        itemsArray.splice(removeIndex, 1);
-
-    const inventoryListElement = hasPath ? ELEMENTS.inventoryContainerInfoItems : ELEMENTS.inventory;
-    updateInventoryList(inventoryListElement, itemsArray);
-
-    if (recalculate && hasPath)
-        calculateParametersForItemsArray(inventory);
 }
 
 function addInventoryItem(itemParams) {
@@ -1130,7 +1170,8 @@ function addInventoryItem(itemParams) {
             isContainer: itemParams.isContainer,
             weight: itemParams.weight,
             containerWeight: itemParams.containerWeight,
-            capacity: itemParams.capacity
+            capacity: itemParams.capacity,
+            contents: itemParams.isContainer ? [] : undefined
         });
     }
 
@@ -1146,6 +1187,44 @@ function addInventoryItem(itemParams) {
     const id = ELEMENTS.inventoryInfoId.value;
     if (inventoryArray.find(item => item.id === id))
         showInventoryInfo(id, inventoryArray);
+}
+
+function generateInventoryItemContextMenu(currentItem, parentItemsArray) {
+    ELEMENTS.inventoryItemContextMenu.innerHTML = '';
+    ELEMENTS.inventoryItemContextMenuName.innerHTML = currentItem.name;
+
+    generateMenuItem('Открыть', () => showInventoryInfo(currentItem.id, parentItemsArray));
+    if (currentItem.contentsPath)
+        generateMenuItem('Выложить в инвентарь', () => moveItem(currentItem, parentItemsArray, inventory, true));  
+    generateMenuItem('Выбросить', () => deleteItemWithConfirmation(currentItem, parentItemsArray, true));
+      
+    for (const item of parentItemsArray) {
+        if (item.id != currentItem.id
+            && item.isContainer && Array.isArray(item.contents)
+            && item.capacity >= item.contents.length + 1)
+            generateMenuItem(`Положить в ${item.name}`, () => moveItemWithConfirmation(currentItem, parentItemsArray, item.contents, true));        
+    }
+
+    function generateMenuItem(label, action) {
+        const listItem = document.createElement('li');
+        listItem.textContent = label;
+        listItem.addEventListener('click', () => {
+            action();
+            hideInventoryItemContextMenu();
+        });
+        ELEMENTS.inventoryItemContextMenu.appendChild(listItem);    
+    }
+}
+
+function showItemContextMenu(currentItem, parentItemsArray, x, y) {
+    generateInventoryItemContextMenu(currentItem, parentItemsArray);
+    ELEMENTS.inventoryItemContextMenuContainer.style.display = 'block';
+    ELEMENTS.inventoryItemContextMenuContainer.style.left = x + 'px';
+    ELEMENTS.inventoryItemContextMenuContainer.style.top = y + 'px';
+}
+
+function hideInventoryItemContextMenu() {
+    ELEMENTS.inventoryItemContextMenuContainer.style.display = 'none';
 }
 
 //---- SKILLS ----//
@@ -1204,7 +1283,7 @@ function showSkillInfo(id, active) {
     ELEMENTS.skillInfoDescription.innerHTML = description;
     ELEMENTS.skillInfoDelete.style.display = active ? 'block' : 'none';
     ELEMENTS.skillInfoDelete.onclick = function () {
-        if (!confirmDelete())
+        if (!confirmAction())
             return;
 
         if (active) {
@@ -1263,7 +1342,7 @@ function showLocationInfo(id) {
     ELEMENTS.locationInfoName.innerHTML = `${markdown(currentLocation.name)} (${difficultyLabel} ${currentLocation.difficulty})`;
     ELEMENTS.locationInfoDescription.innerHTML = markdown(currentLocation.description);
     ELEMENTS.locationInfoDelete.onclick = function () {
-        if (!confirmDelete())
+        if (!confirmAction())
             return;
 
         visitedLocations = visitedLocations.filter(loc => loc.name !== currentLocation.name);
@@ -1365,7 +1444,7 @@ function showNPCInfo(id) {
     ELEMENTS.npcInfoJournal.innerHTML = journalNotes;
 
     ELEMENTS.npcInfoDelete.onclick = function () {
-        if (!confirmDelete())
+        if (!confirmAction())
             return;
 
         encounteredNPCs = encounteredNPCs.filter(npc => npc.id !== currentNPC.id);
@@ -1374,7 +1453,7 @@ function showNPCInfo(id) {
         ELEMENTS.npcInfo.style.display = 'none';
     };
     ELEMENTS.npcInfoDeleteJournal.onclick = function () {
-        if (!confirmDelete())
+        if (!confirmAction())
             return;
 
         npcJournals = npcJournals.filter(npc => npc.name !== currentNPC.name);
@@ -1543,7 +1622,7 @@ function showQuestInfo(id) {
     }
 
     ELEMENTS.questInfoDelete.onclick = function () {
-        if (!confirmDelete())
+        if (!confirmAction())
             return;
 
         quests = quests.filter(quest => quest.id !== currentQuest.id);
@@ -1676,9 +1755,9 @@ ELEMENTS.imageInfoClose.onclick = function () { ELEMENTS.imageInfo.style.display
 
 //--------------------------------------------------------------------UTILITY------------------------------------------------------------------//
 
-function confirmDelete(deleteMessage) {
-    deleteMessage ??= translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["confirm_message_label"];
-    if (confirm(deleteMessage))
+function confirmAction(message) {
+    message ??= translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["confirm_message_label"];
+    if (confirm(message))
         return true;
 
     return false;
@@ -2125,6 +2204,143 @@ function getRandomNumber(min, max) {
     const mixedValue = mathRandomValue ^ timestamp;
 
     return min + (mixedValue % (max - min + 1));
+}
+
+function describeItemContainerContents(container, depth = 0) {
+    if (!container || !container.isContainer || !Array.isArray(container.contents))
+        return '';
+
+    let result = '';
+    const indent = '  '.repeat(depth);
+
+    for (const item of container.contents) {
+        if (item.isContainer) {
+            const containerHeader = `${indent}- [${item.name}]\n`;
+            const subItems = describeItemContainerContents(item, depth + 1);
+
+            if (!subItems)
+                result += containerHeader + `${'  '.repeat(depth + 1)}Пусто\n`;
+            else
+                result += containerHeader + subItems;
+        } else {
+            result += `${indent}- ${item.name}\n`;
+        }
+    }
+
+    return result;
+}
+
+function findItemContainerByContentsArray(itemsArray, targetArray) {
+    for (const item of itemsArray) {
+        if (item.isContainer && item.contents === targetArray)
+            return item;
+
+        if (item.isContainer && Array.isArray(item.contents) && item.contents.length > 0) {
+            const found = findItemContainerByContentsArray(item.contents, targetArray);
+            if (found)
+                return found;
+        }
+    }
+
+    return null;
+}
+
+function findAndMoveItem(name, contentsPath, contentsPathOfDestinationContainer, destinationContainerName) {
+    const dataItemToMove = getItemByNameAndPath(name, contentsPath);
+
+    if (!dataItemToMove?.item)
+        return;
+
+    const currentItem = dataItemToMove.item;
+    const originalItemsArray = dataItemToMove.parentItemsArray ?? inventory;
+
+    let destinationItemsArray = inventory;
+    if (destinationContainerName) {
+        const containerData = getItemByNameAndPath(destinationContainerName, contentsPathOfDestinationContainer);
+        if (containerData.item) {
+            containerData.item.contents ??= [];
+            destinationItemsArray = containerData.item.contents;
+        }
+    }
+
+    moveItem(currentItem, originalItemsArray, destinationItemsArray, false);
+}
+
+function moveItemWithConfirmation(currentItem, originalItemsArray, destinationItemsArray, recalculate) {
+    if (!confirmAction())
+        return;
+
+    moveItem(currentItem, originalItemsArray, destinationItemsArray, recalculate);
+}
+
+function moveItem(currentItem, originalItemsArray, destinationItemsArray, recalculate) {
+    if (!currentItem || !Array.isArray(originalItemsArray) || !Array.isArray(destinationItemsArray))
+        return;
+
+    const removeIndex = originalItemsArray.findIndex(item => currentItem.id === item.id);
+    if (removeIndex < 0)
+        return;
+
+    originalItemsArray.splice(removeIndex, 1);
+    destinationItemsArray.push(currentItem);
+
+    if (recalculate) {
+        let destinationContainer = null;
+        if (inventory !== destinationItemsArray)
+            destinationContainer = findItemContainerByContentsArray(inventory, destinationItemsArray);
+
+        currentItem.contentsPath = null;
+        if (destinationContainer)
+            currentItem.contentsPath = [...destinationContainer.contentsPath ?? [], destinationContainer.name];           
+
+        updateContentsPathForNestedItems(currentItem);
+        calculateParametersForItemsArray(inventory);
+        adjustInventoryContainerCapacity(inventory);
+    }
+
+    updateInventoryInfoWindows(currentItem, originalItemsArray, destinationItemsArray);
+
+    function updateContentsPathForNestedItems(container) {
+        if (!container.isContainer || !Array.isArray(container.contents))
+            return;
+
+        for (const nestedItem of container.contents) {
+            nestedItem.contentsPath = [...container.contentsPath ?? [], container.name];
+
+            if (nestedItem.isContainer && Array.isArray(nestedItem.contents))
+                updateContentsPathForNestedItems(nestedItem);            
+        }
+    }
+}
+
+function findAndDeleteItem(name, contentsPath) {
+    const data = getItemByNameAndPath(name, contentsPath);
+
+    if (!data?.item)
+        return;
+
+    deleteItem(data.item, data.parentItemsArray, false);
+}
+
+function deleteItemWithConfirmation(currentItem, itemsArray, recalculate) {
+    if (!confirmAction())
+        return;
+
+    deleteItem(currentItem, itemsArray, recalculate);
+}
+
+function deleteItem(currentItem, itemsArray, recalculate) {
+    if (!currentItem || !itemsArray)
+        return;
+
+    const removeIndex = itemsArray.findIndex(item => currentItem.id === item.id);
+    if (removeIndex > -1)
+        itemsArray.splice(removeIndex, 1);
+
+    if (recalculate && isNestedItem(currentItem))
+        calculateParametersForItemsArray(inventory);    
+
+    updateInventoryInfoWindows(currentItem, itemsArray, itemsArray);
 }
 
 //----------------------------------------------------------------SAVE/LOAD ACTIONS-----------------------------------------------------------------------//
@@ -3464,7 +3680,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const settingsPanel = document.getElementById('settings-info');
     const actionButtons = document.querySelector('.action-buttons');
 
-    // Добавляем класс settings-panel к контейнеру настроек
     settingsPanel.classList.add('settings-panel', 'collapsed');
 
     let isMainCollapsed = false;
@@ -3495,5 +3710,13 @@ document.addEventListener('DOMContentLoaded', function () {
         isInputAreaCollapsed = !isInputAreaCollapsed;
         collapseButtonInputArea.classList.toggle('collapsed');
         actionButtons.classList.toggle('collapsed');
+    });
+
+    document.addEventListener('click', (event) => {
+        if (ELEMENTS.inventoryItemContextMenuContainer.style.display !== 'block')
+            return;
+
+        if (event.target !== ELEMENTS.inventoryItemContextMenu)
+            hideInventoryItemContextMenu();        
     });
 });

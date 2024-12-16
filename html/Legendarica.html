@@ -648,6 +648,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <p id="inventory-info-customProperty"></p>
             <p id="inventory-info-description"></p>
             <div id="inventory-info-bonuses"></div>
+            <p id="inventory-info-contents-description"></p>
             <h4 id="inventory-container-open" class="infoOpen">Открыть</h4>
             <h4 id="inventory-delete" class="infoDelete">Выбросить этот предмет</h4>
             <input type="hidden" id="inventory-info-id" name="inventory-info-id">
@@ -687,6 +688,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <a id="image-info-image" data-fslightbox="gallery" href="https://i.imgur.com/fsyrScY.jpg"><img id="image-info-thumbnail" class="rounded-corners" src="" /></a>
             <textarea type="text" id="image-info-prompt" class="gameTextarea" placeholder="Промпт для генерации изображения" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"></textarea>
             <h4 id="image-generate" class="infoDelete">Генерировать изображение</h4>
+        </div>
+
+        <div id="inventoryItemContextMenuContainer" style="display: none; position: absolute;">
+            <h4 id="inventory-item-context-menu-name"></h4>
+            <ul id="inventory-item-context-menu"></ul>
         </div>
 
         <button id="collapseButtonMain" class="collapse-button main" style="display:none">
