@@ -3408,6 +3408,20 @@ Openrouter (https://openrouter.ai/). Offre des modèles gratuits et payants. Les
                 );
 
             }
+        },
+
+        setConteinerItemsExceedCapacityMessage: function (containerName, excessCount, itemNames) {
+            const id = "item-conteiner-items-exceed-capacity-message";
+
+            this.setTranslation("english-language", id, `Container "${containerName}" exceeds capacity by ${excessCount} item(s). Moved: ${itemNames} to the main inventory.`);
+            this.setTranslation("russian-language", id, `Контейнер "${containerName}" превышает вместимость на ${excessCount} элемент(ов). Перемещены: ${itemNames} в основной инвентарь.`);
+            this.setTranslation("spanish-language", id, `El contenedor "${containerName}" excede la capacidad por ${excessCount} artículo(s). Movidos: ${itemNames} al inventario principal.`);
+            this.setTranslation("portuguese-language", id, `O contêiner "${containerName}" excede a capacidade em ${excessCount} item(ns). Movidos: ${itemNames} para o inventário principal.`);
+            this.setTranslation("hindi-language", id, `कंटेनर "${containerName}" की क्षमता ${excessCount} आइटम(स) से अधिक हो गई है। स्थानांतरित किए गए: ${itemNames} मुख्य इन्वेंटरी में।`);
+            this.setTranslation("german-language", id, `Der Container "${containerName}" überschreitet die Kapazität um ${excessCount} Element(e). Verschoben: ${itemNames} in das Hauptinventar.`);
+            this.setTranslation("french-language", id, `Le conteneur "${containerName}" dépasse la capacité de ${excessCount} élément(s). Déplacés : ${itemNames} dans l'inventaire principal.`);
+
+            return id;
         }
     }
 })();

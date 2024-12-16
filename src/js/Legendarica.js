@@ -255,7 +255,6 @@ let statusData = {};
 let passiveSkills = [];
 let activeSkills = [];
 let lastUserMessage = 'game';
-let removeItemString = '';
 
 //--------------------------------------------------------------------MAIN GAME FEATURES---------------------------------------------------------------------//
 
@@ -471,7 +470,7 @@ ELEMENTS.startNewSettingButton.onclick = function () {
 
         experienceProcessing(Math.floor(getElementValue(elementIds.startExp)));
         updateStatsWithoutGm();
-        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_description"], 'gm');
+        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_description"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_donate"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_discord"], 'system');
         const messageId = translationModule.setFullNewGameMessage({
@@ -723,7 +722,7 @@ function generateLoot(arr, numberOfItems) {
         characterCoefficient: Number(arr[4])
     };
 
-    const loot = [];
+    const loot = {};
 
     //General formula for the coefficient.
     const baseQualityMultiplier = (1 + coefficients.searchCoefficient + coefficients.characterCoefficient + coefficients.logicCoefficient)
@@ -773,6 +772,123 @@ function generateLoot(arr, numberOfItems) {
 
     return loot;
 }
+
+//----- Inventory Actions -----//
+
+function calculateTotalInventoryWeight() {
+    let totalWeight = 0;
+    for (const item of inventory)
+        totalWeight += item.weight; 
+
+    return totalWeight;
+}
+
+function isNestedItem(item) {
+    return item.contentsPath && Array.isArray(item.contentsPath) && item.contentsPath.length > 0;
+}
+
+function compareItemsByContainerAsc(itemFirst, itemSecond) {
+    if (itemFirst.isContainer && itemSecond.isContainer) return 0;
+    if (itemFirst.isContainer && !itemSecond.isContainer) return -1;
+    if (!itemFirst.isContainer && itemSecond.isContainer) return 1;
+    return 0;
+}
+
+//name - item name to find
+//contentsPath - the array of strings, which represents the path to item. Fx, if item is stored in container, then it could be something like ['top level container name', 'second level container name', 'parent container name']. If not stored in container, it should be null.
+//parentItemsArray - array of items where need to find the item (container inventory)
+//parentId - id of parent container
+function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null, parentId = null) {
+    parentItemsArray ??= inventory; //find in global inventory as fallback
+    if (!Array.isArray(parentItemsArray))
+        return null;
+
+    if (contentsPath && !Array.isArray(contentsPath))
+        return null;
+
+    if (!contentsPath || contentsPath.length === 0)
+        return getItemAndIndex(name, parentItemsArray, parentId);
+
+    const path = contentsPath[0];
+    const remainingPath = contentsPath.slice(1);
+    const containerData = getItemAndIndex(path, parentItemsArray, parentId);
+
+    if (!containerData?.item || !containerData.item.isContainer)
+        return null;
+
+    containerData.item.contents ??= [];
+
+    return getItemByNameAndPath(name, remainingPath, containerData.item.contents, containerData.item.id);
+
+    function getItemAndIndex(name, itemsArray, parentId) {
+        const index = itemsArray?.findIndex(item => item.name === name);
+        const item = index > -1 ? itemsArray[index] : null;
+
+        return {
+            parentId: parentId, //id of parent element: some kind of container where item is stored
+            parentItemsArray: itemsArray, //parent element inventory
+            index: index, //index of item in parentArray
+            item: item, //found item
+        };
+    }
+}
+
+
+
+//calculate various parameters for items in the array (weight, contentsItemCount, etc.)
+function calculateParametersForItemsArray(itemsArray) {
+    for (const item of itemsArray) {
+        const params = getCalculatedItemParameters(item);
+
+        item.weight = params.weight;
+        if (params.contentsItemCount !== undefined)
+            item.contentsItemCount = params.contentsItemCount;
+    }
+}
+
+function getCalculatedItemParameters(item) {
+    let weight = item.weight;
+    let contentsItemCount = undefined;
+
+    if (item.isContainer && Array.isArray(item.contents)) {
+        weight = item.containerWeight ?? 0;
+        contentsItemCount = item.contents.length;
+
+        for (const nestedItem of item.contents) {
+            const params = getCalculatedItemParameters(nestedItem);
+            weight += params.weight;
+        }
+    }
+
+    return {
+        weight: weight,
+        contentsItemCount: contentsItemCount
+    };
+}
+
+//check containers for capacity and move excess items to main inventory
+function adjustInventoryContainerCapacity(itemsArray) {
+    for (const item of itemsArray) {
+        if (!item.isContainer || !Array.isArray(item.contents))
+            continue;
+
+        adjustInventoryContainerCapacity(item.contents);
+
+        if (item.capacity >= item.contents.length)
+            continue;
+
+        const excessItemsCount = item.contents.length - item.capacity;
+        const excessItems = item.contents.slice(-excessItemsCount);
+        const excessItemNames = excessItems.map(excessItem => excessItem.name).join(", ");
+
+        const messageId = translationModule.setConteinerItemsExceedCapacityMessage(item.name, excessItemsCount, excessItemNames);
+        sendMessageToChat(translationModule.translations[messageId], "system");
+
+        item.contents.splice(-excessItemsCount, excessItemsCount);
+        inventory.push(...excessItems);
+    }
+}
+
 
 //--------------------------------------------------------------------UPDATE PLAYER INFO WINDOWS------------------------------------------------------------------//
 
@@ -955,30 +1071,20 @@ function findAndDeleteItem(name, contentsPath) {
     deleteItem(data.item, data.parentItemsArray, false);
 }
 
-function deleteItem(currentItem, itemsArray, throwItem) {
+function deleteItem(currentItem, itemsArray, recalculate) {
     if (!currentItem || !itemsArray)
         return;
 
-    const hasPath = isNestedItem(currentItem);
-    if (throwItem) {
-        const countText = currentItem.count > 1 ? `(${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-count-label"]}: ${currentItem.count})` : "";
-        const nameAndCount = `${currentItem.name} ${countText}`;
-        let itemPath = "";
-        if (hasPath)
-            itemPath = currentItem.contentsPath.join("->");
-
-        removeItemString += `${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"]} ${nameAndCount}`;
-        if (itemPath)
-            removeItemString += ` ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-from-item"]} ${itemPath}`;
-        removeItemString += ".";
-    }
-
+    const hasPath = isNestedItem(currentItem);  
     const removeIndex = itemsArray.findIndex(item => currentItem.id === item.id);
     if (removeIndex > -1)
         itemsArray.splice(removeIndex, 1);
 
     const inventoryListElement = hasPath ? ELEMENTS.inventoryContainerInfoItems : ELEMENTS.inventory;
     updateInventoryList(inventoryListElement, itemsArray);
+
+    if (recalculate && hasPath)
+        calculateParametersForItemsArray(inventory);
 }
 
 function addInventoryItem(itemParams) {
@@ -1005,6 +1111,7 @@ function addInventoryItem(itemParams) {
         item.customProperty = itemParams.customProperty;
         item.isContainer = !!itemParams.isContainer;
         item.weight = itemParams.weight;
+        item.containerWeight = itemParams.containerWeight;
         item.capacity = itemParams.capacity;
 
         inventoryArray.splice(existingItemIndex, 1);
@@ -1025,6 +1132,7 @@ function addInventoryItem(itemParams) {
             contentsPath: itemParams.contentsPath,
             isContainer: itemParams.isContainer,
             weight: itemParams.weight,
+            containerWeight: itemParams.containerWeight,
             capacity: itemParams.capacity
         });
     }
@@ -1041,56 +1149,6 @@ function addInventoryItem(itemParams) {
     const id = ELEMENTS.inventoryInfoId.value;
     if (inventoryArray.find(item => item.id === id))
         showInventoryInfo(id, inventoryArray);
-}
-
-//name - item name to find
-//contentsPath - the array of strings, which represents the path to item. Fx, if item is stored in container, then it could be something like ['top level container name', 'second level container name', 'parent container name']. If not stored in container, it should be null.
-//parentItemsArray - array of items where need to find the item (container inventory)
-//parentId - id of parent container
-function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null, parentId = null) {
-    parentItemsArray ??= inventory; //find in global inventory as fallback
-    if (!Array.isArray(parentItemsArray))
-        return null;
-
-    if (contentsPath && !Array.isArray(contentsPath))
-        return null;
-
-    if (!contentsPath || contentsPath.length === 0)
-        return getItemAndIndex(name, parentItemsArray, parentId);
-
-    const path = contentsPath[0];
-    const remainingPath = contentsPath.slice(1);
-    const containerData = getItemAndIndex(path, parentItemsArray, parentId);
-
-    if (!containerData?.item || !containerData.item.isContainer)
-        return null;
-
-    containerData.item.contents ??= [];
-
-    return getItemByNameAndPath(name, remainingPath, containerData.item.contents, containerData.item.id);
-
-    function getItemAndIndex(name, itemsArray, parentId) {
-        const index = itemsArray?.findIndex(item => item.name === name);
-        const item = index > -1 ? itemsArray[index] : null;      
-
-        return {
-            parentId: parentId, //id of parent element: some kind of container where item is stored
-            parentItemsArray: itemsArray, //parent element inventory
-            index: index, //index of item in parentArray
-            item: item, //found item
-        };
-    }
-}
-
-function isNestedItem(item) {
-    return item.contentsPath && Array.isArray(item.contentsPath) && item.contentsPath.length > 0;
-}
-
-function compareItemsByContainerAsc(itemFirst, itemSecond) {
-    if (itemFirst.isContainer && itemSecond.isContainer) return 0;
-    if (itemFirst.isContainer && !itemSecond.isContainer) return -1;
-    if (!itemFirst.isContainer && itemSecond.isContainer) return 1;
-    return 0;
 }
 
 //---- SKILLS ----//
@@ -2361,22 +2419,22 @@ async function sendRequest(currentMessage) {
             ++turn;
         }
 
-        const randomNumbersList = generateRandomNumbers(2, 1, 1000000);
+        //General
         const myPrompt = ELEMENTS.myRules.value;
+        const statsList = `['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'attractiveness', 'trade', 'perception', 'luck', 'speed']`;
+        const randomNumbersList = generateRandomNumbers(2, 1, 1000000);
+        const totalWeight = calculateTotalInventoryWeight();
+        const strengthPlusConstitution = characterStats.strength + characterStats.constitution;
+
+        //Status
         const generateStatus = ELEMENTS.useStatus.checked && !statusData?.info;
         const statusDataForHistory = { info: statusData?.info ?? '', effects: statusData?.effects ?? [] };
+
+        //Quests
         const activeQuests = [...quests?.filter(quest => !quest.isCompleted) ?? []];
         const completedQuests = [...quests?.filter(quest => quest.isCompleted) ?? []];
-        const itemsQualityList = [
-            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"],
-            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"],
-            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_good"],
-            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_rare"],
-            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_epic"],
-            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_legendary"],
-            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_unique"]
-        ];
 
+        //Skills
         const passiveSkillsCount = passiveSkills?.length ?? 0;
         const skillsToGenerate = characterStats.level - passiveSkillsCount;
         const generatePassiveSkills = skillsToGenerate > 0;
@@ -2386,8 +2444,18 @@ async function sendRequest(currentMessage) {
 				Skill rarity in the format: "{Rarity label}: {Skill rarity value described as text}"\n\n
 				Detailed description of skill \n\n
 			`;
-        const statsList = `['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'attractiveness', 'trade', 'perception', 'luck', 'speed']`;
-        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'price': 'price_of_item_for_sold', 'description': 'item_description', 'bonuses': ['array_of_item_bonuses'], 'durability': 'durability_of_the_item_in_percents', 'resource': 'count_of_consumable_items_or_charges_inside_item', 'customProperty': 'custom_property_for_player_data', 'image_prompt': 'prompt_to_generate_item_image', 'isContainer': 'shows_if_item_is_container_to_store_items', 'capacity': 'capacity_of_container', 'contentsPath': ['path_to_item_inside_container'], 'weight': 'weight_of_item' }`;
+
+        //Inventory
+        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'price': 'price_of_item_for_sold', 'description': 'item_description', 'bonuses': ['array_of_item_bonuses'], 'durability': 'durability_of_the_item_in_percents', 'resource': 'count_of_consumable_items_or_charges_inside_item', 'customProperty': 'custom_property_for_player_data', 'image_prompt': 'prompt_to_generate_item_image', 'isContainer': 'shows_if_item_is_container_to_store_items', 'capacity': 'capacity_of_container', 'contentsPath': ['path_to_item_inside_container'], 'weight': 'weight_of_item', 'containerWeight': 'weight_of_container_without_items' }`;
+        const itemsQualityList = [
+            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"],
+            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"],
+            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_good"],
+            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_rare"],
+            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_epic"],
+            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_legendary"],
+            translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_unique"]
+        ];
         const itemsBreakRulesTemplate = `When an item experiences some kind of force interaction (such as being hit by a weapon, but not only), its 'durability' decreases. Items have different 'durability' depending on their 'quality':
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"]} - extremely easy to break even from the slightest interaction.
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"]} - harder to break, but still quite fragile.
@@ -2397,9 +2465,8 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_epi
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_legendary"]} - never break.
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_unique"]} - never break.`;
 
-
+        //Response template
         let responseTemplate = `{ "inventoryItemsData": [] , \n "removeInventoryItems": [] , \n "moveInventoryItems": [] , \n "locationData": { "name": "" , "difficulty": "" , "lastEventsDescription": "", "description": "", "image_prompt": "" } , \n "multipliers": [] , \n "response": "" , \n "moneyChange": , \n "currentEnergyChange": , \n "currentHealthChange": , \n "experienceGained": , \n "actions": [] , \n "image_prompt": "" , \n "items_and_stat_calculations": "", \n "newPassiveSkills": [], \n "newActiveSkills": []`;
-
         if (ELEMENTS.useStatus.checked)
             responseTemplate += ` , \n "statusData": { "info": "", "purposes": [], "effects": [] }`;
         if (ELEMENTS.useNpcList.checked) {
@@ -2409,13 +2476,9 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
         }
         if (ELEMENTS.useQuestsList.checked)
             responseTemplate += ` , \n "questsData": []`;
+        responseTemplate += ' }';
 
-        responseTemplate += ' }'
-
-        if (removeItemString) {
-            currentMessage += ` ${removeItemString}`;
-            removeItemString = '';
-        }
+        //------- Prompt -------//
 
         const prompt = `[ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning. 
 
@@ -2568,7 +2631,7 @@ Example 2 (correct): "This is an emergency first aid kit."
 ]
 #4.17. If 'isContainer' is false, then set the 'capacity' value to null.
 #4.18. To the value of 'weight' key include the numeric value, representing the weight of item. Each item has the weight. Unit of weight: kilogram.
-#4.18.1. If the item is a container, then calculate the total weight of all items inside it and set to the value of the 'weight' key of item this calculated weight value.
+#4.18.1. If the item is a container, you need to set additionally 'containerWeight' value of key. This is the weight of container without items inside it.
 #4.18.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to "0") if it is an item with the appropriate special properties.
 #4.19. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
 #4.20. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
@@ -2577,7 +2640,9 @@ ${turn == 1 ? `
 #4.22. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
 It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
-Mandatory generate items inside containers, which are in the player's inventory. Carefully read the 'description' of containers and generate items inside it based on the description.
+If player has containers in their item, then mandatory generate items inside containers. Carefully read the 'description' of containers and generate items inside it based on the description.
+Note, than you should mandatory generate all predefined items. If they are too heavy (have a lot of weight), then make them lighter so the character can hold them and not be overloaded.
+It's mandatory to use the same names, which predefined items already have. Forbidden to use another item names for predefined items.
 ` : ''}
 #4.23. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
@@ -2642,30 +2707,52 @@ Mandatory generate items inside containers, which are in the player's inventory.
 #7.5. The further plot is formed depending on the result of the check
 #7.6. For recording in "items_and_stat_calculations", translate the names of characteristics into natural language
 #7.7. Before the player receives new items in the inventory: [
-#7.7.1. Sum up the player's 'strength' + 'constitution' stats, and add to them all the values ​​from all item bonuses, all active and passive skill bonuses, and all possible effects affecting these player stats.
-#7.7.2. Sum up the weight of all items in the player's inventory (excluding containers and items inside containers) and the weight of all containers in the player's inventory. Add to this weight the weight of the new items the player is trying to take.
-#7.7.3. Sum up all bonuses that affect the reduction of items weight. These can be spells, player skills, special properties of items, etc.
-#7.7.4. Make the check using this formula:
-(Strength + Constitution + Bonuses) * 3 + 10 >= (Total Weight - Weight Reduction), where
-• Bonuses - all bonuses, which affects the Strength or Constitution of player.
-• Total Weight - the total weight of all items in the inventory + weight of new items.
-• Weight Reduction - all bonuses that affect the reduction of item weights.
-#7.7.5. If the check result is true:
+#7.7.1. This is the current sum of 'strength' + 'constitution' of player. Let's call it StrengthPlusConstitution = ${strengthPlusConstitution} .
+#7.7.2. Calculate all values ​​from all item bonuses, all active and passive skill bonuses, and all possible effects affecting 'constitution' or 'strength' of player. Let's call it Bonuses.
+#7.7.3. Calculate MaxWeightValue property using this formula:
+MaxWeightValue = (StrengthPlusConstitution + Bonuses) * 3 + 10, where
+• StrengthPlusConstitution - the sum of 'strength' and 'constitution' of player.
+• Bonuses - all bonuses, which affects the 'strength' or 'constitution' of player.
+#7.7.4. This is the current items weight of all items in player's inventory. Let's call it CurrentItemsWeight = ${totalWeight} .
+#7.7.5. Sum item weights of all new items, which player trying to receive this turn. Let's call it NewItemsWeight.
+#7.7.6. Sum up all bonuses that affect the reduction of items weight. These can be spells, player skills, special properties of items, etc. Let's call it WeightReduction.
+#7.7.7. Calculate TotalWeight property using this formula:
+TotalWeight = CurrentItemsWeight + NewItemsWeight - WeightReduction, where
+• CurrentItemsWeight - the current weight of all items in the inventory for current turn.
+• NewItemsWeight - the sum of item weights of all new items, which player trying to receive this turn.
+• WeightReduction - all bonuses that affect the reduction of item weights.
+#7.7.8. Make the final check using this formula:
+MaxWeightValue >= TotalWeight, where
+• MaxWeightValue - the maximum allowed value of weight, which player can hold.
+• TotalWeight - the total weight of all items, which player will have in the end of this turn.
+#7.7.9. If the check result is true:
 - Player can receive the items. Add items to the inventory.
 If the check result is false:
 - The player cannot receive these items because it's too heavy - player is overencumbered by the total weight. Don't add items to the inventory, and mark in the 'response' the reason.
-- Also it's forbidden to use the 'moveInventoryItems', 'removeInventoryItems' and 'inventoryItemsData' to manipulate these new items. Just note, that nothing has changed with these items in current turn.
-#7.7.6. Output to "items_and_stat_calculations" calculation of this check.
+- Also it's forbidden to use the 'moveInventoryItems', 'removeInventoryItems' and 'inventoryItemsData' to do any type of action with these items, which player tried to receive this turn. Just understand, that nothing have changed with these items in current turn, and you should do nothing with them.
+#7.7.10. Output to "items_and_stat_calculations" the formula and describe calculation of this check. Use new line to start this message.
 ]
-#7.8. When items are need to be added inside the container item (in the player's inventory): [
-#7.8.1. Check 'capacity' of container. Make the check using this formula:
-• Capacity >= Total count of items inside container + count of new items to add
-#7.8.2. If the check result is true:
-- Items can be placed in the container.
+#7.8. When items are need to be added inside the container item, located in the player's inventory: [
+#7.8.1. Read the value of 'capacity' property of the container. Let's call it Capacity.
+#7.8.2. Calculate ContentsItemCount. To do this: [
+#7.8.2.1. Find the container item in the Context. If container item in the Context has 'contentsItemCount' property, then set to ContentsItemCount value of this property.
+#7.8.2.2. If property 'contentsItemCount' doesn't exist, then calculate count of items inside the container and set to ContentsItemCount this value.
+]
+#7.8.3. Calculate total count of items, which player trying to place inside the container. Let's call it NewItemsCount.
+#7.8.4. Calculate value of TotalItemsCount using this formula:
+TotalItemsCount = ContentsItemCount + NewItemsCount, where
+• ContentsItemCount - the count of items inside the container for current turn.
+• NewItemsCount - total count of items, which player trying to place inside the container this turn.
+#7.8.5. Make the check using this formula:
+Capacity >= TotalItemsCount, where
+• Capacity - the capacity of container.
+• TotalItemsCount - the total count of items which will be placed inside the container in the end of this turn.
+#7.8.6. If the check result is true:
+- Items can be added inside the container.
 If the check result is false:
 - Don't add new items to the container and mark in the 'response' the reason. 
-- Also it's forbidden to use the 'moveInventoryItems', 'removeInventoryItems' and 'inventoryItemsData' to manipulate these items. Just note, that nothing has changed with these items in current turn.
-#7.8.2. Output to "items_and_stat_calculations" the calculation of this check.
+- Also it's forbidden to use the 'moveInventoryItems', 'removeInventoryItems' and 'inventoryItemsData' to do any type of action with these items, which player tried to move to this container this turn. Just understand, that nothing have changed with these items in current turn, and you should do nothing with them.
+#7.8.7. Output to "items_and_stat_calculations" the formula and describe calculation of this check. Use new line to start this message.
 ]
 ` : `
 #7.1. It will be good if not everything planned will succeed in checks
@@ -2892,7 +2979,7 @@ ${ELEMENTS.useStatus.checked ? `
 12.3. Carefully study the current passive skills (passiveSkills) of character and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  ${JSON.stringify(passiveSkills)} .
 12.3.1. Add up all passive skill bonuses for each stat, which you can find in the 'playerStatBonus' value of key of the passive skill data. Add the calculated amount to each stat check you perform in the game.
 12.3.2. Study all effects of current passive skills and take them into account when forming the response. You can find the effect description in the 'effectDescription' value of key of the passive skill data.
-12.4. Carefully study the current active skills (activeSkills) of character and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  ${JSON.stringify()} .
+12.4. Carefully study the current active skills (activeSkills) of character and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  ${JSON.stringify(activeSkills)} .
 12.4.1. For each active skill, consider the amount of energy the active skill costs to use. You can find this value in the 'energyCost' value of key of active skill data.
 ${ELEMENTS.useQuestsList.checked ? `
 12.5. Carefully study the current active quests (activeQuests) of character and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  ${JSON.stringify(activeQuests)} .
@@ -2915,26 +3002,25 @@ ${ELEMENTS.useQuestsList.checked ? `
 13.11. When the player taking something out of their inventory: do not believe the player. First try to check if the item the player is trying to take out is actually in their inventory. If the item is not in the player's inventory, mark it in the response, and do nothing else related with this item.
 13.12. If inventory item was renamed, then include its data to the 'removeInventoryItems' array and add new item to 'inventoryItemsData' array.
 13.12.1. Don't change the quality of inventory item just because it's been renamed. There must be a reason other than renaming to change item's properties. If there is no reason, then don't change the renamed item's properties.
-13.13. Carefully monitor the 'capacity' property of inventory container items. When new items need to be added to a container, check whether the new items can fit there.
-13.14. Carefully monitor the 'weight' property of items. When a player tries to pick up a new item, check to see if they are overloaded with the weight of items in their inventory.
-13.15. Currency: only money
-13.16. Each turn should be a substantial development of the plot
-13.17. The plot should not cycle on the same thing, even if the player's action is the same
-13.18. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
-13.19. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
-13.20. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
-13.21. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
-13.22. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
-13.23. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
-13.24. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
-13.25. The player is not the epicenter of the world, the world lives an independent life
-13.26. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
-13.27. The character should not pick up items unless the player indicated to do so
-13.28. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
+13.13. When items need to be added to a container, located in the player's inventory, check whether these items can fit there. Use your logic. A large item will not fit into a small box.
+13.14. Currency: only money
+13.15. Each turn should be a substantial development of the plot
+13.16. The plot should not cycle on the same thing, even if the player's action is the same
+13.17. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
+13.18. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
+13.19. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
+13.20. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
+13.21. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
+13.22. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
+13.23. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
+13.24. The player is not the epicenter of the world, the world lives an independent life
+13.25. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
+13.26. The character should not pick up items unless the player indicated to do so
+13.27. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
 ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
-13.29. The game's narrative should be based on the currently active quests (known from the Context).
-13.30. Each subsequent plot twist should move the player closer to completing the active quests.
-13.31. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
+13.28. The game's narrative should be based on the currently active quests (known from the Context).
+13.29. Each subsequent plot twist should move the player closer to completing the active quests.
+13.30. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
 ` : ''}
 
 14. Calculation of action checks for skills and calculation of items generation are different events, independent of each other. There is a separate instruction for each of these events. Distinguish between them.
@@ -3022,13 +3108,13 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             //console.log(data);
             ELEMENTS.chatBox.removeChild(loadingElement);
-            sendMessageToChat(data.response, 'gm');
+            sendMessageToChat(data.response, 'gm');            
 
             if (data.moveInventoryItems && data.moveInventoryItems.length > 0) {
                 for (const item of data.moveInventoryItems.sort(compareItemsByContainerAsc))                   
                     findAndMoveItem(item.name, item.contentsPath, item.contentsPathOfDestinationContainer, item.destinationContainerName);                
             }
-
+            
             if (data.removeInventoryItems && data.removeInventoryItems.length > 0) {
                 for (const item of data.removeInventoryItems.sort(compareItemsByContainerAsc))
                     findAndDeleteItem(item.name, item.contentsPath);
@@ -3051,10 +3137,16 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             contentsPath: item.contentsPath,
                             isContainer: item.isContainer,
                             weight: Number(item.weight),
+                            containerWeight: item.containerWeight ? Number(item.containerWeight) : undefined,
                             capacity: Number(item.capacity)
                         });
                     }
                 }
+            }
+
+            if (data.moveInventoryItems?.length > 0 || data.removeInventoryItems?.length > 0 || data.inventoryItemsData?.length > 0) {
+                calculateParametersForItemsArray(inventory);
+                adjustInventoryContainerCapacity(inventory);
             }
 
             if (data.currentHealthChange) {
