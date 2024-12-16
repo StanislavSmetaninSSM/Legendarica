@@ -363,7 +363,7 @@ ELEMENTS.createCharacterButton.onclick = function () {
         CHARACTER_INFO.campaign = campaign;
 
         updateStatsWithoutGm();
-        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_description"], 'gm');
+        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_description"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_donate"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_discord"], 'system');
 
@@ -833,8 +833,6 @@ function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null
     }
 }
 
-
-
 //calculate various parameters for items in the array (weight, contentsItemCount, etc.)
 function calculateParametersForItemsArray(itemsArray) {
     for (const item of itemsArray) {
@@ -882,13 +880,12 @@ function adjustInventoryContainerCapacity(itemsArray) {
         const excessItemNames = excessItems.map(excessItem => excessItem.name).join(", ");
 
         const messageId = translationModule.setConteinerItemsExceedCapacityMessage(item.name, excessItemsCount, excessItemNames);
-        sendMessageToChat(translationModule.translations[messageId], "system");
+        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId], "system");
 
         item.contents.splice(-excessItemsCount, excessItemsCount);
         inventory.push(...excessItems);
     }
 }
-
 
 //--------------------------------------------------------------------UPDATE PLAYER INFO WINDOWS------------------------------------------------------------------//
 
@@ -2466,7 +2463,7 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_leg
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_unique"]} - never break.`;
 
         //Response template
-        let responseTemplate = `{ "inventoryItemsData": [] , \n "removeInventoryItems": [] , \n "moveInventoryItems": [] , \n "locationData": { "name": "" , "difficulty": "" , "lastEventsDescription": "", "description": "", "image_prompt": "" } , \n "multipliers": [] , \n "response": "" , \n "moneyChange": , \n "currentEnergyChange": , \n "currentHealthChange": , \n "experienceGained": , \n "actions": [] , \n "image_prompt": "" , \n "items_and_stat_calculations": "", \n "newPassiveSkills": [], \n "newActiveSkills": []`;
+        let responseTemplate = `{ "inventoryItemsData": [] , \n "removeInventoryItems": [] , \n "moveInventoryItems": [] , \n "locationData": { "name": "" , "difficulty": "" , "lastEventsDescription": "", "description": "", "image_prompt": "" } , \n "multipliers": [] , \n "response": "" , \n "moneyChange": , \n "currentEnergyChange": , \n "currentHealthChange": , \n "experienceGained": , \n "actions": [] , \n "image_prompt": "" , \n "items_and_stat_calculations": ['array_of_log_messages'], \n "newPassiveSkills": [], \n "newActiveSkills": []`;
         if (ELEMENTS.useStatus.checked)
             responseTemplate += ` , \n "statusData": { "info": "", "purposes": [], "effects": [] }`;
         if (ELEMENTS.useNpcList.checked) {
@@ -2489,6 +2486,7 @@ Please, Let's think step by step:
 #0 Carefully study and remember the super instructions, which are more priority in case of contradictions than other parts of the instructions: [ ${myPrompt} ].
 
 #1 Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes. Response template: ${responseTemplate} . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
+#1.1. To the "items_and_stat_calculations" include array of strings, each of which represents one complete message about various calculations for logs. Fill it only when you see the direct instruction to output something into "items_and_stat_calculations".
 
 #2 ${turn == 1 ? `This is the start of a new game. [ Starting message from player: [ ${currentMessage} ]. Let's think step by step : [ 
 #2.1. Briefly tell about the character (without inventing their personality and goals) and their backstory.
@@ -2669,7 +2667,8 @@ It's mandatory to use the same names, which predefined items already have. Forbi
 #5.4. To the value of 'isContainer' key include the boolean value, that indicates whether the item being moved is a container or not.
 #5.4.1. It's mandatory to set to 'isContainer' the same value, like in the item with same name known from Context. 
 #5.5. If container is moved, then include to 'moveInventoryItems' only container, without its contents, because the contents of container will be moved to a new place automatically by game system.
-#5.6. Mandatory record information about this event in "items_and_stat_calculations".
+#5.6. The order in which you add items to the 'moveInventoryItems' array is important. It must be logically correct. For example, if the player says to put these items in a container, and then move the container to a new location, you must add the items in exactly that order. This is important for the system to process the result.
+#5.7. Mandatory record information about this event in "items_and_stat_calculations".
 ] ]
 
 #6 If this condition is true: [
@@ -2729,8 +2728,8 @@ MaxWeightValue >= TotalWeight, where
 - Player can receive the items. Add items to the inventory.
 If the check result is false:
 - The player cannot receive these items because it's too heavy - player is overencumbered by the total weight. Don't add items to the inventory, and mark in the 'response' the reason.
-- Also it's forbidden to use the 'moveInventoryItems', 'removeInventoryItems' and 'inventoryItemsData' to do any type of action with these items, which player tried to receive this turn. Just understand, that nothing have changed with these items in current turn, and you should do nothing with them.
-#7.7.10. Output to "items_and_stat_calculations" the formula and describe calculation of this check. Use new line to start this message.
+- It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
+#7.7.10. Output to "items_and_stat_calculations" the formula and describe calculation of this check.
 ]
 #7.8. When items are need to be added inside the container item, located in the player's inventory: [
 #7.8.1. Read the value of 'capacity' property of the container. Let's call it Capacity.
@@ -2751,8 +2750,8 @@ Capacity >= TotalItemsCount, where
 - Items can be added inside the container.
 If the check result is false:
 - Don't add new items to the container and mark in the 'response' the reason. 
-- Also it's forbidden to use the 'moveInventoryItems', 'removeInventoryItems' and 'inventoryItemsData' to do any type of action with these items, which player tried to move to this container this turn. Just understand, that nothing have changed with these items in current turn, and you should do nothing with them.
-#7.8.7. Output to "items_and_stat_calculations" the formula and describe calculation of this check. Use new line to start this message.
+- It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
+#7.8.7. Output to "items_and_stat_calculations" the formula and describe calculation of this check.
 ]
 ` : `
 #7.1. It will be good if not everything planned will succeed in checks
@@ -3111,12 +3110,12 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             sendMessageToChat(data.response, 'gm');            
 
             if (data.moveInventoryItems && data.moveInventoryItems.length > 0) {
-                for (const item of data.moveInventoryItems.sort(compareItemsByContainerAsc))                   
+                for (const item of data.moveInventoryItems)                   
                     findAndMoveItem(item.name, item.contentsPath, item.contentsPathOfDestinationContainer, item.destinationContainerName);                
             }
             
             if (data.removeInventoryItems && data.removeInventoryItems.length > 0) {
-                for (const item of data.removeInventoryItems.sort(compareItemsByContainerAsc))
+                for (const item of data.removeInventoryItems)
                     findAndDeleteItem(item.name, item.contentsPath);
             }
 
@@ -3209,8 +3208,9 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 }
             }
 
-            if (data.items_and_stat_calculations)
-                logMessage(data.items_and_stat_calculations, data.currentHealthChange, data.currentEnergyChange, data.moneyChange);
+            if (data.items_and_stat_calculations && data.items_and_stat_calculations.length > 0) {                
+                logMessage(data.items_and_stat_calculations.join('\n\n'), data.currentHealthChange, data.currentEnergyChange, data.moneyChange);
+            }
 
             if (data.actions)
                 handlePlayerActionHints(data.actions);
