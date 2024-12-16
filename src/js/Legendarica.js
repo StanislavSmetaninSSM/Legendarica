@@ -886,10 +886,15 @@ function adjustInventoryContainerCapacity(itemsArray) {
         const excessItemNames = excessItems.map(excessItem => excessItem.name).join(", ");
 
         const messageId = translationModule.setConteinerItemsExceedCapacityMessage(item.name, excessItemsCount, excessItemNames);
-        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId], "system");
+        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId], "system");        
 
         item.contents.splice(-excessItemsCount, excessItemsCount);
         inventory.push(...excessItems);
+
+        for (const excessedItem of excessItems) {
+            excessedItem.contentsPath = null;
+            updateContentsPathForNestedItems(excessedItem);
+        }
     }
 }
 
@@ -969,21 +974,19 @@ function updateInventoryInfoWindows(currentItem, originalItemsArray, destination
             if (ELEMENTS.inventoryContainerInfo.style.display == 'block' && ELEMENTS.inventoryContainerInfoId.value == container.id)
                 updateInventoryList(ELEMENTS.inventoryContainerInfoItems, itemsArray);
             if (ELEMENTS.inventoryInfo.style.display == 'block' && ELEMENTS.inventoryInfoId.value == container.id) {
-                if (Array.isArray(container.contentsPath)) {
+                if (Array.isArray(container.contentsPath) && container.contentsPath.length > 0) {
                     const pathCount = container.contentsPath.length;
-                    const parentName = container.contentsPath.slice(-1, 1);
+                    const parentName = container.contentsPath.slice(-1, 1)[0];
                     const parentPath = container.contentsPath.slice(0, pathCount - 1);
-                    showItemWindow(container.id, parentName, parentPath);                    
+                    const data = getItemByNameAndPath(parentName, parentPath);
+                    if (data.item)
+                        showInventoryInfo(container.id, data.item.contents);
                 } else {
-                    showItemWindow(container.id, container.name, null);                   
+                    const data = getItemByNameAndPath(container.name, null);
+                    if (data.item)
+                        showInventoryInfo(container.id, data.parentItemsArray);                  
                 }
             }
-        }
-
-        function showItemWindow(id, name, path) {
-            const data = getItemByNameAndPath(name, path);
-            if (data.item)
-                showInventoryInfo(id, data.parentItemsArray ?? inventory);
         }
     }
 }
@@ -2245,6 +2248,18 @@ function findItemContainerByContentsArray(itemsArray, targetArray) {
     return null;
 }
 
+function updateContentsPathForNestedItems(container) {
+    if (!container.isContainer || !Array.isArray(container.contents))
+        return;
+
+    for (const nestedItem of container.contents) {
+        nestedItem.contentsPath = [...container.contentsPath ?? [], container.name];
+
+        if (nestedItem.isContainer && Array.isArray(nestedItem.contents))
+            updateContentsPathForNestedItems(nestedItem);
+    }
+}
+
 function findAndMoveItem(name, contentsPath, contentsPathOfDestinationContainer, destinationContainerName) {
     const dataItemToMove = getItemByNameAndPath(name, contentsPath);
 
@@ -2299,18 +2314,6 @@ function moveItem(currentItem, originalItemsArray, destinationItemsArray, recalc
     }
 
     updateInventoryInfoWindows(currentItem, originalItemsArray, destinationItemsArray);
-
-    function updateContentsPathForNestedItems(container) {
-        if (!container.isContainer || !Array.isArray(container.contents))
-            return;
-
-        for (const nestedItem of container.contents) {
-            nestedItem.contentsPath = [...container.contentsPath ?? [], container.name];
-
-            if (nestedItem.isContainer && Array.isArray(nestedItem.contents))
-                updateContentsPathForNestedItems(nestedItem);            
-        }
-    }
 }
 
 function findAndDeleteItem(name, contentsPath) {
