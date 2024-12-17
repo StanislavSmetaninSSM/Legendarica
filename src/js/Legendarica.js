@@ -114,6 +114,8 @@ const ELEMENTS = {
     inventoryInfoName: document.getElementById('inventory-info-name'),
     inventoryInfoDescription: document.getElementById('inventory-info-description'),
     inventoryInfoContentsDescription: document.getElementById('inventory-info-contents-description'),
+    inventoryInfoAvailableCapacity: document.getElementById('inventory-info-available-capacity'),
+    inventoryInfoAvailableVolume: document.getElementById('inventory-info-available-volume'),
     inventoryInfoClose: document.getElementById('inventory-info-close'),
     inventoryInfoDelete: document.getElementById('inventory-delete'),
     inventoryContainerOpen: document.getElementById('inventory-container-open'),
@@ -123,6 +125,7 @@ const ELEMENTS = {
     inventoryInfoDurability: document.getElementById('inventory-info-durability'),
     inventoryInfoResource: document.getElementById('inventory-info-resource'),
     inventoryInfoWeight: document.getElementById('inventory-info-weight'),
+    inventoryInfoVolume: document.getElementById('inventory-info-volume'),
     inventoryInfoCapacity: document.getElementById('inventory-info-capacity'),
     inventoryInfoCustomProperty: document.getElementById('inventory-info-customProperty'),
     inventoryInfoBonuses: document.getElementById('inventory-info-bonuses'),
@@ -815,6 +818,45 @@ function adjustInventoryContainerCapacity(itemsArray) {
     }
 }
 
+function adjustInventoryContainerVolume(itemsArray) {
+    for (const item of itemsArray) {
+        if (!item.isContainer || !Array.isArray(item.contents))
+            continue;
+
+        adjustInventoryContainerVolume(item.contents);
+
+        const containerVolume = item.volume ?? 0;
+
+        const totalVolume = item.contents.reduce((sum, currentItem) => {
+            return sum + (currentItem.volume ?? 0);
+        }, 0);
+
+        if (totalVolume <= containerVolume)
+            continue;
+
+        let excessVolume = totalVolume - containerVolume;
+        const excessItems = [];
+
+        while (excessVolume > 0 && item.contents.length > 0) {
+            const removedItem = item.contents.pop();
+            excessItems.push(removedItem);
+            excessVolume -= (removedItem.volume ?? 0);
+        }
+
+        if (excessItems.length > 0) {
+            const excessItemNames = excessItems.map(excessItem => excessItem.name).join(", ");
+            const messageId = translationModule.setContainerItemsExceedVolumeMessage(item.name, excessItemNames);
+            sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId], "system");
+
+            inventory.push(...excessItems);
+            for (const excessedItem of excessItems) {
+                excessedItem.contentsPath = null;
+                updateContentsPathForNestedItems(excessedItem);
+            }
+        }
+    }
+}
+
 //--------------------------------------------------------------------UPDATE PLAYER INFO WINDOWS------------------------------------------------------------------//
 
 function updateElements() {
@@ -925,6 +967,7 @@ function showInventoryInfo(id, itemsArray) {
     const resourceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-resource-label"];
     const weightLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-weight-label"];
     const capacityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-capacity-label"];
+    const volumeLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-volume-label"];
 
     ELEMENTS.inventoryInfoId.value = id;
     ELEMENTS.inventoryInfoName.innerHTML = markdown(currentItem.name);
@@ -934,6 +977,7 @@ function showInventoryInfo(id, itemsArray) {
     ELEMENTS.inventoryInfoPrice.innerHTML = `${priceLabel}: ${currentItem.price ?? '-'}`;
     ELEMENTS.inventoryInfoWeight.innerHTML = `${weightLabel}: ${currentItem.weight?.toFixed(2) ?? '-'}`;
     ELEMENTS.inventoryInfoCapacity.innerHTML = `${capacityLabel}: ${currentItem.capacity ?? '-'}`;
+    ELEMENTS.inventoryInfoVolume.innerHTML = `${volumeLabel}: ${currentItem.volume?.toFixed(2) ?? '-'}`;
 
     processDurability();
     processCustomProperties();
@@ -1011,23 +1055,34 @@ function showInventoryInfo(id, itemsArray) {
     }
 
     function processContainerProperties() {
-        if (currentItem.isContainer && currentItem.capacity > 0) {
+        if (currentItem.isContainer && currentItem.capacity > 0 && currentItem.volume > 0) {
             ELEMENTS.inventoryContainerOpen.classList.remove(displayNoneClass);
             ELEMENTS.inventoryInfoCapacity.classList.remove(displayNoneClass);
             ELEMENTS.inventoryInfoCount.classList.add(displayNoneClass);
-            ELEMENTS.inventoryInfoContentsDescription.classList.remove(displayNoneClass);
 
+            ELEMENTS.inventoryInfoContentsDescription.classList.remove(displayNoneClass);
             const contentsDescriptionLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["content-description-label"];
             let contentsDescription = describeItemContainerContents(currentItem);
             if (!contentsDescription)
                 contentsDescription = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-container-label"];
-            ELEMENTS.inventoryInfoContentsDescription.innerHTML = `<p>${contentsDescriptionLabel}:</p><p>${markdown(contentsDescription)}</p>`;
+            ELEMENTS.inventoryInfoContentsDescription.innerHTML = `<p>${contentsDescriptionLabel}:</p><p>${markdown(contentsDescription)}</p>`;            
+
+            ELEMENTS.inventoryInfoAvailableCapacity.classList.remove(displayNoneClass);
+            ELEMENTS.inventoryInfoAvailableVolume.classList.remove(displayNoneClass);
+            const availableCapacityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-contents-count-label"];
+            const availableVolumeLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-contents-volume-label"];
+            const availableCapacity = currentItem.capacity - (currentItem.contents?.length ?? 0);
+            const availableVolume = currentItem.volume - (currentItem.contentsVolume ?? 0);
+            ELEMENTS.inventoryInfoAvailableCapacity.innerHTML = `${availableCapacityLabel}: ${availableCapacity}`;
+            ELEMENTS.inventoryInfoAvailableVolume.innerHTML = `${availableVolumeLabel}: ${availableVolume.toFixed(2)}`;
 
         } else {
             ELEMENTS.inventoryContainerOpen.classList.add(displayNoneClass);
             ELEMENTS.inventoryInfoCapacity.classList.add(displayNoneClass);
             ELEMENTS.inventoryInfoCount.classList.remove(displayNoneClass);
             ELEMENTS.inventoryInfoContentsDescription.classList.add(displayNoneClass);
+            ELEMENTS.inventoryInfoAvailableCapacity.classList.add(displayNoneClass);
+            ELEMENTS.inventoryInfoAvailableVolume.classList.add(displayNoneClass);
         }
     }
 }
@@ -1067,6 +1122,7 @@ function addInventoryItem(itemParams) {
         item.customProperty = itemParams.customProperty;
         item.isContainer = !!itemParams.isContainer;
         item.weight = itemParams.weight;
+        item.volume = itemParams.volume;
         item.containerWeight = itemParams.containerWeight;
         item.capacity = itemParams.capacity;
 
@@ -1088,6 +1144,7 @@ function addInventoryItem(itemParams) {
             contentsPath: itemParams.contentsPath,
             isContainer: itemParams.isContainer,
             weight: itemParams.weight,
+            volume: itemParams.volume,
             containerWeight: itemParams.containerWeight,
             capacity: itemParams.capacity,
             contents: itemParams.isContainer ? [] : undefined
@@ -1120,7 +1177,8 @@ function generateInventoryItemContextMenu(currentItem, parentItemsArray) {
     for (const item of parentItemsArray) {
         if (item.id != currentItem.id
             && item.isContainer && Array.isArray(item.contents)
-            && item.capacity >= item.contents.length + 1)
+            && item.capacity >= item.contents.length + 1
+            && item.volume >= (item.contentsVolume ?? 0) + currentItem.volume)
             generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["place-item-to"] + item.name, () => moveItem(currentItem, parentItemsArray, item.contents, true));        
     }
 
@@ -2183,26 +2241,34 @@ function calculateParametersForItemsArray(itemsArray) {
         item.weight = params.weight;
         if (params.contentsItemCount !== undefined)
             item.contentsItemCount = params.contentsItemCount;
+        if (params.contentsVolume !== undefined)
+            item.contentsVolume = params.contentsVolume;
     }
 }
 
 function getCalculatedItemParameters(item) {
     let weight = item.weight;
     let contentsItemCount = undefined;
+    let contentsVolume = undefined;
 
     if (item.isContainer && Array.isArray(item.contents)) {
         weight = item.containerWeight ?? 0;
         contentsItemCount = item.contents.length;
+        contentsVolume = 0;
 
         for (const nestedItem of item.contents) {
             const params = getCalculatedItemParameters(nestedItem);
             weight += params.weight;
+
+            const nestedItemVolume = nestedItem.volume ?? 0;
+            contentsVolume += nestedItemVolume;
         }
     }
 
     return {
         weight: weight,
-        contentsItemCount: contentsItemCount
+        contentsItemCount: contentsItemCount,
+        contentsVolume: contentsVolume
     };
 }
 
@@ -2309,6 +2375,8 @@ function moveItem(currentItem, originalItemsArray, destinationItemsArray, recalc
         updateContentsPathForNestedItems(currentItem);
         calculateParametersForItemsArray(inventory);
         adjustInventoryContainerCapacity(inventory);
+        adjustInventoryContainerVolume(inventory);
+        calculateParametersForItemsArray(inventory);
     }
 
     updateInventoryInfoWindows(currentItem, originalItemsArray, destinationItemsArray);
@@ -2660,7 +2728,7 @@ async function sendRequest(currentMessage) {
 			`;
 
         //Inventory
-        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'price': 'price_of_item_for_sold', 'description': 'item_description', 'bonuses': ['array_of_item_bonuses'], 'durability': 'durability_of_the_item_in_percents', 'resource': 'count_of_consumable_items_or_charges_inside_item', 'customProperty': 'custom_property_for_player_data', 'image_prompt': 'prompt_to_generate_item_image', 'isContainer': 'shows_if_item_is_container_to_store_items', 'capacity': 'capacity_of_container', 'contentsPath': ['path_to_item_inside_container'], 'weight': 'weight_of_item', 'containerWeight': 'weight_of_container_without_items' }`;
+        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'price': 'price_of_item_for_sold', 'description': 'item_description', 'bonuses': ['array_of_item_bonuses'], 'durability': 'durability_of_the_item_in_percents', 'resource': 'count_of_consumable_items_or_charges_inside_item', 'customProperty': 'custom_property_for_player_data', 'image_prompt': 'prompt_to_generate_item_image', 'isContainer': 'shows_if_item_is_container_to_store_items', 'capacity': 'capacity_of_container', 'contentsPath': ['path_to_item_inside_container'], 'weight': 'weight_of_item', 'volume': 'volume_of_item', 'containerWeight': 'weight_of_container_without_items' }`;
         const itemsQualityList = [
             translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"],
             translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"],
@@ -2848,20 +2916,21 @@ Example 2 (correct): "This is an emergency first aid kit."
 #4.18. To the value of 'weight' key include the numeric value, representing the weight of item. Each item has the weight. Unit of weight: kilogram.
 #4.18.1. If the item is a container, you need to set additionally 'containerWeight' value of key. This is the weight of container without items inside it.
 #4.18.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to "0") if it is an item with the appropriate special properties.
-#4.19. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
-#4.20. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
-#4.21. Mandatory record information about this event in "items_and_stat_calculations".
+#4.19. To the value of 'volume' key include the numeric value, representing the volume of item. Each item has the volume. Unit of volume: dm³.
+#4.20. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
+#4.21. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
+#4.22. Mandatory record information about this event in "items_and_stat_calculations".
 ${turn == 1 ? `
-#4.22. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
+#4.23. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
 It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
 If player has containers in their item, then mandatory generate items inside containers. Carefully read the 'description' of containers and generate items inside it based on the description.
 Note, than you should mandatory generate all predefined items. If they are too heavy (have a lot of weight), then make them lighter so the character can hold them and not be overloaded.
 It's mandatory to use the same names, which predefined items already have. Forbidden to use another item names for predefined items.
 ` : ''}
-#4.23. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#4.24. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
-#4.24. Do not include 'inventoryItemsData' key to the response.
+#4.25. Do not include 'inventoryItemsData' key to the response.
 ]
 
 #5 If any of these conditions are true: [
@@ -2963,12 +3032,33 @@ TotalItemsCount = ContentsItemCount + NewItemsCount, where
 Capacity >= TotalItemsCount, where
 • Capacity - the capacity of container.
 • TotalItemsCount - the total count of items which will be placed inside the container in the end of this turn.
-#7.8.6. If the check result is true:
+#7.8.6. If the check result is true: [
+#7.8.6.1. Read the value of 'volume' property of the container. Let's call it Volume.
+#7.8.6.2. Calculate ContentsVolume. To do this: [
+#7.8.6.2.1. Find the container item in the Context. If container item in the Context has 'contentsVolume' property, then set to ContentsVolume value of this property.
+#7.8.6.2.2. If property 'contentsVolume' doesn't exist, then sum total volume of top-level items inside the container and set to ContentsVolume this value.
+]
+#7.8.6.3. Calculate total volume of items, which player trying to place inside the container. Let's call it NewItemsVolume.
+#7.8.6.4. Calculate value of TotalItemsVolume using this formula:
+TotalItemsVolume = ContentsVolume + NewItemsVolume, where
+• ContentsVolume - the volume of items inside the container for current turn.
+• NewItemsVolume - total sum of item volumes, which player trying to place inside the container this turn.
+#7.8.6.5. Make the check using this formula:
+Volume >= TotalItemsVolume, where
+• Volume - the volume of container.
+• TotalItemsVolume - the total sum of item volumes which will be placed inside the container in the end of this turn.
+#7.8.6.6. If the check result is true:
 - Items can be added inside the container.
 If the check result is false:
 - Don't add new items to the container and mark in the 'response' the reason. 
 - It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
-#7.8.7. Output to "items_and_stat_calculations" the formula and describe calculation of this check.
+#7.8.6.7. Output to "items_and_stat_calculations" the formula and describe calculation of this check.
+]
+If the check result is false:
+- Don't add new items to the container and mark in the 'response' the reason. 
+- It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
+#7.8.7. Make sure that you made both checks: for capacity and volume. Only if both of them returns true as result, you can include these items to 'moveInventoryItems' or 'inventoryItemsData'.
+#7.8.8. Output to "items_and_stat_calculations" the formula and describe calculation of this check.
 ]
 ` : `
 #7.1. It will be good if not everything planned will succeed in checks
@@ -3353,6 +3443,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             contentsPath: item.contentsPath,
                             isContainer: item.isContainer,
                             weight: Number(item.weight),
+                            volume: Number(item.volume),
                             containerWeight: item.containerWeight ? Number(item.containerWeight) : undefined,
                             capacity: Number(item.capacity)
                         });
@@ -3363,6 +3454,8 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (data.moveInventoryItems?.length > 0 || data.removeInventoryItems?.length > 0 || data.inventoryItemsData?.length > 0) {
                 calculateParametersForItemsArray(inventory);
                 adjustInventoryContainerCapacity(inventory);
+                adjustInventoryContainerVolume(inventory);
+                calculateParametersForItemsArray(inventory);
             }
 
             if (data.currentHealthChange) {

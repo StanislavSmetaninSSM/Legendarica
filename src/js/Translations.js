@@ -420,6 +420,9 @@ const translationModule = (function getTranslationModule() {
             "place-item-to": "Place into ",
             "empty-container-label": "Empty",
             "content-description-label": "Content",
+            "inventory-volume-label": "Volume (dm³)",
+            "inventory-contents-count-label": "Available capacity",
+            "inventory-contents-volume-label": "Available volume (dm³)"
         },
         "russian-language": {
             // placeholders
@@ -825,6 +828,9 @@ Websim. Зависит от нейросети, которую использу�
             "place-item-to": "Положить в ",
             "empty-container-label": "Пусто",
             "content-description-label": "Содержимое",
+            "inventory-volume-label": "Объем (дм³)",
+            "inventory-contents-count-label": "Доступная вместимость",
+            "inventory-contents-volume-label": "Доступный объём (дм³)"
         },
         "spanish-language": {
             // placeholders
@@ -1233,6 +1239,9 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "place-item-to": "Colocar en ",
             "empty-container-label": "Vacío",
             "content-description-label": "Contenido",
+            "inventory-volume-label": "Volumen (dm³)",
+            "inventory-contents-count-label": "Capacidad disponible",
+            "inventory-contents-volume-label": "Volumen disponible (dm³)"
         },
         "portuguese-language": {
             // placeholders
@@ -1641,6 +1650,9 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "place-item-to": "Colocar em ",
             "empty-container-label": "Vazio",
             "content-description-label": "Conteúdo",
+            "inventory-volume-label": "Volume (dm³)",
+            "inventory-contents-count-label": "Capacidade disponível",
+            "inventory-contents-volume-label": "Volume disponível (dm³)"
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -2046,6 +2058,9 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "place-item-to": "में रखें ",
             "empty-container-label": "खाली",
             "content-description-label": "सामग्री",
+            "inventory-volume-label": "आयतन (घन डेसीमीटर)",
+            "inventory-contents-count-label": "उपलब्ध क्षमता",
+            "inventory-contents-volume-label": "उपलब्ध आयतन (dm³)"
         },
         "german-language": {
             // placeholders
@@ -2454,6 +2469,9 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "place-item-to": "In ",
             "empty-container-label": "Leer",
             "content-description-label": "Inhalt",
+            "inventory-volume-label": "Volumen (dm³)",
+            "inventory-contents-count-label": "Verfügbare Kapazität",
+            "inventory-contents-volume-label": "Verfügbares Volumen (dm³)"
         },
         "french-language": {
             // placeholders
@@ -2863,6 +2881,9 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "place-item-to": "Placer dans ",
             "empty-container-label": "Vide",
             "content-description-label": "Contenu",
+            "inventory-volume-label": "Volume (dm³)",
+            "inventory-contents-count-label": "Capacité disponible",
+            "inventory-contents-volume-label": "Volume disponible (dm³)"
         }
     };
 
@@ -3432,7 +3453,7 @@ Openrouter (https://openrouter.ai/). Offre des modèles gratuits et payants. Les
         },
 
         setConteinerItemsExceedCapacityMessage: function (containerName, excessCount, itemNames) {
-            const id = "item-conteiner-items-exceed-capacity-message";
+            const id = "item-container-items-exceed-capacity-message";
 
             this.setTranslation("english-language", id, `Container "${containerName}" exceeds capacity by ${excessCount} item(s). Moved: "${itemNames}" to the main inventory.`);
             this.setTranslation("russian-language", id, `Контейнер "${containerName}" превышает вместимость на ${excessCount} элемент(ов). Перемещены: "${itemNames}" в основной инвентарь.`);
@@ -3441,6 +3462,20 @@ Openrouter (https://openrouter.ai/). Offre des modèles gratuits et payants. Les
             this.setTranslation("hindi-language", id, `कंटेनर "${containerName}" की क्षमता ${excessCount} आइटम(स) से अधिक हो गई है। स्थानांतरित किए गए: "${itemNames}" मुख्य इन्वेंटरी में।`);
             this.setTranslation("german-language", id, `Der Container "${containerName}" überschreitet die Kapazität um ${excessCount} Element(e). Verschoben: "${itemNames}" in das Hauptinventar.`);
             this.setTranslation("french-language", id, `Le conteneur "${containerName}" dépasse la capacité de ${excessCount} élément(s). Déplacés : "${itemNames}" dans l'inventaire principal.`);
+
+            return id;
+        },
+
+        setContainerItemsExceedVolumeMessage: function (containerName, itemNames) {
+            const id = "item-container-items-exceed-volume-message";
+
+            this.setTranslation("english-language", id, `The volume of the container "${containerName}" is smaller than the volume of the items placed inside it. Automatically corrected. Moved: "${itemNames}" to the main inventory.`);
+            this.setTranslation("russian-language", id, `Объем контейнера "${containerName}" меньше объёма вложенных в него предметов. Автоматически исправлено. Перемещены: "${itemNames}" в основной инвентарь.`);
+            this.setTranslation("spanish-language", id, `El volumen del contenedor "${containerName}" es menor que el volumen de los artículos colocados en su interior. Corregido automáticamente. Movidos: "${itemNames}" al inventario principal.`);
+            this.setTranslation("portuguese-language", id, `O volume do contêiner "${containerName}" é menor que o volume dos itens colocados dentro dele. Corrigido automaticamente. Movidos: "${itemNames}" para o inventário principal.`);
+            this.setTranslation("hindi-language", id, `कंटेनर "${containerName}" की क्षमता उसमें रखी वस्तुओं के आयतन से कम है। स्वतः ठीक कर दिया गया है। स्थानांतरित किए गए: "${itemNames}" मुख्य इन्वेंटरी में।`);
+            this.setTranslation("german-language", id, `Das Volumen des Containers "${containerName}" ist geringer als das Volumen der darin platzierten Gegenstände. Automatisch korrigiert. Verschoben: "${itemNames}" ins Hauptinventar.`);
+            this.setTranslation("french-language", id, `Le volume du conteneur "${containerName}" est inférieur au volume des objets qui y sont placés. Corrigé automatiquement. Déplacés : "${itemNames}" dans l'inventaire principal.`);
 
             return id;
         }
