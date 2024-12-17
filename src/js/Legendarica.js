@@ -1015,7 +1015,7 @@ function showInventoryInfo(id, itemsArray) {
     ELEMENTS.inventoryInfoCount.innerHTML = `${countLabel}: ${currentItem.count ?? '-'}`;
     ELEMENTS.inventoryInfoQuality.innerHTML = `${qualityLabel}: ${currentItem.quality ?? '-'}`;
     ELEMENTS.inventoryInfoPrice.innerHTML = `${priceLabel}: ${currentItem.price ?? '-'}`;
-    ELEMENTS.inventoryInfoWeight.innerHTML = `${weightLabel}: ${currentItem.weight ?? '-'}`;
+    ELEMENTS.inventoryInfoWeight.innerHTML = `${weightLabel}: ${currentItem.weight?.toFixed(2) ?? '-'}`;
     ELEMENTS.inventoryInfoCapacity.innerHTML = `${capacityLabel}: ${currentItem.capacity ?? '-'}`;
 
     processDurability();
@@ -1025,8 +1025,7 @@ function showInventoryInfo(id, itemsArray) {
     processContainerProperties();
 
     ELEMENTS.inventoryInfoDelete.onclick = function () {
-        const deleteMessage = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-delete-message"];
-        if (!confirmAction(deleteMessage))
+        if (!confirmAction())
             return;
 
         deleteItem(currentItem, itemsArray, true);
@@ -1101,10 +1100,10 @@ function showInventoryInfo(id, itemsArray) {
             ELEMENTS.inventoryInfoCount.classList.add(displayNoneClass);
             ELEMENTS.inventoryInfoContentsDescription.classList.remove(displayNoneClass);
 
-            const contentsDescriptionLabel = "Содержимое";
+            const contentsDescriptionLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["content-description-label"];
             let contentsDescription = describeItemContainerContents(currentItem);
             if (!contentsDescription)
-                contentsDescription = 'Пусто';
+                contentsDescription = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-container-label"];
             ELEMENTS.inventoryInfoContentsDescription.innerHTML = `<p>${contentsDescriptionLabel}:</p><p>${markdown(contentsDescription)}</p>`;
 
         } else {
@@ -1195,17 +1194,17 @@ function addInventoryItem(itemParams) {
 function generateInventoryItemContextMenu(currentItem, parentItemsArray) {
     ELEMENTS.inventoryItemContextMenu.innerHTML = '';
     ELEMENTS.inventoryItemContextMenuName.innerHTML = currentItem.name;
-
-    generateMenuItem('Открыть', () => showInventoryInfo(currentItem.id, parentItemsArray));
+    
+    generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-container-open"], () => showInventoryInfo(currentItem.id, parentItemsArray));
     if (currentItem.contentsPath)
-        generateMenuItem('Выложить в инвентарь', () => moveItem(currentItem, parentItemsArray, inventory, true));  
-    generateMenuItem('Выбросить', () => deleteItemWithConfirmation(currentItem, parentItemsArray, true));
-      
+        generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["move-to-inventory"], () => moveItem(currentItem, parentItemsArray, inventory, true));  
+    generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"], () => deleteItemWithConfirmation(currentItem, parentItemsArray, true));
+    
     for (const item of parentItemsArray) {
         if (item.id != currentItem.id
             && item.isContainer && Array.isArray(item.contents)
             && item.capacity >= item.contents.length + 1)
-            generateMenuItem(`Положить в ${item.name}`, () => moveItemWithConfirmation(currentItem, parentItemsArray, item.contents, true));        
+            generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["place-item-to"] + item.name, () => moveItem(currentItem, parentItemsArray, item.contents, true));        
     }
 
     function generateMenuItem(label, action) {
@@ -2215,6 +2214,7 @@ function describeItemContainerContents(container, depth = 0) {
 
     let result = '';
     const indent = '  '.repeat(depth);
+    const emptyLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-container-label"];
 
     for (const item of container.contents) {
         if (item.isContainer) {
@@ -2222,7 +2222,7 @@ function describeItemContainerContents(container, depth = 0) {
             const subItems = describeItemContainerContents(item, depth + 1);
 
             if (!subItems)
-                result += containerHeader + `${'  '.repeat(depth + 1)}Пусто\n`;
+                result += containerHeader + `${'  '.repeat(depth + 1)}${emptyLabel}\n`;
             else
                 result += containerHeader + subItems;
         } else {
