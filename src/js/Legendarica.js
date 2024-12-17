@@ -2991,7 +2991,7 @@ It's mandatory to use the same names, which predefined items already have. Forbi
 #7.4. If not success: if a random number from the list of generated numbers is less than 150000, then a new action check is performed, but now on 'luck', while the needed 'luck' value is chosen randomly from 1 to the needed skill value from the previous check and is compared with the current player's 'luck' value plus bonuses from the items in the inventory array known from Context.
 #7.5. The further plot is formed depending on the result of the check
 #7.6. For recording in "items_and_stat_calculations", translate the names of characteristics into natural language
-#7.7. Before the player receives new items in the inventory: [
+#7.7. Before the player receives new items in the inventory, make this check for possibility to receive them: [
 #7.7.1. This is the current sum of 'strength' + 'constitution' of player. Let's call it StrengthPlusConstitution = ${strengthPlusConstitution} .
 #7.7.2. Calculate all values ​​from all item bonuses, all active and passive skill bonuses, and all possible effects affecting 'constitution' or 'strength' of player. Let's call it Bonuses.
 #7.7.3. Calculate MaxWeightValue property using this formula:
@@ -3017,7 +3017,7 @@ If the check result is false:
 - It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
 #7.7.10. Output to "items_and_stat_calculations" the formula and describe calculation of this check.
 ]
-#7.8. When items are need to be added inside the container item, located in the player's inventory: [
+#7.8. When items are need to be added inside the container item, located in the player's inventory, make this check for possibility to do it: [
 #7.8.1. Read the value of 'capacity' property of the container. Let's call it Capacity.
 #7.8.2. Calculate ContentsItemCount. To do this: [
 #7.8.2.1. Find the container item in the Context. If container item in the Context has 'contentsItemCount' property, then set to ContentsItemCount value of this property.
