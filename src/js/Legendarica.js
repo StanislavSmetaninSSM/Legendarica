@@ -779,95 +779,12 @@ function generateLoot(arr, numberOfItems) {
     return loot;
 }
 
-//----- Inventory Actions -----//
-
 function calculateTotalInventoryWeight() {
     let totalWeight = 0;
     for (const item of inventory)
         totalWeight += item.weight; 
 
     return totalWeight;
-}
-
-function isNestedItem(item) {
-    return item.contentsPath && Array.isArray(item.contentsPath) && item.contentsPath.length > 0;
-}
-
-function compareItemsByContainerAsc(itemFirst, itemSecond) {
-    if (itemFirst.isContainer && itemSecond.isContainer) return 0;
-    if (itemFirst.isContainer && !itemSecond.isContainer) return -1;
-    if (!itemFirst.isContainer && itemSecond.isContainer) return 1;
-    return 0;
-}
-
-//name - item name to find
-//contentsPath - the array of strings, which represents the path to item. Fx, if item is stored in container, then it could be something like ['top level container name', 'second level container name', 'parent container name']. If not stored in container, it should be null.
-//parentItemsArray - array of items where need to find the item (container inventory)
-//parentId - id of parent container
-function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null, parentId = null) {
-    parentItemsArray ??= inventory; //find in global inventory as fallback
-    if (!Array.isArray(parentItemsArray))
-        return null;
-
-    if (contentsPath && !Array.isArray(contentsPath))
-        return null;
-
-    if (!contentsPath || contentsPath.length === 0)
-        return getItemAndIndex(name, parentItemsArray, parentId);
-
-    const path = contentsPath[0];
-    const remainingPath = contentsPath.slice(1);
-    const containerData = getItemAndIndex(path, parentItemsArray, parentId);
-
-    if (!containerData?.item || !containerData.item.isContainer)
-        return null;
-
-    containerData.item.contents ??= [];
-
-    return getItemByNameAndPath(name, remainingPath, containerData.item.contents, containerData.item.id);
-
-    function getItemAndIndex(name, itemsArray, parentId) {
-        const index = itemsArray?.findIndex(item => item.name === name);
-        const item = index > -1 ? itemsArray[index] : null;
-
-        return {
-            parentId: parentId, //id of parent element: some kind of container where item is stored
-            parentItemsArray: itemsArray, //parent element inventory
-            index: index, //index of item in parentArray
-            item: item, //found item
-        };
-    }
-}
-
-//calculate various parameters for items in the array (weight, contentsItemCount, etc.)
-function calculateParametersForItemsArray(itemsArray) {
-    for (const item of itemsArray) {
-        const params = getCalculatedItemParameters(item);
-
-        item.weight = params.weight;
-        if (params.contentsItemCount !== undefined)
-            item.contentsItemCount = params.contentsItemCount;
-    }
-}
-
-function getCalculatedItemParameters(item) {
-    let weight = item.weight;
-    let contentsItemCount = undefined;
-
-    if (item.isContainer && Array.isArray(item.contents)) {
-        weight = item.containerWeight ?? 0;
-        contentsItemCount = item.contents.length;
-
-        for (const nestedItem of item.contents) {
-            const params = getCalculatedItemParameters(nestedItem);
-            weight += params.weight;
-        }
-    }
-
-    return {
-        weight: weight,
-        contentsItemCount: contentsItemCount
-    };
 }
 
 //check containers for capacity and move excess items to main inventory
@@ -886,7 +803,7 @@ function adjustInventoryContainerCapacity(itemsArray) {
         const excessItemNames = excessItems.map(excessItem => excessItem.name).join(", ");
 
         const messageId = translationModule.setConteinerItemsExceedCapacityMessage(item.name, excessItemsCount, excessItemNames);
-        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId], "system");        
+        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId], "system");
 
         item.contents.splice(-excessItemsCount, excessItemsCount);
         inventory.push(...excessItems);
@@ -2206,6 +2123,87 @@ function getRandomNumber(min, max) {
     const mixedValue = mathRandomValue ^ timestamp;
 
     return min + (mixedValue % (max - min + 1));
+}
+
+function isNestedItem(item) {
+    return item.contentsPath && Array.isArray(item.contentsPath) && item.contentsPath.length > 0;
+}
+
+function compareItemsByContainerAsc(itemFirst, itemSecond) {
+    if (itemFirst.isContainer && itemSecond.isContainer) return 0;
+    if (itemFirst.isContainer && !itemSecond.isContainer) return -1;
+    if (!itemFirst.isContainer && itemSecond.isContainer) return 1;
+    return 0;
+}
+
+//name - item name to find
+//contentsPath - the array of strings, which represents the path to item. Fx, if item is stored in container, then it could be something like ['top level container name', 'second level container name', 'parent container name']. If not stored in container, it should be null.
+//parentItemsArray - array of items where need to find the item (container inventory)
+//parentId - id of parent container
+function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null, parentId = null) {
+    parentItemsArray ??= inventory; //find in global inventory as fallback
+    if (!Array.isArray(parentItemsArray))
+        return null;
+
+    if (contentsPath && !Array.isArray(contentsPath))
+        return null;
+
+    if (!contentsPath || contentsPath.length === 0)
+        return getItemAndIndex(name, parentItemsArray, parentId);
+
+    const path = contentsPath[0];
+    const remainingPath = contentsPath.slice(1);
+    const containerData = getItemAndIndex(path, parentItemsArray, parentId);
+
+    if (!containerData?.item || !containerData.item.isContainer)
+        return null;
+
+    containerData.item.contents ??= [];
+
+    return getItemByNameAndPath(name, remainingPath, containerData.item.contents, containerData.item.id);
+
+    function getItemAndIndex(name, itemsArray, parentId) {
+        const index = itemsArray?.findIndex(item => item.name === name);
+        const item = index > -1 ? itemsArray[index] : null;
+
+        return {
+            parentId: parentId, //id of parent element: some kind of container where item is stored
+            parentItemsArray: itemsArray, //parent element inventory
+            index: index, //index of item in parentArray
+            item: item, //found item
+        };
+    }
+}
+
+//calculate various parameters for items in the array (weight, contentsItemCount, etc.)
+function calculateParametersForItemsArray(itemsArray) {
+    for (const item of itemsArray) {
+        const params = getCalculatedItemParameters(item);
+
+        item.weight = params.weight;
+        if (params.contentsItemCount !== undefined)
+            item.contentsItemCount = params.contentsItemCount;
+    }
+}
+
+function getCalculatedItemParameters(item) {
+    let weight = item.weight;
+    let contentsItemCount = undefined;
+
+    if (item.isContainer && Array.isArray(item.contents)) {
+        weight = item.containerWeight ?? 0;
+        contentsItemCount = item.contents.length;
+
+        for (const nestedItem of item.contents) {
+            const params = getCalculatedItemParameters(nestedItem);
+            weight += params.weight;
+        }
+    }
+
+    return {
+        weight: weight,
+        contentsItemCount: contentsItemCount
+    };
 }
 
 function describeItemContainerContents(container, depth = 0) {
