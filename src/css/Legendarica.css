@@ -969,3 +969,18 @@ img.rounded-corners {
         #inventoryItemContextMenuContainer li:hover {
             color: white;
         }
+
+#npc-info-tabs {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+    #npc-info-tabs .tab {
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+        #npc-info-tabs .tab.active {
+            background-color: #d4af37;
+        }

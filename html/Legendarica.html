@@ -130,7 +130,27 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         <div id="player-status">
                             <button id="player-status-label" class="infoDataLabel" onclick="toggleElementVisible('status-data')">Статус</button>
                             <div id="status-data" class="infoDataList">
-                                <div id="status-info"></div>
+                                <p id="status-name"></p>
+                                <p id="status-age"></p>
+                                <p id="status-race"></p>
+                                <p id="status-class"></p>
+                                <div>
+                                    <span id="status-appearanceDescription-label"></span>
+                                    <p id="status-appearanceDescription"></p>
+                                </div>
+                                <div>
+                                    <span id="status-statusInSociety-label"></span>
+                                    <p id="status-statusInSociety"></p>
+                                </div>
+                                <div>
+                                    <span id="status-positionInSociety-label"></span>
+                                    <p id="status-positionInSociety"></p>
+                                </div>
+                                <div>
+                                    <span id="status-affiliationWithOrganizations-label"></span>
+                                    <p id="status-affiliationWithOrganizations"></p>
+                                </div>
+                                <div id="status-effects"></div>
                                 <div id="status-purposes"></div>
                             </div>
                         </div>
@@ -234,6 +254,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useNpcJournal" name="useNpcJournal" checked />
                                 <label for="useNpcJournal" id="use-npc-journal-label">Использовать дневники персонажей (отключите для экономии токенов). Работает только при включенном списке персонажей.</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useNpcMemoriesDiary" name="useNpcMemoriesDiary" checked />
+                                <label for="useNpcMemoriesDiary" id="use-npc-memories-diary-label">Использовать хроники персонажей (отключите для экономии токенов). Работает только при включенном дневнике персонажей.</label>
                             </div>
 
                             <div class="settingsContainer displayBlock">
@@ -614,11 +639,42 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <span id="npc-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
             <span id="npc-info-img" class="adjustButton"><i class="uil uil-image-search"></i></span>
             <h4 id="npc-info-name"></h4>
-            <p id="npc-info-description"></p>
+            <p id="npc-info-rarity"></p>
+            <p id="npc-info-race"></p>
+            <p id="npc-info-class"></p>
+            <p id="npc-info-age"></p>
+            <p id="npc-info-worldview"></p>
+            <div>
+                <span id="npc-info-appearanceDescription-label"></span>
+                <p id="npc-info-appearanceDescription"></p>
+            </div>
+            <div>
+                <span id="npc-info-history-label"></span>
+                <p id="npc-info-history"></p>
+            </div>
+            <div>
+                <span id="npc-info-attitude-label"></span>
+                <p id="npc-info-attitude"></p>
+            </div>
+            <p id="npc-info-stats"></p>
+            <p id="npc-info-skills"></p>
+            <p id="npc-info-effects"></p>
+
+            <div id="npc-info-tabs">
+                <span class="tab active" id="npc-info-tab-journal-label" data-target="npc-info-journal">Дневник</span>
+                <span class="tab" id="npc-info-tab-memory-diary-label" data-target="npc-info-memory-diary">Хроники</span>
+            </div>
+
             <h4 id="npc-info-journal-label">Дневник</h4>
             <p id="npc-info-journal"></p>
+
+            <h4 id="npc-info-memory-diary-label" style="display: none;">Хроники</h4>
+            <p id="npc-info-memory-diary" style="display: none;"></p>
+
             <h4 id="npc-delete" class="infoDelete">Забыть этого персонажа</h4>
             <h4 id="npc-delete-journal" style="cursor: pointer">Забыть дневник этого персонажа</h4>
+            <h4 id="npc-delete-memory-diary" style="cursor: pointer">Забыть хроники этого персонажа</h4>
+
             <input type="hidden" id="npc-info-id" name="npc-info-id">
         </div>
 

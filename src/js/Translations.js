@@ -422,7 +422,31 @@ const translationModule = (function getTranslationModule() {
             "content-description-label": "Content",
             "inventory-volume-label": "Volume (dm³)",
             "inventory-contents-count-label": "Available capacity",
-            "inventory-contents-volume-label": "Available volume (dm³)"
+            "inventory-contents-volume-label": "Available volume (dm³)",
+            "inventory-item-inspect": "Inspect",
+            "rarity-label": "Rarity",
+            "age-label": "Age",
+            "npc-info-worldview-label": "Worldview",
+            "npc-info-race-label": "Race",
+            "npc-info-class-label": "Class",
+            "npc-info-stats-label": "Stats",
+            "npc-info-skills-label": "Skills",
+            "npc-info-effects-label": "Active Effects",
+            "npc-info-appearanceDescription-label": "Appearance:",
+            "npc-info-history-label": "History:",
+            "npc-info-attitude-label": "Attitude towards player character:",
+            "npc-info-tab-journal-label": "Journal",
+            "npc-info-tab-memory-diary-label": "Chronicles",
+            "npc-info-memory-diary-label": "Chronicles",
+            "npc-delete-memory-diary": "Forget this character's chronicles",
+            "use-npc-memories-diary-label": "Use character chronicles (disable to save tokens). Only works when character diary is enabled.",
+            "status-name-label": "Name",
+            "status-race-label": "Race",
+            "status-class-label": "Class",
+            "status-appearanceDescription-label": "Appearance:",
+            "status-statusInSociety-label": "Social Status:",
+            "status-positionInSociety-label": "Position in Society:",
+            "status-affiliationWithOrganizations-label": "Affiliation with Organizations:",
         },
         "russian-language": {
             // placeholders
@@ -830,7 +854,31 @@ Websim. Зависит от нейросети, которую использу�
             "content-description-label": "Содержимое",
             "inventory-volume-label": "Объем (дм³)",
             "inventory-contents-count-label": "Доступная вместимость",
-            "inventory-contents-volume-label": "Доступный объём (дм³)"
+            "inventory-contents-volume-label": "Доступный объём (дм³)",
+            "inventory-item-inspect": "Осмотреть",
+            "rarity-label": "Редкость",
+            "age-label": "Возраст",
+            "npc-info-worldview-label": "Мировоззрение",
+            "npc-info-race-label": "Раса",
+            "npc-info-class-label": "Класс",
+            "npc-info-stats-label": "Характеристики",
+            "npc-info-skills-label": "Навыки",
+            "npc-info-effects-label": "Действующие эффекты",
+            "npc-info-appearanceDescription-label": "Внешность:",
+            "npc-info-history-label": "История:",
+            "npc-info-attitude-label": "Отношение к персонажу игрока:",
+            "npc-info-tab-journal-label": "Дневник",
+            "npc-info-tab-memory-diary-label": "Хроники",
+            "npc-info-memory-diary-label": "Хроники",
+            "npc-delete-memory-diary": "Забыть хроники этого персонажа",
+            "use-npc-memories-diary-label": "Использовать хроники персонажей (отключите для экономии токенов). Работает только при включенном дневнике персонажей.",
+            "status-name-label": "Имя",
+            "status-race-label": "Раса",
+            "status-class-label": "Класс",
+            "status-appearanceDescription-label": "Внешность:",
+            "status-statusInSociety-label": "Положение в обществе:",
+            "status-positionInSociety-label": "Позиция в обществе:",
+            "status-affiliationWithOrganizations-label": "Принадлежность к организациям:",
         },
         "spanish-language": {
             // placeholders
@@ -1241,7 +1289,31 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "content-description-label": "Contenido",
             "inventory-volume-label": "Volumen (dm³)",
             "inventory-contents-count-label": "Capacidad disponible",
-            "inventory-contents-volume-label": "Volumen disponible (dm³)"
+            "inventory-contents-volume-label": "Volumen disponible (dm³)",
+            "inventory-item-inspect": "Inspeccionar",
+            "rarity-label": "Rareza",
+            "age-label": "Edad",
+            "npc-info-worldview-label": "Cosmovisión",
+            "npc-info-race-label": "Raza",
+            "npc-info-class-label": "Clase",
+            "npc-info-stats-label": "Características",
+            "npc-info-skills-label": "Habilidades",
+            "npc-info-effects-label": "Efectos Activos",
+            "npc-info-appearanceDescription-label": "Apariencia:",
+            "npc-info-history-label": "Historia:",
+            "npc-info-attitude-label": "Actitud hacia el personaje del jugador:",
+            "npc-info-tab-journal-label": "Diario",
+            "npc-info-tab-memory-diary-label": "Crónicas",
+            "npc-info-memory-diary-label": "Crónicas",
+            "npc-delete-memory-diary": "Olvidar las crónicas de este personaje",
+            "use-npc-memories-diary-label": "Usar crónicas de personajes (desactivar para ahorrar tokens). Solo funciona cuando el diario de personajes está habilitado.",
+            "status-name-label": "Nombre",
+            "status-race-label": "Raza",
+            "status-class-label": "Clase",
+            "status-appearanceDescription-label": "Apariencia:",
+            "status-statusInSociety-label": "Estado Social:",
+            "status-positionInSociety-label": "Posición en la Sociedad:",
+            "status-affiliationWithOrganizations-label": "Afiliación con Organizaciones:",
         },
         "portuguese-language": {
             // placeholders
@@ -1652,7 +1724,31 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "content-description-label": "Conteúdo",
             "inventory-volume-label": "Volume (dm³)",
             "inventory-contents-count-label": "Capacidade disponível",
-            "inventory-contents-volume-label": "Volume disponível (dm³)"
+            "inventory-contents-volume-label": "Volume disponível (dm³)",
+            "inventory-item-inspect": "Inspecionar",
+            "rarity-label": "Raridade",
+            "age-label": "Idade",
+            "npc-info-worldview-label": "Cosmovisão",
+            "npc-info-race-label": "Raça",
+            "npc-info-class-label": "Classe",
+            "npc-info-stats-label": "Características",
+            "npc-info-skills-label": "Habilidades",
+            "npc-info-effects-label": "Efeitos Ativos",
+            "npc-info-appearanceDescription-label": "Aparência:",
+            "npc-info-history-label": "História:",
+            "npc-info-attitude-label": "Atitude em relação ao personagem do jogador:",
+            "npc-info-tab-journal-label": "Diário",
+            "npc-info-tab-memory-diary-label": "Crônicas",
+            "npc-info-memory-diary-label": "Crônicas",
+            "npc-delete-memory-diary": "Esquecer as crônicas deste personagem",
+            "use-npc-memories-diary-label": "Usar crônicas de personagens (desative para economizar tokens). Funciona apenas quando o diário de personagens está habilitado.",
+            "status-name-label": "Nome",
+            "status-race-label": "Raça",
+            "status-class-label": "Classe",
+            "status-appearanceDescription-label": "Aparência:",
+            "status-statusInSociety-label": "Status Social:",
+            "status-positionInSociety-label": "Posição na Sociedade:",
+            "status-affiliationWithOrganizations-label": "Afiliação com Organizações:",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -2060,7 +2156,31 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "content-description-label": "सामग्री",
             "inventory-volume-label": "आयतन (घन डेसीमीटर)",
             "inventory-contents-count-label": "उपलब्ध क्षमता",
-            "inventory-contents-volume-label": "उपलब्ध आयतन (dm³)"
+            "inventory-contents-volume-label": "उपलब्ध आयतन (dm³)",
+            "inventory-item-inspect": "जांचें",
+            "rarity-label": "दुर्लभता",
+            "age-label": "उम्र",
+            "npc-info-worldview-label": "विश्व दृष्टिकोण",
+            "npc-info-race-label": "जाति",
+            "npc-info-class-label": "वर्ग",
+            "npc-info-stats-label": "विशेषताएँ",
+            "npc-info-skills-label": "कौशल",
+            "npc-info-effects-label": "सक्रिय प्रभाव",
+            "npc-info-appearanceDescription-label": "दिखावट:",
+            "npc-info-history-label": "इतिहास:",
+            "npc-info-attitude-label": "खिलाड़ी के पात्र के प्रति रवैया:",
+            "npc-info-tab-journal-label": "जर्नल",
+            "npc-info-tab-memory-diary-label": "क्रॉनिकल्स",
+            "npc-info-memory-diary-label": "क्रॉनिकल्स",
+            "npc-delete-memory-diary": "इस पात्र की क्रॉनिकल्स भूल जाएं",
+            "use-npc-memories-diary-label": "पात्र क्रॉनिकल्स का उपयोग करें (टोकन बचाने के लिए अक्षम करें)। यह केवल तभी काम करता है जब पात्र जर्नल सक्षम है।",
+            "status-name-label": "नाम",
+            "status-race-label": "जाति",
+            "status-class-label": "वर्ग",
+            "status-appearanceDescription-label": "वнешность:",
+            "status-statusInSociety-label": "समाज में स्थिति:",
+            "status-positionInSociety-label": "समाज में पद:",
+            "status-affiliationWithOrganizations-label": "संगठनों के साथ संबद्धता:",
         },
         "german-language": {
             // placeholders
@@ -2471,7 +2591,31 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "content-description-label": "Inhalt",
             "inventory-volume-label": "Volumen (dm³)",
             "inventory-contents-count-label": "Verfügbare Kapazität",
-            "inventory-contents-volume-label": "Verfügbares Volumen (dm³)"
+            "inventory-contents-volume-label": "Verfügbares Volumen (dm³)",
+            "inventory-item-inspect": "Untersuchen",
+            "rarity-label": "Seltenheit",
+            "age-label": "Alter",
+            "npc-info-worldview-label": "Weltanschauung",
+            "npc-info-race-label": "Rasse",
+            "npc-info-class-label": "Klasse",
+            "npc-info-stats-label": "Statistiken",
+            "npc-info-skills-label": "Fähigkeiten",
+            "npc-info-effects-label": "Aktive Effekte",
+            "npc-info-appearanceDescription-label": "Aussehen:",
+            "npc-info-history-label": "Geschichte:",
+            "npc-info-attitude-label": "Einstellung zum Spielercharakter:",
+            "npc-info-tab-journal-label": "Journal",
+            "npc-info-tab-memory-diary-label": "Chroniken",
+            "npc-info-memory-diary-label": "Chroniken",
+            "npc-delete-memory-diary": "Chroniken dieses Charakters vergessen",
+            "use-npc-memories-diary-label": "Charakterchroniken verwenden (deaktivieren, um Tokens zu sparen). Funktioniert nur, wenn das Charakterjournal aktiviert ist.",
+            "status-name-label": "Name",
+            "status-race-label": "Rasse",
+            "status-class-label": "Klasse",
+            "status-appearanceDescription-label": "Aussehen:",
+            "status-statusInSociety-label": "Sozialer Status:",
+            "status-positionInSociety-label": "Position in der Gesellschaft:",
+            "status-affiliationWithOrganizations-label": "Zugehörigkeit zu Organisationen:",
         },
         "french-language": {
             // placeholders
@@ -2883,7 +3027,31 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "content-description-label": "Contenu",
             "inventory-volume-label": "Volume (dm³)",
             "inventory-contents-count-label": "Capacité disponible",
-            "inventory-contents-volume-label": "Volume disponible (dm³)"
+            "inventory-contents-volume-label": "Volume disponible (dm³)",
+            "inventory-item-inspect": "Inspecter",
+            "rarity-label": "Rareté",
+            "age-label": "Âge",
+            "npc-info-worldview-label": "Vision du monde",
+            "npc-info-race-label": "Race",
+            "npc-info-class-label": "Classe",
+            "npc-info-stats-label": "Caractéristiques",
+            "npc-info-skills-label": "Compétences",
+            "npc-info-effects-label": "Effets Actifs",
+            "npc-info-appearanceDescription-label": "Apparence:",
+            "npc-info-history-label": "Histoire:",
+            "npc-info-attitude-label": "Attitude envers le personnage joueur:",
+            "npc-info-tab-journal-label": "Journal",
+            "npc-info-tab-memory-diary-label": "Chroniques",
+            "npc-info-memory-diary-label": "Chroniques",
+            "npc-delete-memory-diary": "Oublier les chroniques de ce personnage",
+            "use-npc-memories-diary-label": "Utiliser les chroniques des personnages (désactivez pour économiser des jetons). Fonctionne uniquement lorsque le journal des personnages est activé.",
+            "status-name-label": "Nom",
+            "status-race-label": "Race",
+            "status-class-label": "Classe",
+            "status-appearanceDescription-label": "Apparence :",
+            "status-statusInSociety-label": "Statut Social :",
+            "status-positionInSociety-label": "Position dans la Société :",
+            "status-affiliationWithOrganizations-label": "Affiliation avec des Organisations :",
         }
     };
 
@@ -2971,7 +3139,11 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             'inventory-delete', 'npc-info-journal-label', 'npc-delete-journal', 'use-npc-journal-label', 'use-quests-list-label', 'make-game-quest-oriented-label',
             'stats-button-label', 'statsGroup-general-button-label', 'statsGroup-main-button-label', 'statsGroup-secondary-button-label', 'player-quests-button-label',
             'system-instructions-explanaition', 'ai-none2-label', 'ai-none-label', 'ai-none3-label', 'additional-settings-label2', 'additional-settings-label3',
-            'download-system-instructions-button-label', 'load-system-instructions-button-label', 'skill-info-delete', 'inventory-container-open'
+            'download-system-instructions-button-label', 'load-system-instructions-button-label', 'skill-info-delete', 'inventory-container-open',
+            "npc-info-attitude-label", "npc-info-history-label", "npc-info-appearanceDescription-label",
+            "npc-info-tab-journal-label", "npc-info-tab-memory-diary-label",
+            "npc-info-memory-diary-label", "npc-delete-memory-diary", "use-npc-memories-diary-label",
+            "status-appearanceDescription-label", "status-statusInSociety-label", "status-positionInSociety-label", "status-affiliationWithOrganizations-label"
         ];
 
         //Update labels
@@ -3234,8 +3406,6 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
         setNewLevelMessage: function (level, skillName, shouldGeneratePassiveSkills) {
             const id = "new_level_system_message";
 
-            this.setTranslation("english-language", id, `Congratulations! You have reached level ${level}! The ${skillName} skill has increased! ${shouldGeneratePassiveSkills ? "A new passive ability will appear soon!" : ""}`);
-
             // English translation
             this.setTranslation("english-language", id,
                 `Congratulations! You have reached level ${level}! The ${skillName} skill has increased! ${shouldGeneratePassiveSkills ? "A new passive ability will appear soon!" : ""}`);
@@ -3478,6 +3648,58 @@ Openrouter (https://openrouter.ai/). Offre des modèles gratuits et payants. Les
             this.setTranslation("french-language", id, `Le volume du conteneur "${containerName}" est inférieur au volume des objets qui y sont placés. Corrigé automatiquement. Déplacés : "${itemNames}" dans l'inventaire principal.`);
 
             return id;
-        }
+        },
+
+        setStatIncreasedMessage: function (statName, increaseValue) {
+            const id = "stat_increased_message";
+
+            this.setTranslation("english-language", id, `Attention! The '${statName}' stat has increased by ${increaseValue}!`);
+            this.setTranslation("russian-language", id, `Внимание! Характеристика '${statName}' повысилась на ${increaseValue}!`);
+            this.setTranslation("spanish-language", id, `¡Atención! ¡La característica '${statName}' ha aumentado en ${increaseValue}!`);
+            this.setTranslation("portuguese-language", id, `Atenção! A característica '${statName}' aumentou em ${increaseValue}!`);
+            this.setTranslation("hindi-language", id, `ध्यान दें! '${statName}' गुण ${increaseValue} से बढ़ गया है!`);
+            this.setTranslation("german-language", id, `Achtung! Die Eigenschaft '${statName}' hat sich um ${increaseValue} erhöht!`);
+            this.setTranslation("french-language", id, `Attention ! La caractéristique '${statName}' a augmenté de ${increaseValue} !`);
+
+            return id;
+        },
+
+        setStatDecreasedMessage: function (statName, decreaseValue) {
+            const id = "stat_decreased_message";
+
+            this.setTranslation("english-language", id, `Attention! The '${statName}' stat has decreased by ${decreaseValue}!`);
+            this.setTranslation("russian-language", id, `Внимание! Характеристика '${statName}' понизилась на ${decreaseValue}!`);
+            this.setTranslation("spanish-language", id, `¡Atención! ¡La característica '${statName}' ha disminuido en ${decreaseValue}!`);
+            this.setTranslation("portuguese-language", id, `Atenção! A característica '${statName}' diminuiu em ${decreaseValue}!`);
+            this.setTranslation("hindi-language", id, `ध्यान दें! '${statName}' गुण ${decreaseValue} से कम हो गया है!`);
+            this.setTranslation("german-language", id, `Achtung! Die Eigenschaft '${statName}' hat sich um ${decreaseValue} verringert!`);
+            this.setTranslation("french-language", id, `Attention ! La caractéristique '${statName}' a diminué de ${decreaseValue} !`);
+
+            return id;
+        },
+
+        setSkillRemovedMessage: function (skillName, isActive) {
+            const id = "skill_removed_message";
+
+            const skillType = {
+                "english-language": isActive ? "active skill" : "passive skill",
+                "russian-language": isActive ? "активный навык" : "пассивный навык",
+                "spanish-language": isActive ? "habilidad activa" : "habilidad pasiva",
+                "portuguese-language": isActive ? "habilidade ativa" : "habilidade passiva",
+                "hindi-language": isActive ? "सक्रिय कौशल" : "निष्क्रिय कौशल",
+                "german-language": isActive ? "aktive Fähigkeit" : "passive Fähigkeit",
+                "french-language": isActive ? "compétence active" : "compétence passive"
+            };
+
+            this.setTranslation("english-language", id, `Attention! The ${skillType["english-language"]} '${skillName}' has been removed from the player's skills!`);
+            this.setTranslation("russian-language", id, `Внимание! ${skillType["russian-language"]} '${skillName}' был удален из навыков игрока!`);
+            this.setTranslation("spanish-language", id, `¡Atención! ¡La ${skillType["spanish-language"]} '${skillName}' ha sido eliminada de las habilidades del jugador!`);
+            this.setTranslation("portuguese-language", id, `Atenção! A ${skillType["portuguese-language"]} '${skillName}' foi removida das habilidades do jogador!`);
+            this.setTranslation("hindi-language", id, `ध्यान दें! ${skillType["hindi-language"]} '${skillName}' को खिलाड़ी के कौशल से हटा दिया गया है!`);
+            this.setTranslation("german-language", id, `Achtung! Die ${skillType["german-language"]} '${skillName}' wurde aus den Fähigkeiten des Spielers entfernt!`);
+            this.setTranslation("french-language", id, `Attention ! La ${skillType["french-language"]} '${skillName}' a été supprimée des compétences du joueur!`);
+
+            return id;
+        },
     }
 })();
