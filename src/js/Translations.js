@@ -173,7 +173,7 @@ const translationModule = (function getTranslationModule() {
             "api-key-label3": "Your API key",
             "location-delete": "Forget this location",
             "player-status-label": "Status",
-            "status-purposes-label": "Possible purposes:",
+            "status-purposes-label": "Possible purposes",
             "player-npc-button-label": "Characters",
             "use-status-label": "Use status (disable to save tokens)",
             "use-npc-list-label": "Use characters list (disable to save tokens)",
@@ -447,6 +447,7 @@ const translationModule = (function getTranslationModule() {
             "status-statusInSociety-label": "Social Status:",
             "status-positionInSociety-label": "Position in Society:",
             "status-affiliationWithOrganizations-label": "Affiliation with Organizations:",
+            "status-effect-none-label": "None",
         },
         "russian-language": {
             // placeholders
@@ -611,7 +612,7 @@ const translationModule = (function getTranslationModule() {
             "ai-provider-label3": "Провайдер нейросети",
             "location-delete": "Забыть эту локацию",
             "player-status-label": "Статус",
-            "status-purposes-label": "Возможные цели:",
+            "status-purposes-label": "Возможные цели",
             "player-npc-button-label": "Персонажи",
             "use-status-label": "Использовать статус (отключите для экономии токенов)",
             "use-npc-list-label": "Использовать список персонажей (отключите для экономии токенов)",
@@ -879,6 +880,7 @@ Websim. Зависит от нейросети, которую использу�
             "status-statusInSociety-label": "Положение в обществе:",
             "status-positionInSociety-label": "Позиция в обществе:",
             "status-affiliationWithOrganizations-label": "Принадлежность к организациям:",
+            "status-effect-none-label": "Отсутствуют",
         },
         "spanish-language": {
             // placeholders
@@ -1043,7 +1045,7 @@ Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, 
             "ai-provider-label3": "Proveedor de red neuronal",
             "location-delete": "Olvidar esta ubicación",
             "player-status-label": "Estado",
-            "status-purposes-label": "Posibles propósitos:",
+            "status-purposes-label": "Posibles propósitos",
             "player-npc-button-label": "Personajes",
             "use-status-label": "Usar estado (deshabilitar para guardar tokens)",
             "use-npc-list-label": "Usar lista de personajes (deshabilitar para guardar tokens)",
@@ -1314,6 +1316,7 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "status-statusInSociety-label": "Estado Social:",
             "status-positionInSociety-label": "Posición en la Sociedad:",
             "status-affiliationWithOrganizations-label": "Afiliación con Organizaciones:",
+            "status-effect-none-label": "Ninguno",
         },
         "portuguese-language": {
             // placeholders
@@ -1478,7 +1481,7 @@ Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria 
             "ai-provider-label3": "Fornecedor de rede neural",
             "location-delete": "Esquecer esta localização",
             "player-status-label": "Estado",
-            "status-purposes-label": "Possíveis finalidades:",
+            "status-purposes-label": "Possíveis finalidades",
             "player-npc-button-label": "Personagens",
             "use-status-label": "Utilizar estado (desativar para guardar tokens)",
             "use-npc-list-label": "Utilizar lista de caracteres (desativar para guardar tokens)",
@@ -1749,6 +1752,7 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "status-statusInSociety-label": "Status Social:",
             "status-positionInSociety-label": "Posição na Sociedade:",
             "status-affiliationWithOrganizations-label": "Afiliação com Organizações:",
+            "status-effect-none-label": "Nenhum",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -1912,7 +1916,7 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "ai-provider-label3": "तंत्रिका नेटवर्क प्रदाता",
             "location-delete": "इस स्थान को भूल जाएं",
             "player-status-label": "स्थिति",
-            "status-purposes-label": "संभावित उद्देश्य:",
+            "status-purposes-label": "संभावित उद्देश्य",
             "player-npc-button-label": "अक्षर",
             "use-status-label": "स्थिति का उपयोग करें (टोकन सहेजने के लिए अक्षम करें)",
             "use-npc-list-label": "अक्षरों की सूची का उपयोग करें (टोकन सहेजने के लिए अक्षम करें)",
@@ -2181,6 +2185,7 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "status-statusInSociety-label": "समाज में स्थिति:",
             "status-positionInSociety-label": "समाज में पद:",
             "status-affiliationWithOrganizations-label": "संगठनों के साथ संबद्धता:",
+            "status-effect-none-label": "कोई नहीं",
         },
         "german-language": {
             // placeholders
@@ -2345,7 +2350,7 @@ Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, 
             "ai-provider-label3": "Anbieter neuronaler Netzwerke",
             "location-delete": "Diesen Ort vergessen",
             "player-status-label": "Status",
-            "status-purposes-label": "Mögliche Zwecke:",
+            "status-purposes-label": "Mögliche Zwecke",
             "player-npc-button-label": "Charaktere",
             "use-status-label": "Status verwenden (deaktivieren, um Token zu speichern)",
             "use-npc-list-label": "Charakterliste verwenden (deaktivieren, um Token zu speichern)",
@@ -2616,6 +2621,7 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "status-statusInSociety-label": "Sozialer Status:",
             "status-positionInSociety-label": "Position in der Gesellschaft:",
             "status-affiliationWithOrganizations-label": "Zugehörigkeit zu Organisationen:",
+            "status-effect-none-label": "Keine",
         },
         "french-language": {
             // placeholders
@@ -2781,7 +2787,7 @@ Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau �
             "ai-provider-label3": "Fournisseur de réseau neuronal",
             "location-delete": "Oublier ce lieu",
             "player-status-label": "Statut",
-            "status-purposes-label": "Fins possibles:",
+            "status-purposes-label": "Fins possibles",
             "player-npc-button-label": "Personnages",
             "use-status-label": "Utiliser le statut (désactiver pour enregistrer les jetons)",
             "use-npc-list-label": "Utiliser la liste des personnages (désactiver pour enregistrer les jetons)",
@@ -3052,6 +3058,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "status-statusInSociety-label": "Statut Social :",
             "status-positionInSociety-label": "Position dans la Société :",
             "status-affiliationWithOrganizations-label": "Affiliation avec des Organisations :",
+            "status-effect-none-label": "Aucun",
         }
     };
 

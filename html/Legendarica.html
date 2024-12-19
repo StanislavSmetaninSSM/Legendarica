@@ -130,28 +130,30 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         <div id="player-status">
                             <button id="player-status-label" class="infoDataLabel" onclick="toggleElementVisible('status-data')">Статус</button>
                             <div id="status-data" class="infoDataList">
-                                <p id="status-name"></p>
-                                <p id="status-age"></p>
-                                <p id="status-race"></p>
-                                <p id="status-class"></p>
-                                <div>
-                                    <span id="status-appearanceDescription-label"></span>
-                                    <p id="status-appearanceDescription"></p>
+                                <div id="status-data-container" class="displayNone">
+                                    <p id="status-name"></p>
+                                    <p id="status-age"></p>
+                                    <p id="status-race"></p>
+                                    <p id="status-class"></p>
+                                    <div>
+                                        <span id="status-appearanceDescription-label"></span>
+                                        <p id="status-appearanceDescription" class="tabSpace"></p>
+                                    </div>
+                                    <div>
+                                        <span id="status-statusInSociety-label"></span>
+                                        <p id="status-statusInSociety" class="tabSpace"></p>
+                                    </div>
+                                    <div>
+                                        <span id="status-positionInSociety-label"></span>
+                                        <p id="status-positionInSociety" class="tabSpace"></p>
+                                    </div>
+                                    <div>
+                                        <span id="status-affiliationWithOrganizations-label"></span>
+                                        <p id="status-affiliationWithOrganizations" class="tabSpace"></p>
+                                    </div>
+                                    <div id="status-effects"></div>
+                                    <div id="status-purposes"></div>
                                 </div>
-                                <div>
-                                    <span id="status-statusInSociety-label"></span>
-                                    <p id="status-statusInSociety"></p>
-                                </div>
-                                <div>
-                                    <span id="status-positionInSociety-label"></span>
-                                    <p id="status-positionInSociety"></p>
-                                </div>
-                                <div>
-                                    <span id="status-affiliationWithOrganizations-label"></span>
-                                    <p id="status-affiliationWithOrganizations"></p>
-                                </div>
-                                <div id="status-effects"></div>
-                                <div id="status-purposes"></div>
                             </div>
                         </div>
                     </div>
@@ -646,15 +648,15 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <p id="npc-info-worldview"></p>
             <div>
                 <span id="npc-info-appearanceDescription-label"></span>
-                <p id="npc-info-appearanceDescription"></p>
+                <p id="npc-info-appearanceDescription" class="tabSpace"></p>
             </div>
             <div>
                 <span id="npc-info-history-label"></span>
-                <p id="npc-info-history"></p>
+                <p id="npc-info-history" class="tabSpace"></p>
             </div>
             <div>
                 <span id="npc-info-attitude-label"></span>
-                <p id="npc-info-attitude"></p>
+                <p id="npc-info-attitude" class="tabSpace"></p>
             </div>
             <p id="npc-info-stats"></p>
             <p id="npc-info-skills"></p>

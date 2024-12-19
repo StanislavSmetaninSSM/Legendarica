@@ -199,6 +199,7 @@ const ELEMENTS = {
     skillInfoClose: document.getElementById('skill-info-close'),
     skillInfoDelete: document.getElementById('skill-info-delete'),
     //Status
+    statusContainer: document.getElementById('status-data-container'),
     statusName: document.getElementById('status-name'),
     statusAge: document.getElementById('status-age'),
     statusRace: document.getElementById('status-race'),
@@ -310,6 +311,8 @@ ELEMENTS.clearStatus.onclick = function () {
     ELEMENTS.statusAffiliationWithOrganizations.innerHTML = "";
     ELEMENTS.statusEffects.innerHTML = "";
     ELEMENTS.statusPurposes.innerHTML = "";
+
+    ELEMENTS.statusContainer.classList.add("displayNone");
 }
 
 ELEMENTS.myGameButton.onclick = function () {
@@ -1946,15 +1949,17 @@ function updateStatus() {
     if (!statusData?.name)
         return;
 
+    ELEMENTS.statusContainer.classList.remove("displayNone");
+
     const nameLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["status-name-label"];
     const ageLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["age-label"];
     const raceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["status-race-label"];
     const classLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["status-class-label"];
 
-    ELEMENTS.statusName.innerHTML = `${nameLabel}: ${currentNPC.name ?? '-'}`;
-    ELEMENTS.statusAge.innerHTML = `${ageLabel}: ${currentNPC.age ?? '-'}`;
-    ELEMENTS.statusRace.innerHTML = `${raceLabel}: ${currentNPC.race ?? '-'}`;
-    ELEMENTS.statusClass.innerHTML = `${classLabel}: ${currentNPC.class ?? '-'}`;
+    ELEMENTS.statusName.innerHTML = `${nameLabel}: ${statusData.name ?? '-'}`;
+    ELEMENTS.statusAge.innerHTML = `${ageLabel}: ${statusData.age > 0 ? statusData.age : '-'}`;
+    ELEMENTS.statusRace.innerHTML = `${raceLabel}: ${statusData.race ?? '-'}`;
+    ELEMENTS.statusClass.innerHTML = `${classLabel}: ${statusData.class ?? '-'}`;
         
     renderDescriptionElement(statusData.appearanceDescription, ELEMENTS.statusAppearanceDescription);
     renderDescriptionElement(statusData.statusInSociety, ELEMENTS.statusStatusInSociety);
@@ -1964,13 +1969,17 @@ function updateStatus() {
 
     function processEffects() {
         const effectsLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["status-effects-label"];
+        const effectsNoneLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["status-effect-none-label"];
+        
         statusDataEffects ??= [];
 
-        const effectOptions = statusDataEffects.map(effect => {
+        let effectOptions = statusDataEffects.map(effect => {
             const name = markdown(effect.name);
             const description = markdown(effect.description);
             return `<li>${name}${description}</li>`;
         }).join('');
+        if (!effectOptions)
+            effectOptions = `<li>${effectsNoneLabel}</li>`;
 
         ELEMENTS.statusEffects.innerHTML = `
             <p>${effectsLabel}</p>
@@ -1985,7 +1994,7 @@ function setStatus(statusParams) {
 
     statusData = {};
     statusData.name = statusParams.name;
-    statusData.age = Number(statusParams.age);
+    statusData.age = Number(statusParams.age ?? 0);
     statusData.race = statusParams.race;
     statusData.class = statusParams.class;
     statusData.appearanceDescription = statusParams.appearanceDescription;
@@ -3393,14 +3402,10 @@ StatValueWithBonuses = StatValue + Bonuses, where
 • StatValue - the current value of associated characteristic.
 • Bonuses - all bonuses, which affects the associated characteristic of player.
 #7.3.1.5. Set the maximum value for the associated characteristic. Let's call it MaximumStatValue = (${characterStats.level} + 5) .
-#7.3.1.6. Calculate the normalized characteristic value using this formula:
-NormalizedStatValue = min(MaximumStatValue, StatValueWithBonuses), where
-• NormalizedStatValue - normalized value of the associated characteristic.
+#7.3.1.6. Calculate the StatModificator value using this formula:
+StatModificator = min(MaximumStatValue, StatValueWithBonuses), where
 • MaximumStatValue - maximum value for the associated characteristic.
 • StatValueWithBonuses - the sum of associated characteristic value and and all bonuses related with this characteristic.
-#7.3.1.7. Calculate StatModificator using this formula:
-StatModificator = floor(NormalizedStatValue / 2), where
-• NormalizedStatValue - normalized value of the associated characteristic.
 ]
 #7.3.2. Let's describe ActionDifficultModificator - the value that determines the difficulty of the player's action.
 #7.3.2.1. Calculate the ActionDifficultModificator using the instruction: [
@@ -3424,7 +3429,7 @@ PlayerDiceResult + StatModificator >= GMDiceResult + ActionDifficultModificator,
 • GMDiceResult - result of gamemaster dice roll.
 • ActionDifficultModificator - the value that determines the difficulty of the player's action.
 ]
-#7.3.6. Output to "items_and_stat_calculations" the result of the check.
+#7.3.6. Output to "items_and_stat_calculations" the check calculation and result of check.
 #7.3.6.1. For recording in "items_and_stat_calculations", translate the names of characteristics into natural language.
 #7.3.7. If the check result is true, then: [
 - Output to "items_and_stat_calculations" that player's action was succeeded.
@@ -3582,7 +3587,7 @@ ${ELEMENTS.useNpcJournal.checked ? `
 #8.12.2.7. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. 
 ]
 ${ELEMENTS.useNpcMemoriesDiary.checked ? `
-#8.12.3. From time to time, NPCs react to events and remember their past. If this happens, then follow the instructions: [ Let's think step by step :
+#8.12.3. NPCs react to various events and remember their past. Often, something in the events of the current turn can remind them of the past. When it happens, then follow the instructions: [ Let's think step by step :
 #8.12.3.1. Include to the response, the 'NPCMemories' key, the value of which is the array of objects, and each object of the array represents the information about NPC memories.
 #8.12.3.2. Mandatory format for recording the value of each item of 'NPCMemories' array: {'name': 'full_name_of_current_NPC', 'lastDiaryNote': 'last_NPC_memories_for_current_turn'} .
 #8.12.3.3. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
@@ -3639,13 +3644,13 @@ For example, for practicing with a sword, for shooting, or for practicing magic.
 #10.5. If you want to increase player's stat, then include to the response the key 'statsIncreased'.
 #10.5.1. The value of 'statsIncreased' key is an array of objects, each of which represents the information about player's stat to increase.
 #10.5.2. Mandatory format for recording the value of each item of 'statsIncreased' array: { 'name': 'name_of_stat_to_increase', 'value': 'value_by_which_the_stat_is_increased' } .
-#10.5.3. To the 'name' value of key include the name of player's stat to increase. It's important to use the name in exactly the same format like in 'name' property of stats_increase_list.
+#10.5.3. To the 'name' value of key include the name of player's stat to increase. It's important to use the name in exactly the same format like in 'name' property of stats_increase_list. Use only english to write this value.
 #10.5.4. To the 'value' value of key include the number to which you decided to increase the player's stat.
 #10.6. If you want to decrease player's stat, then include to the response the key 'statsDecreased'.
 #10.6.1. You can decrease any stat from the stats_list if needed.
 #10.6.2. The value of 'statsDecreased' key is an array of objects, each of which represents the information about player's stat to decrease.
 #10.6.3. Mandatory format for recording the value of each item of 'statsDecreased' array: { 'name': 'name_of_stat_to_decrease', 'value': 'value_by_which_the_stat_is_decreased' } .
-#10.6.4. To the 'name' value of key include the name of player's stat to decrease. It's important to use the name in exactly the same format like in the stats_list.
+#10.6.4. To the 'name' value of key include the name of player's stat to decrease. It's important to use the name in exactly the same format like in the stats_list. Use only english to write this value.
 #10.6.5. To the 'value' value of key include the number to which you decided to decrease the player's stat.
 
 #11 The 'location where the character was on the previous turn' is checked for compliance with the current location - if not, then the response includes the locationData key with the current location according to the following instruction: [ Let's think step by step :
@@ -3712,7 +3717,7 @@ For example, for practicing with a sword, for shooting, or for practicing magic.
 #17.7. Set the value of the 'multipliers' key in the JSON output to the following array:  '[item_search_coefficient, location_coefficient, danger_coefficient, logic_coefficient, characters_coefficient]'.
 
 ${ELEMENTS.useStatus.checked ?
-`#18 Rules for generating player status.
+`#18 Player status.
 ${generateStatus ? `
 #18.1. Strictly follow the instructions: [ Let's think step by step : [ ` : `
 #18.1. If this condition is true: [
@@ -3721,7 +3726,7 @@ ${generateStatus ? `
 #18.2. Mandatory include to the response the key 'statusData', the value of which is an object, that represents the player's status information.
 #18.3. Mandatory format for recording the value of the 'statusData' key: ${statusTemplate} .
 #18.4. To the value of the 'name' key, include the full name of the player character.
-#18.5. To the value of the 'age' key, include a number that represents the player's age in years.
+#18.5. To the value of the 'age' key, include an integer that represents the player's character age in years. You can imagine it if you don't have exact data.
 #18.6. To the value of the 'race' key, include the name of the player's race.
 #18.7. To the value of the 'class' key, include the name of the player's class.
 #18.8. To the value of the 'appearanceDescription' key, include a string that describes the player's appearance in exceptional detail, including but not limited to face, body proportions, figure, clothing, posture, and any distinguishing features such as scars, tattoos, or jewelry. Use as much detail and artistic language as possible. Provide a meticulous breakdown of each aspect, ensuring that every notable feature is vividly described.
@@ -3731,7 +3736,9 @@ ${generateStatus ? `
 #18.11. To the value of the 'affiliationWithOrganizations' key, include a string that describes player's affiliation to various organizations or groups. Use as much detail and artistic language as possible.
 #18.12. To the value of the 'purposes' key include an array of strings, each of which representing a hint about proposed character game purpose for a long game perspective.
 #18.13. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. 
-] ]
+] ], otherwise, then: [ 
+#18.14. Do not include 'statusData' value of key to the response. Use just empty object value {} in this case.
+]
 
 #19 Rules for accounting for explicit effects affecting the player character.
 #19.1. Explicit effects are conditions that affects the player's character stats, abilities or actions, such as poisoning, curse, disease, blessing or similar.
@@ -4006,7 +4013,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             name: newNPC.name,
                             image_prompt: newNPC.image_prompt,
                             rarity: newNPC.rarity,
-                            age: Number(newNPC.age),
+                            age: Number(newNPC.age ?? 0),
                             worldview: newNPC.worldview,
                             race: newNPC.race,
                             class: newNPC.class,
@@ -4025,6 +4032,13 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 for (const NPCJournal of data.NPCJournals) {
                     if (NPCJournal.name)
                         addNpcJournal(NPCJournal.name, NPCJournal.lastJournalNote);
+                }
+            }
+
+            if (data.NPCMemories && data.NPCMemories.length > 0) {
+                for (const NPCMemory of data.NPCMemories) {
+                    if (NPCMemory.name)
+                        addNpcMemoryDiary(NPCMemory.name, NPCMemory.lastDiaryNote);
                 }
             }
 

@@ -685,6 +685,10 @@ img.rounded-corners {
     justify-content: space-between;
 }
 
+.tabSpace {
+    margin-left: 20px;
+}
+
 #info-panel {
     background-size: cover;
     background-repeat: no-repeat;
@@ -979,8 +983,12 @@ img.rounded-corners {
         padding: 5px 10px;
         border: 1px solid #ccc;
         cursor: pointer;
+        width: 100%;
+        margin-top: 5px;
+        text-align: center;
     }
 
         #npc-info-tabs .tab.active {
             background-color: #d4af37;
+            color: white;
         }
