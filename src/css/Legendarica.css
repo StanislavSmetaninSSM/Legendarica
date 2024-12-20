@@ -160,9 +160,6 @@ input:checked + .slider {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    transition: max-height 0.2s ease, opacity 0.2s ease;
-    max-height: 1000px;
-    opacity: 1;
 }
 
 .message {
@@ -264,6 +261,9 @@ input:checked + .slider {
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
+    transition: max-height 0.2s ease, opacity 0.2s ease;
+    max-height: 1000px;
+    opacity: 1;
 }
 
 .loading {
@@ -513,7 +513,8 @@ input:checked + .slider {
     cursor: move;
 }
 
-.infoDelete {
+.infoDelete,
+.infoOpen {
     cursor: pointer;
     margin-top: 20px;
 }
@@ -578,7 +579,6 @@ img.rounded-corners {
     border-radius: 30px;
 }
 
-/* Общие стили для кнопок сворачивания */
 .collapse-button {
     position: fixed;
     right: 0;
@@ -602,20 +602,17 @@ img.rounded-corners {
         transition: transform 0.3s ease;
     }
 
-    /* Кнопка для основной панели */
     .collapse-button.main {
         top: 50%;
         transform: translateY(-50%);
     }
 
-    /* Кнопка для панели настроек */
     .collapse-button.settings {
-        bottom: 150px; /* Регулируйте положение по вертикали */
+        bottom: 150px;
     }
 
-    /* Кнопка для панели настроек */
     .collapse-button.inputAreaButton {
-        bottom: 150px; /* Регулируйте положение по вертикали */
+        bottom: 150px;
         left: 0;
         border-radius: 0 5px 5px 0 !important;
         border-right: 1px solid #d4af37 !important;
@@ -626,7 +623,6 @@ img.rounded-corners {
         transform: rotate(180deg);
     }
 
-/* Стили для панели настроек */
 .settings-panel {
     position: fixed;
     right: 0;
@@ -636,13 +632,12 @@ img.rounded-corners {
     z-index: 100;
 }
 
-    /* Состояния свёрнутых панелей */
     .player-info.collapsed,
     .settings-panel.collapsed {
         width: 0 !important;
     }
 
-.input-area.collapsed {
+.action-buttons.collapsed {
     max-height: 0px;
     opacity: 0;
 }
@@ -688,6 +683,10 @@ img.rounded-corners {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.tabSpace {
+    margin-left: 20px;
 }
 
 #info-panel {
@@ -747,6 +746,7 @@ img.rounded-corners {
     }
 
 #inventory-list li,
+.inventoryList li,
 .listWithInheritedList li {
     margin-bottom: 5px;
     position: relative;
@@ -754,6 +754,7 @@ img.rounded-corners {
 }
 
     #inventory-list li::marker,
+    .inventoryList li::marker,
     .listWithInheritedList li::marker {
         margin-left: 5px;
         width: 40px;
@@ -792,6 +793,7 @@ img.rounded-corners {
 #visited-locations,
 #player-npc,
 #player-quests,
+.inventoryList,
 .listWithInheritedList {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
 }
@@ -881,6 +883,7 @@ img.rounded-corners {
 }
 
 #inventory-list,
+.inventoryList,
 .listWithInheritedList {
     overflow: visible;
     max-height: none !important;
@@ -938,3 +941,54 @@ img.rounded-corners {
     color: #2c2c2c;
     padding: 5px;
 }
+
+#inventoryItemContextMenuContainer {
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    background: rgba(30, 30, 30, 0.9);
+    padding: 15px;
+    border: 1px solid #d4af37;
+    border-radius: 10px;
+}
+
+    #inventoryItemContextMenuContainer h4 {
+        padding: 5px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+
+    #inventoryItemContextMenuContainer ul {
+        list-style: decimal;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-inline-start: 0px !important;
+        margin-left: 25px;
+    }
+
+    #inventoryItemContextMenuContainer li {
+        cursor: pointer;
+        margin-top: 5px;
+    }
+
+        #inventoryItemContextMenuContainer li:hover {
+            color: white;
+        }
+
+#npc-info-tabs {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+    #npc-info-tabs .tab {
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 5px;
+        text-align: center;
+    }
+
+        #npc-info-tabs .tab.active {
+            background-color: #d4af37;
+            color: white;
+        }

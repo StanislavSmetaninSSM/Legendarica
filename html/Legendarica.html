@@ -16,7 +16,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 </head>
 
 <body>
-    <img id="floating" src="https://i.imgur.com/BD5zPmF.jpeg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 9999;">
+    <img id="floating" src="../src/img/Legendarica.png" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 9999;">
 
     <div class="container">
         <div class="game-area">
@@ -42,7 +42,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             </div>
 
             <div style="display: flex; flex-direction: column; flex: 1; gap: 20px;">
-                <div id="info-panel" class="player-info">                    
+                <div id="info-panel" class="player-info">
                     <div id="player-stats-and-status" class="infoData">
                         <div id="player-stats">
                             <button id="stats-button-label" class="infoDataLabel" onclick="toggleElementVisible('stats-container')">Характеристики</button>
@@ -117,6 +117,10 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                             <span id="trade-value"></span>
                                         </div>
                                         <div class="stat">
+                                            <span class="stat-name" id="persuasion-label"></span>
+                                            <span id="persuasion-value"></span>
+                                        </div>
+                                        <div class="stat">
                                             <span class="stat-name" id="luck-label"></span>
                                             <span id="luck-value"></span>
                                         </div>
@@ -130,15 +134,37 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         <div id="player-status">
                             <button id="player-status-label" class="infoDataLabel" onclick="toggleElementVisible('status-data')">Статус</button>
                             <div id="status-data" class="infoDataList">
-                                <div id="status-info"></div>
-                                <div id="status-purposes"></div>
+                                <div id="status-data-container" class="displayNone">
+                                    <p id="status-name"></p>
+                                    <p id="status-age"></p>
+                                    <p id="status-race"></p>
+                                    <p id="status-class"></p>
+                                    <div>
+                                        <span id="status-appearanceDescription-label"></span>
+                                        <p id="status-appearanceDescription" class="tabSpace"></p>
+                                    </div>
+                                    <div>
+                                        <span id="status-statusInSociety-label"></span>
+                                        <p id="status-statusInSociety" class="tabSpace"></p>
+                                    </div>
+                                    <div>
+                                        <span id="status-positionInSociety-label"></span>
+                                        <p id="status-positionInSociety" class="tabSpace"></p>
+                                    </div>
+                                    <div>
+                                        <span id="status-affiliationWithOrganizations-label"></span>
+                                        <p id="status-affiliationWithOrganizations" class="tabSpace"></p>
+                                    </div>
+                                    <div id="status-effects"></div>
+                                    <div id="status-purposes"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div id="player-inventory" class="infoData displayNone">
                         <button id="inventory-button-label" class="infoDataLabel" onclick="toggleElementVisible('inventory-list')">Инвентарь</button>
-                        <ul id="inventory-list" class="infoDataList" onmouseover="this.style.scrollbarWidth='thin'" onmouseout="this.style.scrollbarWidth='none'"></ul>
+                        <ul id="inventory-list" class="infoDataList"></ul>
                     </div>
 
                     <div id="visited-locations" class="infoData displayNone">
@@ -201,7 +227,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <button id="clear-half-chat" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Очистить половину чата. Подробности из удаленного чата забудутся гейммастером. Сжатая информация, хранящаяся в описаниях локаций и предметов, не забудется. Вы можете записать отдельные события или сжатую историю приключений на отдельные листы бумаги в инвентаре перед удалением чата.</button>
                             <button id="clear-system-chat" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Удалить все красные сообщения из чата. Никак не влияет на память гейммастера.</button>
                             <button id="clear-log" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Очистить лог. Почти не влияет на память гейммастера, так как он помнит только последние 5 сообщений лога</button>
-                            <button id="clear-item-descriptions" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;" onclick="clearItemDescriptions()" w-tid="89">Очистить базу данных описаний тех предметов, которых нет в данный момент в инвентаре. Для чего это? Если вы выкладываете куда-то предмет или продаете, то предмет и его описание не исчезает из мира, для того чтобы его потом можно было забрать обратно. Но информация о таких предметах отсылается гейммастеру каждый запрос, что расходует токены. Вы можете использовать данную функцию в случае, если не собираетесь ничего выкупать или забирать что-то откуда-то обратно. Примечание: если предмет удалить через окно описания предмета в инвентаре, то предмет удалится и из базы данных описаний автоматически.</button>
                         </div>
 
                         <div id="system-instructions-box" class="chat-box rulesBox" data-show="false" style="display:none">
@@ -235,6 +260,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useNpcJournal" name="useNpcJournal" checked />
                                 <label for="useNpcJournal" id="use-npc-journal-label">Использовать дневники персонажей (отключите для экономии токенов). Работает только при включенном списке персонажей.</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useNpcMemoriesDiary" name="useNpcMemoriesDiary" checked />
+                                <label for="useNpcMemoriesDiary" id="use-npc-memories-diary-label">Использовать хроники персонажей (отключите для экономии токенов). Работает только при включенном дневнике персонажей.</label>
                             </div>
 
                             <div class="settingsContainer displayBlock">
@@ -392,6 +422,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         <option value="lizardman" data-translate-key="lizardman">Ящер</option>
                         <option value="vampire" data-translate-key="vampire">Вампир</option>
                         <option value="golem" data-translate-key="golem">Голем</option>
+                        <option value="angel" data-translate-key="angel">Ангел</option>
+                        <option value="demon" data-translate-key="demon">Демон</option>
                     </select>
 
                     <span class="tooltip">???<span class="tooltiptext" id="tooltip-race" style="white-space: pre-wrap;"></span></span>
@@ -438,6 +470,12 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <option value="magical-academy" data-translate-key="magical-academy">Магическая академия</option>
                     <option value="royal-escort" data-translate-key="royal-escort">Королевский эскорт</option>
                     <option value="giant-invasion" data-translate-key="giant-invasion">Вторжение великанов</option>
+                    <option value="rebirth-in-another-world" data-translate-key="rebirth-in-another-world">Перерождение в другом мире</option>
+                    <option value="being-summoned-to-another-world" data-translate-key="being-summoned-to-another-world">Быть призванным в другой мир</option>
+                    <option value="reincarnation" data-translate-key="reincarnation">Реинкарнация</option>
+                    <option value="demon-invasion" data-translate-key="demon-invasion">Вторжение демонов</option>
+                    <option value="the-end-of-the-world" data-translate-key="the-end-of-the-world">Конец мира</option>
+                    <option value="apocalypse" data-translate-key="apocalypse">Апокалипсис</option>
                     <option value="random" data-translate-key="random">Случайная кампания из списка</option>
                 </select>
 
@@ -529,6 +567,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                 <input type="text" id="start-per" placeholder="Восприятие" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
                 <input type="text" id="start-money" placeholder="Деньги" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
                 <input type="text" id="start-trd" placeholder="Торговля" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
+                <input type="text" id="start-prs" placeholder="Убеждение" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
                 <input type="text" id="start-luck" placeholder="Удача" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
                 <input type="text" id="start-exp" placeholder="Опыт" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: auto; overflow-y: auto;  font-family: 'MedievalSharp', cursive;">
 
@@ -615,11 +654,42 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <span id="npc-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
             <span id="npc-info-img" class="adjustButton"><i class="uil uil-image-search"></i></span>
             <h4 id="npc-info-name"></h4>
-            <p id="npc-info-description"></p>
+            <p id="npc-info-rarity"></p>
+            <p id="npc-info-race"></p>
+            <p id="npc-info-class"></p>
+            <p id="npc-info-age"></p>
+            <p id="npc-info-worldview"></p>
+            <div>
+                <span id="npc-info-appearanceDescription-label"></span>
+                <p id="npc-info-appearanceDescription" class="tabSpace"></p>
+            </div>
+            <div>
+                <span id="npc-info-history-label"></span>
+                <p id="npc-info-history" class="tabSpace"></p>
+            </div>
+            <div>
+                <span id="npc-info-attitude-label"></span>
+                <p id="npc-info-attitude" class="tabSpace"></p>
+            </div>
+            <p id="npc-info-stats"></p>
+            <p id="npc-info-skills"></p>
+            <p id="npc-info-effects"></p>
+
+            <div id="npc-info-tabs">
+                <span class="tab active" id="npc-info-tab-journal-label" data-target="npc-info-journal">Дневник</span>
+                <span class="tab" id="npc-info-tab-memory-diary-label" data-target="npc-info-memory-diary">Хроники</span>
+            </div>
+
             <h4 id="npc-info-journal-label">Дневник</h4>
             <p id="npc-info-journal"></p>
+
+            <h4 id="npc-info-memory-diary-label" style="display: none;">Хроники</h4>
+            <p id="npc-info-memory-diary" style="display: none;"></p>
+
             <h4 id="npc-delete" class="infoDelete">Забыть этого персонажа</h4>
             <h4 id="npc-delete-journal" style="cursor: pointer">Забыть дневник этого персонажа</h4>
+            <h4 id="npc-delete-memory-diary" style="cursor: pointer">Забыть хроники этого персонажа</h4>
+
             <input type="hidden" id="npc-info-id" name="npc-info-id">
         </div>
 
@@ -637,10 +707,36 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <span id="inventory-info-close" class="infoClose">×</span>
             <span id="inventory-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
             <span id="inventory-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <span id="inventory-info-img" class="adjustButton"><i class="uil uil-image-search"></i></span>
             <h4 id="inventory-info-name"></h4>
+            <p id="inventory-info-count"></p>
+            <p id="inventory-info-price"></p>
+            <p id="inventory-info-quality"></p>
+            <p id="inventory-info-durability"></p>
+            <p id="inventory-info-resource"></p>
+            <p id="inventory-info-weight"></p>
+            <p id="inventory-info-volume"></p>
+            <p id="inventory-info-available-volume"></p>
+            <p id="inventory-info-capacity"></p>
+            <p id="inventory-info-available-capacity"></p>
+            <p id="inventory-info-customProperty"></p>
             <p id="inventory-info-description"></p>
+            <div id="inventory-info-bonuses"></div>
+            <p id="inventory-info-contents-description"></p>
+            <h4 id="inventory-container-open" class="infoOpen">Открыть</h4>
             <h4 id="inventory-delete" class="infoDelete">Выбросить этот предмет</h4>
             <input type="hidden" id="inventory-info-id" name="inventory-info-id">
+        </div>
+
+        <div id="inventory-container-info" class="infoWindow">
+            <span id="inventory-container-info-close" class="infoClose">×</span>
+            <span id="inventory-container-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
+            <span id="inventory-container-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <h4 id="inventory-container-info-name"></h4>
+            <div>
+                <ul id="inventory-container-info-items" class="infoDataList inventoryList"></ul>
+            </div>
+            <input type="hidden" id="inventory-container-info-id" name="inventory-container-info-id">
         </div>
 
         <div id="quest-info" class="infoWindow">
@@ -648,9 +744,17 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <span id="quest-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
             <span id="quest-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
             <h4 id="quest-info-name"></h4>
+            <p id="quest-info-questGiver"></p>
             <p id="quest-info-reward"></p>
             <p id="quest-info-punishment"></p>
-            <p id="quest-info-description"></p>
+            <div>
+                <span id="quest-info-questBackground-label"></span>
+                <p id="quest-info-questBackground" class="tabSpace"></p>
+            </div>
+            <div>
+                <span id="quest-info-description-label"></span>
+                <p id="quest-info-description" class="tabSpace"></p>
+            </div>           
             <div id="quest-info-purposes"></div>
             <p id="quest-info-details"></p>
             <h4 id="quest-delete" class="infoDelete">Забыть это задание</h4>
@@ -666,6 +770,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <a id="image-info-image" data-fslightbox="gallery" href="https://i.imgur.com/fsyrScY.jpg"><img id="image-info-thumbnail" class="rounded-corners" src="" /></a>
             <textarea type="text" id="image-info-prompt" class="gameTextarea" placeholder="Промпт для генерации изображения" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"></textarea>
             <h4 id="image-generate" class="infoDelete">Генерировать изображение</h4>
+        </div>
+
+        <div id="inventoryItemContextMenuContainer" style="display: none; position: absolute;">
+            <h4 id="inventory-item-context-menu-name"></h4>
+            <ul id="inventory-item-context-menu"></ul>
         </div>
 
         <button id="collapseButtonMain" class="collapse-button main" style="display:none">
@@ -686,5 +795,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
         <script src="../src/js/Translations.js"></script>
         <script src="../src/js/Legendarica.js"></script>
         <script src="../src/js/LegendaricaAPI.js"></script>
+        <script src="../src/js/Thinking.js"></script>
 </body>
 </html>

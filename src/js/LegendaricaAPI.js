@@ -618,8 +618,7 @@ const APIModule = (function getAPIModule() {
                 messages: messages
             };
 
-            const apiRequest = model ? model : "gamemaster";
-            const request = await fetch(`/api/${apiRequest}`, {
+            const request = await fetch(`/api/ai_completion`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

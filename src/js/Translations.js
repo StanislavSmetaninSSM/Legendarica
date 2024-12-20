@@ -128,20 +128,25 @@ const translationModule = (function getTranslationModule() {
 	Warlock - Magical focus, Leather armor, Grimoire, Eldritch talisman
 
 	Wizard - Spellbook, Magic wand, Robe, Magic missile scroll`,
-            "tooltip-race": `Race affects starting location, racial skill generation, storyline, and starting bonuses to skills and items:
-	Human: Luck +2, Trade +1, Perception +1, Wisdom -1, Intelligence -1, Universal Tool
+            "tooltip-race": `Race affects the starting location, racial ability generation, plot, and starting bonuses to skills and items:
 
-	Elf: Agility +2, Speed +1, Attractiveness +1, Strength -1, Endurance -1, Elven Cloak
+Human: Luck +2, Trade +1, Perception +1, Wisdom -1, Intelligence -1, Universal Tool
 
-	Dwarf: Trade +2, Strength +1, Endurance +1, Agility -1, Speed -1, Dwarven Ale
+Elf: Dexterity +2, Speed +1, Attractiveness +1, Strength -1, Stamina -1, Elven Cloak
 
-	Orc: Strength +3, Endurance +2, Intelligence -1, Wisdom -1, Attractiveness -1, Orcish War Paint
+Dwarf: Trade +2, Strength +1, Stamina +1, Dexterity -1, Speed -1, Dwarven Ale
 
-	Lizard: Endurance +2, Speed +1, Attractiveness -1, Scale Oil
+Orc: Strength +3, Stamina +2, Intelligence -1, Wisdom -1, Attractiveness -1, Orc Battle Paint
 
-	Vampire: Perception +1, Attractiveness +1, Agility +1, Luck -1, Vial of Blood
+Lizard: Stamina +2, Speed +1, Attractiveness -1, Scale Oil
 
-	Golem: Strength +3, Endurance +2, Intelligence -1, Attractiveness -1, Wisdom -1, Elemental Core`,
+Vampire: Perception +1, Attractiveness +1, Dexterity +1, Luck -1, Blood Vial
+
+Golem: Strength +3, Stamina +2, Intelligence -1, Attractiveness -1, Wisdom -1, Elemental Core
+
+Angel: Strength +1, Attractiveness +1, Wisdom +1, Trade -1, Angelic Halo
+
+Demon: Dexterity +1, Attractiveness +2, Persuasion +1, Wisdom -1, Luck -1, Demonic Symbol`,
             "create-character-label": "Create your character",
             "api-key-button": "Show for 10 seconds",
             "api-key-button2": "Show for 10 seconds",
@@ -158,7 +163,6 @@ const translationModule = (function getTranslationModule() {
             "my-rules-explanaition": "Here you can modify or add game rules or simply influence the behavior of the game master. Just enter an instruction here and leave it. For example: 'The character's inventory should have a list as a separate item, which indicates all bonuses in total from all items in the inventory, and if there is no such list in the inventory, add it' or 'let there be monsters in every location'. Warning: changes made may break some game mechanics. Or they may not. Go for it!",
             "clear-log": "Clear log. Almost does not affect the game master's memory, as he only remembers the last 5 log messages",
             "clear-system-chat": "Delete all red messages from the chat. Does not affect the game master's memory at all",
-            "clear-item-descriptions": "Clear the database of descriptions for items that are not currently in the inventory. Why? If you place an item somewhere or sell it, the item and its description don't disappear from the world, so you can retrieve it later. But information about such items is sent to the gamemaster with each request, which consumes tokens. You can use this function if you don't plan to buy anything back or retrieve something from somewhere. Note: if you delete an item through the item description window in the inventory, the item will automatically be deleted from the descriptions database as well.",
             "clear-half-chat": "Clear half of the chat. Details from the deleted chat will be forgotten by the game master. Compressed information stored in location and item descriptions will not be forgotten. You can write down individual events or a compressed history of adventures on separate sheets of paper in the inventory before deleting the chat.",
             "settings-button-label": "Settings",
             "load-box-button-label": "Load game",
@@ -174,7 +178,7 @@ const translationModule = (function getTranslationModule() {
             "api-key-label3": "Your API key",
             "location-delete": "Forget this location",
             "player-status-label": "Status",
-            "status-purposes-label": "Possible purposes:",
+            "status-purposes-label": "Possible purposes",
             "player-npc-button-label": "Characters",
             "use-status-label": "Use status (disable to save tokens)",
             "use-npc-list-label": "Use characters list (disable to save tokens)",
@@ -226,6 +230,8 @@ const translationModule = (function getTranslationModule() {
             "dwarf": "Dwarf",
             "elf": "Elf",
             "human": "Human",
+            "angel": "Angel",
+            "demon": "Demon",
             "no-choosed-race": "Choose a race",
 
 
@@ -236,9 +242,20 @@ const translationModule = (function getTranslationModule() {
 
             "item_notepad": "Notepad for notes",
             "item_notepad_description": "Notepad for notes",
-            "game_starting_description": `---- ABSOLUTE LEGENDARICA ----\n\n A new game begins. You are free to do and say absolutely anything you want. However, the consequences will not be long in coming, especially if your character does not have enough skills for your idea. You can become a hero, an entrepreneur, a thief, an actor, a hired assassin, a farmer, a king, and much more... Complete freedom of action.\n\n The built-in memory is enough for the last 30 visited locations, NPCs, quests (completed) - the old ones will be deleted. You can remember the ones you need by clicking the lock to the left of the name (in the list). \nEach location has a difficulty level indicated by a number in parentheses.\n\n Some skill checks may be considered successful or unsuccessful even if the calculation result is the opposite because the logic of the situation is more important than randomness, but such a check will still affect the consequences of such success/failure. After a character gains a level, a random base parameter is randomly increased by 1 and a new passive skill is generated on the next turn. During the game, items with bonuses to skills that are not on the skill list may appear, but such bonuses may apply to several skills from the list: an item with a bonus, for example, to agility +1, can increase both speed and dexterity in different checks.\n\n You can ask the host in the chat to correct a mistake they made, such as incorrectly calculated money, energy, etc. The host understands a lot, so feel free to experiment.\n\n You can try to build your instructions for the host to suit your needs in the 'Your rules (prompt)' tab.\n\n The game is automatically saved every 5 minutes. When loading the game, the host remembers the story only from the description of locations, descriptions of items, as well as the list of NPCs, the NPC diary, the character's status, and the quest log. This is useful to avoid overloading the host. But if you want, you can expand their post-load memory in such a way that before saving, you write down a detailed history of the latest events on a piece of paper in your inventory. And the host will see this piece of paper after loading. The save file can be opened in Notepad and the data can be changed there - but before you do this, do not forget to save a backup copy of the save so that it does not disappear if the editing is unsuccessful.\n\n For unlimited access to neural networks, you can use one of the neural network providers from the list.\nThe number of tokens spent per turn and per session can be viewed by hovering the cursor over the message in the action log.\n\n You can delete this and any other messages by clicking on the cross in the corner of the message. Deleted messages are erased from the host's memory.\n\n This game is a heavily modified (believe me, VERY HEAVILY) version of the game by Creature. You can check out the original at the link: https://websim.ai/@Creature/legendarica-v1-neural-sandbox\n\nPlease consider thanking me (Lottarend - the author of ABSOLUTE LEGENDARICA) to make me happy and motivate me to release new versions of the game.`,
-            "game_starting_donate": "Thank the author of ABSOLUTE LEGENDARICA:\n\n Cryptocurrency: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nAnother way: https://www.donationalerts.com/r/lottarend",
-            "game_starting_discord": "You can find the latest version and discuss the game in Discord https://discord.com/invite/JVshMaq3GG",
+            "game_starting_description": `Welcome to Absolute Legendaria, adventurer! Please review the following information...
+
+This is a text-based role-playing game with an LLM. You can enter your action in the text box at the bottom. The neural network will process your response and send instructions that fill the game interface.
+You can switch between the available information windows in the top right corner of the screen, using the drop-down panel with buttons. Every item, every NPC in the NPC list, every skill and quest, as well as status information—all of these are used by the game master when forming a response. When you click to remove an item/NPC/quest, etc., that information disappears from the game master's available data, and they formulate further responses without taking it into account. Additionally, the game master carefully looks at the history of your messages with it, as well as the last five messages of the "Action Calculation Log."
+
+All info-window lists are limited to 30 elements, except for inventory items. This is done so as not to overload the game master with information, as there may come a time when the game master simply cannot create a response. You can lock any list element in the info window by clicking the "lock" button, thus protecting it from deletion.
+
+If the game master still cannot formulate a response, the context may be overloaded with information. Try clearing some of the available data. Start by deleting half of the chat and see if that helps the game master form a response.
+
+Please consider supporting me (Lottarend, the author of the game). Links to ways to support are provided in the next message.
+
+Enjoy the game!`,
+            "game_starting_donate": "Thank the author of Legendarica Absolute :\n\n Cryptocurrency: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nAnother way: https://www.donationalerts.com/r/lottarend",
+            "game_starting_discord": "You can find the latest version and discuss the game in Discord https://discord.gg/XwsjrRRS",
             "null_resend_message": "Where am I? Who am I?",
             "item_not_descripted": "Item not studied by the hero",
             "name_turn": "Turn",
@@ -282,6 +299,8 @@ const translationModule = (function getTranslationModule() {
             "Scale_oil": "Scale oil",
             "Blood_vial": "Blood vial",
             "Elemental_core": "Elemental core",
+            "Angelic_halo": "Angelic Halo",
+            "Demonic_symbol": "Demonic Symbol",
             "lute": "Lute",
             "dagger": "Dagger",
             "staff": "Staff",
@@ -407,6 +426,59 @@ const translationModule = (function getTranslationModule() {
             "load-system-instructions-button-label": "Load system instructions from file",
             "skill-info-delete": "Forget this skill",
             "empty-ai-key-label": "API key is not set. Please enter the API key.",
+            "inventory-count-label": "Quantity",
+            "inventory-quality-label": "Quality",
+            "inventory-durability-label": "Durability",
+            "inventory-bonuses-label": "Bonuses",
+            "inventory-price-label": "Price",
+            "inventory-resource-label": "Resource",
+            "throw-from-item": "from container (if the symbol -> is present, it indicates the path to the item, from container to container)",
+            "inventory-container-open": "Open",
+            "inventory-weight-label": "Weight (kilograms)",
+            "inventory-capacity-label": "Capacity",
+            "move-to-inventory": "Place in inventory",
+            "place-item-to": "Place into ",
+            "empty-container-label": "Empty",
+            "content-description-label": "Content",
+            "inventory-volume-label": "Volume (dm³)",
+            "inventory-contents-count-label": "Available capacity",
+            "inventory-contents-volume-label": "Available volume (dm³)",
+            "inventory-item-inspect": "Inspect",
+            "rarity-label": "Rarity",
+            "age-label": "Age",
+            "npc-info-worldview-label": "Worldview",
+            "npc-info-race-label": "Race",
+            "npc-info-class-label": "Class",
+            "npc-info-stats-label": "Stats",
+            "npc-info-skills-label": "Skills",
+            "npc-info-effects-label": "Active Effects",
+            "npc-info-appearanceDescription-label": "Appearance:",
+            "npc-info-history-label": "History:",
+            "npc-info-attitude-label": "Attitude towards player character:",
+            "npc-info-tab-journal-label": "Journal",
+            "npc-info-tab-memory-diary-label": "Chronicles",
+            "npc-info-memory-diary-label": "Chronicles",
+            "npc-delete-memory-diary": "Forget this character's chronicles",
+            "use-npc-memories-diary-label": "Use character chronicles (disable to save tokens). Only works when character diary is enabled.",
+            "status-name-label": "Name",
+            "status-race-label": "Race",
+            "status-class-label": "Class",
+            "status-appearanceDescription-label": "Appearance:",
+            "status-statusInSociety-label": "Social Status:",
+            "status-positionInSociety-label": "Position in Society:",
+            "status-affiliationWithOrganizations-label": "Affiliation with Organizations:",
+            "status-effect-none-label": "None",
+            "persuasion-label": "Persuasion",
+            "start-prs": "Persuasion",
+            "rebirth-in-another-world": "Rebirth in Another World",
+            "being-summoned-to-another-world": "Being Summoned to Another World",
+            "reincarnation": "Reincarnation",
+            "demon-invasion": "Demon Invasion",
+            "the-end-of-the-world": "The End of the World",
+            "apocalypse": "Apocalypse",
+            "quest-info-questGiver-label": "Quest Giver",
+            "quest-info-questBackground-label": "Background:",
+            "quest-info-description-label": "Description:",
         },
         "russian-language": {
             // placeholders
@@ -524,9 +596,9 @@ const translationModule = (function getTranslationModule() {
 Волшебник - Книга заклинаний, Волшебная палочка, Мантия, Свиток магической стрелы`,
             "tooltip-race": `Раса влияет на стартовую локацию, генерацию расового умения, сюжет и стартовые бонусы к навыкам и предметам:
 
-Человек: Удача +2, Торговля +1, Восприятие +1, Мудрость -1, Интеллект -1,  Универсальный инструмент
+Человек: Удача +2, Торговля +1, Восприятие +1, Мудрость -1, Интеллект -1, Универсальный инструмент
 
-Эльф: Ловкость +2, Скорость +1, Привлекательность +1, Сила -1, Выносливость -1,  Эльфийский плащ
+Эльф: Ловкость +2, Скорость +1, Привлекательность +1, Сила -1, Выносливость -1, Эльфийский плащ
 
 Гном: Торговля +2, Сила +1, Выносливость +1, Ловкость -1, Скорость -1, Гномий эль
 
@@ -536,7 +608,11 @@ const translationModule = (function getTranslationModule() {
 
 Вампир: Восприятие +1, Привлекательность +1, Ловкость +1, Удача -1, Флакон крови
 
-Голем: Сила +3, Выносливость +2, Интеллект -1, Привлекательность -1, Мудрость -1, Элементальное ядро`,
+Голем: Сила +3, Выносливость +2, Интеллект -1, Привлекательность -1, Мудрость -1, Элементальное ядро
+
+Ангел: Сила +1, Привлекательность +1, Мудрость +1, Торговля -1, Ангельский нимб
+
+Демон: Ловкость +1, Привлекательность +2, Убеждение +1, Мудрость -1, Удача -1, Демонический символ`,
             "create-character-label": "Создайте своего персонажа",
             "api-key-button": "Показать на 10 секунд",
             "api-key-button2": "Показать на 10 секунд",
@@ -553,7 +629,6 @@ const translationModule = (function getTranslationModule() {
             "my-rules-explanaition": "Здесь вы можете изменить или дополнить правила игры или просто повлиять на поведение ведущего. Просто введите тут инструкцию и оставьте. Например: 'В инвентаре персонажа должен быть список в виде отдельного предмета, в котором указаны вообще все бонусы в сумме со всех предметов в инвентаре, а если такого списка в инвентаре нет, то добавить его' или 'пусть в каждой локации будут монстры'. Предупреждение: внесённые изменения могут сломать какие-нибудь механики игры. А могут и не сломать. Дерзайте!",
             "clear-log": "Очистить лог. Почти не влияет на память гейммастера, так как он помнит только последние 5 сообщений лога",
             "clear-system-chat": "Удалить все красные сообщения из чата. Никак не влияет на память гейммастера",
-            "clear-item-descriptions": "Очистить базу данных описаний тех предметов, которых нет в данный момент в инвентаре. Для чего это? Если вы выкладываете куда-то предмет или продаете, то предмет и его описание не исчезает из мира, для того чтобы его потом можно было забрать обратно. Но информация о таких предметах отсылается гейммастеру каждый запрос, что расходует токены. Вы можете использовать данную функцию в случае, если не собираетесь ничего выкупать или забирать что-то откуда-то обратно. Примечание: если предмет удалить через окно описания предмета в инвентаре, то предмет удалится и из базы данных описаний автоматически.",
             "clear-half-chat": "Очистить половину чата. Подробности из удаленного чата забудутся гейммастером. Сжатая информация, хранящаяся в описаниях локаций и предметов, не забудется. Вы можете записать отдельные события или сжатую историю приключений на отдельные листы бумаги в инвентаре перед удалением чата.",
             "settings-button-label": "Настройки",
             "load-box-button-label": "Загрузить игру",
@@ -572,7 +647,7 @@ const translationModule = (function getTranslationModule() {
             "ai-provider-label3": "Провайдер нейросети",
             "location-delete": "Забыть эту локацию",
             "player-status-label": "Статус",
-            "status-purposes-label": "Возможные цели:",
+            "status-purposes-label": "Возможные цели",
             "player-npc-button-label": "Персонажи",
             "use-status-label": "Использовать статус (отключите для экономии токенов)",
             "use-npc-list-label": "Использовать список персонажей (отключите для экономии токенов)",
@@ -623,6 +698,8 @@ const translationModule = (function getTranslationModule() {
             "dwarf": "Гном",
             "elf": "Эльф",
             "human": "Человек",
+            "angel": "Ангел",
+            "demon": "Демон",
             "no-choosed-race": "Выберите расу",
 
             "female": "Женский",
@@ -632,9 +709,16 @@ const translationModule = (function getTranslationModule() {
             //not interface
             "item_notepad": "Блокнот для заметок",
             "item_notepad_description": "Блокнот для заметок",
-            "game_starting_description": `---- АБСОЛЮТНАЯ LEGENDARICA ----\n\nНачинается новая игра. Вы вольны делать и говорить абсолютно всё, что вам вздумается. Однако, последствия не заставят себя долго ждать, особенно если у вашего персонажа не хватит навыков на вашу задумку. Вы можете стать героем, предпринимателем, вором, актёром, наёмным убийцей, фермером, королём и гораздо больше... Полная свобода действий.\n\nВстроенной памяти хватает на 30 последних посещённых локаций, NPC, квестов (завершенных) - старые будут будут удаляться. Нужные можно запомнить, нажав замочек слева от названия (в списке). \nУ каждой локации есть сложность, обозначенная цифрой в скобочках.\n\nНекоторые проверки навыков могут считаться успешными или неуспешными, даже если результат расчёта противоположен, потому что логика ситуации важнее случайности, но такая проверка всё равно будет влиять на последствия от такого успеха/неуспеха. После получения уровня персонажа случайным образом увеличивается случайный базовый параметр на 1 и на следующий ход генерируется новый пассивный навык. В процессе игры могут появиться вещи с бонусом к навыкам, которых нет в списке навыков, но такие бонусы могут распространяться на несколько навыков из списка: предмет с бонусом, например к проворству +1, может увеличивать и скорость и ловкость в разных проверках.\n\nВы можете в чате попросить ведущего исправить допущенную им ошибку, например неверно подсчитанные деньги, энергию и тд. Ведущий многое понимает, экспериментируйте.\n\nВы можете попробовать выстраивать свою инструкцию для ведущего под свои нуждны во вкладке 'Свои правила (промпт)'.\n\nИгра автоматически сохраняется каждые 5 минут. При загрузке игры ведущий помнит историю только из описания локаций, описания предметов, а так же списка NPC, дневника NPC, статуса персонажа, и журнала квестов. Это полезно, чтобы не перегружать ведущего. Но при желании вы можете расширить его послезагрузочную память таким образом, что перед сохранением запишите подробную историю последних событий на бумажку в инвентарь. И ведущий после загрузки увидит эту бумажку. Файл сохранения можно открыть в блокноте и изменить там данные - но перед тем как этим заняться, не забудьте сохранить резервную копию сохранения, чтобы оно не пропало при неудачном редактировании.\n\nДля неограниченного доступа к нейросетям вы можете воспользоваться одним из провайдеров нейросетей из списка.\nКоличество потраченных токенов за ход и за сессию можно посмотреть при наведении курсора на сообщение в логе действий.\n\nВы можете удалить это и любые другие сообщения, нажав на крестик в углу сообщения. Удалённые сообщения стираются из памяти ведущего.\n\nДанная игра представляет собой сильно модифицированную (поверьте мне, ОЧЕНЬ СИЛЬНО) версию игры от Существа. Вы можете ознакомиться с оригиналом по ссылке: https://websim.ai/@Creature/legendarica-v1-neural-sandbox\n\nПожалуйста, рассмотрите возможность отблагодарить меня (Lottarend - автор АБСОЛЮТНОЙ LEGENDARICA ), чтобы сделать мне приятно и замотивировать выпускать новые версии игры.`,
-            "game_starting_donate": "Поблагодарить автора АБСОЛЮТНОЙ LEGENDARICA:\n\n Криптовалюта: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nДругой способ: https://www.donationalerts.com/r/lottarend",
-            "game_starting_discord": "В дискорде можно найти последнюю версию и обсудить игру https://discord.com/invite/JVshMaq3GG",
+            "game_starting_description": `Приветствую тебя в Абсолютной Легендарике, искатель приключений! Ознакомься со следующей информацией...
+
+Это текстовая ролевая игра с LLM. Ты можешь ввести свое действие в текстовом поле внизу. Нейросеть обработает твой ответ и пришлет инструкции, на основе которых заполняется интерфейс игры.
+Ты можешь переключить доступные тебе информационные окна в верхнем правом углу экрана, в выпадающей панели с кнопками. Каждый предмет, каждый NPC в списке NPC, каждый навык и квест, а также информация статуса — все это используется мастером игры при формировании ответа. Когда вы нажимаете на удалить предмет/NPC/квест и т.д., эта информация исчезает из доступной гейм-мастеру, и он формулирует дальнейший ответ без её учёта. Кроме того, мастер игры внимательно смотрит на историю ваших с ним сообщений, а также на последние пять сообщений "Лога расчёта действий".
+Все списки инфо-окон ограничены 30 элементами, за исключением предметов инвентаря. Это сделано, чтобы не перегружать мастера игры информацией, поскольку может наступить момент, когда мастер игры просто не сможет создать ответ. Ты можешь заблокировать любой списочный элемент в инфо-окне, нажав на кнопку "замочка" и таким образом защитив его от удаления.
+Если мастер игры все равно не может сформировать ответ, возможно, его контекст перегружен информацией. Попробуйте очистить какие-либо из доступных вам данных. Начните с удаления половины чата и посмотрите, не поможет ли это мастеру игры сформировать ответ.
+Пожалуйста, рассмотрите возможность поддержать меня (Lottarend — автор игры). Ссылки на способы поддержки приведены в следующем сообщении.
+Приятной игры!`,
+            "game_starting_donate": "Поблагодарить автора Абсолютной Легендарики:\n\n Криптовалюта: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nДругой способ: https://www.donationalerts.com/r/lottarend",
+            "game_starting_discord": "В дискорде можно найти последнюю версию и обсудить игру https://discord.gg/XwsjrRRS",
             "null_resend_message": "Где я? Кто я?",
             "item_not_descripted": "Предмет не изучен героем",
             "name_turn": "Ход",
@@ -678,6 +762,8 @@ const translationModule = (function getTranslationModule() {
             "Scale_oil": 'Масло для чешуи',
             "Blood_vial": 'Флакон крови',
             "Elemental_core": 'Элементальное ядро',
+            "Angelic_halo": "Ангельский нимб",
+            "Demonic_symbol": "Демонический символ",
             "lute": "Лютня",
             "dagger": "Кинжал",
             "staff": "Посох",
@@ -799,6 +885,59 @@ Websim. Зависит от нейросети, которую использу�
             "load-system-instructions-button-label": "Загрузить системные инструкции из файла",
             "skill-info-delete": "Забыть этот навык",
             "empty-ai-key-label": "Не задан API ключ. Введите API ключ.",
+            "inventory-count-label": "Количество",
+            "inventory-quality-label": "Качество",
+            "inventory-durability-label": "Прочность",
+            "inventory-bonuses-label": "Эффекты",
+            "inventory-price-label": "Цена",
+            "inventory-resource-label": "Ресурс",
+            "throw-from-item": "из контейнера (если присутствует символ ->, то он указывает путь к предмету, от контейнера к контейнеру)",
+            "inventory-container-open": "Открыть",
+            "inventory-weight-label": "Вес (килограммы)",
+            "inventory-capacity-label": "Вместимость",
+            "move-to-inventory": "Выложить в инвентарь",
+            "place-item-to": "Положить в ",
+            "empty-container-label": "Пусто",
+            "content-description-label": "Содержимое",
+            "inventory-volume-label": "Объем (дм³)",
+            "inventory-contents-count-label": "Доступная вместимость",
+            "inventory-contents-volume-label": "Доступный объём (дм³)",
+            "inventory-item-inspect": "Осмотреть",
+            "rarity-label": "Редкость",
+            "age-label": "Возраст",
+            "npc-info-worldview-label": "Мировоззрение",
+            "npc-info-race-label": "Раса",
+            "npc-info-class-label": "Класс",
+            "npc-info-stats-label": "Характеристики",
+            "npc-info-skills-label": "Навыки",
+            "npc-info-effects-label": "Действующие эффекты",
+            "npc-info-appearanceDescription-label": "Внешность:",
+            "npc-info-history-label": "История:",
+            "npc-info-attitude-label": "Отношение к персонажу игрока:",
+            "npc-info-tab-journal-label": "Дневник",
+            "npc-info-tab-memory-diary-label": "Хроники",
+            "npc-info-memory-diary-label": "Хроники",
+            "npc-delete-memory-diary": "Забыть хроники этого персонажа",
+            "use-npc-memories-diary-label": "Использовать хроники персонажей (отключите для экономии токенов). Работает только при включенном дневнике персонажей.",
+            "status-name-label": "Имя",
+            "status-race-label": "Раса",
+            "status-class-label": "Класс",
+            "status-appearanceDescription-label": "Внешность:",
+            "status-statusInSociety-label": "Положение в обществе:",
+            "status-positionInSociety-label": "Позиция в обществе:",
+            "status-affiliationWithOrganizations-label": "Принадлежность к организациям:",
+            "status-effect-none-label": "Отсутствуют",
+            "persuasion-label": "Убеждение",
+            "start-prs": "Убеждение",
+            "rebirth-in-another-world": "Перерождение в другом мире",
+            "being-summoned-to-another-world": "Быть призванным в другой мир",
+            "reincarnation": "Реинкарнация",
+            "demon-invasion": "Вторжение демонов",
+            "the-end-of-the-world": "Конец мира",
+            "apocalypse": "Апокалипсис",
+            "quest-info-questGiver-label": "Квестодатель",
+            "quest-info-questBackground-label": "Предыстория:",
+            "quest-info-description-label": "Описание:",
         },
         "spanish-language": {
             // placeholders
@@ -914,21 +1053,25 @@ Hechicero - Daga de fuego, Orbe, Túnica, Poción de energía
 Brujo - Foco mágico, Armadura de cuero, Grimorio, Talismán eldritchiano
 
 Mago - Libro de hechizos, Varita mágica, Túnica, Pergamino de flecha mágica`,
-            "tooltip-race": `La raza afecta la ubicación inicial, la generación de habilidades raciales, la historia y las bonificaciones iniciales a las habilidades y objetos:
-			
+            "tooltip-race": `La raza influye en la ubicación de inicio, generación de habilidades raciales, trama y bonificaciones iniciales a habilidades y objetos:
+
 Humano: Suerte +2, Comercio +1, Percepción +1, Sabiduría -1, Inteligencia -1, Herramienta Universal
 
-Elfo: Agilidad +2, Velocidad +1, Atractivo +1, Fuerza -1, Resistencia -1, Capa Élfica
+Elfo: Destreza +2, Velocidad +1, Atractivo +1, Fuerza -1, Resistencia -1, Capa Élfica
 
-Enano: Comercio +2, Fuerza +1, Resistencia +1, Agilidad -1, Velocidad -1, Cerveza Enana
+Enano: Comercio +2, Fuerza +1, Resistencia +1, Destreza -1, Velocidad -1, Cerveza Enana
 
-Orco: Fuerza +3, Resistencia +2, Inteligencia -1, Sabiduría -1, Atractivo -1, Pintura de Guerra Orca
+Orco: Fuerza +3, Resistencia +2, Inteligencia -1, Sabiduría -1, Atractivo -1, Pintura de Batalla Orca
 
-Lagarto: Resistencia +2, Velocidad +1, Atractivo -1, Aceite de Escamas
+Lagarto: Resistencia +2, Velocidad +1, Atractivo -1, Aceite para Escamas
 
-Vampiro: Percepción +1, Atractivo +1, Agilidad +1, Suerte -1, Vial de Sangre
+Vampiro: Percepción +1, Atractivo +1, Destreza +1, Suerte -1, Frasco de Sangre
 
-Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, Núcleo Elemental`,
+Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, Núcleo Elemental
+
+Ángel: Fuerza +1, Atractivo +1, Sabiduría +1, Comercio -1, Halo Angelical
+
+Demonio: Destreza +1, Atractivo +2, Persuasión +1, Sabiduría -1, Suerte -1, Símbolo Demoníaco`,
             "create-character-label": "Crea tu personaje",
             "api-key-button": "Mostrar por 10 segundos",
             "api-key-button2": "Mostrar por 10 segundos",
@@ -945,7 +1088,6 @@ Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, 
             "my-rules-explanaition": "Aquí puedes modificar o complementar las reglas del juego o simplemente influir en el comportamiento del maestro. Simplemente ingresa una instrucción aquí y déjala. Por ejemplo: 'En el inventario del personaje debe haber una lista como un elemento separado que enumere todos los bonos en total de todos los elementos en el inventario, y si no hay tal lista en el inventario, agrégala' o 'que haya monstruos en cada ubicación'. Advertencia: los cambios realizados pueden romper algunas mecánicas del juego. O pueden no romperlas. ¡Atrévete!",
             "clear-log": "Limpiar registro. Casi no afecta la memoria del maestro del juego, ya que solo recuerda los últimos 5 mensajes del registro",
             "clear-system-chat": "Eliminar todos los mensajes rojos del chat. No afecta en absoluto la memoria del maestro del juego",
-            "clear-item-descriptions": "Limpiar la base de datos de descripciones de aquellos objetos que no están actualmente en el inventario. ¿Para qué? Si colocas un objeto en algún lugar o lo vendes, el objeto y su descripción no desaparecen del mundo, para que puedas recuperarlo más tarde. Pero la información sobre estos objetos se envía al maestro del juego en cada solicitud, lo que consume tokens. Puedes usar esta función si no planeas comprar nada de vuelta o recuperar algo de algún lugar. Nota: si eliminas un objeto a través de la ventana de descripción del objeto en el inventario, el objeto se eliminará automáticamente de la base de datos de descripciones también.",
             "clear-half-chat": "Limpiar la mitad del chat. Los detalles del chat eliminado serán olvidados por el maestro del juego. La información condensada almacenada en las descripciones de ubicaciones y objetos no se olvidará. Puedes escribir eventos individuales o una historia condensada de las aventuras en hojas de papel separadas en el inventario antes de eliminar el chat.",
             "settings-button-label": "Configuración",
             "load-box-button-label": "Cargar juego",
@@ -964,7 +1106,7 @@ Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, 
             "ai-provider-label3": "Proveedor de red neuronal",
             "location-delete": "Olvidar esta ubicación",
             "player-status-label": "Estado",
-            "status-purposes-label": "Posibles propósitos:",
+            "status-purposes-label": "Posibles propósitos",
             "player-npc-button-label": "Personajes",
             "use-status-label": "Usar estado (deshabilitar para guardar tokens)",
             "use-npc-list-label": "Usar lista de personajes (deshabilitar para guardar tokens)",
@@ -1015,6 +1157,8 @@ Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, 
             "dwarf": "Enano",
             "elf": "Elfo",
             "human": "Humano",
+            "angel": "Ángel",
+            "demon": "Demonio",
             "no-choosed-race": "Elige una raza",
 
             "female": "Femenino",
@@ -1024,9 +1168,20 @@ Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, 
             //not interface
             "item_notepad": "Bloc de notas",
             "item_notepad_description": "Bloc de notas",
-            "game_starting_description": `---- ABSOLUTE LEGENDARICA ----\n\n Comienza un nuevo juego. Eres libre de hacer y decir absolutamente todo lo que quieras. Sin embargo, las consecuencias no tardarán en llegar, especialmente si tu personaje no tiene las habilidades suficientes para tu idea. Puedes ser un héroe, un emprendedor, un ladrón, un actor, un asesino a sueldo, un granjero, un rey y mucho más... Libertad total de acción.\n\n La memoria integrada es suficiente para las últimas 30 ubicaciones visitadas, NPC, misiones (completadas): las antiguas se eliminarán. Puedes recordar las que necesites haciendo clic en el candado a la izquierda del nombre (en la lista). \nCada ubicación tiene un nivel de dificultad indicado por un número entre paréntesis.\n\n Algunas pruebas de habilidad pueden considerarse exitosas o fallidas incluso si el resultado del cálculo es lo contrario, porque la lógica de la situación es más importante que la aleatoriedad, pero dicha prueba seguirá afectando las consecuencias de dicho éxito/fracaso. Después de que un personaje sube de nivel, un parámetro base aleatorio se incrementa aleatoriamente en 1 y se genera una nueva habilidad pasiva en el siguiente turno. Durante el juego, pueden aparecer objetos con bonificaciones a habilidades que no están en la lista de habilidades, pero dichas bonificaciones pueden aplicarse a varias habilidades de la lista: un objeto con una bonificación, por ejemplo, a agilidad +1, puede aumentar tanto la velocidad como la destreza en diferentes pruebas.\n\n Puedes pedirle al anfitrión en el chat que corrija un error que haya cometido, como dinero, energía, etc. mal calculados. El anfitrión entiende mucho, así que no dudes en experimentar.\n\n Puedes intentar construir tus propias instrucciones para el anfitrión para que se adapten a tus necesidades en la pestaña 'Tus reglas (prompt)'\n\n El juego se guarda automáticamente cada 5 minutos. Al cargar el juego, el anfitrión recuerda la historia solo de la descripción de las ubicaciones, las descripciones de los objetos, así como la lista de NPC, el diario de los NPC, el estado del personaje y el registro de misiones. Esto es útil para evitar sobrecargar al anfitrión. Pero si quieres, puedes ampliar su memoria posterior a la carga de tal manera que antes de guardar, escribas una historia detallada de los últimos eventos en un trozo de papel en tu inventario. Y el anfitrión verá este trozo de papel después de cargar. El archivo guardado se puede abrir en el Bloc de notas y los datos se pueden cambiar allí, pero antes de hacer esto, no olvides guardar una copia de seguridad de la partida guardada para que no desaparezca si la edición no tiene éxito.\n\n Para un acceso ilimitado a las redes neuronales, puedes usar uno de los proveedores de redes neuronales de la lista.\nEl número de tokens gastados por turno y por sesión se puede ver pasando el cursor sobre el mensaje en el registro de acciones.\n\n Puedes eliminar este y cualquier otro mensaje haciendo clic en la cruz en la esquina del mensaje. Los mensajes eliminados se borran de la memoria del anfitrión.\n\n Este juego es una versión muy modificada (créeme, MUY MUCHO) del juego de Creature. Puedes consultar el original en el enlace: https://websim.ai/@Creature/legendarica-v1-neural-sandbox\n\n Por favor, considera agradecerme (Lottarend - el autor de ABSOLUTE LEGENDARICA) para hacerme feliz y motivarme a lanzar nuevas versiones del juego.`,
-            "game_starting_donate": "Agradecer al autor de ABSOLUTE LEGENDARICA:\n\n Criptomoneda: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nOtra forma: https://www.donationalerts.com/r/lottarend",
-            "game_starting_discord": "En Discord puedes encontrar la última versión y discutir el juego https://discord.com/invite/JVshMaq3GG",
+            "game_starting_description": `¡Bienvenido a Absoluta Legendaria, aventurero! Por favor, revisa la siguiente información...
+
+Este es un juego de rol basado en texto con un LLM. Puedes ingresar tu acción en el cuadro de texto en la parte inferior. La red neuronal procesará tu respuesta y enviará instrucciones que llenarán la interfaz del juego.
+Puedes cambiar entre las ventanas de información disponibles en la esquina superior derecha de la pantalla, usando el panel desplegable con botones. Cada objeto, cada NPC en la lista de NPC, cada habilidad y misión, así como la información de estado, son utilizados por el maestro del juego al formar una respuesta. Cuando hagas clic para eliminar un objeto/NPC/misión, etc., esa información desaparecerá de los datos disponibles para el maestro del juego, y él formulará respuestas posteriores sin tenerla en cuenta. Además, el maestro del juego revisa cuidadosamente el historial de tus mensajes con él, así como los últimos cinco mensajes del "Registro de Cálculo de Acciones".
+
+Todas las listas de las ventanas de información están limitadas a 30 elementos, excepto los objetos del inventario. Esto se hace para no sobrecargar al maestro del juego con información, ya que podría llegar un momento en que simplemente no pueda crear una respuesta. Puedes bloquear cualquier elemento de la lista en la ventana de información haciendo clic en el botón de "candado", protegiéndolo así de la eliminación.
+
+Si el maestro del juego aún no puede formular una respuesta, es posible que el contexto esté sobrecargado de información. Intenta limpiar algunos de los datos disponibles. Comienza eliminando la mitad del chat y ve si esto ayuda al maestro del juego a formular una respuesta.
+
+Por favor, considera apoyarme (Lottarend, el autor del juego). Los enlaces para hacerlo se proporcionan en el siguiente mensaje.
+
+¡Disfruta del juego!`,
+            "game_starting_donate": "Agradecer al autor de Legendarica Absolute :\n\n Criptomoneda: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nOtra forma: https://www.donationalerts.com/r/lottarend",
+            "game_starting_discord": "En Discord puedes encontrar la última versión y discutir el juego https://discord.gg/XwsjrRRS",
             "null_resend_message": "¿Dónde estoy? ¿Quién soy?",
             "item_not_descripted": "El objeto no ha sido estudiado por el héroe",
             "name_turn": "Turno",
@@ -1070,6 +1225,8 @@ Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, 
             "Scale_oil": 'Aceite para escamas',
             "Blood_vial": 'Vial de sangre',
             "Elemental_core": 'Núcleo elemental',
+            "Angelic_halo": "Aureola Angélica",
+            "Demonic_symbol": "Símbolo Demoníaco",
             "lute": "Laúd",
             "dagger": "Daga",
             "staff": "Bastón",
@@ -1194,6 +1351,59 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "load-system-instructions-button-label": "Cargar instrucciones del sistema desde archivo",
             "skill-info-delete": "Olvidar esta habilidad",
             "empty-ai-key-label": "No se ha establecido la clave API. Por favor, introduce la clave API.",
+            "inventory-count-label": "Cantidad",
+            "inventory-quality-label": "Calidad",
+            "inventory-durability-label": "Durabilidad",
+            "inventory-bonuses-label": "Bonificaciones",
+            "inventory-price-label": "Precio",
+            "inventory-resource-label": "Recurso",
+            "throw-from-item": "desde el contenedor (si está presente el símbolo ->, indica el camino al elemento, de contenedor a contenedor)",
+            "inventory-container-open": "Abrir",
+            "inventory-weight-label": "Peso (kilogramos)",
+            "inventory-capacity-label": "Capacidad",
+            "move-to-inventory": "Poner en el inventario",
+            "place-item-to": "Colocar en ",
+            "empty-container-label": "Vacío",
+            "content-description-label": "Contenido",
+            "inventory-volume-label": "Volumen (dm³)",
+            "inventory-contents-count-label": "Capacidad disponible",
+            "inventory-contents-volume-label": "Volumen disponible (dm³)",
+            "inventory-item-inspect": "Inspeccionar",
+            "rarity-label": "Rareza",
+            "age-label": "Edad",
+            "npc-info-worldview-label": "Cosmovisión",
+            "npc-info-race-label": "Raza",
+            "npc-info-class-label": "Clase",
+            "npc-info-stats-label": "Características",
+            "npc-info-skills-label": "Habilidades",
+            "npc-info-effects-label": "Efectos Activos",
+            "npc-info-appearanceDescription-label": "Apariencia:",
+            "npc-info-history-label": "Historia:",
+            "npc-info-attitude-label": "Actitud hacia el personaje del jugador:",
+            "npc-info-tab-journal-label": "Diario",
+            "npc-info-tab-memory-diary-label": "Crónicas",
+            "npc-info-memory-diary-label": "Crónicas",
+            "npc-delete-memory-diary": "Olvidar las crónicas de este personaje",
+            "use-npc-memories-diary-label": "Usar crónicas de personajes (desactivar para ahorrar tokens). Solo funciona cuando el diario de personajes está habilitado.",
+            "status-name-label": "Nombre",
+            "status-race-label": "Raza",
+            "status-class-label": "Clase",
+            "status-appearanceDescription-label": "Apariencia:",
+            "status-statusInSociety-label": "Estado Social:",
+            "status-positionInSociety-label": "Posición en la Sociedad:",
+            "status-affiliationWithOrganizations-label": "Afiliación con Organizaciones:",
+            "status-effect-none-label": "Ninguno",
+            "persuasion-label": "Persuasión",
+            "start-prs": "Persuasión",
+            "rebirth-in-another-world": "Renacimiento en Otro Mundo",
+            "being-summoned-to-another-world": "Ser Convocado a Otro Mundo",
+            "reincarnation": "Reencarnación",
+            "demon-invasion": "Invasión Demoníaca",
+            "the-end-of-the-world": "El Fin del Mundo",
+            "apocalypse": "Apocalipsis",
+            "quest-info-questGiver-label": "Dador de la Misión",
+            "quest-info-questBackground-label": "Antecedentes:",
+            "quest-info-description-label": "Descripción:",
         },
         "portuguese-language": {
             // placeholders
@@ -1310,20 +1520,24 @@ Bruxo - Foco mágico, Armadura de couro, Grimório, Talismã eldritch
 
 Mago - Livro de feitiços, Varinha mágica, Manto, Pergaminho de míssil mágico`,
             "tooltip-race": `A raça afeta a localização inicial, a geração de habilidades raciais, o enredo e os bônus iniciais para habilidades e itens:
-	
+
 Humano: Sorte +2, Comércio +1, Percepção +1, Sabedoria -1, Inteligência -1, Ferramenta Universal
 
-Elfo: Agilidade +2, Velocidade +1, Atratividade +1, Força -1, Resistência -1, Manto Élfico
+Elfo: Destreza +2, Velocidade +1, Atração +1, Força -1, Resistência -1, Manto Élfico
 
-Anão: Comércio +2, Força +1, Resistência +1, Agilidade -1, Velocidade -1, Cerveja Anã
+Anão: Comércio +2, Força +1, Resistência +1, Destreza -1, Velocidade -1, Cerveja Anã
 
-Orc: Força +3, Resistência +2, Inteligência -1, Sabedoria -1, Atratividade -1, Pintura de Guerra Orc
+Orc: Força +3, Resistência +2, Inteligência -1, Sabedoria -1, Atração -1, Pintura de Batalha Orca
 
-Lagarto: Resistência +2, Velocidade +1, Atratividade -1, Óleo de Escamas
+Lagarto: Resistência +2, Velocidade +1, Atração -1, Óleo para Escamas
 
-Vampiro: Percepção +1, Atratividade +1, Agilidade +1, Sorte -1, Frasco de Sangue
+Vampiro: Percepção +1, Atração +1, Destreza +1, Sorte -1, Frasco de Sangue
 
-Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria -1, Núcleo Elemental`,
+Golem: Força +3, Resistência +2, Inteligência -1, Atração -1, Sabedoria -1, Núcleo Elemental
+
+Anjo: Força +1, Atração +1, Sabedoria +1, Comércio -1, Auréola Angelical
+
+Demônio: Destreza +1, Atração +2, Persuasão +1, Sabedoria -1, Sorte -1, Símbolo Demoníaco`,
             "create-character-label": "Crie seu personagem",
             "api-key-button": "Mostrar por 10 segundos",
             "api-key-button2": "Mostrar por 10 segundos",
@@ -1340,7 +1554,6 @@ Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria 
             "my-rules-explanaition": "Aqui você pode alterar ou complementar as regras do jogo ou simplesmente influenciar o comportamento do mestre. Basta inserir sua instrução aqui e deixá-la. Por exemplo: 'No inventário do personagem deve haver uma lista como um item separado, que lista todos os bônus de todos os itens no inventário, e se não houver tal lista no inventário, adicioná-la' ou 'que haja monstros em cada localização'. Aviso: as alterações feitas podem quebrar alguns mecanismos do jogo. Ou podem não quebrar. Ouse!",
             "clear-log": "Limpar o log. Quase não afeta a memória do mestre, pois ele lembra apenas das últimas 5 mensagens do log",
             "clear-system-chat": "Remover todas as mensagens vermelhas do chat. Não afeta a memória do mestre de forma alguma",
-            "clear-item-descriptions": "Limpar o banco de dados de descrições dos itens que não estão atualmente no inventário. Para quê? Se você coloca um item em algum lugar ou o vende, o item e sua descrição não desaparecem do mundo, para que você possa recuperá-lo mais tarde. Mas as informações sobre esses itens são enviadas ao mestre do jogo a cada solicitação, o que consome tokens. Você pode usar esta função se não planeja comprar nada de volta ou recuperar algo de algum lugar. Observação: se você excluir um item através da janela de descrição do item no inventário, o item será automaticamente excluído do banco de dados de descrições também.",
             "clear-half-chat": "Limpar metade do chat. Detalhes do chat removido serão esquecidos pelo mestre. Informações comprimidas armazenadas nas descrições de localizações e itens não serão esquecidas. Você pode registrar eventos individuais ou uma história comprimida de aventuras em folhas de papel separadas no inventário antes de excluir o chat.",
             "settings-button-label": "Configurações",
             "load-box-button-label": "Carregar jogo",
@@ -1359,7 +1572,7 @@ Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria 
             "ai-provider-label3": "Fornecedor de rede neural",
             "location-delete": "Esquecer esta localização",
             "player-status-label": "Estado",
-            "status-purposes-label": "Possíveis finalidades:",
+            "status-purposes-label": "Possíveis finalidades",
             "player-npc-button-label": "Personagens",
             "use-status-label": "Utilizar estado (desativar para guardar tokens)",
             "use-npc-list-label": "Utilizar lista de caracteres (desativar para guardar tokens)",
@@ -1410,6 +1623,8 @@ Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria 
             "dwarf": "Anão",
             "elf": "Elfo",
             "human": "Humano",
+            "angel": "Anjo",
+            "demon": "Demônio",
             "no-choosed-race": "Escolha uma raça",
 
             "female": "Feminino",
@@ -1419,9 +1634,20 @@ Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria 
             //not interface
             "item_notepad": "Bloco de notas",
             "item_notepad_description": "Bloco de notas",
-            "game_starting_description": `---- ABSOLUTE LEGENDARICA ----\n\n Um novo jogo começa. Você é livre para fazer e dizer absolutamente tudo o que quiser. No entanto, as consequências não tardarão a chegar, especialmente se o seu personagem não tiver habilidades suficientes para a sua ideia. Você pode se tornar um herói, um empreendedor, um ladrão, um ator, um assassino de aluguel, um fazendeiro, um rei e muito mais... Liberdade total de ação.\n\n A memória integrada é suficiente para os últimos 30 locais visitados, NPCs, missões (concluídas) - os antigos serão excluídos. Você pode se lembrar dos que precisa clicando no cadeado à esquerda do nome (na lista). \nCada local tem um nível de dificuldade indicado por um número entre parênteses.\n\n Algumas verificações de habilidade podem ser consideradas bem-sucedidas ou malsucedidas, mesmo que o resultado do cálculo seja o oposto, porque a lógica da situação é mais importante do que a aleatoriedade, mas essa verificação ainda afetará as consequências de tal sucesso/falha. Depois que um personagem ganha um nível, um parâmetro base aleatório é aumentado aleatoriamente em 1 e uma nova habilidade passiva é gerada no próximo turno. Durante o jogo, itens com bônus para habilidades que não estão na lista de habilidades podem aparecer, mas esses bônus podem ser aplicados a várias habilidades da lista: um item com um bônus, por exemplo, para agilidade +1, pode aumentar a velocidade e a destreza em diferentes verificações.\n\n Você pode pedir ao anfitrião no chat para corrigir um erro que ele cometeu, como dinheiro, energia, etc. calculados incorretamente. O anfitrião entende muito, então sinta-se à vontade para experimentar.\n\n Você pode tentar construir suas próprias instruções para o anfitrião para atender às suas necessidades na guia 'Suas regras (prompt)'\n\n O jogo é salvo automaticamente a cada 5 minutos. Ao carregar o jogo, o anfitrião se lembra da história apenas da descrição dos locais, descrições dos itens, bem como da lista de NPCs, do diário do NPC, do status do personagem e do registro de missões. Isso é útil para evitar sobrecarregar o anfitrião. Mas se você quiser, pode expandir a memória pós-carregamento dele de tal forma que, antes de salvar, você escreva uma história detalhada dos últimos eventos em um pedaço de papel em seu inventário. E o anfitrião verá esse pedaço de papel após o carregamento. O arquivo salvo pode ser aberto no Bloco de Notas e os dados podem ser alterados lá - mas antes de fazer isso, não se esqueça de salvar uma cópia de segurança do jogo salvo para que ele não desapareça se a edição não for bem-sucedida.\n\n Para acesso ilimitado às redes neurais, você pode usar um dos provedores de redes neurais da lista.\nO número de tokens gastos por turno e por sessão pode ser visto passando o cursor sobre a mensagem no registro de ações.\n\n Você pode excluir esta e quaisquer outras mensagens clicando no X no canto da mensagem. As mensagens excluídas são apagadas da memória do anfitrião.\n\n Este jogo é uma versão fortemente modificada (acredite em mim, MUITO FORTEMENTE) do jogo do Creature. Você pode conferir o original no link: https://websim.ai/@Creature/legendarica-v1-neural-sandbox\n\n Por favor, considere agradecer-me (Lottarend - o autor do ABSOLUTE LEGENDARICA) para me deixar feliz e me motivar a lançar novas versões do jogo.`,
-            "game_starting_donate": "Agradecer ao autor de ABSOLUTE LEGENDARICA:\n\n Criptomoeda: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nOutra maneira: https://www.donationalerts.com/r/lottarend",
-            "game_starting_discord": "No Discord, você pode encontrar a versão mais recente e discutir o jogo https://discord.com/invite/JVshMaq3GG",
+            "game_starting_description": `Bem-vindo à Absoluta Legendaria, aventureiro! Por favor, revise as seguintes informações...
+
+Este é um jogo de RPG baseado em texto com LLM. Você pode inserir sua ação na caixa de texto na parte inferior. A rede neural processará sua resposta e enviará instruções que preencherão a interface do jogo.
+Você pode alternar entre as janelas de informações disponíveis no canto superior direito da tela, usando o painel suspenso com botões. Cada item, cada NPC na lista de NPC, cada habilidade e missão, bem como as informações de status — tudo isso é usado pelo mestre do jogo ao formar uma resposta. Quando você clicar para remover um item/NPC/missão etc., essa informação desaparecerá dos dados disponíveis para o mestre do jogo, e ele formulará respostas posteriores sem levá-la em conta. Além disso, o mestre do jogo analisa cuidadosamente o histórico de suas mensagens com ele, bem como as últimas cinco mensagens do "Log de Cálculo de Ações".
+
+Todas as listas das janelas de informação são limitadas a 30 elementos, exceto os itens do inventário. Isso é feito para não sobrecarregar o mestre do jogo com informações, pois pode chegar um momento em que o mestre do jogo simplesmente não consiga criar uma resposta. Você pode bloquear qualquer elemento da lista na janela de informações clicando no botão de "cadeado", protegendo-o assim da exclusão.
+
+Se o mestre do jogo ainda não conseguir formular uma resposta, talvez o contexto esteja sobrecarregado de informações. Tente limpar alguns dos dados disponíveis. Comece excluindo metade do chat e veja se isso ajuda o mestre do jogo a formular uma resposta.
+
+Por favor, considere me apoiar (Lottarend, o autor do jogo). Links para formas de apoio são fornecidos na próxima mensagem.
+
+Aproveite o jogo!`,
+            "game_starting_donate": "Agradecer ao autor de Legendarica Absolute :\n\n Criptomoeda: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nOutra maneira: https://www.donationalerts.com/r/lottarend",
+            "game_starting_discord": "No Discord, você pode encontrar a versão mais recente e discutir o jogo https://discord.gg/XwsjrRRS",
             "null_resend_message": "Onde estou? Quem sou eu?",
             "item_not_descripted": "Item não estudado pelo herói",
             "name_turn": "Turno",
@@ -1465,6 +1691,8 @@ Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria 
             "Scale_oil": 'Óleo para escamas',
             "Blood_vial": 'Frasco de sangue',
             "Elemental_core": 'Núcleo elemental',
+            "Angelic_halo": "Auréola Angelical",
+            "Demonic_symbol": "Símbolo Demoníaco",
             "lute": "Alaúde",
             "dagger": "Adaga",
             "staff": "Cajado",
@@ -1589,6 +1817,59 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "load-system-instructions-button-label": "Carregar instruções do sistema a partir do arquivo",
             "skill-info-delete": "Esquecer esta habilidade",
             "empty-ai-key-label": "A chave API não está definida. Introduza a chave API.",
+            "inventory-count-label": "Quantidade",
+            "inventory-quality-label": "Qualidade",
+            "inventory-durability-label": "Durabilidade",
+            "inventory-bonuses-label": "Bônus",
+            "inventory-price-label": "Preço",
+            "inventory-resource-label": "Recurso",
+            "throw-from-item": "do contêiner (se o símbolo -> estiver presente, ele indica o caminho para o item, do contêiner para o contêiner)",
+            "inventory-container-open": "Abrir",
+            "inventory-weight-label": "Peso (quilogramas)",
+            "inventory-capacity-label": "Capacidade",
+            "move-to-inventory": "Colocar no inventário",
+            "place-item-to": "Colocar em ",
+            "empty-container-label": "Vazio",
+            "content-description-label": "Conteúdo",
+            "inventory-volume-label": "Volume (dm³)",
+            "inventory-contents-count-label": "Capacidade disponível",
+            "inventory-contents-volume-label": "Volume disponível (dm³)",
+            "inventory-item-inspect": "Inspecionar",
+            "rarity-label": "Raridade",
+            "age-label": "Idade",
+            "npc-info-worldview-label": "Cosmovisão",
+            "npc-info-race-label": "Raça",
+            "npc-info-class-label": "Classe",
+            "npc-info-stats-label": "Características",
+            "npc-info-skills-label": "Habilidades",
+            "npc-info-effects-label": "Efeitos Ativos",
+            "npc-info-appearanceDescription-label": "Aparência:",
+            "npc-info-history-label": "História:",
+            "npc-info-attitude-label": "Atitude em relação ao personagem do jogador:",
+            "npc-info-tab-journal-label": "Diário",
+            "npc-info-tab-memory-diary-label": "Crônicas",
+            "npc-info-memory-diary-label": "Crônicas",
+            "npc-delete-memory-diary": "Esquecer as crônicas deste personagem",
+            "use-npc-memories-diary-label": "Usar crônicas de personagens (desative para economizar tokens). Funciona apenas quando o diário de personagens está habilitado.",
+            "status-name-label": "Nome",
+            "status-race-label": "Raça",
+            "status-class-label": "Classe",
+            "status-appearanceDescription-label": "Aparência:",
+            "status-statusInSociety-label": "Status Social:",
+            "status-positionInSociety-label": "Posição na Sociedade:",
+            "status-affiliationWithOrganizations-label": "Afiliação com Organizações:",
+            "status-effect-none-label": "Nenhum",
+            "persuasion-label": "Persuasão",
+            "start-prs": "Persuasão",
+            "rebirth-in-another-world": "Renascimento em Outro Mundo",
+            "being-summoned-to-another-world": "Ser Convocado para Outro Mundo",
+            "reincarnation": "Reencarnação",
+            "demon-invasion": "Invasão de Demônios",
+            "the-end-of-the-world": "O Fim do Mundo",
+            "apocalypse": "Apocalipse",
+            "quest-info-questGiver-label": "Doador da Missão",
+            "quest-info-questBackground-label": "Antecedentes:",
+            "quest-info-description-label": "Descrição:",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -1703,21 +1984,25 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
 वारलॉक - जादुई फोकस, चमड़े का कवच, ग्रिमोयर, एल्ड्रिच तावीज
 
 विज़ार्ड - स्पेलबुक, जादुई छड़ी, अलखा, जादुई तीर का स्क्रॉल`,
-            "tooltip-race": `नस्ल शुरुआती स्थान, नस्लीय कौशल पीढ़ी, कहानी और कौशल और वस्तुओं के लिए शुरुआती बोनस को प्रभावित करती है:
-	
-मनुष्य: भाग्य +2, व्यापार +1, धारणा +1, ज्ञान -1, बुद्धि -1, सार्वभौमिक उपकरण
+            "tooltip-race": `जाति प्रारंभिक स्थान, जातीय क्षमता उत्पादन, प्लॉट और कौशल एवं वस्तुओं पर प्रारंभिक बोनस को प्रभावित करती है:
 
-एल्फ: चपलता +2, गति +1, आकर्षण +1, शक्ति -1, सहनशक्ति -1, एल्विन लबादा
+मानव: भाग्य +2, व्यापार +1, धारणा +1, बुद्धिमत्ता -1, ज्ञान -1, सार्वभौमिक उपकरण
 
-बौना: व्यापार +2, शक्ति +1, सहनशक्ति +1, चपलता -1, गति -1, बौना शराब
+एल्फ़: चपलता +2, गति +1, आकर्षण +1, शक्ति -1, सहनशीलता -1, एल्फ़ीन चोगा
 
-ओर्क: शक्ति +3, सहनशक्ति +2, बुद्धि -1, ज्ञान -1, आकर्षण -1, ओर्किश युद्ध पेंट
+ग्नोम: व्यापार +2, शक्ति +1, सहनशीलता +1, चपलता -1, गति -1, ग्नोम का अली
 
-छिपकली: सहनशक्ति +2, गति +1, आकर्षण -1, स्केल ऑयल
+ऑर्क: शक्ति +3, सहनशीलता +2, बुद्धिमत्ता -1, ज्ञान -1, आकर्षण -1, ऑर्क युद्ध चित्रण
 
-पिशाच: धारणा +1, आकर्षण +1, चपलता +1, भाग्य -1, रक्त की शीशी
+सरीसृप: सहनशीलता +2, गति +1, आकर्षण -1, पपड़ी के लिए तेल
 
-गोलेम: शक्ति +3, सहनशक्ति +2, बुद्धि -1, आकर्षण -1, ज्ञान -1, मौलिक कोर`,
+वैंपायर: धारणा +1, आकर्षण +1, चपलता +1, भाग्य -1, रक्त का बोतल
+
+गोलम: शक्ति +3, सहनशीलता +2, बुद्धिमत्ता -1, आकर्षण -1, ज्ञान -1, मौलिक कोर
+
+फरिश्ता: शक्ति +1, आकर्षण +1, ज्ञान +1, व्यापार -1, फरिश्ते की प्रभामंडल
+
+दानव: चपलता +1, आकर्षण +2, प्रेरणा +1, ज्ञान -1, भाग्य -1, दानव प्रतीक`,
             "create-character-label": "अपना चरित्र बनाएं",
             "api-key-button": "10 सेकंड के लिए दिखाएं",
             "api-key-button2": "10 सेकंड के लिए दिखाएं",
@@ -1734,7 +2019,6 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "my-rules-explanaition": "यहाँ आप खेल के नियमों को बदल या जोड़ सकते हैं या बस गेममास्टर के व्यवहार को प्रभावित कर सकते हैं। बस यहाँ निर्देश दर्ज करें और छोड़ दें। उदाहरण के लिए: 'चरित्र की इन्वेंटरी में एक अलग वस्तु के रूप में एक सूची होनी चाहिए जिसमें इन्वेंटरी में सभी वस्तुओं से कुल बोनस दिखाया गया हो, और यदि इन्वेंटरी में ऐसी सूची नहीं है, तो इसे जोड़ें' या 'प्रत्येक स्थान में राक्षस हों'। चेतावनी: किए गए परिवर्तन खेल के कुछ तंत्र को तोड़ सकते हैं। या नहीं भी तोड़ सकते। साहस करें!",
             "clear-log": "लॉग साफ़ करें। गेममास्टर की याददाश्त पर लगभग कोई प्रभाव नहीं पड़ता, क्योंकि वह केवल पिछले 5 लॉग संदेशों को याद रखता है",
             "clear-system-chat": "चैट से सभी लाल संदेश हटाएं। गेममास्टर की याददाश्त पर कोई प्रभाव नहीं पड़ता",
-            "clear-item-descriptions": "उन वस्तुओं के विवरणों के डेटाबेस को साफ करें जो वर्तमान में इन्वेंटरी में नहीं हैं। यह क्यों? यदि आप किसी वस्तु को कहीं रखते हैं या बेचते हैं, तो वस्तु और उसका विवरण दुनिया से गायब नहीं होता है, ताकि आप बाद में इसे वापस ले सकें। लेकिन ऐसी वस्तुओं की जानकारी हर अनुरोध पर गेममास्टर को भेजी जाती है, जो टोकन का उपयोग करती है। यदि आप कुछ भी वापस खरीदने या कहीं से कुछ वापस लेने की योजना नहीं बना रहे हैं तो आप इस फ़ंक्शन का उपयोग कर सकते हैं। नोट: यदि आप इन्वेंटरी में वस्तु विवरण विंडो के माध्यम से किसी वस्तु को हटाते हैं, तो वस्तु स्वचालित रूप से विवरण डेटाबेस से भी हट जाएगी।",
             "clear-half-chat": "आधी चैट साफ़ करें। हटाई गई चैट से विवरण गेममास्टर द्वारा भूल जाएंगे। स्थानों और वस्तुओं के विवरण में संग्रहीत संक्षिप्त जानकारी नहीं भूली जाएगी। चैट हटाने से पहले आप अलग-अलग घटनाओं या संक्षिप्त साहसिक कहानी को इन्वेंटरी में अलग कागज पर लिख सकते हैं।",
             "settings-button-label": "सेटिंग्स",
             "load-box-button-label": "गेम लोड करें",
@@ -1753,7 +2037,7 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "ai-provider-label3": "तंत्रिका नेटवर्क प्रदाता",
             "location-delete": "इस स्थान को भूल जाएं",
             "player-status-label": "स्थिति",
-            "status-purposes-label": "संभावित उद्देश्य:",
+            "status-purposes-label": "संभावित उद्देश्य",
             "player-npc-button-label": "अक्षर",
             "use-status-label": "स्थिति का उपयोग करें (टोकन सहेजने के लिए अक्षम करें)",
             "use-npc-list-label": "अक्षरों की सूची का उपयोग करें (टोकन सहेजने के लिए अक्षम करें)",
@@ -1803,6 +2087,8 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "dwarf": "बौना",
             "elf": "एल्फ़",
             "human": "मानव",
+            "angel": "फरिश्ता",
+            "demon": "दानव",
             "no-choosed-race": "जाति चुनें",
 
             "female": "महिला",
@@ -1811,9 +2097,20 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
 
             "item_notepad": "नोट्स के लिए नोटपैड",
             "item_notepad_description": "नोट्स के लिए नोटपैड",
-            "game_starting_description": `---- एब्सोल्यूट लेजेंडैरिका ----\n\n एक नया खेल शुरू हो रहा है। आप जो चाहें वह करने और कहने के लिए पूरी तरह से स्वतंत्र हैं। हालाँकि, परिणाम आने में देर नहीं लगेगी, खासकर यदि आपके चरित्र में आपकी योजना के लिए पर्याप्त कौशल नहीं है। आप एक नायक, एक उद्यमी, एक चोर, एक अभिनेता, एक भाड़े का हत्यारा, एक किसान, एक राजा और बहुत कुछ बन सकते हैं... कार्रवाई की पूरी स्वतंत्रता।\n\n अंतर्निहित मेमोरी पिछले 30 देखे गए स्थानों, एनपीसी, खोज (पूरी की गई) के लिए पर्याप्त है - पुराने हटा दिए जाएंगे। आप सूची में नाम के बाईं ओर स्थित लॉक पर क्लिक करके अपनी आवश्यकता वाले स्थानों को याद रख सकते हैं। \nप्रत्येक स्थान की एक कठिनाई स्तर होती है जो कोष्ठक में एक संख्या द्वारा इंगित की जाती है।\n\n कुछ कौशल जाँच सफल या असफल मानी जा सकती हैं, भले ही गणना का परिणाम विपरीत हो, क्योंकि स्थिति का तर्क यादृच्छिकता से अधिक महत्वपूर्ण है, लेकिन ऐसी जाँच अभी भी ऐसी सफलता/असफलता के परिणामों को प्रभावित करेगी। जब कोई पात्र एक स्तर प्राप्त करता है, तो एक यादृच्छिक आधार पैरामीटर को यादृच्छिक रूप से 1 बढ़ा दिया जाता है और अगले मोड़ पर एक नया निष्क्रिय कौशल उत्पन्न होता है। खेल के दौरान, कौशल सूची में नहीं होने वाले कौशल के लिए बोनस वाले आइटम दिखाई दे सकते हैं, लेकिन ऐसे बोनस सूची में कई कौशल पर लागू हो सकते हैं: एक आइटम जो बोनस देता है, उदाहरण के लिए, फुर्ती +1, विभिन्न जाँचों में गति और निपुणता दोनों को बढ़ा सकता है।\n\n आप चैट में होस्ट से उनके द्वारा की गई गलती को सुधारने के लिए कह सकते हैं, जैसे कि गलत तरीके से गणना की गई राशि, ऊर्जा, आदि। होस्ट बहुत कुछ समझता है, इसलिए बेझिझक प्रयोग करें।\n\n आप 'आपके नियम (प्रॉम्प्ट)' टैब में अपनी आवश्यकताओं के अनुरूप होस्ट के लिए अपने निर्देश बनाने का प्रयास कर सकते हैं।\n\n खेल हर 5 मिनट में स्वचालित रूप से सहेजा जाता है। खेल लोड करते समय, होस्ट केवल स्थानों के विवरण, वस्तुओं के विवरण, साथ ही एनपीसी की सूची, एनपीसी डायरी, चरित्र की स्थिति और खोज लॉग से कहानी को याद रखता है। होस्ट को ओवरलोड करने से बचने के लिए यह उपयोगी है। लेकिन यदि आप चाहें, तो आप इसकी पोस्ट-लोड मेमोरी को इस तरह से विस्तारित कर सकते हैं कि सहेजने से पहले, आप अपनी इन्वेंट्री में कागज के एक टुकड़े पर नवीनतम घटनाओं का विस्तृत इतिहास लिख लें। और होस्ट लोड करने के बाद कागज का यह टुकड़ा देखेगा। सहेजें फ़ाइल को नोटपैड में खोला जा सकता है और डेटा को वहाँ बदला जा सकता है - लेकिन ऐसा करने से पहले, सहेजे गए गेम की बैकअप कॉपी को सहेजना न भूलें ताकि असफल संपादन पर यह गायब न हो जाए।\n\n न्यूरल नेटवर्क तक असीमित पहुंच के लिए, आप सूची में से एक न्यूरल नेटवर्क प्रदाता का उपयोग कर सकते हैं।\nप्रति मोड़ और प्रति सत्र खर्च किए गए टोकन की संख्या को एक्शन लॉग में संदेश पर कर्सर घुमाकर देखा जा सकता है।\n\n आप संदेश के कोने में स्थित क्रॉस पर क्लिक करके इस और किसी भी अन्य संदेश को हटा सकते हैं। हटाए गए संदेश होस्ट की मेमोरी से मिटा दिए जाते हैं।\n\n यह खेल क्रिएचर के खेल का भारी संशोधित (मेरा विश्वास करें, बहुत भारी) संस्करण है। आप मूल को लिंक पर देख सकते हैं: https://websim.ai/@Creature/legendarica-v1-neural-sandbox\n\n कृपया मुझे (लॉटारेंड - एब्सोल्यूट लेजेंडैरिका के लेखक) धन्यवाद देने पर विचार करें ताकि मुझे खुशी हो और मुझे खेल के नए संस्करण जारी करने के लिए प्रेरित करें।`,
+            "game_starting_description": `एब्सोल्यूट लीजेंडारिका में आपका स्वागत है, साहसी यात्री! कृपया निम्नलिखित जानकारी देखें...
+
+यह एक टेक्स्ट-आधारित रोल-प्लेइंग गेम है जो LLM का उपयोग करता है। आप नीचे दिए गए टेक्स्ट बॉक्स में अपनी क्रिया दर्ज कर सकते हैं। न्यूरल नेटवर्क आपकी प्रतिक्रिया को संसाधित करेगा और ऐसे निर्देश भेजेगा जिनसे गेम इंटरफ़ेस भरा जाएगा।
+आप स्क्रीन के दाएं ऊपरी कोने में उपलब्ध सूचना विंडोज़ के बीच स्विच कर सकते हैं, बटन वाले ड्रॉप-डाउन पैनल का उपयोग करके। प्रत्येक आइटम, NPC सूची में प्रत्येक NPC, प्रत्येक कौशल और क्वेस्ट, साथ ही स्थिति संबंधी जानकारी — इन सभी का उपयोग गेम मास्टर आपके उत्तर को तैयार करने में करता है। जब आप किसी आइटम/NPC/क्वेस्ट इत्यादि को हटाने पर क्लिक करते हैं, तो वह जानकारी गेम मास्टर के उपलब्ध डेटा से गायब हो जाती है, और वह आगे के उत्तर बिना उसे ध्यान में रखे तैयार करता है। इसके अलावा, गेम मास्टर आपके साथ हुए संदेशों के इतिहास और "क्रिया गणना लॉग" के अंतिम पांच संदेशों पर भी ध्यान देता है।
+
+सभी सूचना-विंडो सूचियां 30 तत्वों तक सीमित हैं, सिवाय इन्वेंटरी आइटम्स के। यह गेम मास्टर को जानकारियों से अधिभार से बचाने के लिए किया गया है, क्योंकि ऐसा समय आ सकता है जब गेम मास्टर उत्तर देने में असमर्थ हो जाए। आप सूचना विंडो में किसी भी सूचीयुक्त तत्व को "ताला" बटन दबाकर ब्लॉक कर सकते हैं, जिससे वह हटाने से सुरक्षित रहेगा।
+
+यदि गेम मास्टर फिर भी उत्तर तैयार नहीं कर पाता है, तो संभव है कि संदर्भ अधिक जानकारी से भरा हो। उपलब्ध डेटा का कुछ हिस्सा साफ़ करने का प्रयास करें। शुरुआत के लिए, आधा चैट हटा दें और देखें कि क्या इससे गेम मास्टर को उत्तर तैयार करने में मदद मिलती है।
+
+कृपया मुझे (Lottarend — इस गेम के लेखक) समर्थन करने पर विचार करें। समर्थन के तरीकों के लिंक अगले संदेश में दिए गए हैं।
+
+खेल का आनंद लें!`,
             "game_starting_donate": "एब्सोल्यूट लेजेंडैरिका के लेखक को धन्यवाद दें:\n\n क्रिप्टोकरेंसी: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nदूसरा तरीका: https://www.donationalerts.com/r/lottarend",
-            "game_starting_discord": "डिस्कॉर्ड पर नवीनतम संस्करण और खेल पर चर्चा कर सकते हैं https://discord.com/invite/JVshMaq3GG",
+            "game_starting_discord": "डिस्कॉर्ड पर नवीनतम संस्करण और खेल पर चर्चा कर सकते हैं https://discord.gg/XwsjrRRS",
             "null_resend_message": "मैं कहाँ हूँ? मैं कौन हूँ?",
             "item_not_descripted": "वस्तु का नायक द्वारा अध्ययन नहीं किया गया है",
             "name_turn": "बारी",
@@ -1857,6 +2154,8 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "Scale_oil": "स्केल के लिए तेल",
             "Blood_vial": "खून की शीशी",
             "Elemental_core": "तत्व का कोर",
+            "Angelic_halo": "फरिश्ते का निब",
+            "Demonic_symbol": "दानव प्रतीक",
             "lute": "वीणा",
             "dagger": "कटार",
             "staff": "लाठी",
@@ -1981,6 +2280,59 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "load-system-instructions-button-label": "फ़ाइल से सिस्टम निर्देश लोड करें",
             "skill-info-delete": "इस कौशल को भूल जाओ",
             "empty-ai-key-label": "API कुंजी सेट नहीं है। कृपया API कुंजी दर्ज करें।",
+            "inventory-count-label": "मात्रा",
+            "inventory-quality-label": "गुणवत्ता",
+            "inventory-durability-label": "टिकाऊपन",
+            "inventory-bonuses-label": "बोनस",
+            "inventory-price-label": "मूल्य",
+            "inventory-resource-label": "संसाधन",
+            "throw-from-item": "कंटेनर से (यदि प्रतीक -> मौजूद है, तो यह आइटम तक का रास्ता इंगित करता है, कंटेनर से कंटेनर तक)",
+            "inventory-container-open": "खोलें",
+            "inventory-weight-label": "वजन (किलोग्राम)",
+            "inventory-capacity-label": "क्षमता",
+            "move-to-inventory": "इन्वेंटरी में रखें",
+            "place-item-to": "में रखें ",
+            "empty-container-label": "खाली",
+            "content-description-label": "सामग्री",
+            "inventory-volume-label": "आयतन (घन डेसीमीटर)",
+            "inventory-contents-count-label": "उपलब्ध क्षमता",
+            "inventory-contents-volume-label": "उपलब्ध आयतन (dm³)",
+            "inventory-item-inspect": "जांचें",
+            "rarity-label": "दुर्लभता",
+            "age-label": "उम्र",
+            "npc-info-worldview-label": "विश्व दृष्टिकोण",
+            "npc-info-race-label": "जाति",
+            "npc-info-class-label": "वर्ग",
+            "npc-info-stats-label": "विशेषताएँ",
+            "npc-info-skills-label": "कौशल",
+            "npc-info-effects-label": "सक्रिय प्रभाव",
+            "npc-info-appearanceDescription-label": "दिखावट:",
+            "npc-info-history-label": "इतिहास:",
+            "npc-info-attitude-label": "खिलाड़ी के पात्र के प्रति रवैया:",
+            "npc-info-tab-journal-label": "जर्नल",
+            "npc-info-tab-memory-diary-label": "क्रॉनिकल्स",
+            "npc-info-memory-diary-label": "क्रॉनिकल्स",
+            "npc-delete-memory-diary": "इस पात्र की क्रॉनिकल्स भूल जाएं",
+            "use-npc-memories-diary-label": "पात्र क्रॉनिकल्स का उपयोग करें (टोकन बचाने के लिए अक्षम करें)। यह केवल तभी काम करता है जब पात्र जर्नल सक्षम है।",
+            "status-name-label": "नाम",
+            "status-race-label": "जाति",
+            "status-class-label": "वर्ग",
+            "status-appearanceDescription-label": "वнешность:",
+            "status-statusInSociety-label": "समाज में स्थिति:",
+            "status-positionInSociety-label": "समाज में पद:",
+            "status-affiliationWithOrganizations-label": "संगठनों के साथ संबद्धता:",
+            "status-effect-none-label": "कोई नहीं",
+            "persuasion-label": "प्रभाव",
+            "start-prs": "प्रभाव",
+            "rebirth-in-another-world": "दूसरे दुनिया में पुनर्जन्म",
+            "being-summoned-to-another-world": "दूसरे दुनिया में बुलाया जाना",
+            "reincarnation": "पुनर्जन्म",
+            "demon-invasion": "दानव आक्रमण",
+            "the-end-of-the-world": "दुनिया का अंत",
+            "apocalypse": "प्रलय",
+            "quest-info-questGiver-label": "क्वेस्ट देने वाला",
+            "quest-info-questBackground-label": "पृष्ठभूमि:",
+            "quest-info-description-label": "विवरण:",
         },
         "german-language": {
             // placeholders
@@ -2096,21 +2448,25 @@ Zauberer - Feuerdolch, Kugel, Robe, Energietrank
 Hexenmeister - Magischer Fokus, Lederrüstung, Grimoire, Eldritch-Talisman
 
 Magier - Zauberbuch, Zauberstab, Robe, Magiepfeil-Schriftrolle`,
-            "tooltip-race": `Die Rasse beeinflusst den Startort, die Generierung von Rassenfähigkeiten, die Handlung und die Startboni für Fähigkeiten und Gegenstände:
-			
+            "tooltip-race": `Die Rasse beeinflusst den Startort, die Generierung von Rassenfähigkeiten, die Handlung und die anfänglichen Boni für Fähigkeiten und Gegenstände:
+
 Mensch: Glück +2, Handel +1, Wahrnehmung +1, Weisheit -1, Intelligenz -1, Universelles Werkzeug
 
-Elf: Beweglichkeit +2, Geschwindigkeit +1, Attraktivität +1, Stärke -1, Ausdauer -1, Elfenumhang
+Elf: Geschicklichkeit +2, Geschwindigkeit +1, Attraktivität +1, Stärke -1, Ausdauer -1, Elfenumhang
 
-Zwerg: Handel +2, Stärke +1, Ausdauer +1, Beweglichkeit -1, Geschwindigkeit -1, Zwergenbier
+Zwerg: Handel +2, Stärke +1, Ausdauer +1, Geschicklichkeit -1, Geschwindigkeit -1, Zwergenbier
 
-Ork: Stärke +3, Ausdauer +2, Intelligenz -1, Weisheit -1, Attraktivität -1, Orkische Kriegsbemalung
+Ork: Stärke +3, Ausdauer +2, Intelligenz -1, Weisheit -1, Attraktivität -1, Orkische Kampfbemalung
 
 Echse: Ausdauer +2, Geschwindigkeit +1, Attraktivität -1, Schuppenöl
 
-Vampir: Wahrnehmung +1, Attraktivität +1, Beweglichkeit +1, Glück -1, Fläschchen mit Blut
+Vampir: Wahrnehmung +1, Attraktivität +1, Geschicklichkeit +1, Glück -1, Blutfläschchen
 
-Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, Elementarkern`,
+Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, Elementarkern
+
+Engel: Stärke +1, Attraktivität +1, Weisheit +1, Handel -1, Engelsnimbus
+
+Dämon: Geschicklichkeit +1, Attraktivität +2, Überzeugung +1, Weisheit -1, Glück -1, Dämonensymbol`,
             "create-character-label": "Erstellen Sie Ihren Charakter",
             "api-key-button": "10 Sekunden anzeigen",
             "api-key-button2": "10 Sekunden anzeigen",
@@ -2127,7 +2483,6 @@ Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, 
             "my-rules-explanaition": "Hier können Sie die Spielregeln ändern oder ergänzen oder einfach das Verhalten des Spielleiters beeinflussen. Geben Sie einfach hier eine Anweisung ein und lassen Sie sie stehen. Zum Beispiel: 'Im Inventar des Charakters sollte eine Liste als separater Gegenstand sein, in der alle Boni von allen Gegenständen im Inventar zusammengefasst sind, und wenn es keine solche Liste im Inventar gibt, füge sie hinzu' oder 'Lass in jeder Location Monster sein'. Warnung: Die vorgenommenen Änderungen können einige Spielmechaniken kaputt machen. Oder auch nicht. Seien Sie mutig!",
             "clear-log": "Log löschen. Hat kaum Einfluss auf das Gedächtnis des Spielleiters, da er sich nur an die letzten 5 Log-Nachrichten erinnert",
             "clear-system-chat": "Alle roten Nachrichten aus dem Chat entfernen. Hat keinen Einfluss auf das Gedächtnis des Spielleiters",
-            "clear-item-descriptions": "Löschen Sie die Datenbank der Beschreibungen von Gegenständen, die sich derzeit nicht im Inventar befinden. Wozu? Wenn Sie einen Gegenstand irgendwo ablegen oder verkaufen, verschwinden der Gegenstand und seine Beschreibung nicht aus der Welt, damit Sie ihn später zurückholen können. Aber Informationen über solche Gegenstände werden bei jeder Anfrage an den Spielleiter gesendet, was Token verbraucht. Sie können diese Funktion verwenden, wenn Sie nicht vorhaben, etwas zurückzukaufen oder etwas von irgendwo zurückzuholen. Hinweis: Wenn Sie einen Gegenstand über das Gegenstandsbeschreibungsfenster im Inventar löschen, wird der Gegenstand automatisch auch aus der Beschreibungsdatenbank gelöscht.",
             "clear-half-chat": "Hälfte des Chats löschen. Details aus dem gelöschten Chat werden vom Spielleiter vergessen. Komprimierte Informationen, die in Locations- und Gegenstandsbeschreibungen gespeichert sind, werden nicht vergessen. Sie können einzelne Ereignisse oder eine komprimierte Abenteuergeschichte auf separate Papierblätter im Inventar schreiben, bevor Sie den Chat löschen.",
             "settings-button-label": "Einstellungen",
             "load-box-button-label": "Spiel laden",
@@ -2146,7 +2501,7 @@ Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, 
             "ai-provider-label3": "Anbieter neuronaler Netzwerke",
             "location-delete": "Diesen Ort vergessen",
             "player-status-label": "Status",
-            "status-purposes-label": "Mögliche Zwecke:",
+            "status-purposes-label": "Mögliche Zwecke",
             "player-npc-button-label": "Charaktere",
             "use-status-label": "Status verwenden (deaktivieren, um Token zu speichern)",
             "use-npc-list-label": "Charakterliste verwenden (deaktivieren, um Token zu speichern)",
@@ -2197,6 +2552,8 @@ Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, 
             "dwarf": "Zwerg",
             "elf": "Elf",
             "human": "Mensch",
+            "angel": "Engel",
+            "demon": "Dämon",
             "no-choosed-race": "Rasse wählen",
 
             "female": "Weiblich",
@@ -2206,9 +2563,20 @@ Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, 
             //not interface
             "item_notepad": "Notizbuch für Notizen",
             "item_notepad_description": "Notizbuch für Notizen",
-            "game_starting_description": `---- ABSOLUTE LEGENDARICA ----\n\n Ein neues Spiel beginnt. Du bist völlig frei zu tun und zu sagen, was immer du willst. Allerdings werden die Konsequenzen nicht lange auf sich warten lassen, besonders wenn dein Charakter nicht genügend Fähigkeiten für deine Idee hat. Du kannst ein Held, ein Unternehmer, ein Dieb, ein Schauspieler, ein Auftragsmörder, ein Bauer, ein König und vieles mehr werden ... Volle Handlungsfreiheit.\n\n Der eingebaute Speicher reicht für die letzten 30 besuchten Orte, NPCs, Quests (abgeschlossen) - alte werden gelöscht. Du kannst dir die benötigten merken, indem du auf das Schloss links neben dem Namen (in der Liste) klickst. \nJeder Ort hat einen Schwierigkeitsgrad, der durch eine Zahl in Klammern angegeben wird.\n\n Einige Fähigkeitsprüfungen können als erfolgreich oder nicht erfolgreich gewertet werden, selbst wenn das Berechnungsergebnis das Gegenteil ist, da die Logik der Situation wichtiger ist als der Zufall, aber eine solche Prüfung wird dennoch die Konsequenzen dieses Erfolgs/Misserfolgs beeinflussen. Nachdem ein Charakter ein Level aufsteigt, wird ein zufälliger Basisparameter zufällig um 1 erhöht und in der nächsten Runde eine neue passive Fähigkeit generiert. Während des Spiels können Gegenstände mit Boni auf Fähigkeiten auftauchen, die nicht in der Fähigkeitsliste enthalten sind, aber solche Boni können sich auf mehrere Fähigkeiten aus der Liste auswirken: ein Gegenstand mit einem Bonus, z. B. auf Beweglichkeit +1, kann sowohl die Geschwindigkeit als auch die Geschicklichkeit in verschiedenen Prüfungen erhöhen.\n\n Du kannst den Spielleiter im Chat bitten, einen Fehler zu korrigieren, den er gemacht hat, z. B. falsch berechnetes Geld, Energie usw. Der Spielleiter versteht vieles, also experimentiere ruhig.\n\n Du kannst versuchen, deine eigenen Anweisungen für den Spielleiter zu erstellen, die deinen Bedürfnissen entsprechen, im Tab 'Deine Regeln (Prompt)'.\n\n Das Spiel wird alle 5 Minuten automatisch gespeichert. Beim Laden des Spiels erinnert sich der Spielleiter nur an die Geschichte aus der Beschreibung der Orte, der Beschreibung der Gegenstände sowie der Liste der NPCs, des NPC-Tagebuchs, des Charakterstatus und des Quest-Logs. Dies ist nützlich, um den Spielleiter nicht zu überlasten. Aber wenn du willst, kannst du seinen Speicher nach dem Laden erweitern, indem du vor dem Speichern eine detaillierte Geschichte der letzten Ereignisse auf ein Blatt Papier in deinem Inventar schreibst. Und der Spielleiter wird dieses Blatt Papier nach dem Laden sehen. Die Speicherdatei kann im Notepad geöffnet und die Daten dort geändert werden - aber bevor du das tust, vergiss nicht, eine Sicherungskopie des Spielstands zu erstellen, damit er bei einer erfolglosen Bearbeitung nicht verloren geht.\n\n Für unbegrenzten Zugriff auf neuronale Netzwerke kannst du einen der Anbieter von neuronalen Netzwerken aus der Liste verwenden.\nDie Anzahl der verbrauchten Token pro Runde und pro Sitzung kann angezeigt werden, indem man mit dem Mauszeiger über die Nachricht im Aktionsprotokoll fährt.\n\n Du kannst diese und alle anderen Nachrichten löschen, indem du auf das Kreuz in der Ecke der Nachricht klickst. Gelöschte Nachrichten werden aus dem Speicher des Spielleiters gelöscht.\n\n Dieses Spiel ist eine stark modifizierte (glaub mir, SEHR STARK) Version des Spiels von Creature. Du kannst das Original unter folgendem Link ansehen: https://websim.ai/@Creature/legendarica-v1-neural-sandbox\n\n Bitte erwäge, mir (Lottarend - dem Autor von ABSOLUTE LEGENDARICA) zu danken, um mir eine Freude zu machen und mich zu motivieren, neue Versionen des Spiels zu veröffentlichen.`,
-            "game_starting_donate": "Danken Sie dem Autor von ABSOLUTE LEGENDARICA:\n\n Kryptowährung: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nAnderer Weg: https://www.donationalerts.com/r/lottarend",
-            "game_starting_discord": "Im Discord können Sie die neueste Version finden und das Spiel diskutieren https://discord.com/invite/JVshMaq3GG",
+            "game_starting_description": `Willkommen in Absolut Legendaria, Abenteurer! Bitte lies dir die folgenden Informationen durch...
+
+Dies ist ein textbasiertes Rollenspiel mit LLM. Du kannst deine Aktion in das Textfeld unten eingeben. Das neuronale Netzwerk wird deine Antwort verarbeiten und Anweisungen senden, anhand derer die Spieloberfläche ausgefüllt wird.
+Du kannst zwischen den verfügbaren Informationsfenstern in der oberen rechten Ecke des Bildschirms umschalten, indem du das Dropdown-Menü mit Schaltflächen verwendest. Jeder Gegenstand, jeder NPC in der NPC-Liste, jede Fertigkeit und jede Quest sowie Statusinformationen werden vom Spielleiter bei der Formulierung einer Antwort verwendet. Wenn du auf das Entfernen eines Gegenstands/NPCs/Quests usw. klickst, verschwindet diese Information aus den verfügbaren Daten des Spielleiters und er formuliert weitere Antworten ohne deren Berücksichtigung. Außerdem achtet der Spielleiter sorgfältig auf den Verlauf deiner Nachrichten mit ihm sowie auf die letzten fünf Nachrichten des "Aktionsberechnungs-Logs".
+
+Alle Listen in den Info-Fenstern sind auf 30 Elemente begrenzt, mit Ausnahme der Inventargegenstände. Dies soll verhindern, dass der Spielleiter mit Informationen überlastet wird, da es einen Punkt geben kann, an dem der Spielleiter einfach keine Antwort mehr erstellen kann. Du kannst jedes Listenelement im Info-Fenster sperren, indem du auf die "Schloss"-Schaltfläche klickst, um es vor dem Löschen zu schützen.
+
+Wenn der Spielleiter immer noch keine Antwort formulieren kann, ist der Kontext möglicherweise mit Informationen überladen. Versuche, einige der verfügbaren Daten zu löschen. Beginne damit, die Hälfte des Chats zu entfernen, und sieh, ob dies dem Spielleiter hilft, eine Antwort zu erstellen.
+
+Bitte erwäge, mich (Lottarend — den Autor des Spiels) zu unterstützen. Links zu Unterstützungsmöglichkeiten findest du in der nächsten Nachricht.
+
+Viel Spaß beim Spielen!`,
+            "game_starting_donate": "Danken Sie dem Autor von Legendarica Absolute :\n\n Kryptowährung: TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nAnderer Weg: https://www.donationalerts.com/r/lottarend",
+            "game_starting_discord": "Im Discord können Sie die neueste Version finden und das Spiel diskutieren https://discord.gg/XwsjrRRS",
             "null_resend_message": "Wo bin ich? Wer bin ich?",
             "item_not_descripted": "Der Gegenstand wurde vom Helden nicht untersucht",
             "name_turn": "Zug",
@@ -2252,6 +2620,8 @@ Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, 
             "Scale_oil": 'Schuppenöl',
             "Blood_vial": 'Blutphiole',
             "Elemental_core": 'Elementarkern',
+            "Angelic_halo": "Engelsnimbus",
+            "Demonic_symbol": "Dämonensymbol",
             "lute": "Laute",
             "dagger": "Dolch",
             "staff": "Stab",
@@ -2376,6 +2746,59 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "load-system-instructions-button-label": "Systemanweisungen aus Datei laden",
             "skill-info-delete": "Diese Fähigkeit vergessen",
             "empty-ai-key-label": "API-Schlüssel ist nicht festgelegt. Bitte geben Sie den API-Schlüssel ein.",
+            "inventory-count-label": "Anzahl",
+            "inventory-quality-label": "Qualität",
+            "inventory-durability-label": "Haltbarkeit",
+            "inventory-bonuses-label": "Bonus",
+            "inventory-price-label": "Preis",
+            "inventory-resource-label": "Ressource",
+            "throw-from-item": "aus dem Container (wenn das Symbol -> vorhanden ist, zeigt es den Pfad zum Element an, vom Container zum Container)",
+            "inventory-container-open": "Öffnen",
+            "inventory-weight-label": "Gewicht (Kilogramm)",
+            "inventory-capacity-label": "Kapazität",
+            "move-to-inventory": "In das Inventar legen",
+            "place-item-to": "In ",
+            "empty-container-label": "Leer",
+            "content-description-label": "Inhalt",
+            "inventory-volume-label": "Volumen (dm³)",
+            "inventory-contents-count-label": "Verfügbare Kapazität",
+            "inventory-contents-volume-label": "Verfügbares Volumen (dm³)",
+            "inventory-item-inspect": "Untersuchen",
+            "rarity-label": "Seltenheit",
+            "age-label": "Alter",
+            "npc-info-worldview-label": "Weltanschauung",
+            "npc-info-race-label": "Rasse",
+            "npc-info-class-label": "Klasse",
+            "npc-info-stats-label": "Statistiken",
+            "npc-info-skills-label": "Fähigkeiten",
+            "npc-info-effects-label": "Aktive Effekte",
+            "npc-info-appearanceDescription-label": "Aussehen:",
+            "npc-info-history-label": "Geschichte:",
+            "npc-info-attitude-label": "Einstellung zum Spielercharakter:",
+            "npc-info-tab-journal-label": "Journal",
+            "npc-info-tab-memory-diary-label": "Chroniken",
+            "npc-info-memory-diary-label": "Chroniken",
+            "npc-delete-memory-diary": "Chroniken dieses Charakters vergessen",
+            "use-npc-memories-diary-label": "Charakterchroniken verwenden (deaktivieren, um Tokens zu sparen). Funktioniert nur, wenn das Charakterjournal aktiviert ist.",
+            "status-name-label": "Name",
+            "status-race-label": "Rasse",
+            "status-class-label": "Klasse",
+            "status-appearanceDescription-label": "Aussehen:",
+            "status-statusInSociety-label": "Sozialer Status:",
+            "status-positionInSociety-label": "Position in der Gesellschaft:",
+            "status-affiliationWithOrganizations-label": "Zugehörigkeit zu Organisationen:",
+            "status-effect-none-label": "Keine",
+            "persuasion-label": "Überzeugung",
+            "start-prs": "Überzeugung",
+            "rebirth-in-another-world": "Wiedergeburt in einer Anderen Welt",
+            "being-summoned-to-another-world": "In eine Andere Welt Gerufen Werden",
+            "reincarnation": "Reinkarnation",
+            "demon-invasion": "Dämoneninvasion",
+            "the-end-of-the-world": "Das Ende der Welt",
+            "apocalypse": "Apokalypse",
+            "quest-info-questGiver-label": "Questgeber",
+            "quest-info-questBackground-label": "Hintergrund:",
+            "quest-info-description-label": "Beschreibung:",
         },
         "french-language": {
             // placeholders
@@ -2492,21 +2915,25 @@ Ensorceleur - Dague de feu, Orbe, Robe, Potion d'énergie
 Sorcier - Focus magique, Armure de cuir, Grimoire, Talisman eldritch
 
 Magicien - Livre de sorts, Baguette magique, Robe, Parchemin de projectile magique`,
-            "tooltip-race": `La race affecte le lieu de départ, la génération de compétences raciales, l'histoire et les bonus de départ aux compétences et aux objets:
-			
+            "tooltip-race": `La race influence la localisation de départ, la génération des compétences raciales, l'intrigue et les bonus de départ pour les compétences et les objets :
+
 Humain : Chance +2, Commerce +1, Perception +1, Sagesse -1, Intelligence -1, Outil Universel
 
-Elfe : Agilité +2, Vitesse +1, Attrait +1, Force -1, Endurance -1, Cape Elfique
+Elfe : Dextérité +2, Vitesse +1, Attractivité +1, Force -1, Endurance -1, Cape Elfique
 
-Nain : Commerce +2, Force +1, Endurance +1, Agilité -1, Vitesse -1, Bière Naine
+Nain : Commerce +2, Force +1, Endurance +1, Dextérité -1, Vitesse -1, Bière Naine
 
-Orc : Force +3, Endurance +2, Intelligence -1, Sagesse -1, Attrait -1, Peinture de Guerre Orc
+Orc : Force +3, Endurance +2, Intelligence -1, Sagesse -1, Attractivité -1, Peinture de Combat Orc
 
-Lézard : Endurance +2, Vitesse +1, Attrait -1, Huile d'Écailles
+Lézard : Endurance +2, Vitesse +1, Attractivité -1, Huile pour Écailles
 
-Vampire : Perception +1, Attrait +1, Agilité +1, Chance -1, Fiole de Sang
+Vampire : Perception +1, Attractivité +1, Dextérité +1, Chance -1, Flacon de Sang
 
-Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau Élémentaire`,
+Golem : Force +3, Endurance +2, Intelligence -1, Attractivité -1, Sagesse -1, Noyau Élémentaire
+
+Ange : Force +1, Attractivité +1, Sagesse +1, Commerce -1, Halo Angélique
+
+Démon : Dextérité +1, Attractivité +2, Persuasion +1, Sagesse -1, Chance -1, Symbole Démoniaque`,
             "create-character-label": "Créez votre personnage",
             "api-key-button": "Afficher pendant 10 secondes",
             "api-key-button2": "Afficher pendant 10 secondes",
@@ -2523,7 +2950,6 @@ Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau �
             "my-rules-explanaition": "Ici, vous pouvez modifier ou compléter les règles du jeu ou simplement influencer le comportement du maître du jeu. Entrez simplement une instruction ici et laissez-la. Par exemple : 'Dans l'inventaire du personnage, il doit y avoir une liste sous forme d'objet séparé qui indique tous les bonus cumulés de tous les objets de l'inventaire, et s'il n'y a pas une telle liste dans l'inventaire, ajoutez-la' ou 'que chaque lieu ait des monstres'. Avertissement : les modifications apportées peuvent casser certaines mécaniques du jeu. Ou peuvent ne pas les casser. Osez !",
             "clear-log": "Effacer le journal. N'affecte presque pas la mémoire du maître du jeu, car il ne se souvient que des 5 derniers messages du journal",
             "clear-system-chat": "Supprimer tous les messages rouges du chat. N'affecte pas du tout la mémoire du maître du jeu",
-            "clear-item-descriptions": "Nettoyer la base de données des descriptions des objets qui ne sont pas actuellement dans l'inventaire. Pourquoi ? Si vous déposez un objet quelque part ou le vendez, l'objet et sa description ne disparaissent pas du monde, afin que vous puissiez le récupérer plus tard. Mais les informations sur ces objets sont envoyées au maître du jeu à chaque requête, ce qui consomme des tokens. Vous pouvez utiliser cette fonction si vous ne prévoyez pas de racheter quoi que ce soit ou de récupérer quelque chose quelque part. Remarque : si vous supprimez un objet via la fenêtre de description de l'objet dans l'inventaire, l'objet sera automatiquement supprimé de la base de données des descriptions également.",
             "clear-half-chat": "Effacer la moitié du chat. Les détails du chat supprimé seront oubliés par le maître du jeu. Les informations condensées stockées dans les descriptions des lieux et des objets ne seront pas oubliées. Vous pouvez noter des événements spécifiques ou une histoire condensée des aventures sur des feuilles de papier séparées dans l'inventaire avant de supprimer le chat.",
             "settings-button-label": "Paramètres",
             "load-box-button-label": "Charger la partie",
@@ -2542,7 +2968,7 @@ Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau �
             "ai-provider-label3": "Fournisseur de réseau neuronal",
             "location-delete": "Oublier ce lieu",
             "player-status-label": "Statut",
-            "status-purposes-label": "Fins possibles:",
+            "status-purposes-label": "Fins possibles",
             "player-npc-button-label": "Personnages",
             "use-status-label": "Utiliser le statut (désactiver pour enregistrer les jetons)",
             "use-npc-list-label": "Utiliser la liste des personnages (désactiver pour enregistrer les jetons)",
@@ -2593,6 +3019,8 @@ Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau �
             "dwarf": "Nain",
             "elf": "Elfe",
             "human": "Humain",
+            "angel": "Ange",
+            "demon": "Démon",
             "no-choosed-race": "Choisissez une race",
 
             "female": "Féminin",
@@ -2602,9 +3030,20 @@ Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau �
             //not interface
             "item_notepad": "Bloc-notes",
             "item_notepad_description": "Bloc-notes",
-            "game_starting_description": `---- ABSOLUTE LEGENDARICA ----\n\n Un nouveau jeu commence. Vous êtes libre de faire et de dire absolument tout ce que vous voulez. Cependant, les conséquences ne tarderont pas à se faire sentir, surtout si votre personnage n'a pas les compétences suffisantes pour votre idée. Vous pouvez devenir un héros, un entrepreneur, un voleur, un acteur, un assassin à gages, un fermier, un roi et bien plus encore... Liberté d'action totale.\n\n La mémoire intégrée est suffisante pour les 30 derniers lieux visités, PNJ, quêtes (terminées) - les anciens seront supprimés. Vous pouvez vous souvenir de ceux dont vous avez besoin en cliquant sur le cadenas à gauche du nom (dans la liste). \nChaque lieu a un niveau de difficulté indiqué par un chiffre entre parenthèses.\n\n Certains tests de compétences peuvent être considérés comme réussis ou échoués même si le résultat du calcul est opposé, car la logique de la situation est plus importante que le hasard, mais un tel test aura quand même une influence sur les conséquences de cette réussite/échec. Après qu'un personnage ait gagné un niveau, un paramètre de base aléatoire est augmenté aléatoirement de 1 et une nouvelle compétence passive est générée au tour suivant. Pendant le jeu, des objets avec des bonus de compétences qui ne figurent pas dans la liste des compétences peuvent apparaître, mais ces bonus peuvent s'appliquer à plusieurs compétences de la liste : un objet avec un bonus, par exemple, à l'agilité +1, peut augmenter à la fois la vitesse et la dextérité dans différents tests.\n\n Vous pouvez demander à l'hôte dans le chat de corriger une erreur qu'il a commise, comme de l'argent, de l'énergie, etc. mal calculés. L'hôte comprend beaucoup de choses, alors n'hésitez pas à expérimenter.\n\n Vous pouvez essayer de construire vos propres instructions pour l'hôte afin qu'elles correspondent à vos besoins dans l'onglet 'Vos règles (prompt)'\n\n Le jeu est automatiquement sauvegardé toutes les 5 minutes. Lors du chargement du jeu, l'hôte se souvient de l'histoire uniquement à partir de la description des lieux, des descriptions des objets, ainsi que de la liste des PNJ, du journal des PNJ, du statut du personnage et du journal des quêtes. Ceci est utile pour éviter de surcharger l'hôte. Mais si vous le souhaitez, vous pouvez étendre sa mémoire post-chargement de telle manière qu'avant de sauvegarder, vous écrivez une histoire détaillée des derniers événements sur un morceau de papier dans votre inventaire. Et l'hôte verra ce morceau de papier après le chargement. Le fichier de sauvegarde peut être ouvert dans le Bloc-notes et les données peuvent y être modifiées - mais avant de faire cela, n'oubliez pas de sauvegarder une copie de sauvegarde de la sauvegarde afin qu'elle ne disparaisse pas en cas d'édition infructueuse.\n\n Pour un accès illimité aux réseaux neuronaux, vous pouvez utiliser l'un des fournisseurs de réseaux neuronaux de la liste.\nLe nombre de jetons dépensés par tour et par session peut être affiché en passant le curseur sur le message dans le journal d'actions.\n\n Vous pouvez supprimer ce message et tout autre message en cliquant sur la croix dans le coin du message. Les messages supprimés sont effacés de la mémoire de l'hôte.\n\n Ce jeu est une version fortement modifiée (croyez-moi, TRÈS FORTEMENT) du jeu de Creature. Vous pouvez consulter l'original sur le lien : https://websim.ai/@Creature/legendarica-v1-neural-sandbox\n\n Veuillez envisager de me remercier (Lottarend - l'auteur d'ABSOLUTE LEGENDARICA) pour me faire plaisir et me motiver à sortir de nouvelles versions du jeu.`,
-            "game_starting_donate": "Remerciez l'auteur d'ABSOLUTE LEGENDARICA :\n\n Crypto-monnaie : TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nAutre moyen : https://www.donationalerts.com/r/lottarend",
-            "game_starting_discord": "Vous pouvez trouver la dernière version et discuter du jeu sur Discord https://discord.com/invite/JVshMaq3GG",
+            "game_starting_description": `Bienvenue dans Absolute Legendaria, aventurier ! Veuillez prendre connaissance des informations suivantes...
+
+C'est un jeu de rôle textuel avec un LLM. Vous pouvez saisir votre action dans la zone de texte en bas. Le réseau neuronal traitera votre réponse et enverra des instructions qui rempliront l'interface du jeu.
+Vous pouvez basculer entre les fenêtres d'information disponibles dans le coin supérieur droit de l'écran, en utilisant le panneau déroulant avec des boutons. Chaque objet, chaque PNJ dans la liste des PNJ, chaque compétence et quête, ainsi que les informations de statut, sont utilisés par le maître du jeu pour formuler une réponse. Lorsque vous cliquez pour supprimer un objet/PNJ/quête, etc., cette information disparaît des données disponibles pour le maître du jeu, et il formulera les réponses ultérieures sans en tenir compte. De plus, le maître du jeu examine attentivement l'historique de vos messages avec lui, ainsi que les cinq derniers messages du "Journal de calcul des actions".
+
+Toutes les listes des fenêtres d'information sont limitées à 30 éléments, à l'exception des objets de l'inventaire. Cela est fait pour ne pas surcharger le maître du jeu d'informations, car il pourrait arriver qu'il ne puisse plus créer de réponse. Vous pouvez verrouiller n'importe quel élément de la liste dans la fenêtre d'information en cliquant sur le bouton "cadenas", le protégeant ainsi de la suppression.
+
+Si le maître du jeu ne parvient toujours pas à formuler une réponse, il est possible que le contexte soit surchargé d'informations. Essayez de supprimer certaines données disponibles. Commencez par effacer la moitié du chat et voyez si cela aide le maître du jeu à formuler une réponse.
+
+Veuillez envisager de me soutenir (Lottarend — l'auteur du jeu). Les liens vers les moyens de soutien sont fournis dans le message suivant.
+
+Bon jeu !`,
+            "game_starting_donate": "Remerciez l'auteur d'Legendarica Absolute  :\n\n Crypto-monnaie : TSH1v85VbFo6b8gzb2xKcHy7Lk5NYLqVYh (USDT TRC20)\n\nAutre moyen : https://www.donationalerts.com/r/lottarend",
+            "game_starting_discord": "Vous pouvez trouver la dernière version et discuter du jeu sur Discord https://discord.gg/XwsjrRRS",
             "null_resend_message": "Où suis-je ? Qui suis-je ?",
             "item_not_descripted": "L'objet n'a pas été étudié par le héros",
             "name_turn": "Tour",
@@ -2648,6 +3087,8 @@ Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau �
             "Scale_oil": 'Huile pour écailles',
             "Blood_vial": 'Fiole de sang',
             "Elemental_core": 'Noyau élémentaire',
+            "Angelic_halo": "Halo Angélique",
+            "Demonic_symbol": "Symbole Démoniaque",
             "lute": "Luth",
             "dagger": "Dague",
             "staff": "Bâton",
@@ -2772,6 +3213,59 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "load-system-instructions-button-label": "Charger les instructions système à partir du fichier",
             "skill-info-delete": "Oublier cette compétence",
             "empty-ai-key-label": "La clé API n'est pas définie. Veuillez saisir la clé API.",
+            "inventory-count-label": "Quantité",
+            "inventory-quality-label": "Qualité",
+            "inventory-durability-label": "Durabilité",
+            "inventory-bonuses-label": "Bonus",
+            "inventory-price-label": "Prix",
+            "inventory-resource-label": "Ressource",
+            "throw-from-item": "du conteneur (si le symbole -> est présent, il indique le chemin vers l'objet, du conteneur au conteneur)",
+            "inventory-container-open": "Ouvrir",
+            "inventory-weight-label": "Poids (kilogrammes)",
+            "inventory-capacity-label": "Capacité",
+            "move-to-inventory": "Placer dans l'inventaire",
+            "place-item-to": "Placer dans ",
+            "empty-container-label": "Vide",
+            "content-description-label": "Contenu",
+            "inventory-volume-label": "Volume (dm³)",
+            "inventory-contents-count-label": "Capacité disponible",
+            "inventory-contents-volume-label": "Volume disponible (dm³)",
+            "inventory-item-inspect": "Inspecter",
+            "rarity-label": "Rareté",
+            "age-label": "Âge",
+            "npc-info-worldview-label": "Vision du monde",
+            "npc-info-race-label": "Race",
+            "npc-info-class-label": "Classe",
+            "npc-info-stats-label": "Caractéristiques",
+            "npc-info-skills-label": "Compétences",
+            "npc-info-effects-label": "Effets Actifs",
+            "npc-info-appearanceDescription-label": "Apparence:",
+            "npc-info-history-label": "Histoire:",
+            "npc-info-attitude-label": "Attitude envers le personnage joueur:",
+            "npc-info-tab-journal-label": "Journal",
+            "npc-info-tab-memory-diary-label": "Chroniques",
+            "npc-info-memory-diary-label": "Chroniques",
+            "npc-delete-memory-diary": "Oublier les chroniques de ce personnage",
+            "use-npc-memories-diary-label": "Utiliser les chroniques des personnages (désactivez pour économiser des jetons). Fonctionne uniquement lorsque le journal des personnages est activé.",
+            "status-name-label": "Nom",
+            "status-race-label": "Race",
+            "status-class-label": "Classe",
+            "status-appearanceDescription-label": "Apparence :",
+            "status-statusInSociety-label": "Statut Social :",
+            "status-positionInSociety-label": "Position dans la Société :",
+            "status-affiliationWithOrganizations-label": "Affiliation avec des Organisations :",
+            "status-effect-none-label": "Aucun",
+            "persuasion-label": "Persuasion",
+            "start-prs": "Persuasion",
+            "rebirth-in-another-world": "Renaissance dans un Autre Monde",
+            "being-summoned-to-another-world": "Être Invoqué dans un Autre Monde",
+            "reincarnation": "Réincarnation",
+            "demon-invasion": "Invasion Démoniaque",
+            "the-end-of-the-world": "La Fin du Monde",
+            "apocalypse": "Apocalypse",
+            "quest-info-questGiver-label": "Donneur de Quête",
+            "quest-info-questBackground-label": "Contexte :",
+            "quest-info-description-label": "Description :",
         }
     };
 
@@ -2808,7 +3302,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
         const placeholders = [
             'start-str', 'start-dex', 'start-con', 'start-intl',
             'start-wis', 'start-trd', 'start-per', 'start-luck',
-            'start-spd', 'start-money', 'start-exp', 'start-atr',
+            'start-spd', 'start-money', 'start-exp', 'start-atr', 'start-prs',
             'start-location-description', 'start-location',
             'character-starting-inventory', 'character-prehistory',
             'character-class-description', 'character-class2',
@@ -2835,7 +3329,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             'health-label', 'level-label', 'strength-label', 'dexterity-label',
             'wisdom-label', 'perception-label', 'trade-label', 'energy-label',
             'exp-label', 'constitution-label', 'speed-label', 'intelligence-label',
-            'luck-label', 'attractiveness-label', 'money-label', 'send-button', 'resend-button',
+            'luck-label', 'attractiveness-label', 'persuasion-label', 'money-label', 'send-button', 'resend-button',
             'create-setting', 'load-created-setting', 'save-created-setting',
             'tts-mode-label', 'tts-mode-label2', 'tts-mode-label3', 'tooltip-class', 'tooltip-rpg', 'tooltip-rpg2',
             'nonmagic-mode-name', 'tooltip-noMagic', 'starting-parameters-label',
@@ -2845,7 +3339,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             'ai-model-label', 'ai-model-label2', 'ai-model-label3',
             'interface-language', 'interface-language2', 'image-mode-settings-label',
             'load-my-rules-button-label', 'download-my-rules-button-label',
-            'my-rules-explanaition', 'clear-log', 'clear-system-chat', 'clear-item-descriptions',
+            'my-rules-explanaition', 'clear-log', 'clear-system-chat',
             'clear-half-chat', 'settings-button-label',
             'load-box-button-label', 'save-box-button-lable',
             'my-rules-button-label', 'antilag-button-label',
@@ -2859,7 +3353,12 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             'inventory-delete', 'npc-info-journal-label', 'npc-delete-journal', 'use-npc-journal-label', 'use-quests-list-label', 'make-game-quest-oriented-label',
             'stats-button-label', 'statsGroup-general-button-label', 'statsGroup-main-button-label', 'statsGroup-secondary-button-label', 'player-quests-button-label',
             'system-instructions-explanaition', 'ai-none2-label', 'ai-none-label', 'ai-none3-label', 'additional-settings-label2', 'additional-settings-label3',
-            'download-system-instructions-button-label', 'load-system-instructions-button-label', 'skill-info-delete',
+            'download-system-instructions-button-label', 'load-system-instructions-button-label', 'skill-info-delete', 'inventory-container-open',
+            "npc-info-attitude-label", "npc-info-history-label", "npc-info-appearanceDescription-label",
+            "npc-info-tab-journal-label", "npc-info-tab-memory-diary-label",
+            "npc-info-memory-diary-label", "npc-delete-memory-diary", "use-npc-memories-diary-label",
+            "status-appearanceDescription-label", "status-statusInSociety-label", "status-positionInSociety-label", "status-affiliationWithOrganizations-label",
+            "quest-info-questBackground-label", "quest-info-description-label"
         ];
 
         //Update labels
@@ -2935,16 +3434,16 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
                 translations[language] = languageData;
         },
 
-        setShortNewGameMessage: function (name, gender, race, characterClass) {
+        setShortNewGameMessage: function (name, gender, race, characterClass, campaign) {
             const id = "game_starting_message";
 
-            this.setTranslation("english-language", id, `This is the beginning of a new game, the character's name is ${name}, their gender is ${gender}, race is ${race}, class is ${characterClass}!`);
-            this.setTranslation("russian-language", id, `Это начало новой игры, имя персонажа - ${name}, его пол ${gender}, раса ${race}, класс ${characterClass}!`);
-            this.setTranslation("spanish-language", id, `¡Este es el comienzo de un nuevo juego, el nombre del personaje es ${name}, su género es ${gender}, su raza es ${race}, su clase es ${characterClass}!`);
-            this.setTranslation("portuguese-language", id, `Este é o início de um novo jogo, o nome do personagem é ${name}, seu gênero é ${gender}, raça é ${race}, classe é ${characterClass}!`);
-            this.setTranslation("hindi-language", id, `यह एक नए खेल की शुरुआत है, चरित्र का नाम ${name} है, उनका लिंग ${gender} है, जाति ${race} है, वर्ग ${characterClass} है!`);
-            this.setTranslation("german-language", id, `Dies ist der Beginn eines neuen Spiels, der Name des Charakters ist ${name}, sein Geschlecht ist ${gender}, Rasse ist ${race}, Klasse ist ${characterClass}!`);
-            this.setTranslation("french-language", id, `C'est le début d'un nouveau jeu, le nom du personnage est ${name}, son sexe est ${gender}, sa race est ${race}, sa classe est ${characterClass}!`);
+            this.setTranslation("english-language", id, `This is the start of a new game, character name: '${name}', gender: '${gender}', race: '${race}', class: '${characterClass}', campaign: '${campaign}'!`);
+            this.setTranslation("russian-language", id, `Это начало новой игры, имя персонажа: '${name}', его пол: '${gender}', раса: '${race}', класс: '${characterClass}', сюжетная кампания: '${campaign}'!`);
+            this.setTranslation("spanish-language", id, `¡Este es el comienzo de un nuevo juego, nombre del personaje: '${name}', género: '${gender}', raza: '${race}', clase: '${characterClass}', campaña: '${campaign}'!`);
+            this.setTranslation("portuguese-language", id, `Este é o início de um novo jogo, nome do personagem: '${name}', gênero: '${gender}', raça: '${race}', classe: '${characterClass}', campanha: '${campaign}'!`);
+            this.setTranslation("hindi-language", id, `यह एक नए खेल की शुरुआत है, पात्र का नाम: '${name}', लिंग: '${gender}', जाति: '${race}', वर्ग: '${characterClass}', अभियान: '${campaign}'!`);
+            this.setTranslation("german-language", id, `Dies ist der Beginn eines neuen Spiels, Charaktername: '${name}', Geschlecht: '${gender}', Rasse: '${race}', Klasse: '${characterClass}', Kampagne: '${campaign}'!`);
+            this.setTranslation("french-language", id, `C'est le début d'un nouveau jeu, nom du personnage: '${name}', sexe: '${gender}', race: '${race}', classe: '${characterClass}', campagne: '${campaign}'!`);
 
             return id;
         },
@@ -3122,8 +3621,6 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
         setNewLevelMessage: function (level, skillName, shouldGeneratePassiveSkills) {
             const id = "new_level_system_message";
 
-            this.setTranslation("english-language", id, `Congratulations! You have reached level ${level}! The ${skillName} skill has increased! ${shouldGeneratePassiveSkills ? "A new passive ability will appear soon!" : ""}`);
-
             // English translation
             this.setTranslation("english-language", id,
                 `Congratulations! You have reached level ${level}! The ${skillName} skill has increased! ${shouldGeneratePassiveSkills ? "A new passive ability will appear soon!" : ""}`);
@@ -3187,28 +3684,29 @@ Openrouter (https://openrouter.ai/). Offers both free and paid models. Free mode
                 );
 
                 // Русский перевод
-                this.setTranslation("russian-language", id, `Провайдеры нейронных сетей
-
-Для всех провайдеров вам нужно зарегистрироваться на соответствующем сайте и создать API-ключ или Access Token. Обратите внимание на значение доступного контекста модели — Legendarica использует очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, используемых Мастером Игры. Требуется контекст не менее 128 000 токенов. Информация, описанная здесь, актуальна на указанную дату (24.11.2024).
+                this.setTranslation("russian-language", id, `Провайдеры нейросетей.
+Для всех провайдеров, кроме Websim, вам нужно зарегистрироваться на соответствующем сайте и создать API ключ или Access Token. Обращайте внимание на контекст нейросети - у Легендарики очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, которые используются ГМ-ом. Нужен контекст как минимум 128 000 токенов. Информация, описанная здесь, актуальна на момент указанной даты (24.11.2024).
 
 Cohere (https://coral.cohere.com/). Предоставляет полностью бесплатный доступ к моделям Command R.
 С чего начать: модель command-r-plus
 
-Google AI Studio (https://ai.google.dev/aistudio). Все модели имеют бесплатный доступ; смотрите сайт Google AI Studio. Попробуйте экспериментальные модели — у них обычно больший лимит бесплатных сообщений в день.
+Google AI Studio (https://ai.google.dev/aistudio). Все модели имеют бесплатный лимит, смотрите на сайте студии. Попробуйте экспериментальные модели - они обычно имеют больший лимит бесплатных сообщений в день.
 С чего начать: модель gemini-1.5-pro
 
-Groq (https://groq.com/). Groq предоставляет доступ к различным бесплатным моделям, но сильно ограничивает их по контексту. В настоящее время на этом сайте нет бесплатных моделей, которые хорошо работают в Legendarica, но это может измениться в будущем. Платные модели, вероятно, будут работать хорошо. Смотрите список моделей здесь: https://console.groq.com/docs/models
+Groq (https://groq.com/). Groq предоставляет доступ к различным бесплатным моделям, но сильно ограничивает их по контексту. Сейчас на этом сайте нет бесплатных моделей, которые бы хорошо работали в Легендарике, но все может измениться в будущем. Платные модели, скорее всего, работают хорошо. Смотрите список моделей здесь: https://console.groq.com/docs/models
 
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Большое хранилище нейронных сетей. Для доступа используется Inference API, и только модели, которые его поддерживают, доступны для игры. Существует ограничение на количество сообщений в день, которое увеличивается с платной подпиской. Если модели отправляют нечитаемый текст в ответ, то либо модель очень слабая, либо температура высокая. В этом случае попробуйте снизить температуру или сменить модель.
-С чего начать: модель Qwen/Qwen2.5-72B-Instruct (температура 0.4)
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Большой репозиторий для нейросетей. Для доступа к нему используется Inference API, и только те модели, которые поддерживают его, доступны для игры. Есть ограничение на количество сообщений в день, которое становится большим с платной подпиской. Если модели посылают нечитаемый текст в качестве ответа, значит либо модель очень слабая, либо температура высокая. В этом случае, попробуйте понизить температуру или сменить модель. 
+С чего начать: модель Qwen/Qwen2.5-72B-Instruct  (температура 0.4)
 
-Mistral AI (https://mistral.ai/). Сайт Mistral AI предлагает участие в "экспериментальном" плане ценообразования, делая все модели Mistral бесплатными для использования.
+Mistral AI (https://mistral.ai/). На сайте Mistral AI есть возможность принять участие в "экспериментальном" тарифном плане, что делает все модели Mistral бесплатными для использования.
 С чего начать: модель mistral-large-latest
 
-OpenAI01 (https://openaio1api.com/ - основной сайт: https://openai01.net/). Доступ к OpenAI o1-preview. Бесплатного доступа нет. При регистрации вы получаете 10 кредитов; 2 кредита списываются за запрос к o1-preview.
-Модель: o1-preview
+OpenAI01 (https://openaio1api.com/ - главный сайт: https://openai01.net/). Доступ к OpenAI o1-preview. Бесплатного тарифа нет. При регистрации дают 10 кредитов, 2 кредита стоит запрос к o1-preview.
+Модель: o1-preview 
 
-Openrouter (https://openrouter.ai/). Предлагает как бесплатные, так и платные модели. У бесплатных моделей есть ежедневный лимит сообщений.`
+Openrouter (https://openrouter.ai/). Есть бесплатные модели, есть платные. У бесплатных моделей есть лимит сообщений в день.
+
+Websim. Зависит от нейросети, которую использует Websim. После того, как Websim изменил AI API с Claude на нечто очень слабое, Websim больше не может гарантировать хорошую игру или вообще её проведение, поскольку используемый AI очень слаб. Но все может измениться в будущем.`
                 );
 
                 // Испанский перевод
@@ -3337,6 +3835,86 @@ Openrouter (https://openrouter.ai/). Offre des modèles gratuits et payants. Les
                 );
 
             }
-        }
+        },
+
+        setConteinerItemsExceedCapacityMessage: function (containerName, excessCount, itemNames) {
+            const id = "item-container-items-exceed-capacity-message";
+
+            this.setTranslation("english-language", id, `Container "${containerName}" exceeds capacity by ${excessCount} item(s). Moved: "${itemNames}" to the main inventory.`);
+            this.setTranslation("russian-language", id, `Контейнер "${containerName}" превышает вместимость на ${excessCount} элемент(ов). Перемещены: "${itemNames}" в основной инвентарь.`);
+            this.setTranslation("spanish-language", id, `El contenedor "${containerName}" excede la capacidad por ${excessCount} artículo(s). Movidos: "${itemNames}" al inventario principal.`);
+            this.setTranslation("portuguese-language", id, `O contêiner "${containerName}" excede a capacidade em ${excessCount} item(ns). Movidos: "${itemNames}" para o inventário principal.`);
+            this.setTranslation("hindi-language", id, `कंटेनर "${containerName}" की क्षमता ${excessCount} आइटम(स) से अधिक हो गई है। स्थानांतरित किए गए: "${itemNames}" मुख्य इन्वेंटरी में।`);
+            this.setTranslation("german-language", id, `Der Container "${containerName}" überschreitet die Kapazität um ${excessCount} Element(e). Verschoben: "${itemNames}" in das Hauptinventar.`);
+            this.setTranslation("french-language", id, `Le conteneur "${containerName}" dépasse la capacité de ${excessCount} élément(s). Déplacés : "${itemNames}" dans l'inventaire principal.`);
+
+            return id;
+        },
+
+        setContainerItemsExceedVolumeMessage: function (containerName, itemNames) {
+            const id = "item-container-items-exceed-volume-message";
+
+            this.setTranslation("english-language", id, `The volume of the container "${containerName}" is smaller than the volume of the items placed inside it. Automatically corrected. Moved: "${itemNames}" to the main inventory.`);
+            this.setTranslation("russian-language", id, `Объем контейнера "${containerName}" меньше объёма вложенных в него предметов. Автоматически исправлено. Перемещены: "${itemNames}" в основной инвентарь.`);
+            this.setTranslation("spanish-language", id, `El volumen del contenedor "${containerName}" es menor que el volumen de los artículos colocados en su interior. Corregido automáticamente. Movidos: "${itemNames}" al inventario principal.`);
+            this.setTranslation("portuguese-language", id, `O volume do contêiner "${containerName}" é menor que o volume dos itens colocados dentro dele. Corrigido automaticamente. Movidos: "${itemNames}" para o inventário principal.`);
+            this.setTranslation("hindi-language", id, `कंटेनर "${containerName}" की क्षमता उसमें रखी वस्तुओं के आयतन से कम है। स्वतः ठीक कर दिया गया है। स्थानांतरित किए गए: "${itemNames}" मुख्य इन्वेंटरी में।`);
+            this.setTranslation("german-language", id, `Das Volumen des Containers "${containerName}" ist geringer als das Volumen der darin platzierten Gegenstände. Automatisch korrigiert. Verschoben: "${itemNames}" ins Hauptinventar.`);
+            this.setTranslation("french-language", id, `Le volume du conteneur "${containerName}" est inférieur au volume des objets qui y sont placés. Corrigé automatiquement. Déplacés : "${itemNames}" dans l'inventaire principal.`);
+
+            return id;
+        },
+
+        setStatIncreasedMessage: function (statName, increaseValue) {
+            const id = "stat_increased_message";
+
+            this.setTranslation("english-language", id, `Attention! The '${statName}' stat has increased by ${increaseValue}!`);
+            this.setTranslation("russian-language", id, `Внимание! Характеристика '${statName}' повысилась на ${increaseValue}!`);
+            this.setTranslation("spanish-language", id, `¡Atención! ¡La característica '${statName}' ha aumentado en ${increaseValue}!`);
+            this.setTranslation("portuguese-language", id, `Atenção! A característica '${statName}' aumentou em ${increaseValue}!`);
+            this.setTranslation("hindi-language", id, `ध्यान दें! '${statName}' गुण ${increaseValue} से बढ़ गया है!`);
+            this.setTranslation("german-language", id, `Achtung! Die Eigenschaft '${statName}' hat sich um ${increaseValue} erhöht!`);
+            this.setTranslation("french-language", id, `Attention ! La caractéristique '${statName}' a augmenté de ${increaseValue} !`);
+
+            return id;
+        },
+
+        setStatDecreasedMessage: function (statName, decreaseValue) {
+            const id = "stat_decreased_message";
+
+            this.setTranslation("english-language", id, `Attention! The '${statName}' stat has decreased by ${decreaseValue}!`);
+            this.setTranslation("russian-language", id, `Внимание! Характеристика '${statName}' понизилась на ${decreaseValue}!`);
+            this.setTranslation("spanish-language", id, `¡Atención! ¡La característica '${statName}' ha disminuido en ${decreaseValue}!`);
+            this.setTranslation("portuguese-language", id, `Atenção! A característica '${statName}' diminuiu em ${decreaseValue}!`);
+            this.setTranslation("hindi-language", id, `ध्यान दें! '${statName}' गुण ${decreaseValue} से कम हो गया है!`);
+            this.setTranslation("german-language", id, `Achtung! Die Eigenschaft '${statName}' hat sich um ${decreaseValue} verringert!`);
+            this.setTranslation("french-language", id, `Attention ! La caractéristique '${statName}' a diminué de ${decreaseValue} !`);
+
+            return id;
+        },
+
+        setSkillRemovedMessage: function (skillName, isActive) {
+            const id = "skill_removed_message";
+
+            const skillType = {
+                "english-language": isActive ? "active skill" : "passive skill",
+                "russian-language": isActive ? "активный навык" : "пассивный навык",
+                "spanish-language": isActive ? "habilidad activa" : "habilidad pasiva",
+                "portuguese-language": isActive ? "habilidade ativa" : "habilidade passiva",
+                "hindi-language": isActive ? "सक्रिय कौशल" : "निष्क्रिय कौशल",
+                "german-language": isActive ? "aktive Fähigkeit" : "passive Fähigkeit",
+                "french-language": isActive ? "compétence active" : "compétence passive"
+            };
+
+            this.setTranslation("english-language", id, `Attention! The ${skillType["english-language"]} '${skillName}' has been removed from the player's skills!`);
+            this.setTranslation("russian-language", id, `Внимание! ${skillType["russian-language"]} '${skillName}' был удален из навыков игрока!`);
+            this.setTranslation("spanish-language", id, `¡Atención! ¡La ${skillType["spanish-language"]} '${skillName}' ha sido eliminada de las habilidades del jugador!`);
+            this.setTranslation("portuguese-language", id, `Atenção! A ${skillType["portuguese-language"]} '${skillName}' foi removida das habilidades do jogador!`);
+            this.setTranslation("hindi-language", id, `ध्यान दें! ${skillType["hindi-language"]} '${skillName}' को खिलाड़ी के कौशल से हटा दिया गया है!`);
+            this.setTranslation("german-language", id, `Achtung! Die ${skillType["german-language"]} '${skillName}' wurde aus den Fähigkeiten des Spielers entfernt!`);
+            this.setTranslation("french-language", id, `Attention ! La ${skillType["french-language"]} '${skillName}' a été supprimée des compétences du joueur!`);
+
+            return id;
+        },
     }
 })();
