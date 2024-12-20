@@ -479,6 +479,7 @@ Enjoy the game!`,
             "quest-info-questGiver-label": "Quest Giver",
             "quest-info-questBackground-label": "Background:",
             "quest-info-description-label": "Description:",
+            "use-thinking-module-label": "Add a response-thinking module (disable to save tokens). Theoretically makes the AI smarter",
         },
         "russian-language": {
             // placeholders
@@ -938,6 +939,7 @@ Websim. Зависит от нейросети, которую использу�
             "quest-info-questGiver-label": "Квестодатель",
             "quest-info-questBackground-label": "Предыстория:",
             "quest-info-description-label": "Описание:",
+            "use-thinking-module-label": "Добавить модуль обдумывания ответов (отключите для экономии токенов). Теоретически сделает АИ более умным",
         },
         "spanish-language": {
             // placeholders
@@ -1404,6 +1406,7 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "quest-info-questGiver-label": "Dador de la Misión",
             "quest-info-questBackground-label": "Antecedentes:",
             "quest-info-description-label": "Descripción:",
+            "use-thinking-module-label": "Agregar un módulo de reflexión de respuestas (desactivar para ahorrar tokens). Teóricamente hace la IA más inteligente",
         },
         "portuguese-language": {
             // placeholders
@@ -1870,6 +1873,7 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "quest-info-questGiver-label": "Doador da Missão",
             "quest-info-questBackground-label": "Antecedentes:",
             "quest-info-description-label": "Descrição:",
+            "use-thinking-module-label": "Adicionar módulo de raciocínio das respostas (desative para economizar tokens). Teoricamente torna a IA mais inteligente",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -2333,6 +2337,7 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "quest-info-questGiver-label": "क्वेस्ट देने वाला",
             "quest-info-questBackground-label": "पृष्ठभूमि:",
             "quest-info-description-label": "विवरण:",
+            "use-thinking-module-label": "उत्तर सोचने वाला मॉड्यूल जोड़ें (टोकन बचाने के लिए बंद करें)। सैद्धांतिक रूप से यह एआई को अधिक बुद्धिमान बनाता है",
         },
         "german-language": {
             // placeholders
@@ -2799,6 +2804,7 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "quest-info-questGiver-label": "Questgeber",
             "quest-info-questBackground-label": "Hintergrund:",
             "quest-info-description-label": "Beschreibung:",
+            "use-thinking-module-label": "Den Denkmodul für Antworten hinzufügen (deaktivieren, um Tokens zu sparen). Theoretisch macht es die KI intelligenter",
         },
         "french-language": {
             // placeholders
@@ -3266,6 +3272,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "quest-info-questGiver-label": "Donneur de Quête",
             "quest-info-questBackground-label": "Contexte :",
             "quest-info-description-label": "Description :",
+            "use-thinking-module-label": "Ajouter un module de réflexion sur les réponses (désactiver pour économiser des jetons). Théoriquement, cela rend l'IA plus intelligente",
         }
     };
 
@@ -3358,7 +3365,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "npc-info-tab-journal-label", "npc-info-tab-memory-diary-label",
             "npc-info-memory-diary-label", "npc-delete-memory-diary", "use-npc-memories-diary-label",
             "status-appearanceDescription-label", "status-statusInSociety-label", "status-positionInSociety-label", "status-affiliationWithOrganizations-label",
-            "quest-info-questBackground-label", "quest-info-description-label"
+            "quest-info-questBackground-label", "quest-info-description-label", "use-thinking-module-label"
         ];
 
         //Update labels

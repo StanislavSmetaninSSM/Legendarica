@@ -230,6 +230,7 @@ const ELEMENTS = {
     useNpcMemoriesDiary: document.getElementById('useNpcMemoriesDiary'),
     useQuestsList: document.getElementById('useQuestsList'),
     makeGameQuestOriented: document.getElementById('makeGameQuestOriented'),
+    useThinkingModule: document.getElementById('useThinkingModule'),
 
     //Graphics
     floatingImg: document.getElementById('floating'), // Splash screen
@@ -3132,7 +3133,7 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
 
         //Response template
         let responseTemplate = `{ 
-            "inventoryItemsData": [] ,
+            ${ELEMENTS.useThinkingModule.checked ? `"thinkingData": '' , \n` : ``} "inventoryItemsData": [] ,
             "removeInventoryItems": [] ,
             "moveInventoryItems": [] ,
             "locationData": { "name": "" , "difficulty": "" , "lastEventsDescription": "", "description": "", "image_prompt": "" } ,
@@ -3173,6 +3174,11 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
 
 Please, Let's think step by step:
 [
+${ELEMENTS.useThinkingModule.checked ? `
+#-1. Include to the 'response' the key 'thinkingData', value of which is a string representing your (game master's) thinking process. Before generating your final response, fill the value of 'thinkingData' key according to the following instructions: [
+${thinkingModule.getPrompt(translationModule.currentLanguage)}
+]
+` : ``}
 #0 Carefully study and remember the super instructions, which are more priority in case of contradictions than other parts of the instructions: [ ${myPrompt} ].
 
 #1 Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes. Response template: ${responseTemplate} . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
