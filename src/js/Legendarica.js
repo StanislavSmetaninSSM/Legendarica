@@ -1628,7 +1628,7 @@ function showNPCInfo(id) {
 
     ELEMENTS.npcInfoName.innerHTML = `${markdown(currentNPC.name)}`;
     ELEMENTS.npcInfoRarity.innerHTML = `${rarityLabel}: ${currentNPC.rarity ?? '-'}`;
-    ELEMENTS.npcInfoAge.innerHTML = `${ageLabel}: ${currentNPC.age ?? '-'}`;
+    ELEMENTS.npcInfoAge.innerHTML = `${ageLabel}: ${currentNPC.age > 0 ? currentNPC.age : '-'}`;
     ELEMENTS.npcInfoWorldview.innerHTML = `${worldviewLabel}: ${currentNPC.worldview ?? '-'}`;
     ELEMENTS.npcInfoRace.innerHTML = `${raceLabel}: ${currentNPC.race ?? '-'}`;
     ELEMENTS.npcInfoClass.innerHTML = `${classLabel}: ${currentNPC.class ?? '-'}`;
