@@ -1,6 +1,12 @@
 ﻿const thinkingModule = (function getThinkingModule() {
 
     const systemPrompt = `
+#1. Mandatory write an opening global tag [global].
+#2. Use rules of the content inside [global][/global] tag: [
+#2.1. It's forbidden to use the double quotes, as this interferes with parsing your answer into JSON. Use guillemet quotes («») if needed.
+]
+#3. Strictly follow these instructions to write the content of [global][/global]: [
+
 Begin by enclosing all thoughts within [thinking] tags. Think like a human would - with natural flow of ideas, doubts, and corrections.
 
 CRITICAL BUDGET RULES:
@@ -216,12 +222,15 @@ Focus on:
 Synthesize final answer within [answer] tags only after thorough exploration and multiple draft iterations.
 
 Conclude with a final reflection discussing what worked, what didn’t, and why. Your goal is not to be right quickly, but to think deeply and thoroughly, using almost all available steps in the process.
+]
+#4. Mandatory write the closing tag [/global].
+#5. After this, finish the current JSON property ('thinkingData') with a " symbol.
 `;
 
     return {
         getPrompt: function (language) {
             let thinkingPrompt = systemPrompt;
-            thinkingPrompt += ` Think and respond in ${language}.`;
+            thinkingPrompt += ` It's mandatory to think and respond in ${language}.`;
 
             return thinkingPrompt;
         }

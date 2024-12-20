@@ -63,6 +63,7 @@ const ELEMENTS = {
     chooseLanguageMenu: document.getElementById('choose-language-menu'),
     bottomBox: document.getElementById('bottom-box'),
     logBox: document.getElementById('log-box'),
+    thinkingLogBox: document.getElementById('thinking-log-box'),
     lagBox: document.getElementById('lag-box'),
     myRulesBox: document.getElementById('my-rules-box'),
     systemInstructionsBox: document.getElementById('system-instructions-box'),
@@ -746,6 +747,21 @@ function logMessage(message, currentHealthChange, currentEnergyChange, moneyChan
 
     ELEMENTS.logBox.appendChild(messageContainer);
     ELEMENTS.bottomBox.scrollTop = ELEMENTS.bottomBox.scrollHeight;
+}
+
+function logThinkingMessage(message) {
+    ELEMENTS.thinkingLogBox.innerHTML = "";
+
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message', 'gm');
+    messageContainer.innerHTML = markdown(message);
+
+    const countTurn = document.createElement('span');
+    countTurn.classList.add('message-turn-and-close-button');
+    countTurn.textContent = `\n ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["turn_log_name"]} #${turn} `;
+    messageContainer.appendChild(countTurn);
+
+    ELEMENTS.thinkingLogBox.appendChild(messageContainer);
 }
 
 function generateLoot(arr, numberOfItems) {
@@ -2115,7 +2131,7 @@ function playerInfoDataSwitch(caller, activeDataIds) {
 }
 
 function toggleVisibility(targetBoxIds) {
-    const boxIds = ['my-rules-box', 'log-box', 'lag-box', 'settings-box', 'system-instructions-box'];
+    const boxIds = ['my-rules-box', 'log-box', 'thinking-log-box', 'lag-box', 'settings-box', 'system-instructions-box'];
 
     boxIds.forEach(id => {
         const box = document.getElementById(id);
@@ -2134,6 +2150,10 @@ function toggleVisibility(targetBoxIds) {
 
 function toggleLogVisibility() {
     toggleVisibility(['log-box']);
+}
+
+function toggleThinkingLogVisibility() {
+    toggleVisibility(['thinking-log-box']);
 }
 
 function toggleMyRulesVisibility() {
@@ -3133,7 +3153,7 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
 
         //Response template
         let responseTemplate = `{ 
-            ${ELEMENTS.useThinkingModule.checked ? `"thinkingData": '' , \n` : ``} "inventoryItemsData": [] ,
+            ${ELEMENTS.useThinkingModule.checked ? `"thinkingData": "" , \n` : ``} "inventoryItemsData": [] ,
             "removeInventoryItems": [] ,
             "moveInventoryItems": [] ,
             "locationData": { "name": "" , "difficulty": "" , "lastEventsDescription": "", "description": "", "image_prompt": "" } ,
@@ -3175,15 +3195,17 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
 Please, Let's think step by step:
 [
 ${ELEMENTS.useThinkingModule.checked ? `
-#-1. Include to the 'response' the key 'thinkingData', value of which is a string representing your (game master's) thinking process. Before generating your final response, fill the value of 'thinkingData' key according to the following instructions: [
+#-1. Include to the response the key 'thinkingData', value of which is a string, representing draft version of 'response' value of key. The purpose of it is to help you to create the nice version of 'response'.
+#-1.1. The value of 'thinkingData' shouldn't contain any JSON data, only the text.
+#-1.2. Before generating your final response, fill the value of 'thinkingData' key according to the following instructions: [ Let's think step by step: [
 ${thinkingModule.getPrompt(translationModule.currentLanguage)}
-]
+] ]
 ` : ``}
 #0 Carefully study and remember the super instructions, which are more priority in case of contradictions than other parts of the instructions: [ ${myPrompt} ].
 
 #1 Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes. Response template: ${responseTemplate} . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
-#1.1. To the "items_and_stat_calculations" include array of strings, each of which represents one complete message about various calculations for logs. Fill it only when you see the direct instruction to output something into "items_and_stat_calculations".
-#1.1.1. Group messages for "items_and_stat_calculations" logically. Try not form many small messages. Instead, write one large message for it. 
+#1.1. To the 'items_and_stat_calculations' include array of strings, each of which represents one complete message about various calculations for logs. Fill it only when you see the direct instruction to output something into 'items_and_stat_calculations'.
+#1.1.1. Group messages for 'items_and_stat_calculations' logically. Try not form many small messages. Instead, write one large message for it. 
 
 #2 ${turn == 1 ? `This is the start of a new game. [ Starting message from player: [ ${currentMessage} ]. Let's think step by step : [ 
 #2.1. Briefly tell about the character (without inventing their personality and goals) and their backstory.
@@ -3199,12 +3221,12 @@ ${thinkingModule.getPrompt(translationModule.currentLanguage)}
 #2.8.3. To the value of 'skillDescription' key you need to include the following data about the skill and describe the data in as much detail and artistic language as possible (each value should be separated from previous by a blank line and translated to user's chosen language): [ ${skillsDescriptionTemplate} ]
 #2.8.4. Objects of newPassiveSkills array should not contain nested arrays or objects. 
 #2.8.5. Each passive skill must be one of the following types: [
-#2.8.6. Knowledge-based: Represents a broad area of expertise, enabling creation of related active skills. Examples: "Fire Magic Knowledge", "Knife Fighting Mastery". For example, "Fire Magic Knowledge" could lead to active skills like "Fireball" or "Fire Rain". Such passive skills are like a book from which the player draws information to create related active skills.
-#2.8.7. Stat-based: Directly enhances one of these player stats: ${statsList}. Example: "Strong Physique" grants +1 to constitution. 
+#2.8.6. Knowledge-based: Represents a broad area of expertise, enabling creation of related active skills. Examples: 'Fire Magic Knowledge', 'Knife Fighting Mastery'. For example, 'Fire Magic Knowledge' could lead to active skills like 'Fireball' or 'Fire Rain'. Such passive skills are like a book from which the player draws information to create related active skills.
+#2.8.7. Stat-based: Directly enhances one of these player stats: ${statsList}. Example: 'Strong Physique' grants +1 to constitution. 
 #2.8.8. Improvements-based: Gives the player other important benefits. ]
 #2.8.9. To the value of 'type' key, you need to write the type to which the passive skill belongs. It should be one of: [ 'Knowledge-based', 'Stat-based', 'Improvements-based' ] . 
 #2.8.10. If the generated passive skill is knowledge-based, then note in the description that player can create new active skills based on this passive skill.
-#2.8.11. If the generated passive skill is stat-based, fill the value of key 'playerStatBonus' with a string in corresponding format: "+{stat bonus numeric value} {player stat}". Like "+1 constitution". You should use as stats only these characteristics: ${statsList} . Translate {player stat} label to user's chosen language.
+#2.8.11. If the generated passive skill is stat-based, fill the value of key 'playerStatBonus' with a string in corresponding format: '+{stat bonus numeric value} {player stat}'. Like '+1 constitution'. You should use as stats only these characteristics: ${statsList} . Translate {player stat} label to user's chosen language.
 #2.8.12. If the generated passive skill is not stat-based, then: 
 [ To the value of 'effectDescription' set string, representing the description of passive skill effect. ], otherwise: [ Do not include 'effectDescription' key to the object ] .
 #2.8.13. The value of 'group' key, which represents the category of passive skill, should not be equal to 'type'. It is the name of a group into which a passive skill can be classified based on its description.
@@ -3227,12 +3249,12 @@ ${generatePassiveSkills ? `
 #3.3. To the value of 'skillDescription' key you need to include the following data about the skill and describe the data in as much detail and artistic language as possible (each value should be separated from previous by a blank line and translated to user's chosen language): [ ${skillsDescriptionTemplate} ]
 #3.4. Objects of newPassiveSkills array should not contain nested arrays or objects.
 #3.5. Each passive skill must be one of the following types: [
-#3.5.1. Knowledge-based: Represents a broad area of expertise, enabling creation of related active skills. Examples: "Fire Magic Knowledge", "Knife Fighting Mastery". For example, "Fire Magic Knowledge" could lead to active skills like "Fireball" or "Fire Rain". Such passive skills are like a book from which the player draws information to create related active skills.
-#3.5.2. Stat-based: Directly enhances one of these player stats: ${statsList}. Example: "Strong Physique" grants +1 to constitution. 
+#3.5.1. Knowledge-based: Represents a broad area of expertise, enabling creation of related active skills. Examples: 'Fire Magic Knowledge', 'Knife Fighting Mastery'. For example, 'Fire Magic Knowledge' could lead to active skills like 'Fireball' or 'Fire Rain'. Such passive skills are like a book from which the player draws information to create related active skills.
+#3.5.2. Stat-based: Directly enhances one of these player stats: ${statsList}. Example: 'Strong Physique' grants +1 to constitution. 
 #3.5.3. Improvements-based: Gives the player other important benefits. ]
 #3.6. To the value of 'type' key, you need to write the type to which the passive skill belongs. It should be one of: [ 'Knowledge-based', 'Stat-based', 'Improvements-based' ] . 
 #3.7. If the generated passive skill is knowledge-based, then note in the description that player can create new active skills based on this passive skill.
-#3.8. If the generated passive skill is stat-based, fill the value of key 'playerStatBonus' with a string in corresponding format: "+{stat bonus numeric value} {player stat}". Like "+1 constitution". You should use as stats only these characteristics: ${statsList} . Translate {player stat} label to user's chosen language.
+#3.8. If the generated passive skill is stat-based, fill the value of key 'playerStatBonus' with a string in corresponding format: '+{stat bonus numeric value} {player stat}'. Like '+1 constitution'. You should use as stats only these characteristics: ${statsList} . Translate {player stat} label to user's chosen language.
 #3.9. If the generated passive skill is not stat-based, then: 
 [ To the value of 'effectDescription' set string, representing the description of passive skill effect. ], otherwise: [ Do not include 'effectDescription' key to the object ] .
 #3.10. The value of 'group' key, which represents the category of passive skill, should not be equal to 'type'. It is the name of a group into which a passive skill can be classified based on its description.
@@ -3330,8 +3352,8 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.16. If item is container, then use these container rules: [
 #4.16.1 Mandatory set 'isContainer' to true.
 #4.16.2. The description of an item (container) should not include information about its contents.
-Example 1 (incorrect): "This is an emergency first aid kit. Inside are bandages and iodine." The description of this container explicitly states that bandages and iodine are inside. This is an incorrect description.
-Example 2 (correct): "This is an emergency first aid kit."
+Example 1 (incorrect): 'This is an emergency first aid kit. Inside are bandages and iodine.' The description of this container explicitly states that bandages and iodine are inside. This is an incorrect description.
+Example 2 (correct): 'This is an emergency first aid kit.'
 #4.16.3. Include to the 'capacity' value of key the numeric value, representing the number of items the container can hold.
 #4.16.4. It's forbidden to add more items to a container than its 'capacity' allows.
 #4.17. The 'count' property of container must always be '1'. Each container is unique one. Instead of combining containers, add the new unique one if needed. It's mandatory to follow this rule for containers.
@@ -3339,11 +3361,11 @@ Example 2 (correct): "This is an emergency first aid kit."
 #4.17. If 'isContainer' is false, then set the 'capacity' value to null.
 #4.18. To the value of 'weight' key include the numeric value, representing the weight of item. Each item has the weight. Unit of weight: kilogram.
 #4.18.1. If the item is a container, you need to set additionally 'containerWeight' value of key. This is the weight of container without items inside it.
-#4.18.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to "0") if it is an item with the appropriate special properties.
+#4.18.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to '0') if it is an item with the appropriate special properties.
 #4.19. To the value of 'volume' key include the numeric value, representing the volume of item. Each item has the volume. Unit of volume: dm³.
 #4.20. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
 #4.21. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
-#4.22. Mandatory record information about this event in "items_and_stat_calculations".
+#4.22. Mandatory record information about this event in 'items_and_stat_calculations'.
 ${turn == 1 ? `
 #4.23. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
@@ -3378,7 +3400,7 @@ It's mandatory to use the same names, which predefined items already have. Forbi
 #5.4.1. It's mandatory to set to 'isContainer' the same value, like in the item with same name known from Context. 
 #5.5. If container is moved, then include to 'moveInventoryItems' only container, without its contents, because the contents of container will be moved to a new place automatically by game system.
 #5.6. The order in which you add items to the 'moveInventoryItems' array is important. It must be logically correct. For example, if the player says to put these items in a container, and then move the container to a new location, you must add the items in exactly that order. This is important for the system to process the result.
-#5.7. Mandatory record information about this event in "items_and_stat_calculations".
+#5.7. Mandatory record information about this event in 'items_and_stat_calculations'.
 ] ]
 
 #6 If this condition is true: [
@@ -3394,7 +3416,7 @@ It's mandatory to use the same names, which predefined items already have. Forbi
 #6.4. To the value of 'isContainer' key include the boolean value, that indicates whether the item being removed is a container or not.
 #6.4.1. It's mandatory to set to 'isContainer' the same value, like in the item with same name known from Context. 
 #6.5. If container is removed, then include to 'removeInventoryItems' only container, without its contents, because the contents of container will be removed automatically by game system.
-#6.6. Mandatory record information about this event in "items_and_stat_calculations".
+#6.6. Mandatory record information about this event in 'items_and_stat_calculations'.
 ] ]
 
 #7 Checking player actions: steps and requirements. [ Let's think step by step: ${CHARACTER_INFO.rpgMode ? `
@@ -3406,7 +3428,7 @@ It's mandatory to use the same names, which predefined items already have. Forbi
 #7.1.5. The 'attractiveness' characteristic is used to seduce or charm the NPC (for example, to get a discount or important information). Attractiveness reflects the physical beauty of the character. It is important to note that not all NPCs care about physical beauty.
 #7.1.6. The 'persuasion' characteristic is used to convince someone using oratory.
 ${playerCritDice != 20 && playerCritDice != 1 ? `
-#7.2. Output to "items_and_stat_calculations" the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Usual dice roll, which means that we need to make additional check for player action.
+#7.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Usual dice roll, which means that we need to make additional check for player action.
 #7.3. Do following check for the associated characteristic: [
 #7.3.1. Let's describe the StatModificator. StatModificator is a special constant for current turn, related with the associated characteristic. We use this value for subsequent checks for a success or failure of the player's action related with the associated characteristic.
 #7.3.1.1. Calculate the StatModificator using the instruction: [
@@ -3445,25 +3467,25 @@ PlayerDiceResult + StatModificator >= GMDiceResult + ActionDifficultModificator,
 • GMDiceResult - result of gamemaster dice roll.
 • ActionDifficultModificator - the value that determines the difficulty of the player's action.
 ]
-#7.3.6. Output to "items_and_stat_calculations" the check calculation and result of check.
-#7.3.6.1. For recording in "items_and_stat_calculations", translate the names of characteristics into natural language.
+#7.3.6. Output to 'items_and_stat_calculations' the check calculation and result of check.
+#7.3.6.1. For recording in 'items_and_stat_calculations', translate the names of characteristics into natural language.
 #7.3.7. If the check result is true, then: [
-- Output to "items_and_stat_calculations" that player's action was succeeded.
+- Output to 'items_and_stat_calculations' that player's action was succeeded.
 - Note that the player has succeeded in doing what player was trying to do. You should develop the game's plot based on this.
 ], otherwise: [
-- Output to "items_and_stat_calculations" that the player's action failed.
+- Output to 'items_and_stat_calculations' that the player's action failed.
 - Note that the player has failed at what player was trying to do. You should develop the game's plot based on this.
 ]
 ` : (playerCritDice == 20 ? `
-#7.2. Output to "items_and_stat_calculations" the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Success!
+#7.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Success!
 #7.2.1. It means that the player's action is successful automatically and no additional check is required.
 #7.2.2. Note that the player has completely succeeded in doing what player was trying to do. You should develop the game's plot based on this.
-#7.2.3. Output to "items_and_stat_calculations" that player's action was succeeded.
+#7.2.3. Output to 'items_and_stat_calculations' that player's action was succeeded.
 ` : `
-#7.2. Output to "items_and_stat_calculations" the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Failure!
+#7.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Failure!
 #7.2.1. It means that the player's action is failed automatically and no additional check is required. 
 #7.2.2. Note that the player has completely failed at what player was trying to do. You should develop the game's plot based on this.
-#7.2.3. Output to "items_and_stat_calculations" that the player's action failed completely.
+#7.2.3. Output to 'items_and_stat_calculations' that the player's action failed completely.
 `)}
 #7.4. Before the player receives new items in the inventory, make this check for possibility to receive them: [
 #7.4.1. This is the current sum of 'strength' + 'constitution' of player. Let's call it StrengthPlusConstitution = ${strengthPlusConstitution} .
@@ -3489,7 +3511,7 @@ MaxWeightValue >= TotalWeight, where
 If the check result is false:
 - The player cannot receive these items because it's too heavy - player is overencumbered by the total weight. Don't add items to the inventory, and mark in the 'response' the reason.
 - It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
-#7.4.10. Output to "items_and_stat_calculations" the formula and describe calculation of this check.
+#7.4.10. Output to 'items_and_stat_calculations' the formula and describe calculation of this check.
 ]
 #7.5. When items are need to be added inside the container item, located in the player's inventory, make this check for possibility to do it: [
 #7.5.1. Read the value of 'capacity' property of the container. Let's call it Capacity.
@@ -3526,18 +3548,18 @@ Volume >= TotalItemsVolume, where
 If the check result is false:
 - Don't add new items to the container and mark in the 'response' the reason. 
 - It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
-#7.5.6.7. Output to "items_and_stat_calculations" the formula and describe calculation of this check.
+#7.5.6.7. Output to 'items_and_stat_calculations' the formula and describe calculation of this check.
 ]
 If the check result is false:
 - Don't add new items to the container and mark in the 'response' the reason. 
 - It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
 #7.5.7. Make sure that you made both checks: for capacity and volume. Only if both of them returns true as result, you can include these items to 'moveInventoryItems' or 'inventoryItemsData'.
-#7.5.8. Output to "items_and_stat_calculations" the formula and describe calculation of this check.
+#7.5.8. Output to 'items_and_stat_calculations' the formula and describe calculation of this check.
 ]
 ` : `
 #7.1. It will be good if not everything planned will succeed in checks
 #7.2. Determine the difficulty of the roll based on the situation
-#7.3. Having preliminarily determined the difficulty of the roll, use d20 + characteristic, output the process of checking the action and the result in "items_and_stat_calculations" .
+#7.3. Having preliminarily determined the difficulty of the roll, use d20 + characteristic, output the process of checking the action and the result in 'items_and_stat_calculations' .
 #7.4. Rely not only on stats, but also on the logic of what's happening
 #7.5. The further story is formed depending on the result of the check
 #7.6. The 'trade' characteristic check is done only when trading about prices for deals
@@ -3555,7 +3577,7 @@ If the check result is false:
 #8.6. When selecting prices, the price/quality ratio of the item is very strongly taken into account in relation to the price/quality ratio of other already existing inventory (known from Context).
 #8.7. The player buys an item only if they said in the current action that they are buying the item. If they did not talk about buying, then the GM cannot make a decision about the player buying the item.
 ${ELEMENTS.useNpcList.checked ? `
-#8.8. If any of NPCs have a proper name (means, that NPC name explicitly includes the "first name" e.g., "King Arthur", "Elara", "Alan Wake", "Christina", "Guard Captain Roric", "Li"), then select such NPCs and apply the check to each of them: [
+#8.8. If any of NPCs have a proper name (means, that NPC name explicitly includes the 'first name' e.g., 'King Arthur', 'Elara', 'Alan Wake', 'Christina', 'Guard Captain Roric', 'Li'), then select such NPCs and apply the check to each of them: [
 #8.8.1. If one of these conditions are true: [
 - The NPC encountered in current turn is new, meaning information about them is not present in the Context.
 - For each NPC near to player in the current turn, find an NPC with the same name in the Context. If such NPC is found, compare values of their properties ['rarity', 'age', 'worldview', 'race', 'class', 'appearanceDescription', 'history', 'stats', 'skills', 'effects', 'attitude'] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no NPC with the same name in the Context (i.e., the NPC is new), the rule is not applied to this NPC and continues checking the rest.
@@ -3597,7 +3619,7 @@ ${ELEMENTS.useNpcJournal.checked ? `
 #8.12.2.2. Mandatory format for recording the value of each item of 'NPCJournals' array: {'name': 'full_name_of_current_NPC', 'lastJournalNote': 'last_NPC_thoughts_and_reactions_for_current_turn'} .
 #8.12.2.3. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
 #8.12.2.4. Imagine the NPC keeps a personal journal, in which NPC makes personal notes, recording their thoughts in the first person. To the value of 'lastJournalNote' key, include last note of NPC for current turn. This note should include information about NPC thoughts and reactions regarding last events. Describe it in as much detail and artistic language as possible.
-#8.12.2.5. The value of 'lastJournalNote' must always start with the current turn number. The current turn number is: "${turn}". Mandatory format for recording the text of note: "#${turn}. {Note text}", where '{' and '}' represents the notation of a variable and should not be used in the note.
+#8.12.2.5. The value of 'lastJournalNote' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of note: '#${turn}. {Note text}', where '{' and '}' represents the notation of a variable and should not be used in the note.
 #8.12.2.6. The data which you recorded in the 'lastJournalNote' should only be related with current turn. Do not copy the notes for previous turn, instead of it always record to 'lastJournalNote' the new data, related with current turn only. 
 #8.12.2.7. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. 
 ]
@@ -3609,7 +3631,7 @@ ${ELEMENTS.useNpcMemoriesDiary.checked ? `
 #8.12.3.4. Imagine that an NPC has a personal diary in which they writes down even their most intimate memories, as well as the thoughts and feelings associated with them.
 #8.12.3.5. To the value of 'lastDiaryNote' key, include last memory note of NPC for current turn. This memory should be related with events for current turn and remember something in NPC's past.
 #8.12.3.6. Each memory note should include complete information about part of NPC history, written as personal diary style. Describe it in as much detail and artistic language as possible.
-#8.12.3.7. The value of 'lastDiaryNote' must always start with the current turn number. The current turn number is: "${turn}". Mandatory format for recording the text of note: "#${turn}. {Note text}", where '{' and '}' represents the notation of a variable and should not be used in the note.
+#8.12.3.7. The value of 'lastDiaryNote' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of note: '#${turn}. {Note text}', where '{' and '}' represents the notation of a variable and should not be used in the note.
 #8.12.3.8. The data which you recorded in the 'lastDiaryNote' should only be related with current turn. Do not copy the notes for previous turn, instead of it always record to 'lastDiaryNote' the new data, related with current turn only. 
 #8.12.3.9. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ]` : '' }
@@ -3617,8 +3639,8 @@ ${ELEMENTS.useNpcMemoriesDiary.checked ? `
 ` : ''}
 ${ELEMENTS.useQuestsList.checked ? `
 #9  If one of these conditions are true: [
-- If an NPC and a player made an agreement in current turn where the player is expected to perform a "quest" (in terms of computer role-playing games) — which involves completing a specific task and receiving a reward upon completion.
-- If player get the "quest" from some type of source (like task board, or device) in current turn and agrees to complete it — which involves completing a specific task and receiving a reward upon completion.
+- If an NPC and a player made an agreement in current turn where the player is expected to perform a 'quest' (in terms of computer role-playing games) — which involves completing a specific task and receiving a reward upon completion.
+- If player get the 'quest' from some type of source (like task board, or device) in current turn and agrees to complete it — which involves completing a specific task and receiving a reward upon completion.
 - For each quest in the player's quests in the current turn, find the quest with the same name in the Context. If such quest is found, compare the values of its properties ['questGiver', 'questBackground, 'description', 'purposes', 'reward', 'punishmentForFailingQuest', 'details', 'isCompleted' ] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no quest with the same name in the Context (i.e., the quest is new), the rule is not applied to this quest and continues checking the rest.
 ], then strictly follow the instructions: [ Let's think step by step : [
 #9.1. Include to the response the 'questsData' key, the value of which is the array of objects, and each of which contains the complete information about specific quest.
@@ -3659,7 +3681,7 @@ ${ELEMENTS.useQuestsList.checked ? `
 #10.5.2. Mandatory format for recording the value of each item of 'statsIncreased' array: { 'name': 'name_of_characteristic_to_increase', 'value': 'value_by_which_the_characteristic_is_increased' } .
 #10.5.3. To the 'name' value of key include the name of player's characteristic to increase. It's important to use the name in exactly the same format like in 'name' property of stats_increase_list. Use only english to write this value.
 #10.5.4. To the 'value' value of key include the number to which you decided to increase the player's characteristic.
-#10.5.5. Write to the "items_and_stat_calculations" the reason of increasing the player's characteristic. 
+#10.5.5. Write to the 'items_and_stat_calculations' the reason of increasing the player's characteristic. 
 ]
 #10.6. If it's needed to decrease player's characteristics, then include to the response the key 'statsDecreased': [
 #10.6.1. You can decrease any characteristic from the stats_list if needed.
@@ -3667,13 +3689,13 @@ ${ELEMENTS.useQuestsList.checked ? `
 #10.6.3. Mandatory format for recording the value of each item of 'statsDecreased' array: { 'name': 'name_of_characteristic_to_decrease', 'value': 'value_by_which_the_characteristic_is_decreased' } .
 #10.6.4. To the 'name' value of key include the name of player's characteristic to decrease. It's important to use the name in exactly the same format like in the stats_list. Use only english to write this value.
 #10.6.5. To the 'value' value of key include the number to which you decided to decrease the player's characteristic.
-#10.6.6. Write to the "items_and_stat_calculations" the reason of decreasing the player's characteristic. 
+#10.6.6. Write to the 'items_and_stat_calculations' the reason of decreasing the player's characteristic. 
 ]
 #10.7. Training and Teaching the Player’s Character. Rules.
 #10.7.1. Each time the player attempts to train, or learn something new, strictly follow these instructions: [ Let’s think step by step: [
 #10.7.2. Match the player character’s training or learning to a specific characteristic from this list: ${statsList} .
 #10.7.3. If this characteristic is present in the stats_increase_list, then do the following: [
-#10.7.3. Perform the characteristic check against the situation’s difficulty, following the rules set forth in "#7 Checking player actions: steps and requirements" . 
+#10.7.3. Perform the characteristic check against the situation’s difficulty, following the rules set forth in '#7 Checking player actions: steps and requirements' . 
 #10.7.3.1. Note, that instead of 'Current location difficulty' you should use the current characteristic value ('StatValue') to calculate the difficulty.
 #10.7.4. If the check is successful, reward the player by increasing the corresponding characteristic. ]
 ] ]
@@ -3688,7 +3710,7 @@ ${ELEMENTS.useQuestsList.checked ? `
 #11.7. If the the current location is not new, then leave the 'image_prompt' key as empty. ]
 #12 Each turn, the information about last event for current turn of the location, where the event of the current turn occurred is briefly recorded to the 'lastEventsDescription' value of key for locationData object. Also briefly record the information about all dialogues with the NPC and character for current turn.
 #12.1. The data which you recorded in the 'lastEventsDescription' should only be related with current turn. Do not copy the description of location to 'lastEventsDescription', instead of it always record to 'lastEventsDescription' the new data, related with current turn only.
-#12.2. The value of 'lastEventsDescription' must always start with the current turn number. The current turn number is: "${turn}". Mandatory format for recording the text of this value: "#${turn}. {lastEventsDescription text}".
+#12.2. The value of 'lastEventsDescription' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of this value: '#${turn}. {lastEventsDescription text}'.
 
 #13 Calculate the change in energy, experience, and health according to the following instruction: [ Let's think step by step :
 #13.1. All character actions spend or restore their energy, in an amount logically dependent on the action. The amount of energy changed is entered in the value of the currentEnergyChange key (value type: positive or negative integer)
@@ -3818,7 +3840,7 @@ ${ELEMENTS.useQuestsList.checked ? `
 12.4. Carefully study the current active quests (activeQuests) of character and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  ${JSON.stringify(activeQuests)} .
 12.5. Carefully study the current completed quests (completedQuests) of character and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  ${JSON.stringify(completedQuests)} .
 ` : ''}
-12.6. Please keep in mind the current turn number (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about technical game information): the turn number is "${turn}".
+12.6. Please keep in mind the current turn number (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about technical game information): the turn number is '${turn}'.
 
 13. GAME RULES:
 13.1. Be smart.${CHARACTER_INFO.nonMagicMode ? ' (Important! When generating items, bonuses, abilities, locations, and enemies: consider that in this world magic is absent.)' : ' '}
@@ -3842,14 +3864,14 @@ ${ELEMENTS.useQuestsList.checked ? `
 13.17. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
 13.18. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
 13.19. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
-13.20. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in "items_and_stat_calculations"
-13.21. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in "items_and_stat_calculations"
+13.20. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in 'items_and_stat_calculations'
+13.21. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in 'items_and_stat_calculations'
 13.22. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
 13.23. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
 13.24. The player is not the epicenter of the world, the world lives an independent life
 13.25. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
 13.26. The character should not pick up items unless the player indicated to do so
-13.27. You must not write calculations to the "response" key. Write all calculations only to the "items_and_stat_calculations" value instead.
+13.27. You must not write calculations to the 'response' key. Write all calculations only to the 'items_and_stat_calculations' value instead.
 ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 13.28. The game's narrative should be based on the currently active quests (known from the Context).
 13.29. Each subsequent plot twist should move the player closer to completing the active quests.
@@ -4104,6 +4126,9 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (data.items_and_stat_calculations && data.items_and_stat_calculations.length > 0) {                
                 logMessage(data.items_and_stat_calculations.join('\n\n'), data.currentHealthChange, data.currentEnergyChange, data.moneyChange);
             }
+
+            if (data.thinkingData)
+                logThinkingMessage(data.thinkingData ?? "");
 
             if (data.actions)
                 handlePlayerActionHints(data.actions);
@@ -4391,4 +4416,17 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById(targetContentId + "-label").style.display = "block";
         });
     });
+
+    ELEMENTS.useThinkingModule.onchange = function (e) {
+        const displayNoneClass = 'displayNone';
+        const logButton = document.getElementById('log-thinking-button-label');
+
+        if (e.target.checked) {
+            ELEMENTS.thinkingLogBox.classList.remove(displayNoneClass);
+            logButton.classList.remove(displayNoneClass);
+        } else {
+            ELEMENTS.thinkingLogBox.classList.add(displayNoneClass);
+            logButton.classList.add(displayNoneClass);
+        }
+    }
 });

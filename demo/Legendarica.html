@@ -210,6 +210,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         <button class="tab-button1 tab-mainButton" onclick="toggleRollUpBox()">⇩⇧</button>
                         <button class="tab-button1 tab-mainButton" onclick="toggleSettingsWidth()"><i class="uil uil-align-center-h"></i></button>
                         <button id="log-button-label" class="tab-button1" onclick="toggleLogVisibility()">Лог расчётов действий</button>
+                        <button id="log-thinking-button-label" class="tab-button1 displayNone" onclick="toggleThinkingLogVisibility()">Лог мыслей</button>
                         <button id="save-box-button-lable" class="tab-button1" onclick="clickSaveGame()">Сохранить игру</button>
                         <button id="load-box-button-label" class="tab-button1" onclick="clickLoadGame()">Загрузить игру</button>
                         <button id="settings-button-label" class="tab-button1" onclick="toggleSettingsVisibility()">Настройки</button>
@@ -219,6 +220,9 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                     <div id="bottom-box" class="chat-box" style="height:30vh">
                         <div id="log-box"
+                             style="flex-grow: 1; border: none; margin-top: 5px; margin-bottom: 0px; margin-left: 3px; scrollbar-width: thin; scrollbar-color: #d4af37 #2c2c2c; white-space: pre-line; top: 33px; background: rgba(30, 30, 30, 0.7); font-size: 14px; text-align:justify;padding-top: 20px;">
+                        </div>
+                        <div id="thinking-log-box" class="displayNone"
                              style="flex-grow: 1; border: none; margin-top: 5px; margin-bottom: 0px; margin-left: 3px; scrollbar-width: thin; scrollbar-color: #d4af37 #2c2c2c; white-space: pre-line; top: 33px; background: rgba(30, 30, 30, 0.7); font-size: 14px; text-align:justify;padding-top: 20px;">
                         </div>
 
