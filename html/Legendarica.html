@@ -16,7 +16,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 </head>
 
 <body>
-    <img id="floating" src="https://i.imgur.com/BD5zPmF.jpeg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 9999;">
+    <img id="floating" src="../src/img/Legendarica.png" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 9999;">
 
     <div class="container">
         <div class="game-area">
@@ -422,6 +422,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         <option value="lizardman" data-translate-key="lizardman">Ящер</option>
                         <option value="vampire" data-translate-key="vampire">Вампир</option>
                         <option value="golem" data-translate-key="golem">Голем</option>
+                        <option value="angel" data-translate-key="angel">Ангел</option>
+                        <option value="demon" data-translate-key="demon">Демон</option>
                     </select>
 
                     <span class="tooltip">???<span class="tooltiptext" id="tooltip-race" style="white-space: pre-wrap;"></span></span>
@@ -742,9 +744,17 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <span id="quest-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [14, 28, 42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
             <span id="quest-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
             <h4 id="quest-info-name"></h4>
+            <p id="quest-info-questGiver"></p>
             <p id="quest-info-reward"></p>
             <p id="quest-info-punishment"></p>
-            <p id="quest-info-description"></p>
+            <div>
+                <span id="quest-info-questBackground-label"></span>
+                <p id="quest-info-questBackground" class="tabSpace"></p>
+            </div>
+            <div>
+                <span id="quest-info-description-label"></span>
+                <p id="quest-info-description" class="tabSpace"></p>
+            </div>           
             <div id="quest-info-purposes"></div>
             <p id="quest-info-details"></p>
             <h4 id="quest-delete" class="infoDelete">Забыть это задание</h4>

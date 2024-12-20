@@ -183,9 +183,11 @@ const ELEMENTS = {
     questInfo: document.getElementById('quest-info'),
     questInfoId: document.getElementById('quest-info-id'),
     questInfoName: document.getElementById('quest-info-name'),
+    questInfoQuestGiver: document.getElementById('quest-info-questGiver'),
     questInfoReward: document.getElementById('quest-info-reward'),
     questInfoPunishment: document.getElementById('quest-info-punishment'),
     questInfoPurposes: document.getElementById('quest-info-purposes'),
+    questInfoQuestBackground: document.getElementById('quest-info-questBackground'),
     questInfoDescription: document.getElementById('quest-info-description'),
     questInfoDetails: document.getElementById('quest-info-details'),
     questInfoClose: document.getElementById('quest-info-close'),
@@ -405,7 +407,7 @@ ELEMENTS.createCharacterButton.onclick = function () {
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_donate"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_discord"], 'system');
 
-        const messageId = translationModule.setShortNewGameMessage(name, gender, race, characterClass);
+        const messageId = translationModule.setShortNewGameMessage(name, gender, race, characterClass, selectedCampaign);
         sendRequest(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId]);
         updateElements();
 
@@ -1825,34 +1827,24 @@ function showQuestInfo(id) {
     const description = currentQuest.description ? markdown(currentQuest.description) : '';
     const details = currentQuest.details ? markdown(currentQuest.details) : '';
     const rewardLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quest-reward-label"];
-    const reward = currentQuest.reward ? markdown(`${rewardLabel}: ${currentQuest.reward}`) : '';
+    const reward = currentQuest.reward ? markdown(`${rewardLabel}: ${currentQuest.reward}`) : '-';
     const punishmentLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quest-punishment-label"];
-    const punishment = currentQuest.punishmentForFailingQuest ? markdown(`${punishmentLabel}: ${currentQuest.punishmentForFailingQuest}`) : '';
-
+    const punishment = currentQuest.punishmentForFailingQuest ? markdown(`${punishmentLabel}: ${currentQuest.punishmentForFailingQuest}`) : '-';
+    const questGiverLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quest-info-questGiver-label"];
+    const questGiver = currentQuest.questGiver ? markdown(`${questGiverLabel}: ${currentQuest.questGiver}`) : '-';
+    
     ELEMENTS.questInfoId.value = id;
     ELEMENTS.questInfoName.innerHTML = `${markdown(currentQuest.name)}`;
+    ELEMENTS.questInfoQuestGiver.innerHTML = questGiver;
     ELEMENTS.questInfoDescription.innerHTML = description;
     ELEMENTS.questInfoDetails.innerHTML = details;
     ELEMENTS.questInfoReward.innerHTML = reward;
     ELEMENTS.questInfoPunishment.innerHTML = punishment;
 
-    if (currentQuest.purposes) {
-        const listData = currentQuest.purposes.map(purpose => {
-            const parsedPurpose = markdown(purpose);
-            return `<li>${parsedPurpose}</li>`;
-        }).join('');
-
-        const label = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quest-purposes-label"];
-        ELEMENTS.questInfoPurposes.innerHTML = `
-		    <span id="quest-purposes-label">${label}</span>
-		    <ul id="quest-info-purposes-list">
-			    ${listData}
-		    </ul>
-		`;
-    } else {
-        ELEMENTS.questInfoPurposes.innerHTML = '';
-    }
-
+    renderDescriptionElement(currentQuest.questBackground, ELEMENTS.questInfoQuestBackground);
+    renderDescriptionElement(currentQuest.description, ELEMENTS.questInfoDescription);
+    renderListElements(currentQuest.purposes, ELEMENTS.questInfoPurposes, "quest-info-purposes-list", "quest-purposes-label");
+        
     ELEMENTS.questInfoDelete.onclick = function () {
         if (!confirmAction())
             return;
@@ -1865,23 +1857,24 @@ function showQuestInfo(id) {
 }
 
 //Add a new quest or change the description of an old quest.
-function addQuest(name, description, purposes, reward, punishmentForFailingQuest, details, isCompleted, isLocked = false) {
-    const existingQuestIndex = quests.findIndex(quest => quest.name === name);
+function addQuest(questParams) {
+    if (!questParams.name)
+        return;
+
+    const existingQuestIndex = quests.findIndex(quest => quest.name === questParams.name);
 
     if (existingQuestIndex !== -1) {
         //If the quest already exists, move it to the top of the list.
         const existingQuest = quests[existingQuestIndex];
-        if (description)
-            existingQuest.description = description;
-        if (purposes)
-            existingQuest.purposes = purposes;
-        if (reward)
-            existingQuest.reward = reward;
-        if (punishmentForFailingQuest)
-            existingQuest.punishmentForFailingQuest = punishmentForFailingQuest;
-        if (details)
-            existingQuest.details = details;
-        existingQuest.isCompleted = isCompleted;
+        existingQuest.questGiver = questParams.questGiver;
+        existingQuest.questBackground = questParams.questBackground;
+        existingQuest.description = questParams.description;
+        existingQuest.purposes = questParams.purposes;
+        existingQuest.reward = questParams.reward;
+        existingQuest.punishmentForFailingQuest = questParams.punishmentForFailingQuest;
+        existingQuest.details = questParams.details;
+        existingQuest.isCompleted = questParams.isCompleted;
+
         quests.splice(existingQuestIndex, 1);
         quests.unshift(existingQuest);
     } else {
@@ -1900,7 +1893,17 @@ function addQuest(name, description, purposes, reward, punishmentForFailingQuest
         }
 
         //Add a new quest to the top of the list.
-        quests.unshift({ name, description, purposes, reward, punishmentForFailingQuest, details, isCompleted, isLocked });
+        quests.unshift({
+            name: questParams.name,
+            questGiver: questParams.questGiver,
+            questBackground: questParams.questBackground,
+            description: questParams.description,
+            purposes: questParams.purposes,
+            reward: questParams.reward,
+            punishmentForFailingQuest: questParams.punishmentForFailingQuest,
+            details: questParams.details,
+            isCompleted: questParams.isCompleted
+        });
     }
 
     updateQuestsList();
@@ -3607,25 +3610,24 @@ ${ELEMENTS.useNpcMemoriesDiary.checked ? `
 ] ]` : ''}
 ` : ''}
 ${ELEMENTS.useQuestsList.checked ? `
-#9.10. If an NPC and a player made an agreement, where the player is expected to perform a "quest" (in terms of computer role-playing games) — which involves completing a specific task and receiving a reward upon completion — then: [
-#9.10.1. The 'Quests information the player has' is checked for compliance with the current quests information from Context: [
-	Compare quests descriptions
-	Compare quests rewards
-	Compare quests purposes
-	Check for any changes in quests details, including completion status ] - if not, then the response includes the questsData key with the information about current quests according to the following instruction: [ Let's think step by step :
-#9.10.2. The value of 'questsData' key is an array of objects, each of which contains the complete information about specific quest.
-#9.10.3. Mandatory format for recording the value of each item of 'questsData' array: {'name': 'full_name_of_current_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
-#9.10.4. To the value of 'description' key, include the following data about the quest and describe the data in as much detail and artistic language as possible (all text of 'description' should be translated to user's chosen language): [
-	Quest giver information in the format: "{NPC name which gave the quest to player label}: {NPC Name}"\n
-	Quest background in the format: "{Quest background label}: {why the quest giver needs the player to complete this quest}."\n
-	Detailed quest description in the format: "{Description label}: {full and detailed quest description}."\n ]
-#9.10.5. The value of 'purposes' key is an array of strings, describes what player should do during quest to complete it. Purposes should be logical tasks, each of which must have at least one correct solution.
-#9.10.6. To the value of 'reward' key, include the description of reward which player will receive for completing the quest. The reward must be specific. For example, if the reward is money, then indicate a specific amount of money.
-#9.10.7. To the value of 'punishmentForFailingQuest' key, include the description of the punishment the player will suffer for failing the quest.
-#9.10.8. To the value of 'details' key, include information about quest details and notes. Do not include information contained in the value of 'description' key. This field is only for new quest data: any notes or details about the quest that the player learned during the quest.
-#9.10.9. Set the value of 'isCompleted' key to false or true. Set true if quest is completed. A quest is considered complete when the quest-giving NPC acknowledges its completion.
-#9.10.10. If the quest is completed, the quest-giving NPC should provide the player with the quest reward. 
-#9.10.11. If the player fails the quest, the quest is marked as completed and the player must suffer the punishment described in the value of 'punishmentForFailingQuest' key.
+#9  If one of these conditions are true: [
+- If an NPC and a player made an agreement in current turn where the player is expected to perform a "quest" (in terms of computer role-playing games) — which involves completing a specific task and receiving a reward upon completion.
+- If player get the "quest" from some type of source (like task board, or device) in current turn and agrees to complete it — which involves completing a specific task and receiving a reward upon completion.
+- For each quest in the player's quests in the current turn, find the quest with the same name in the Context. If such quest is found, compare the values of its properties ['questGiver', 'questBackground, 'description', 'purposes', 'reward', 'punishmentForFailingQuest', 'details', 'isCompleted' ] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no quest with the same name in the Context (i.e., the quest is new), the rule is not applied to this quest and continues checking the rest.
+], then strictly follow the instructions: [ Let's think step by step : [
+#9.1. Include to the response the 'questsData' key, the value of which is the array of objects, and each of which contains the complete information about specific quest.
+#9.2. Mandatory format for recording the value of each item of 'questsData' array: {'name': 'full_name_of_current_quest', 'questGiver': 'full_name_of_quest_giver', 'questBackground': 'background_of_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
+#9.3. To the value of 'name' key, include the string, which representing the full name of quest. If quest isn't new, then it's mandatory to use the quest name in the exactly same format like in the Context.
+#9.4. To the value of 'questGiver' key, include the string, which representing the full name of NPC, who gave the quest to player.
+#9.5. To the value of 'questBackground' key, include the string, which describing why the quest giver needs the player to complete this quest.
+#9.6. To the value of 'description' key, include the string, which is the complete and detailed quest description. Describe it in as much detail and artistic language as possible.
+#9.7. The value of 'purposes' key is an array of strings, describes what player should do during quest to complete it. Purposes should be logical tasks, each of which must have at least one correct solution.
+#9.8. To the value of 'reward' key, include the description of reward which player will receive for completing the quest. The reward must be specific. For example, if the reward is money, then indicate a specific amount of money.
+#9.9. To the value of 'punishmentForFailingQuest' key, include the description of the punishment the player will suffer for failing the quest.
+#9.10. To the value of 'details' key, include information about quest details and notes. Do not include information contained in the value of 'description' key. This field is only for new quest data: any notes or details about the quest that the player learned during the quest.
+#9.11. Set the value of 'isCompleted' key to false or true. Set true if quest is completed. A quest is considered complete when the quest-giving NPC acknowledges its completion.
+#9.12. If the quest is completed, the quest-giving NPC should provide the player with the quest reward. 
+#9.13. If the player fails the quest, the quest is marked as completed and the player must suffer the punishment described in the value of 'punishmentForFailingQuest' key.
 ] ] ` : ''}
 	 
 #10. Player characteristics: reward and punishment.
@@ -3744,8 +3746,8 @@ ${generateStatus ? `
 #18.3. Mandatory format for recording the value of the 'statusData' key: ${statusTemplate} .
 #18.4. To the value of the 'name' key, include the full name of the player character.
 #18.5. To the value of the 'age' key, include an integer that represents the player's character age in years. You can imagine it if you don't have exact data.
-#18.6. To the value of the 'race' key, include the name of the player's race.
-#18.7. To the value of the 'class' key, include the name of the player's class.
+#18.6. To the value of the 'race' key, include the name of the player's race. Translate it to the user's chosen language.
+#18.7. To the value of the 'class' key, include the name of the player's class. Translate it to the user's chosen language.
 #18.8. To the value of the 'appearanceDescription' key, include a string that describes the player's appearance in exceptional detail, including but not limited to face, body proportions, figure, clothing, posture, and any distinguishing features such as scars, tattoos, or jewelry. Use as much detail and artistic language as possible. Provide a meticulous breakdown of each aspect, ensuring that every notable feature is vividly described.
 #18.9. To the value of the 'statusInSociety' key, include a string that describes status in society of player character. Use as much detail and artistic language as possible.
 #18.10. To the value of the 'positionInSociety' key, include a string that describes current position in society of player character.
@@ -4079,8 +4081,17 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             if (data.questsData && data.questsData.length > 0) {
                 for (const newQuest of data.questsData) {
-                    if (newQuest.name)
-                        addQuest(newQuest.name, newQuest.description, newQuest.purposes, newQuest.reward, newQuest.punishmentForFailingQuest, newQuest.details, newQuest.isCompleted);
+                    addQuest({
+                        name: newQuest.name,
+                        questGiver: newQuest.questGiver,
+                        questBackground: newQuest.questBackground,
+                        description: newQuest.description,
+                        purposes: newQuest.purposes,
+                        reward: newQuest.reward,
+                        punishmentForFailingQuest: newQuest.punishmentForFailingQuest,
+                        details: newQuest.details,
+                        isCompleted: newQuest.isCompleted
+                    });
                 }
             }
 
