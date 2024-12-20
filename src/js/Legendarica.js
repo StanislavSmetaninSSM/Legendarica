@@ -102,6 +102,7 @@ const ELEMENTS = {
     wisdomValue: document.getElementById('wisdom-value'),
     attractivenessValue: document.getElementById('attractiveness-value'),
     tradeValue: document.getElementById('trade-value'),
+    persuasionValue: document.getElementById('persuasion-value'),
     intelligenceValue: document.getElementById('intelligence-value'),
     perceptionValue: document.getElementById('perception-value'),
     luckValue: document.getElementById('luck-value'),
@@ -270,6 +271,7 @@ let characterStats = {
     intelligence: 0,
     wisdom: 0,
     attractiveness: 0,
+    persuasion: 0,
     trade: 0,
     perception: 0,
     luck: 0,
@@ -325,7 +327,7 @@ ELEMENTS.randomCharacterButton.onclick = function () {
     const randomName = "Hero";
     const genders = ['male', 'female'];
     const randomGender = genders[Math.floor(Math.random() * genders.length)];
-    const races = ['human', 'elf', 'dwarf', 'orc', 'lizardman', 'vampire', 'golem'];
+    const races = ['human', 'elf', 'dwarf', 'orc', 'lizardman', 'vampire', 'golem', 'angel', 'demon'];
     const randomRace = races[Math.floor(Math.random() * races.length)];
     const classes = ['barbarian', 'bard', 'cleric', 'druid', 'fighter', 'monk', 'paladin', 'ranger', 'rogue', 'sorcerer', 'warlock', 'wizard'];
     const randomClass = classes[Math.floor(Math.random() * classes.length)];
@@ -371,18 +373,7 @@ ELEMENTS.createCharacterButton.onclick = function () {
         CHARACTER_INFO.campaign = selectedCampaign;
         CHARACTER_INFO.nonMagicMode = false;
 
-        const allowedKeys = [
-            'strength',
-            'dexterity',
-            'constitution',
-            'intelligence',
-            'wisdom',
-            'attractiveness',
-            'trade',
-            'perception',
-            'luck',
-            'speed'
-        ];
+        const allowedKeys = getStatsList();
 
         const startStatValue = 1;
         Object.keys(characterStats)
@@ -396,7 +387,9 @@ ELEMENTS.createCharacterButton.onclick = function () {
             orc: () => { characterStats.strength += 3; characterStats.constitution += 2; characterStats.intelligence -= 1; characterStats.wisdom -= 1; characterStats.attractiveness -= 1; },
             lizardman: () => { characterStats.constitution += 2; characterStats.speed += 1; characterStats.attractiveness -= 1; },
             vampire: () => { characterStats.perception += 1; characterStats.attractiveness += 1; characterStats.dexterity += 1; characterStats.luck -= 1; },
-            golem: () => { characterStats.strength += 3; characterStats.constitution += 2; characterStats.intelligence -= 1; characterStats.attractiveness -= 1; characterStats.wisdom -= 1; }
+            golem: () => { characterStats.strength += 3; characterStats.constitution += 2; characterStats.intelligence -= 1; characterStats.attractiveness -= 1; characterStats.wisdom -= 1; },
+            angel: () => { characterStats.strength += 1; characterStats.attractiveness += 1; characterStats.wisdom += 1; characterStats.trade -= 1; },
+            demon: () => { characterStats.dexterity += 1; characterStats.attractiveness += 2; characterStats.persuasion += 1; characterStats.wisdom -= 1; characterStats.luck -= 1  },
         };
 
         gameRaces[race]();
@@ -463,6 +456,7 @@ ELEMENTS.startNewSettingButton.onclick = function () {
         wis: 'start-wis',
         atr: 'start-atr',
         trd: 'start-trd',
+        prs: 'start-prs',
         per: 'start-per',
         luck: 'start-luck',
         spd: 'start-spd',
@@ -492,6 +486,7 @@ ELEMENTS.startNewSettingButton.onclick = function () {
         wisdom: Math.floor(getElementValue(elementIds.wis)),
         attractiveness: Math.floor(getElementValue(elementIds.atr)),
         trade: Math.floor(getElementValue(elementIds.trd)),
+        persuasion: Math.floor(getElementValue(elementIds.prs)),
         perception: Math.floor(getElementValue(elementIds.per)),
         luck: Math.floor(getElementValue(elementIds.luck)),
         speed: Math.floor(getElementValue(elementIds.spd)),
@@ -638,7 +633,9 @@ function getStartInventory(playerClass, playerRace) {
         orc: translate["Orcish_war_paint"],
         lizardman: translate["Scale_oil"],
         vampire: translate["Blood_vial"],
-        golem: translate["Elemental_core"]
+        golem: translate["Elemental_core"],
+        angel: translate["Angelic_halo"],
+        demon: translate["Demonic_symbol"]
     };
 
     const itemNames = [translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_notepad"], ...classInventory[playerClass], raceInventory[playerRace]];
@@ -664,6 +661,7 @@ function updateStatsWithoutGm() {
     ELEMENTS.wisdomValue.textContent = characterStats.wisdom;
     ELEMENTS.attractivenessValue.textContent = characterStats.attractiveness;
     ELEMENTS.tradeValue.textContent = characterStats.trade;
+    ELEMENTS.persuasionValue.textContent = characterStats.persuasion;
     ELEMENTS.intelligenceValue.textContent = characterStats.intelligence;
     ELEMENTS.perceptionValue.textContent = characterStats.perception;
     ELEMENTS.luckValue.textContent = characterStats.luck;
@@ -891,6 +889,7 @@ function getStatsList() {
         'wisdom',
         'attractiveness',
         'trade',
+        'persuasion',
         'perception',
         'luck',
         'speed'
@@ -921,6 +920,9 @@ function getStatsAvailableForIncrease() {
     if (characterStats.trade <= characterStats.level)
         stats.push(getStatData("trade", characterStats.trade));
 
+    if (characterStats.persuasion <= characterStats.level)
+        stats.push(getStatData("persuasion", characterStats.persuasion));
+
     if (characterStats.perception <= characterStats.level)
         stats.push(getStatData("perception", characterStats.perception));
 
@@ -950,7 +952,7 @@ function increasePlayerStat(name, value) {
     if (newValue > characterStats.level)
         newValue = characterStats.level;
 
-    if (oldValue > newValue)
+    if (oldValue >= newValue)
         return;
     
     characterStats[key] = newValue;
@@ -961,6 +963,7 @@ function increasePlayerStat(name, value) {
     const messageId = translationModule.setStatIncreasedMessage(statName, valueDifference);
     const message = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
     sendMessageToChat(message, 'system');
+    updateStatsWithoutGm();
 }
 
 function decreasePlayerStat(name, value) {
@@ -973,7 +976,7 @@ function decreasePlayerStat(name, value) {
     if (newValue < 0)
         newValue = 0;
 
-    if (newValue > oldValue)
+    if (newValue >= oldValue)
         return;
 
     characterStats[key] = newValue;
@@ -984,6 +987,7 @@ function decreasePlayerStat(name, value) {
     const messageId = translationModule.setStatDecreasedMessage(statName, valueDifference);
     const message = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
     sendMessageToChat(message, 'system');
+    updateStatsWithoutGm();
 }
 
 function getPlayerStatByName(name) {
@@ -2929,6 +2933,7 @@ function clickSaveSetting() {
         { id: "start-wis", key: "startWis" },
         { id: "start-atr", key: "startAtr" },
         { id: "start-trd", key: "startTrd" },
+        { id: "start-prs", key: "startPrs" },
         { id: "start-per", key: "startPer" },
         { id: "start-luck", key: "startLuck" },
         { id: "start-spd", key: "startSpd" },
@@ -2988,6 +2993,7 @@ function clickLoadSetting() {
                     { id: "start-wis", key: "startWis" },
                     { id: "start-atr", key: "startAtr" },
                     { id: "start-trd", key: "startTrd" },
+                    { id: "start-prs", key: "startPrs" },
                     { id: "start-per", key: "startPer" },
                     { id: "start-luck", key: "startLuck" },
                     { id: "start-spd", key: "startSpd" },
@@ -3389,6 +3395,7 @@ It's mandatory to use the same names, which predefined items already have. Forbi
 #7.1.3. On any dialogues not related to trade - the affect of characteristics is secondary. The result of dialogue is mainly related to the content of what the player character said.
 #7.1.4. The 'trade' characteristic check is done only when trading about prices for deals.
 #7.1.5. The 'attractiveness' characteristic is used to seduce or charm the NPC (for example, to get a discount or important information). Attractiveness reflects the physical beauty of the character. It is important to note that not all NPCs care about physical beauty.
+#7.1.6. The 'persuasion' characteristic is used to convince someone using oratory.
 ${playerCritDice != 20 && playerCritDice != 1 ? `
 #7.2. Output to "items_and_stat_calculations" the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Usual dice roll, which means that we need to make additional check for player action.
 #7.3. Do following check for the associated characteristic: [
@@ -3526,9 +3533,8 @@ If the check result is false:
 #7.5. The further story is formed depending on the result of the check
 #7.6. The 'trade' characteristic check is done only when trading about prices for deals
 #7.7. When moving from location to location, checks are not made
-#7.8. On any dialogues not related to trade - no skill checks are made. The process and result of dialogues are built relative to the content of what the player said
-#7.9. More free interpretation of events
-#7.10. For output in the answer, translate the names of characteristics into natural language
+#7.8. More free interpretation of events
+#7.9. For output in the answer, translate the names of characteristics into natural language
 `} ]
 		 
 #8 During dialogue or interaction with NPCs: 
@@ -3622,8 +3628,8 @@ ${ELEMENTS.useQuestsList.checked ? `
 #9.10.11. If the player fails the quest, the quest is marked as completed and the player must suffer the punishment described in the value of 'punishmentForFailingQuest' key.
 ] ] ` : ''}
 	 
-#10. Player characteristics (stats): reward and punishment.
-#10.1. Here is the list of all player stats: stats_list = ${statsList} .
+#10. Player characteristics: reward and punishment.
+#10.1. Here is the list of all player characteristics: stats_list = ${statsList} .
 #10.2. During the game, a situation may arise where you need to permanently increase or decrease a certain characteristic of the player. This can happen for many reasons. Here is a list of some of them:
 - A characteristic may be increased as a reward for a task (quest) completed by the player.
 - A characteristic may be decreased due to the player's failure of a task (punishment for a quest failure).
@@ -3631,27 +3637,38 @@ ${ELEMENTS.useQuestsList.checked ? `
 - A characteristic may be decreased because the player is cursed by a powerful NPC.
 - A player's characteristic may be decreased due to serious problems with the player character's body. For example, as a result of the loss of limbs or other serious injuries.
 - A player's characteristic may be increased as a result of the player training the chosen characteristic. For example, as a result of physical exercises.
-#10.3. Here is the maximum amount you can increase or decrease a player's stat this turn: stat_change_value = ${statChangeValue} .
-#10.3.1. If you want to increase or decrease more than one of the player's stats, you can divide the stat_change_value among the stats you want to modify. 
-#10.3.2. Each time you increase or decrease a stat, you subtract 1 from the stat_change_value. When stat_change_value is equal to 0, you can no longer increase or decrease player's stats this turn.
-#10.4. Here is the list of player stats, that are available to increase: stats_increase_list = ${JSON.stringify(statsAvailableForIncrease)} .
-#10.4.1. The 'name' property of each object in the stats_increase_list is the name of stat, that you could increase if needed.
-#10.4.2. The 'maxValue' property of each object in the stats_increase_list is the maximum value, that you can use to increase the player's stat.
-#10.4.3. You can increase only stats that are mentioned in the stats_increase_list.
-#10.4.4. Training is an important part of player character life. Carefully watch for a player actions. You need to reward the player for training their stats. 
-For example, for practicing with a sword, for shooting, or for practicing magic. Choose the stat that corresponds to the player's actions from stats_increase_list and increase it if the player has put in enough effort.
-#10.4.5. Do not increase stats for training too often. Increasing the stat through training should be a reward for dedication, not an everyday occurrence.
-#10.5. If you want to increase player's stat, then include to the response the key 'statsIncreased'.
-#10.5.1. The value of 'statsIncreased' key is an array of objects, each of which represents the information about player's stat to increase.
-#10.5.2. Mandatory format for recording the value of each item of 'statsIncreased' array: { 'name': 'name_of_stat_to_increase', 'value': 'value_by_which_the_stat_is_increased' } .
-#10.5.3. To the 'name' value of key include the name of player's stat to increase. It's important to use the name in exactly the same format like in 'name' property of stats_increase_list. Use only english to write this value.
-#10.5.4. To the 'value' value of key include the number to which you decided to increase the player's stat.
-#10.6. If you want to decrease player's stat, then include to the response the key 'statsDecreased'.
-#10.6.1. You can decrease any stat from the stats_list if needed.
-#10.6.2. The value of 'statsDecreased' key is an array of objects, each of which represents the information about player's stat to decrease.
-#10.6.3. Mandatory format for recording the value of each item of 'statsDecreased' array: { 'name': 'name_of_stat_to_decrease', 'value': 'value_by_which_the_stat_is_decreased' } .
-#10.6.4. To the 'name' value of key include the name of player's stat to decrease. It's important to use the name in exactly the same format like in the stats_list. Use only english to write this value.
-#10.6.5. To the 'value' value of key include the number to which you decided to decrease the player's stat.
+#10.3. Here is the maximum amount you can increase or decrease a player's characteristics this turn: stat_change_value = ${statChangeValue} .
+#10.3.1. If you want to increase or decrease more than one of the player's characteristics, you can divide the stat_change_value among the characteristics you want to modify. 
+#10.3.2. Each time you increase or decrease a characteristic, you subtract 1 from the stat_change_value. When stat_change_value is equal to 0, you can no longer increase or decrease player's characteristics this turn.
+#10.3.3. Don't increase or decrease the player's characteristics without the clear reason. There must be a reason for it. If there is no reason, then don't increase or decrease the player's characteristics.
+#10.4. Here is the list of player characteristics, that are available to increase: stats_increase_list = ${JSON.stringify(statsAvailableForIncrease)} .
+#10.4.1. The 'name' property of each object in the stats_increase_list is the name of characteristic, that you could increase if needed.
+#10.4.2. The 'maxValue' property of each object in the stats_increase_list is the maximum value, that you can use to increase the player's characteristic.
+#10.4.2.1. If value of 'maxValue' is equal to 0 or less than 0, you can't increase this player's characteristic.
+#10.4.3. You can increase only characteristics that are mentioned in the stats_increase_list.
+#10.5. If it's needed to increase player's characteristics, then include to the response the key 'statsIncreased': [
+#10.5.1. The value of 'statsIncreased' key is an array of objects, each of which represents the information about player's characteristic to increase.
+#10.5.2. Mandatory format for recording the value of each item of 'statsIncreased' array: { 'name': 'name_of_characteristic_to_increase', 'value': 'value_by_which_the_characteristic_is_increased' } .
+#10.5.3. To the 'name' value of key include the name of player's characteristic to increase. It's important to use the name in exactly the same format like in 'name' property of stats_increase_list. Use only english to write this value.
+#10.5.4. To the 'value' value of key include the number to which you decided to increase the player's characteristic.
+#10.5.5. Write to the "items_and_stat_calculations" the reason of increasing the player's characteristic. 
+]
+#10.6. If it's needed to decrease player's characteristics, then include to the response the key 'statsDecreased': [
+#10.6.1. You can decrease any characteristic from the stats_list if needed.
+#10.6.2. The value of 'statsDecreased' key is an array of objects, each of which represents the information about player's characteristic to decrease.
+#10.6.3. Mandatory format for recording the value of each item of 'statsDecreased' array: { 'name': 'name_of_characteristic_to_decrease', 'value': 'value_by_which_the_characteristic_is_decreased' } .
+#10.6.4. To the 'name' value of key include the name of player's characteristic to decrease. It's important to use the name in exactly the same format like in the stats_list. Use only english to write this value.
+#10.6.5. To the 'value' value of key include the number to which you decided to decrease the player's characteristic.
+#10.6.6. Write to the "items_and_stat_calculations" the reason of decreasing the player's characteristic. 
+]
+#10.7. Training and Teaching the Player’s Character. Rules.
+#10.7.1. Each time the player attempts to train, or learn something new, strictly follow these instructions: [ Let’s think step by step: [
+#10.7.2. Match the player character’s training or learning to a specific characteristic from this list: ${statsList} .
+#10.7.3. If this characteristic is present in the stats_increase_list, then do the following: [
+#10.7.3. Perform the characteristic check against the situation’s difficulty, following the rules set forth in "#7 Checking player actions: steps and requirements" . 
+#10.7.3.1. Note, that instead of 'Current location difficulty' you should use the current characteristic value ('StatValue') to calculate the difficulty.
+#10.7.4. If the check is successful, reward the player by increasing the corresponding characteristic. ]
+] ]
 
 #11 The 'location where the character was on the previous turn' is checked for compliance with the current location - if not, then the response includes the locationData key with the current location according to the following instruction: [ Let's think step by step :
 #11.1. Mandatory format for recording the value in the locationData key: {'name': 'current_location_name', 'difficulty': 'difficulty_in_numerical_value', 'lastEventsDescription': 'location_last_events_description_for_current_turn', 'description': 'current_location_description', 'image_prompt': 'prompt_to_generate_location_image'} . All this values of keys 'name' , 'difficulty' , 'lastEventsDescription' must never be empty.
@@ -3982,12 +3999,12 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             if (data.statsDecreased && data.statsDecreased.length > 0) {
                 for (data of data.statsDecreased)
-                    decreasePlayerStat(data.name, Number(data.value));                
+                    decreasePlayerStat(data.name, Number(data.value ?? 0));                
             }
 
             if (data.statsIncreased && data.statsIncreased.length > 0) {
                 for (data of data.statsIncreased)
-                    increasePlayerStat(data.name, Number(data.value));
+                    increasePlayerStat(data.name, Number(data.value ?? 0));
             }
 
             if (data.experienceGained)

@@ -128,20 +128,25 @@ const translationModule = (function getTranslationModule() {
 	Warlock - Magical focus, Leather armor, Grimoire, Eldritch talisman
 
 	Wizard - Spellbook, Magic wand, Robe, Magic missile scroll`,
-            "tooltip-race": `Race affects starting location, racial skill generation, storyline, and starting bonuses to skills and items:
-	Human: Luck +2, Trade +1, Perception +1, Wisdom -1, Intelligence -1, Universal Tool
+            "tooltip-race": `Race affects the starting location, racial ability generation, plot, and starting bonuses to skills and items:
 
-	Elf: Agility +2, Speed +1, Attractiveness +1, Strength -1, Endurance -1, Elven Cloak
+Human: Luck +2, Trade +1, Perception +1, Wisdom -1, Intelligence -1, Universal Tool
 
-	Dwarf: Trade +2, Strength +1, Endurance +1, Agility -1, Speed -1, Dwarven Ale
+Elf: Dexterity +2, Speed +1, Attractiveness +1, Strength -1, Stamina -1, Elven Cloak
 
-	Orc: Strength +3, Endurance +2, Intelligence -1, Wisdom -1, Attractiveness -1, Orcish War Paint
+Dwarf: Trade +2, Strength +1, Stamina +1, Dexterity -1, Speed -1, Dwarven Ale
 
-	Lizard: Endurance +2, Speed +1, Attractiveness -1, Scale Oil
+Orc: Strength +3, Stamina +2, Intelligence -1, Wisdom -1, Attractiveness -1, Orc Battle Paint
 
-	Vampire: Perception +1, Attractiveness +1, Agility +1, Luck -1, Vial of Blood
+Lizard: Stamina +2, Speed +1, Attractiveness -1, Scale Oil
 
-	Golem: Strength +3, Endurance +2, Intelligence -1, Attractiveness -1, Wisdom -1, Elemental Core`,
+Vampire: Perception +1, Attractiveness +1, Dexterity +1, Luck -1, Blood Vial
+
+Golem: Strength +3, Stamina +2, Intelligence -1, Attractiveness -1, Wisdom -1, Elemental Core
+
+Angel: Strength +1, Attractiveness +1, Wisdom +1, Trade -1, Angelic Halo
+
+Demon: Dexterity +1, Attractiveness +2, Persuasion +1, Wisdom -1, Luck -1, Demonic Symbol`,
             "create-character-label": "Create your character",
             "api-key-button": "Show for 10 seconds",
             "api-key-button2": "Show for 10 seconds",
@@ -225,6 +230,8 @@ const translationModule = (function getTranslationModule() {
             "dwarf": "Dwarf",
             "elf": "Elf",
             "human": "Human",
+            "angel": "Angel",
+            "demon": "Demon",
             "no-choosed-race": "Choose a race",
 
 
@@ -281,6 +288,8 @@ const translationModule = (function getTranslationModule() {
             "Scale_oil": "Scale oil",
             "Blood_vial": "Blood vial",
             "Elemental_core": "Elemental core",
+            "Angelic_halo": "Angelic Halo",
+            "Demonic_symbol": "Demonic Symbol",
             "lute": "Lute",
             "dagger": "Dagger",
             "staff": "Staff",
@@ -448,6 +457,14 @@ const translationModule = (function getTranslationModule() {
             "status-positionInSociety-label": "Position in Society:",
             "status-affiliationWithOrganizations-label": "Affiliation with Organizations:",
             "status-effect-none-label": "None",
+            "persuasion-label": "Persuasion",
+            "start-prs": "Persuasion",
+            "rebirth-in-another-world": "Rebirth in Another World",
+            "being-summoned-to-another-world": "Being Summoned to Another World",
+            "reincarnation": "Reincarnation",
+            "demon-invasion": "Demon Invasion",
+            "the-end-of-the-world": "The End of the World",
+            "apocalypse": "Apocalypse",
         },
         "russian-language": {
             // placeholders
@@ -565,9 +582,9 @@ const translationModule = (function getTranslationModule() {
 Волшебник - Книга заклинаний, Волшебная палочка, Мантия, Свиток магической стрелы`,
             "tooltip-race": `Раса влияет на стартовую локацию, генерацию расового умения, сюжет и стартовые бонусы к навыкам и предметам:
 
-Человек: Удача +2, Торговля +1, Восприятие +1, Мудрость -1, Интеллект -1,  Универсальный инструмент
+Человек: Удача +2, Торговля +1, Восприятие +1, Мудрость -1, Интеллект -1, Универсальный инструмент
 
-Эльф: Ловкость +2, Скорость +1, Привлекательность +1, Сила -1, Выносливость -1,  Эльфийский плащ
+Эльф: Ловкость +2, Скорость +1, Привлекательность +1, Сила -1, Выносливость -1, Эльфийский плащ
 
 Гном: Торговля +2, Сила +1, Выносливость +1, Ловкость -1, Скорость -1, Гномий эль
 
@@ -577,7 +594,11 @@ const translationModule = (function getTranslationModule() {
 
 Вампир: Восприятие +1, Привлекательность +1, Ловкость +1, Удача -1, Флакон крови
 
-Голем: Сила +3, Выносливость +2, Интеллект -1, Привлекательность -1, Мудрость -1, Элементальное ядро`,
+Голем: Сила +3, Выносливость +2, Интеллект -1, Привлекательность -1, Мудрость -1, Элементальное ядро
+
+Ангел: Сила +1, Привлекательность +1, Мудрость +1, Торговля -1, Ангельский нимб
+
+Демон: Ловкость +1, Привлекательность +2, Убеждение +1, Мудрость -1, Удача -1, Демонический символ`,
             "create-character-label": "Создайте своего персонажа",
             "api-key-button": "Показать на 10 секунд",
             "api-key-button2": "Показать на 10 секунд",
@@ -663,6 +684,8 @@ const translationModule = (function getTranslationModule() {
             "dwarf": "Гном",
             "elf": "Эльф",
             "human": "Человек",
+            "angel": "Ангел",
+            "demon": "Демон",
             "no-choosed-race": "Выберите расу",
 
             "female": "Женский",
@@ -718,6 +741,8 @@ const translationModule = (function getTranslationModule() {
             "Scale_oil": 'Масло для чешуи',
             "Blood_vial": 'Флакон крови',
             "Elemental_core": 'Элементальное ядро',
+            "Angelic_halo": "Ангельский нимб",
+            "Demonic_symbol": "Демонический символ",
             "lute": "Лютня",
             "dagger": "Кинжал",
             "staff": "Посох",
@@ -881,6 +906,14 @@ Websim. Зависит от нейросети, которую использу�
             "status-positionInSociety-label": "Позиция в обществе:",
             "status-affiliationWithOrganizations-label": "Принадлежность к организациям:",
             "status-effect-none-label": "Отсутствуют",
+            "persuasion-label": "Убеждение",
+            "start-prs": "Убеждение",
+            "rebirth-in-another-world": "Перерождение в другом мире",
+            "being-summoned-to-another-world": "Быть призванным в другой мир",
+            "reincarnation": "Реинкарнация",
+            "demon-invasion": "Вторжение демонов",
+            "the-end-of-the-world": "Конец мира",
+            "apocalypse": "Апокалипсис",
         },
         "spanish-language": {
             // placeholders
@@ -996,21 +1029,25 @@ Hechicero - Daga de fuego, Orbe, Túnica, Poción de energía
 Brujo - Foco mágico, Armadura de cuero, Grimorio, Talismán eldritchiano
 
 Mago - Libro de hechizos, Varita mágica, Túnica, Pergamino de flecha mágica`,
-            "tooltip-race": `La raza afecta la ubicación inicial, la generación de habilidades raciales, la historia y las bonificaciones iniciales a las habilidades y objetos:
-			
+            "tooltip-race": `La raza influye en la ubicación de inicio, generación de habilidades raciales, trama y bonificaciones iniciales a habilidades y objetos:
+
 Humano: Suerte +2, Comercio +1, Percepción +1, Sabiduría -1, Inteligencia -1, Herramienta Universal
 
-Elfo: Agilidad +2, Velocidad +1, Atractivo +1, Fuerza -1, Resistencia -1, Capa Élfica
+Elfo: Destreza +2, Velocidad +1, Atractivo +1, Fuerza -1, Resistencia -1, Capa Élfica
 
-Enano: Comercio +2, Fuerza +1, Resistencia +1, Agilidad -1, Velocidad -1, Cerveza Enana
+Enano: Comercio +2, Fuerza +1, Resistencia +1, Destreza -1, Velocidad -1, Cerveza Enana
 
-Orco: Fuerza +3, Resistencia +2, Inteligencia -1, Sabiduría -1, Atractivo -1, Pintura de Guerra Orca
+Orco: Fuerza +3, Resistencia +2, Inteligencia -1, Sabiduría -1, Atractivo -1, Pintura de Batalla Orca
 
-Lagarto: Resistencia +2, Velocidad +1, Atractivo -1, Aceite de Escamas
+Lagarto: Resistencia +2, Velocidad +1, Atractivo -1, Aceite para Escamas
 
-Vampiro: Percepción +1, Atractivo +1, Agilidad +1, Suerte -1, Vial de Sangre
+Vampiro: Percepción +1, Atractivo +1, Destreza +1, Suerte -1, Frasco de Sangre
 
-Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, Núcleo Elemental`,
+Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, Núcleo Elemental
+
+Ángel: Fuerza +1, Atractivo +1, Sabiduría +1, Comercio -1, Halo Angelical
+
+Demonio: Destreza +1, Atractivo +2, Persuasión +1, Sabiduría -1, Suerte -1, Símbolo Demoníaco`,
             "create-character-label": "Crea tu personaje",
             "api-key-button": "Mostrar por 10 segundos",
             "api-key-button2": "Mostrar por 10 segundos",
@@ -1096,6 +1133,8 @@ Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, 
             "dwarf": "Enano",
             "elf": "Elfo",
             "human": "Humano",
+            "angel": "Ángel",
+            "demon": "Demonio",
             "no-choosed-race": "Elige una raza",
 
             "female": "Femenino",
@@ -1151,6 +1190,8 @@ Golem: Fuerza +3, Resistencia +2, Inteligencia -1, Atractivo -1, Sabiduría -1, 
             "Scale_oil": 'Aceite para escamas',
             "Blood_vial": 'Vial de sangre',
             "Elemental_core": 'Núcleo elemental',
+            "Angelic_halo": "Aureola Angélica",
+            "Demonic_symbol": "Símbolo Demoníaco",
             "lute": "Laúd",
             "dagger": "Daga",
             "staff": "Bastón",
@@ -1317,6 +1358,14 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "status-positionInSociety-label": "Posición en la Sociedad:",
             "status-affiliationWithOrganizations-label": "Afiliación con Organizaciones:",
             "status-effect-none-label": "Ninguno",
+            "persuasion-label": "Persuasión",
+            "start-prs": "Persuasión",
+            "rebirth-in-another-world": "Renacimiento en Otro Mundo",
+            "being-summoned-to-another-world": "Ser Convocado a Otro Mundo",
+            "reincarnation": "Reencarnación",
+            "demon-invasion": "Invasión Demoníaca",
+            "the-end-of-the-world": "El Fin del Mundo",
+            "apocalypse": "Apocalipsis",
         },
         "portuguese-language": {
             // placeholders
@@ -1433,20 +1482,24 @@ Bruxo - Foco mágico, Armadura de couro, Grimório, Talismã eldritch
 
 Mago - Livro de feitiços, Varinha mágica, Manto, Pergaminho de míssil mágico`,
             "tooltip-race": `A raça afeta a localização inicial, a geração de habilidades raciais, o enredo e os bônus iniciais para habilidades e itens:
-	
+
 Humano: Sorte +2, Comércio +1, Percepção +1, Sabedoria -1, Inteligência -1, Ferramenta Universal
 
-Elfo: Agilidade +2, Velocidade +1, Atratividade +1, Força -1, Resistência -1, Manto Élfico
+Elfo: Destreza +2, Velocidade +1, Atração +1, Força -1, Resistência -1, Manto Élfico
 
-Anão: Comércio +2, Força +1, Resistência +1, Agilidade -1, Velocidade -1, Cerveja Anã
+Anão: Comércio +2, Força +1, Resistência +1, Destreza -1, Velocidade -1, Cerveja Anã
 
-Orc: Força +3, Resistência +2, Inteligência -1, Sabedoria -1, Atratividade -1, Pintura de Guerra Orc
+Orc: Força +3, Resistência +2, Inteligência -1, Sabedoria -1, Atração -1, Pintura de Batalha Orca
 
-Lagarto: Resistência +2, Velocidade +1, Atratividade -1, Óleo de Escamas
+Lagarto: Resistência +2, Velocidade +1, Atração -1, Óleo para Escamas
 
-Vampiro: Percepção +1, Atratividade +1, Agilidade +1, Sorte -1, Frasco de Sangue
+Vampiro: Percepção +1, Atração +1, Destreza +1, Sorte -1, Frasco de Sangue
 
-Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria -1, Núcleo Elemental`,
+Golem: Força +3, Resistência +2, Inteligência -1, Atração -1, Sabedoria -1, Núcleo Elemental
+
+Anjo: Força +1, Atração +1, Sabedoria +1, Comércio -1, Auréola Angelical
+
+Demônio: Destreza +1, Atração +2, Persuasão +1, Sabedoria -1, Sorte -1, Símbolo Demoníaco`,
             "create-character-label": "Crie seu personagem",
             "api-key-button": "Mostrar por 10 segundos",
             "api-key-button2": "Mostrar por 10 segundos",
@@ -1532,6 +1585,8 @@ Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria 
             "dwarf": "Anão",
             "elf": "Elfo",
             "human": "Humano",
+            "angel": "Anjo",
+            "demon": "Demônio",
             "no-choosed-race": "Escolha uma raça",
 
             "female": "Feminino",
@@ -1587,6 +1642,8 @@ Golem: Força +3, Resistência +2, Inteligência -1, Atratividade -1, Sabedoria 
             "Scale_oil": 'Óleo para escamas',
             "Blood_vial": 'Frasco de sangue',
             "Elemental_core": 'Núcleo elemental',
+            "Angelic_halo": "Auréola Angelical",
+            "Demonic_symbol": "Símbolo Demoníaco",
             "lute": "Alaúde",
             "dagger": "Adaga",
             "staff": "Cajado",
@@ -1753,6 +1810,14 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "status-positionInSociety-label": "Posição na Sociedade:",
             "status-affiliationWithOrganizations-label": "Afiliação com Organizações:",
             "status-effect-none-label": "Nenhum",
+            "persuasion-label": "Persuasão",
+            "start-prs": "Persuasão",
+            "rebirth-in-another-world": "Renascimento em Outro Mundo",
+            "being-summoned-to-another-world": "Ser Convocado para Outro Mundo",
+            "reincarnation": "Reencarnação",
+            "demon-invasion": "Invasão de Demônios",
+            "the-end-of-the-world": "O Fim do Mundo",
+            "apocalypse": "Apocalipse",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -1867,21 +1932,25 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
 वारलॉक - जादुई फोकस, चमड़े का कवच, ग्रिमोयर, एल्ड्रिच तावीज
 
 विज़ार्ड - स्पेलबुक, जादुई छड़ी, अलखा, जादुई तीर का स्क्रॉल`,
-            "tooltip-race": `नस्ल शुरुआती स्थान, नस्लीय कौशल पीढ़ी, कहानी और कौशल और वस्तुओं के लिए शुरुआती बोनस को प्रभावित करती है:
-	
-मनुष्य: भाग्य +2, व्यापार +1, धारणा +1, ज्ञान -1, बुद्धि -1, सार्वभौमिक उपकरण
+            "tooltip-race": `जाति प्रारंभिक स्थान, जातीय क्षमता उत्पादन, प्लॉट और कौशल एवं वस्तुओं पर प्रारंभिक बोनस को प्रभावित करती है:
 
-एल्फ: चपलता +2, गति +1, आकर्षण +1, शक्ति -1, सहनशक्ति -1, एल्विन लबादा
+मानव: भाग्य +2, व्यापार +1, धारणा +1, बुद्धिमत्ता -1, ज्ञान -1, सार्वभौमिक उपकरण
 
-बौना: व्यापार +2, शक्ति +1, सहनशक्ति +1, चपलता -1, गति -1, बौना शराब
+एल्फ़: चपलता +2, गति +1, आकर्षण +1, शक्ति -1, सहनशीलता -1, एल्फ़ीन चोगा
 
-ओर्क: शक्ति +3, सहनशक्ति +2, बुद्धि -1, ज्ञान -1, आकर्षण -1, ओर्किश युद्ध पेंट
+ग्नोम: व्यापार +2, शक्ति +1, सहनशीलता +1, चपलता -1, गति -1, ग्नोम का अली
 
-छिपकली: सहनशक्ति +2, गति +1, आकर्षण -1, स्केल ऑयल
+ऑर्क: शक्ति +3, सहनशीलता +2, बुद्धिमत्ता -1, ज्ञान -1, आकर्षण -1, ऑर्क युद्ध चित्रण
 
-पिशाच: धारणा +1, आकर्षण +1, चपलता +1, भाग्य -1, रक्त की शीशी
+सरीसृप: सहनशीलता +2, गति +1, आकर्षण -1, पपड़ी के लिए तेल
 
-गोलेम: शक्ति +3, सहनशक्ति +2, बुद्धि -1, आकर्षण -1, ज्ञान -1, मौलिक कोर`,
+वैंपायर: धारणा +1, आकर्षण +1, चपलता +1, भाग्य -1, रक्त का बोतल
+
+गोलम: शक्ति +3, सहनशीलता +2, बुद्धिमत्ता -1, आकर्षण -1, ज्ञान -1, मौलिक कोर
+
+फरिश्ता: शक्ति +1, आकर्षण +1, ज्ञान +1, व्यापार -1, फरिश्ते की प्रभामंडल
+
+दानव: चपलता +1, आकर्षण +2, प्रेरणा +1, ज्ञान -1, भाग्य -1, दानव प्रतीक`,
             "create-character-label": "अपना चरित्र बनाएं",
             "api-key-button": "10 सेकंड के लिए दिखाएं",
             "api-key-button2": "10 सेकंड के लिए दिखाएं",
@@ -1966,6 +2035,8 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "dwarf": "बौना",
             "elf": "एल्फ़",
             "human": "मानव",
+            "angel": "फरिश्ता",
+            "demon": "दानव",
             "no-choosed-race": "जाति चुनें",
 
             "female": "महिला",
@@ -2020,6 +2091,8 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "Scale_oil": "स्केल के लिए तेल",
             "Blood_vial": "खून की शीशी",
             "Elemental_core": "तत्व का कोर",
+            "Angelic_halo": "फरिश्ते का निब",
+            "Demonic_symbol": "दानव प्रतीक",
             "lute": "वीणा",
             "dagger": "कटार",
             "staff": "लाठी",
@@ -2186,6 +2259,14 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "status-positionInSociety-label": "समाज में पद:",
             "status-affiliationWithOrganizations-label": "संगठनों के साथ संबद्धता:",
             "status-effect-none-label": "कोई नहीं",
+            "persuasion-label": "प्रभाव",
+            "start-prs": "प्रभाव",
+            "rebirth-in-another-world": "दूसरे दुनिया में पुनर्जन्म",
+            "being-summoned-to-another-world": "दूसरे दुनिया में बुलाया जाना",
+            "reincarnation": "पुनर्जन्म",
+            "demon-invasion": "दानव आक्रमण",
+            "the-end-of-the-world": "दुनिया का अंत",
+            "apocalypse": "प्रलय",
         },
         "german-language": {
             // placeholders
@@ -2301,21 +2382,25 @@ Zauberer - Feuerdolch, Kugel, Robe, Energietrank
 Hexenmeister - Magischer Fokus, Lederrüstung, Grimoire, Eldritch-Talisman
 
 Magier - Zauberbuch, Zauberstab, Robe, Magiepfeil-Schriftrolle`,
-            "tooltip-race": `Die Rasse beeinflusst den Startort, die Generierung von Rassenfähigkeiten, die Handlung und die Startboni für Fähigkeiten und Gegenstände:
-			
+            "tooltip-race": `Die Rasse beeinflusst den Startort, die Generierung von Rassenfähigkeiten, die Handlung und die anfänglichen Boni für Fähigkeiten und Gegenstände:
+
 Mensch: Glück +2, Handel +1, Wahrnehmung +1, Weisheit -1, Intelligenz -1, Universelles Werkzeug
 
-Elf: Beweglichkeit +2, Geschwindigkeit +1, Attraktivität +1, Stärke -1, Ausdauer -1, Elfenumhang
+Elf: Geschicklichkeit +2, Geschwindigkeit +1, Attraktivität +1, Stärke -1, Ausdauer -1, Elfenumhang
 
-Zwerg: Handel +2, Stärke +1, Ausdauer +1, Beweglichkeit -1, Geschwindigkeit -1, Zwergenbier
+Zwerg: Handel +2, Stärke +1, Ausdauer +1, Geschicklichkeit -1, Geschwindigkeit -1, Zwergenbier
 
-Ork: Stärke +3, Ausdauer +2, Intelligenz -1, Weisheit -1, Attraktivität -1, Orkische Kriegsbemalung
+Ork: Stärke +3, Ausdauer +2, Intelligenz -1, Weisheit -1, Attraktivität -1, Orkische Kampfbemalung
 
 Echse: Ausdauer +2, Geschwindigkeit +1, Attraktivität -1, Schuppenöl
 
-Vampir: Wahrnehmung +1, Attraktivität +1, Beweglichkeit +1, Glück -1, Fläschchen mit Blut
+Vampir: Wahrnehmung +1, Attraktivität +1, Geschicklichkeit +1, Glück -1, Blutfläschchen
 
-Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, Elementarkern`,
+Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, Elementarkern
+
+Engel: Stärke +1, Attraktivität +1, Weisheit +1, Handel -1, Engelsnimbus
+
+Dämon: Geschicklichkeit +1, Attraktivität +2, Überzeugung +1, Weisheit -1, Glück -1, Dämonensymbol`,
             "create-character-label": "Erstellen Sie Ihren Charakter",
             "api-key-button": "10 Sekunden anzeigen",
             "api-key-button2": "10 Sekunden anzeigen",
@@ -2401,6 +2486,8 @@ Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, 
             "dwarf": "Zwerg",
             "elf": "Elf",
             "human": "Mensch",
+            "angel": "Engel",
+            "demon": "Dämon",
             "no-choosed-race": "Rasse wählen",
 
             "female": "Weiblich",
@@ -2456,6 +2543,8 @@ Golem: Stärke +3, Ausdauer +2, Intelligenz -1, Attraktivität -1, Weisheit -1, 
             "Scale_oil": 'Schuppenöl',
             "Blood_vial": 'Blutphiole',
             "Elemental_core": 'Elementarkern',
+            "Angelic_halo": "Engelsnimbus",
+            "Demonic_symbol": "Dämonensymbol",
             "lute": "Laute",
             "dagger": "Dolch",
             "staff": "Stab",
@@ -2622,6 +2711,14 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "status-positionInSociety-label": "Position in der Gesellschaft:",
             "status-affiliationWithOrganizations-label": "Zugehörigkeit zu Organisationen:",
             "status-effect-none-label": "Keine",
+            "persuasion-label": "Überzeugung",
+            "start-prs": "Überzeugung",
+            "rebirth-in-another-world": "Wiedergeburt in einer Anderen Welt",
+            "being-summoned-to-another-world": "In eine Andere Welt Gerufen Werden",
+            "reincarnation": "Reinkarnation",
+            "demon-invasion": "Dämoneninvasion",
+            "the-end-of-the-world": "Das Ende der Welt",
+            "apocalypse": "Apokalypse",
         },
         "french-language": {
             // placeholders
@@ -2738,21 +2835,25 @@ Ensorceleur - Dague de feu, Orbe, Robe, Potion d'énergie
 Sorcier - Focus magique, Armure de cuir, Grimoire, Talisman eldritch
 
 Magicien - Livre de sorts, Baguette magique, Robe, Parchemin de projectile magique`,
-            "tooltip-race": `La race affecte le lieu de départ, la génération de compétences raciales, l'histoire et les bonus de départ aux compétences et aux objets:
-			
+            "tooltip-race": `La race influence la localisation de départ, la génération des compétences raciales, l'intrigue et les bonus de départ pour les compétences et les objets :
+
 Humain : Chance +2, Commerce +1, Perception +1, Sagesse -1, Intelligence -1, Outil Universel
 
-Elfe : Agilité +2, Vitesse +1, Attrait +1, Force -1, Endurance -1, Cape Elfique
+Elfe : Dextérité +2, Vitesse +1, Attractivité +1, Force -1, Endurance -1, Cape Elfique
 
-Nain : Commerce +2, Force +1, Endurance +1, Agilité -1, Vitesse -1, Bière Naine
+Nain : Commerce +2, Force +1, Endurance +1, Dextérité -1, Vitesse -1, Bière Naine
 
-Orc : Force +3, Endurance +2, Intelligence -1, Sagesse -1, Attrait -1, Peinture de Guerre Orc
+Orc : Force +3, Endurance +2, Intelligence -1, Sagesse -1, Attractivité -1, Peinture de Combat Orc
 
-Lézard : Endurance +2, Vitesse +1, Attrait -1, Huile d'Écailles
+Lézard : Endurance +2, Vitesse +1, Attractivité -1, Huile pour Écailles
 
-Vampire : Perception +1, Attrait +1, Agilité +1, Chance -1, Fiole de Sang
+Vampire : Perception +1, Attractivité +1, Dextérité +1, Chance -1, Flacon de Sang
 
-Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau Élémentaire`,
+Golem : Force +3, Endurance +2, Intelligence -1, Attractivité -1, Sagesse -1, Noyau Élémentaire
+
+Ange : Force +1, Attractivité +1, Sagesse +1, Commerce -1, Halo Angélique
+
+Démon : Dextérité +1, Attractivité +2, Persuasion +1, Sagesse -1, Chance -1, Symbole Démoniaque`,
             "create-character-label": "Créez votre personnage",
             "api-key-button": "Afficher pendant 10 secondes",
             "api-key-button2": "Afficher pendant 10 secondes",
@@ -2838,6 +2939,8 @@ Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau �
             "dwarf": "Nain",
             "elf": "Elfe",
             "human": "Humain",
+            "angel": "Ange",
+            "demon": "Démon",
             "no-choosed-race": "Choisissez une race",
 
             "female": "Féminin",
@@ -2893,6 +2996,8 @@ Golem : Force +3, Endurance +2, Intelligence -1, Attrait -1, Sagesse -1, Noyau �
             "Scale_oil": 'Huile pour écailles',
             "Blood_vial": 'Fiole de sang',
             "Elemental_core": 'Noyau élémentaire',
+            "Angelic_halo": "Halo Angélique",
+            "Demonic_symbol": "Symbole Démoniaque",
             "lute": "Luth",
             "dagger": "Dague",
             "staff": "Bâton",
@@ -3059,6 +3164,14 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "status-positionInSociety-label": "Position dans la Société :",
             "status-affiliationWithOrganizations-label": "Affiliation avec des Organisations :",
             "status-effect-none-label": "Aucun",
+            "persuasion-label": "Persuasion",
+            "start-prs": "Persuasion",
+            "rebirth-in-another-world": "Renaissance dans un Autre Monde",
+            "being-summoned-to-another-world": "Être Invoqué dans un Autre Monde",
+            "reincarnation": "Réincarnation",
+            "demon-invasion": "Invasion Démoniaque",
+            "the-end-of-the-world": "La Fin du Monde",
+            "apocalypse": "Apocalypse",
         }
     };
 
@@ -3095,7 +3208,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
         const placeholders = [
             'start-str', 'start-dex', 'start-con', 'start-intl',
             'start-wis', 'start-trd', 'start-per', 'start-luck',
-            'start-spd', 'start-money', 'start-exp', 'start-atr',
+            'start-spd', 'start-money', 'start-exp', 'start-atr', 'start-prs',
             'start-location-description', 'start-location',
             'character-starting-inventory', 'character-prehistory',
             'character-class-description', 'character-class2',
@@ -3122,7 +3235,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             'health-label', 'level-label', 'strength-label', 'dexterity-label',
             'wisdom-label', 'perception-label', 'trade-label', 'energy-label',
             'exp-label', 'constitution-label', 'speed-label', 'intelligence-label',
-            'luck-label', 'attractiveness-label', 'money-label', 'send-button', 'resend-button',
+            'luck-label', 'attractiveness-label', 'persuasion-label', 'money-label', 'send-button', 'resend-button',
             'create-setting', 'load-created-setting', 'save-created-setting',
             'tts-mode-label', 'tts-mode-label2', 'tts-mode-label3', 'tooltip-class', 'tooltip-rpg', 'tooltip-rpg2',
             'nonmagic-mode-name', 'tooltip-noMagic', 'starting-parameters-label',
@@ -3150,7 +3263,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "npc-info-attitude-label", "npc-info-history-label", "npc-info-appearanceDescription-label",
             "npc-info-tab-journal-label", "npc-info-tab-memory-diary-label",
             "npc-info-memory-diary-label", "npc-delete-memory-diary", "use-npc-memories-diary-label",
-            "status-appearanceDescription-label", "status-statusInSociety-label", "status-positionInSociety-label", "status-affiliationWithOrganizations-label"
+            "status-appearanceDescription-label", "status-statusInSociety-label", "status-positionInSociety-label", "status-affiliationWithOrganizations-label",
         ];
 
         //Update labels
