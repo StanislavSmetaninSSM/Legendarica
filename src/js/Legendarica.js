@@ -3620,19 +3620,19 @@ ${ELEMENTS.useNpcJournal.checked ? `
 #8.12.2.3. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
 #8.12.2.4. Imagine the NPC keeps a personal journal, in which NPC makes personal notes, recording their thoughts in the first person. To the value of 'lastJournalNote' key, include last note of NPC for current turn. This note should include information about NPC thoughts and reactions regarding last events. Describe it in as much detail and artistic language as possible.
 #8.12.2.5. The value of 'lastJournalNote' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of note: '#${turn}. {Note text}', where '{' and '}' represents the notation of a variable and should not be used in the note.
-#8.12.2.6. The data which you recorded in the 'lastJournalNote' should only be related with current turn. Do not copy the notes for previous turn, instead of it always record to 'lastJournalNote' the new data, related with current turn only. 
+#8.12.2.6. The data which you recorded in the 'lastJournalNote' should only be related with current turn. Do not copy the notes for previous turns, instead of it always record to 'lastJournalNote' the new data, related with current turn only. 
 #8.12.2.7. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. 
 ]
 ${ELEMENTS.useNpcMemoriesDiary.checked ? `
-#8.12.3. NPCs react to various events and remember their past. Often, something in the events of the current turn can remind them of the past. When it happens, then follow the instructions: [ Let's think step by step :
-#8.12.3.1. Include to the response, the 'NPCMemories' key, the value of which is the array of objects, and each object of the array represents the information about NPC memories.
+#8.12.3. Each turn, while the player is interacting with an NPCs, response includes the 'NPCMemories' key with the current NPCs background (memory about the past) notes according to the following instruction: [ Let's think step by step :
+#8.12.3.1. The value of 'NPCMemories' key is an array of objects, each of which contains the information about NPC memory diary notes.
 #8.12.3.2. Mandatory format for recording the value of each item of 'NPCMemories' array: {'name': 'full_name_of_current_NPC', 'lastDiaryNote': 'last_NPC_memories_for_current_turn'} .
 #8.12.3.3. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
-#8.12.3.4. Imagine that an NPC has a personal diary in which they writes down even their most intimate memories, as well as the thoughts and feelings associated with them.
-#8.12.3.5. To the value of 'lastDiaryNote' key, include last memory note of NPC for current turn. This memory should be related with events for current turn and remember something in NPC's past.
-#8.12.3.6. Each memory note should include complete information about part of NPC history, written as personal diary style. Describe it in as much detail and artistic language as possible.
+#8.12.3.4. Imagine that an NPC has a personal diary in which he writes down his background story in first-person format. This story can start with some interesting moment in the NPC's past, or with the NPC's birth, and logically continues to be supplemented each turn.
+#8.12.3.5. To the value of 'lastDiaryNote' key, include last note of NPC's memory diary for current turn.
+#8.12.3.6. Each diary note should include complete information about part of NPC history, written as personal diary style. Describe it in as much detail and artistic language as possible.
 #8.12.3.7. The value of 'lastDiaryNote' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of note: '#${turn}. {Note text}', where '{' and '}' represents the notation of a variable and should not be used in the note.
-#8.12.3.8. The data which you recorded in the 'lastDiaryNote' should only be related with current turn. Do not copy the notes for previous turn, instead of it always record to 'lastDiaryNote' the new data, related with current turn only. 
+#8.12.3.8. The data which you recorded in the 'lastDiaryNote' should only be related with current turn. Do not copy the notes for previous turns, instead of it always record to 'lastDiaryNote' the new data, related with current turn only. 
 #8.12.3.9. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ]` : '' }
 ] ]` : ''}
@@ -3691,7 +3691,7 @@ ${ELEMENTS.useQuestsList.checked ? `
 #10.6.5. To the 'value' value of key include the number to which you decided to decrease the player's characteristic.
 #10.6.6. Write to the 'items_and_stat_calculations' the reason of decreasing the player's characteristic. 
 ]
-#10.7. Training and Teaching the Player’s Character. Rules.
+#10.7. Training and Teaching the Player's Character. Rules.
 #10.7.1. Each time the player attempts to train, or learn something new, strictly follow these instructions: [ Let’s think step by step: [
 #10.7.2. Match the player character’s training or learning to a specific characteristic from this list: ${statsList} .
 #10.7.3. If this characteristic is present in the stats_increase_list, then do the following: [
