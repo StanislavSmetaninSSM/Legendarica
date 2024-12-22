@@ -1129,7 +1129,6 @@ function showInventoryInfo(id, itemsArray) {
     const qualityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-quality-label"];
     const durabilityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-durability-label"];
     const priceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-price-label"];
-    const resourceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-resource-label"];
     const weightLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-weight-label"];
     const capacityLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-capacity-label"];
     const volumeLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-volume-label"];
@@ -1188,11 +1187,12 @@ function showInventoryInfo(id, itemsArray) {
     }
 
     function processResource() {
-        let resourceValue = currentItem.resource ?? '-';
-        if (!currentItem.resource?.includes(':'))
-            resourceValue = `${resourceLabel}: ${resourceValue}`;
+        const resourceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-resource-label"];
+        let resourceValue = currentItem.resource ?? '-';       
+        if (currentItem.resourceType)
+            resourceValue += ` (${currentItem.resourceType})`;
 
-        ELEMENTS.inventoryInfoResource.innerHTML = resourceValue;
+        ELEMENTS.inventoryInfoResource.innerHTML = `${resourceLabel}: ${resourceValue}`;
         if (!currentItem.resource)
             ELEMENTS.inventoryInfoResource.classList.add(displayNoneClass);
         else
@@ -1260,6 +1260,7 @@ function addInventoryItem(itemParams) {
             item.image_prompt = itemParams.image_prompt;
 
         item.resource = itemParams.resource;
+        item.resourceType = itemParams.resourceType;
         item.count = itemParams.count;
         item.price = itemParams.price;
         item.bonuses = itemParams.bonuses;
@@ -1283,6 +1284,7 @@ function addInventoryItem(itemParams) {
             price: itemParams.price,
             durability: itemParams.durability,
             resource: itemParams.resource,
+            resourceType: itemParams.resourceType,
             bonuses: itemParams.bonuses,
             customProperty: itemParams.customProperty,
             image_prompt: itemParams.image_prompt,
@@ -3067,7 +3069,6 @@ async function sendRequest(currentMessage) {
 
         //General
         const myPrompt = ELEMENTS.myRules.value;
-        const randomNumbersList = generateRandomNumbers(2, 1, 1000000);
         const totalWeight = calculateTotalInventoryWeight();
         const strengthPlusConstitution = characterStats.strength + characterStats.constitution;
 
@@ -3122,7 +3123,7 @@ async function sendRequest(currentMessage) {
 			`;
 
         //Inventory
-        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'price': 'price_of_item_for_sold', 'description': 'item_description', 'bonuses': ['array_of_item_bonuses'], 'durability': 'durability_of_the_item_in_percents', 'resource': 'count_of_consumable_items_or_charges_inside_item', 'customProperty': 'custom_property_for_player_data', 'image_prompt': 'prompt_to_generate_item_image', 'isContainer': 'shows_if_item_is_container_to_store_items', 'capacity': 'capacity_of_container', 'contentsPath': ['path_to_item_inside_container'], 'weight': 'weight_of_item', 'volume': 'volume_of_item', 'containerWeight': 'weight_of_container_without_items' }`;
+        const inventoryTemplate = `{'name': 'full_name_of_item', 'count': 'count_of_this_item', 'quality': 'item_quality', 'price': 'price_of_item_for_sold', 'description': 'item_description', 'bonuses': ['array_of_item_bonuses'], 'durability': 'durability_of_the_item_in_percents', 'resource': 'resource_of_item', 'resourceType': 'type_of_resource', 'customProperty': 'custom_property_for_player_data', 'image_prompt': 'prompt_to_generate_item_image', 'isContainer': 'shows_if_item_is_container_to_store_items', 'capacity': 'capacity_of_container', 'contentsPath': ['path_to_item_inside_container'], 'weight': 'weight_of_item', 'volume': 'volume_of_item', 'containerWeight': 'weight_of_container_without_items' }`;
         const itemsQualityList = [
             translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"],
             translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"],
@@ -3146,9 +3147,9 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
         const statsAvailableForIncrease = getStatsAvailableForIncrease();
         const statChangeValue = getRandomNumber(0, 3);
 
-        //Dice (3d20)
-        const gmDice = getRandomNumber(1, 20) + getRandomNumber(1, 20) + getRandomNumber(1, 20);
-        const playerDice = getRandomNumber(1, 20) + getRandomNumber(1, 20) + getRandomNumber(1, 20);
+        //Dice (2d10)
+        const gmDice = getRandomNumber(1, 10) + getRandomNumber(1, 10);
+        const playerDice = getRandomNumber(1, 10) + getRandomNumber(1, 10);
         const playerCritDice = getRandomNumber(1, 20);
 
         //Response template
@@ -3289,7 +3290,9 @@ ${CHARACTER_INFO.nonMagicMode ? `
 ], then strictly follow the instructions: [ Let's think step by step : [ 
 #4.1. Include to the response the 'inventoryItemsData' key, the value of which is the array of objects, and each object of the array represents the inventory item information.
 #4.2. Mandatory the format for each object of 'inventoryItemsData' array: ${inventoryTemplate} . 
-#4.3. Include to 'inventoryItemsData' only new items or items which data were changed. It's important to note, that this array only represents the data about changes and new items, and not the information about all player's inventory.
+#4.3. Include to the 'inventoryItemsData' only new items or items which data were changed. It's important to note, that this array only represents the data about changes and new items, and not the information about all player's inventory.
+#4.3.1. Every change to the value of the 'resource' or 'count' properties of an item, regardless of its magnitude (increase or decrease), must be reflected in 'inventoryItemsData'. Even if the change seems insignificant, information about it must be included.
+#4.3.2. It's forbidden to ignore changes to the values of the 'resource' or 'count' properties based on the assumption that these changes are insignificant. Any changes of 'resource' or 'count' properties must be recorded in 'inventoryItemsData'.
 #4.4. If player receives the new item, then: [
 #4.4.1. Here is the original list of item templates available to the player in the current turn: items_list = ${JSON.stringify(loot)}. 
 #4.4.2. To assign a new item to the player, the gamemaster extracts the first item (template) from the items_list that has not yet been assigned in the current turn. Use item templates only from the original list of items in order, starting with the very first one in the items_list. It is forbidden to assign to the player any other items whose structure does not correspond to the template from the original list.
@@ -3338,45 +3341,56 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.11. To the value of the 'durability' key include the item durability as a percentage value, where 100% - maximum durability. Durability that equals to 0% means that item is broken and its 'count' must be decreased.
 #4.11.1. Use the durability rule to determinate the item durability: [ ${itemsBreakRulesTemplate} ] .
 #4.11.2. Based on the item's durability rule, set the value of durability by your choice.
-#4.12. To the value of the 'resource' key include string, which represents the count of expendable charges or units contained within an item. It could be ammunition (e.g. bullets inside the gun, or arrows inside the quiver). It could also be the battery charge value, or magic staff mana value, or number of milliliters in a bottle, etc.
-#4.12.1. It's important to fill not only the count of resource, but also type of resource in the 'resource' value of key. For example, bullets or arrows.
-#4.12.2. Every time the resource count of an item changes (for example, after a gun shot, or after the battery is discharged, or if the player drank water from a bottle, etc.), you need to update the 'resource' value.
-#4.12.3. If the item doesn't have any internal resource, then set the 'resource' value to null.
-#4.13. The value of 'customProperty' should be filled only if player asks for it. Do not fill it otherwise.
-#4.14. To the value of the 'contentsPath' include the array of strings. Each string is a container name inside which the item is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
-#4.14.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']). Use this rule to set 'contentsPath' for each item.
-#4.14.2. If the item is only in the player's inventory and not included in a container, set 'contentsPath' to null.
-#4.15. To the value of the 'isContainer' key include boolean value, represents if the item is a container or not.
-#4.15.1. A container is any item that can store other items inside it.
-#4.15.2. To understand, that item is container, you should mandatory make a check for possibility to open an item. If item could be opened and has a space inside it, than it is a container.
-#4.16. If item is container, then use these container rules: [
-#4.16.1 Mandatory set 'isContainer' to true.
-#4.16.2. The description of an item (container) should not include information about its contents.
+#4.12. To the value of the 'resource' key include number, which represents one of the following: [
+    - The number of expendable charges or units contained within an item. It could be ammunition (e.g. bullets inside the gun, or arrows inside the quiver). It could also be the battery charge value, or magic staff mana value, or number of milliliters in a bottle, etc.
+    - The number indicating how many times items intended for consumption can be used. Examples: bandages, plasters, duct tape, food, cigarettes, torches, etc.
+]
+#4.12.1. Every time the resource number of an item changes, you should mandatory update the 'resource' value.
+#4.12.2. If the player has used (or spent) part (or the full amount) of an item's resource, then mandatory decrease the value of 'resource' item property. For example, after a gun shot, or after the battery is discharged, or if the player drank water from a bottle, or if the player has spent some uses count for items intended for consumption, etc.
+#4.12.3. If the player has restored (or increased) any amount of the item's resource, then mandatory increase the value of 'resource' item property. For example, if a player filled a bottle with water, or loaded a gun with bullets, or charged the battery, etc.
+#4.12.4. Even if the 'resource' is equal to 0, then don't remove the item from the inventory after using.
+#4.12.5. If the item is intended for consumption: [
+#4.12.5.1. When the item's resource count becomes 0, you should decrease the item's 'count' value of property, and update the 'resource' value according to it.
+#4.12.5.2. When the item's 'count' value of property becomes 0, you can remove the item from the player's inventory. This was you should follow usual rule for item's 'count' property.
+]
+#4.12.6. If the item doesn't have any internal resource and item is not intended for consumption, then set the 'resource' value to null.
+#4.13. To the value of the 'resourceType' key include string, that represetns the type of resource in the 'resource' value of key. For example, bullets or arrows, or uses count for items intended for consumption, etc.
+#4.13.1. If the value of 'resource' is null, then 'resourceType' should also be null.
+#4.14. The value of 'customProperty' should be filled only if player asks for it. Do not fill it otherwise.
+#4.15. To the value of the 'contentsPath' include the array of strings. Each string is a container name inside which the item is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
+#4.15.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']). Use this rule to set 'contentsPath' for each item.
+#4.15.2. If the item is only in the player's inventory and not included in a container, set 'contentsPath' to null.
+#4.16. To the value of the 'isContainer' key include boolean value, represents if the item is a container or not.
+#4.16.1. A container is any item that can store other items inside it.
+#4.16.2. To understand, that item is container, you should mandatory make a check for possibility to open an item. If item could be opened and has a space inside it, than it is a container.
+#4.17. If item is container, then use these container rules: [
+#4.17.1 Mandatory set 'isContainer' to true.
+#4.17.2. The description of an item (container) should not include information about its contents.
 Example 1 (incorrect): 'This is an emergency first aid kit. Inside are bandages and iodine.' The description of this container explicitly states that bandages and iodine are inside. This is an incorrect description.
 Example 2 (correct): 'This is an emergency first aid kit.'
-#4.16.3. Include to the 'capacity' value of key the numeric value, representing the number of items the container can hold.
-#4.16.4. It's forbidden to add more items to a container than its 'capacity' allows.
-#4.17. The 'count' property of container must always be '1'. Each container is unique one. Instead of combining containers, add the new unique one if needed. It's mandatory to follow this rule for containers.
+#4.17.3. Include to the 'capacity' value of key the numeric value, representing the number of items the container can hold.
+#4.17.4. It's forbidden to add more items to a container than its 'capacity' allows.
+#4.17.5. The 'count' property of container must always be 1. Each container is unique one. Instead of combining containers, add the new unique one if needed. It's mandatory to follow this rule for containers.
 ]
-#4.17. If 'isContainer' is false, then set the 'capacity' value to null.
-#4.18. To the value of 'weight' key include the numeric value, representing the weight of item. Each item has the weight. Unit of weight: kilogram.
-#4.18.1. If the item is a container, you need to set additionally 'containerWeight' value of key. This is the weight of container without items inside it.
-#4.18.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to '0') if it is an item with the appropriate special properties.
-#4.19. To the value of 'volume' key include the numeric value, representing the volume of item. Each item has the volume. Unit of volume: dm³.
-#4.20. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
-#4.21. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
-#4.22. Mandatory record information about this event in 'items_and_stat_calculations'.
+#4.18. If 'isContainer' is false, then set the 'capacity' value to null.
+#4.19. To the value of 'weight' key include the numeric value, representing the weight of item. Each item has the weight. Unit of weight: kilogram.
+#4.19.1. If the item is a container, you need to set additionally 'containerWeight' value of key. This is the weight of container without items inside it.
+#4.19.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to 0) if it is an item with the appropriate special properties.
+#4.20. To the value of 'volume' key include the numeric value, representing the volume of item. Each item has the volume. Unit of volume: dm³.
+#4.21. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
+#4.22. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
+#4.23. Mandatory record information about this event in 'items_and_stat_calculations'.
 ${turn == 1 ? `
-#4.23. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
+#4.24. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
 It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
 If player has containers in their item, then mandatory generate items inside containers. Carefully read the 'description' of containers and generate items inside it based on the description.
 Note, than you should mandatory generate all predefined items. If they are too heavy (have a lot of weight), then make them lighter so the character can hold them and not be overloaded.
 It's mandatory to use the same names, which predefined items already have. Forbidden to use another item names for predefined items.
 ` : ''}
-#4.24. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#4.25. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
-#4.25. Do not include 'inventoryItemsData' key to the response.
+#4.26. Do not include 'inventoryItemsData' key to the response.
 ]
 
 #5 If any of these conditions are true: [
@@ -3423,58 +3437,83 @@ It's mandatory to use the same names, which predefined items already have. Forbi
 #7.1. Associate each player action (except for generating items, moving or removing items from the inventory) with one suitable characteristic only from the list: ${statsList} and translate this characteristic into ${translationModule.currentLanguage} .
 #7.1.1. When generating an item, moving item or removing item, no skill check is performed.
 #7.1.2. When moving from location to location, checks are done rarely.
-#7.1.3. On any dialogues not related to trade - the affect of characteristics is secondary. The result of dialogue is mainly related to the content of what the player character said.
-#7.1.4. The 'trade' characteristic check is done only when trading about prices for deals.
-#7.1.5. The 'attractiveness' characteristic is used to seduce or charm the NPC (for example, to get a discount or important information). Attractiveness reflects the physical beauty of the character. It is important to note that not all NPCs care about physical beauty.
-#7.1.6. The 'persuasion' characteristic is used to convince someone using oratory.
+#7.1.3. For elementary actions deemed easy by the game master, no check is required.
+#7.1.4. On any dialogues not related to trade - the affect of characteristics is secondary. The result of dialogue is mainly related to the content of what the player character said.
+#7.1.5. The 'trade' characteristic check is done only when trading about prices for deals.
+#7.1.6. The 'attractiveness' characteristic is used to seduce or charm the NPC (for example, to get a discount or important information). Attractiveness reflects the physical beauty of the character. It is important to note that not all NPCs care about physical beauty.
+#7.1.7. The 'persuasion' characteristic is used to convince someone using oratory.
 ${playerCritDice != 20 && playerCritDice != 1 ? `
 #7.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Usual dice roll, which means that we need to make additional check for player action.
+
 #7.3. Do following check for the associated characteristic: [
 #7.3.1. Let's describe the StatModificator. StatModificator is a special constant for current turn, related with the associated characteristic. We use this value for subsequent checks for a success or failure of the player's action related with the associated characteristic.
 #7.3.1.1. Calculate the StatModificator using the instruction: [
 #7.3.1.2. Read the current value of associated characteristic. Let's call it StatValue.
-#7.3.1.3. Calculate all values ​​from all item bonuses, all active and passive skill bonuses, and all possible effects affecting associated characteristic of player. Let's call it Bonuses.
+#7.3.1.3. Calculate all values from all item bonuses, all active and passive skill bonuses, and all possible effects affecting associated characteristic of player. Let's call it Bonuses.
 #7.3.1.4. Sum the current characteristic value and all associated characteristic bonuses using this formula:
 StatValueWithBonuses = StatValue + Bonuses, where
 • StatValueWithBonuses - the sum of associated characteristic value and and all bonuses related with this characteristic.
 • StatValue - the current value of associated characteristic.
 • Bonuses - all bonuses, which affects the associated characteristic of player.
-#7.3.1.5. Set the maximum value for the associated characteristic. Let's call it MaximumStatValue = (${characterStats.level} + 5) .
+#7.3.1.5. Set the maximum value for the associated characteristic. Let's call it MaximumStatValue = (${characterStats.level} * 0.5 + 20).
 #7.3.1.6. Calculate the StatModificator value using this formula:
-StatModificator = min(MaximumStatValue, StatValueWithBonuses), where
+StatModificator = min(MaximumStatValue, StatValueWithBonuses) + LevelScaling, where
 • MaximumStatValue - maximum value for the associated characteristic.
-• StatValueWithBonuses - the sum of associated characteristic value and and all bonuses related with this characteristic.
+• StatValueWithBonuses - the sum of associated characteristic value and all bonuses related with this characteristic.
+• LevelScaling = floor(${characterStats.level} * 0.8) - scaling bonus based on character level
 ]
+
 #7.3.2. Let's describe ActionDifficultModificator - the value that determines the difficulty of the player's action.
 #7.3.2.1. Calculate the ActionDifficultModificator using the instruction: [
 #7.3.2.2. Let's calculate base ActionDifficult value using this formula:
-ActionDifficult = Current location difficulty * (1 + NPC Difficulty + Situation Difficulty + Action Rationality), where
-• Action Rationality is a fractional number from 0 to 1 (chosen by the gamemaster depending on the logic of actions, the more logical - the closer to zero).
-• Situation Difficulty is a fractional number from 0 to 1 (chosen by the gamemaster depending on the complexity of the situation, the more difficult the circumstances - the closer to one).
-• NPC Difficulty is a fractional number from 0 to 1 (chosen by the gamemaster depending on the complexity of the NPC with which the player interacts during the action, the more complex the NPC - the closer to 1).
+ActionDifficult = BaseDifficulty * (1 + NPC_Difficulty + Situation_Difficulty + Action_Rationality), where
+• BaseDifficulty = Current location difficulty * DifficultyScale
+• DifficultyScale = max(0.2, min(1.5, (${characterStats.level} / 50))) - difficulty scaling factor based on level
+• Action_Rationality is a fractional number from 0 to 1 (chosen by the gamemaster depending on the logic of actions, the more logical - the closer to zero).
+• Situation_Difficulty is a fractional number from 0 to 1 (chosen by the gamemaster depending on the complexity of the situation, the more difficult the circumstances - the closer to one).
+• NPC_Difficulty is a fractional number from 0 to 1 (chosen by the gamemaster depending on the complexity of the NPC with which the player interacts during the action, the more complex the NPC - the closer to 1).
 #7.3.2.3. Be fair in selecting the right fractional numbers. Do not adjust their values to the success of the check deliberately. It's very important for making the game interesting for the player.
 #7.3.2.4. Calculate ActionDifficultModificator by normalizing the ActionDifficult using this formula:
-ActionDifficultModificator = min(100, ActionDifficult), where
+ActionDifficultModificator = min(120, ActionDifficult * (0.4 + ${characterStats.level}/100)), where
 • ActionDifficult - the value that determines the difficulty of the player's action.
 • ActionDifficultModificator - normalized value of ActionDifficult.
 ]
-#7.3.3. This is player dice result (3d20). Let's call it PlayerDiceResult = ${playerDice}.
-#7.3.4. This is gamemaster dice result (3d20). Let's call it GMDiceResult = ${gmDice}.
-#7.3.5. Make final check using this formula:
-PlayerDiceResult + StatModificator >= GMDiceResult + ActionDifficultModificator, where
-• PlayerDiceResult - result of player dice roll.
-• StatModificator - calculated modificator related with associated characteristic of player.
-• GMDiceResult - result of gamemaster dice roll.
-• ActionDifficultModificator - the value that determines the difficulty of the player's action.
+
+#7.3.3. This is player dice result (2d10). Let's call it PlayerDiceResult = ${playerDice}.
+#7.3.4. This is gamemaster dice result (2d10). Let's call it GMDiceResult = ${gmDice}.
+
+#7.3.5. Calculate the difference using this formula:
+Difference = (PlayerDiceResult + StatModificator) - (GMDiceResult + ActionDifficultModificator)
+
+#7.3.6. Determine the result based on the Difference value:
+[
+If Difference ≥ 10:          Result = "Critical Success"
+If 5 ≤ Difference < 10:      Result = "Full Success"
+If 0 ≤ Difference < 5:       Result = "Partial Success"
+If -5 ≤ Difference < 0:      Result = "Minor Failure"
+If -10 ≤ Difference < -5:    Result = "Serious Failure"
+If Difference < -10:         Result = "Critical Failure"
 ]
-#7.3.6. Output to 'items_and_stat_calculations' the check calculation and result of check.
-#7.3.6.1. For recording in 'items_and_stat_calculations', translate the names of characteristics into natural language.
-#7.3.7. If the check result is true, then: [
-- Output to 'items_and_stat_calculations' that player's action was succeeded.
-- Note that the player has succeeded in doing what player was trying to do. You should develop the game's plot based on this.
-], otherwise: [
-- Output to 'items_and_stat_calculations' that the player's action failed.
-- Note that the player has failed at what player was trying to do. You should develop the game's plot based on this.
+
+#7.3.7. Output to 'items_and_stat_calculations' the check calculation, Difference value and Result type, and describe all of this in great details.
+#7.3.8. Based on the Result type, mandatory proceed with the appropriate development of the plot: [
+For "Critical Success":
+- Character achieves their goal exceptionally well with additional positive effects.
+
+For "Full Success":
+- Character completely achieves their intended goal.
+
+For "Partial Success":
+- Character achieves their goal but with some minor complications or limitations.
+
+For "Minor Failure":
+- Character fails to achieve their goal but without serious consequences.
+
+For "Serious Failure":
+- Character fails with notable negative consequences.
+
+For "Critical Failure":
+- Character fails dramatically with severe consequences.
 ]
 ` : (playerCritDice == 20 ? `
 #7.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Success!
@@ -3879,11 +3918,12 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 ` : ''}
 
 14. Calculation of action checks for skills and calculation of items generation are different events, independent of each other. There is a separate instruction for each of these events. Distinguish between them.
+15. Do not write calculation results to 'response' value of key. Instead, write calculation results only to 'items_and_stat_calculations' value of key.
 
-15. The economy and value of money in the game is built relative to known prices for items that exist in the current world according to inventory (known from Context).
+16. The economy and value of money in the game is built relative to known prices for items that exist in the current world according to inventory (known from Context).
 
-16. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
- ] ]`;
+17. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
+ ] ]`; 
 
         console.log(prompt);
         lastUserMessage = currentMessage;
@@ -3986,6 +4026,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             price: item.price,
                             durability: item.durability,
                             resource: item.resource,
+                            resourceType: item.resourceType,
                             bonuses: item.bonuses,
                             image_prompt: item.image_prompt,
                             customProperty: item.customProperty,

@@ -481,6 +481,7 @@ Enjoy the game!`,
             "quest-info-description-label": "Description:",
             "use-thinking-module-label": "Add a response-thinking module (disable to save tokens). Theoretically makes the AI smarter",
             "log-thinking-button-label": "Thought Log",
+            "persuasion": "Persuasion",
         },
         "russian-language": {
             // placeholders
@@ -942,6 +943,7 @@ Websim. Зависит от нейросети, которую использу�
             "quest-info-description-label": "Описание:",
             "use-thinking-module-label": "Добавить модуль обдумывания ответов (отключите для экономии токенов). Теоретически сделает АИ более умным",
             "log-thinking-button-label": "Лог мыслей",
+            "persuasion": "Убеждение",
         },
         "spanish-language": {
             // placeholders
@@ -1410,6 +1412,7 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "quest-info-description-label": "Descripción:",
             "use-thinking-module-label": "Agregar un módulo de reflexión de respuestas (desactivar para ahorrar tokens). Teóricamente hace la IA más inteligente",
             "log-thinking-button-label": "Registro de Pensamientos",
+            "persuasion": "Persuasión",
         },
         "portuguese-language": {
             // placeholders
@@ -1878,6 +1881,7 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "quest-info-description-label": "Descrição:",
             "use-thinking-module-label": "Adicionar módulo de raciocínio das respostas (desative para economizar tokens). Teoricamente torna a IA mais inteligente",
             "log-thinking-button-label": "Registro de Pensamentos",
+            "persuasion": "Persuasão",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -2343,6 +2347,7 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "quest-info-description-label": "विवरण:",
             "use-thinking-module-label": "उत्तर सोचने वाला मॉड्यूल जोड़ें (टोकन बचाने के लिए बंद करें)। सैद्धांतिक रूप से यह एआई को अधिक बुद्धिमान बनाता है",
             "log-thinking-button-label": "सोच लॉग",
+            "persuasion": "प्रभाव",
         },
         "german-language": {
             // placeholders
@@ -2811,6 +2816,7 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "quest-info-description-label": "Beschreibung:",
             "use-thinking-module-label": "Den Denkmodul für Antworten hinzufügen (deaktivieren, um Tokens zu sparen). Theoretisch macht es die KI intelligenter",
             "log-thinking-button-label": "Gedankenprotokoll",
+            "persuasion": "Überzeugung",
         },
         "french-language": {
             // placeholders
@@ -3280,6 +3286,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "quest-info-description-label": "Description :",
             "use-thinking-module-label": "Ajouter un module de réflexion sur les réponses (désactiver pour économiser des jetons). Théoriquement, cela rend l'IA plus intelligente",
             "log-thinking-button-label": "Journal des Pensées",
+            "persuasion": "Persuasion",
         }
     };
 
