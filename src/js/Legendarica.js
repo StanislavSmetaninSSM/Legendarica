@@ -3504,32 +3504,32 @@ Difference = (PlayerDiceResult + StatModificator) - (GMDiceResult + ActionDiffic
 
 #7.3.6. Determine the result based on the Difference value:
 [
-If Difference ≥ 10:          Result = "Critical Success"
-If 5 ≤ Difference < 10:      Result = "Full Success"
-If 0 ≤ Difference < 5:       Result = "Partial Success"
-If -5 ≤ Difference < 0:      Result = "Minor Failure"
-If -10 ≤ Difference < -5:    Result = "Serious Failure"
-If Difference < -10:         Result = "Critical Failure"
+If Difference ≥ 10:          Result = 'Critical Success'
+If 5 ≤ Difference < 10:      Result = 'Full Success'
+If 0 ≤ Difference < 5:       Result = 'Partial Success'
+If -5 ≤ Difference < 0:      Result = 'Minor Failure'
+If -10 ≤ Difference < -5:    Result = 'Serious Failure'
+If Difference < -10:         Result = 'Critical Failure'
 ]
 
 #7.3.7. Output to 'items_and_stat_calculations' the check calculation, Difference value and Result type, and describe all of this in great details.
 #7.3.8. Based on the Result type, mandatory proceed with the appropriate development of the plot: [
-For "Critical Success":
+For 'Critical Success':
 - Character achieves their goal exceptionally well with additional positive effects.
 
-For "Full Success":
+For 'Full Success':
 - Character completely achieves their intended goal.
 
-For "Partial Success":
+For 'Partial Success':
 - Character achieves their goal but with some minor complications or limitations.
 
-For "Minor Failure":
+For 'Minor Failure':
 - Character fails to achieve their goal but without serious consequences.
 
-For "Serious Failure":
+For 'Serious Failure':
 - Character fails with notable negative consequences.
 
-For "Critical Failure":
+For 'Critical Failure':
 - Character fails dramatically with severe consequences.
 ]
 ` : (playerCritDice == 20 ? `
