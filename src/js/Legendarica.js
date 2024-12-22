@@ -2498,6 +2498,17 @@ function getMaxGmSymbols() {
 }
 
 function getRandomNumber(min, max) {
+    if (!Random)
+        return getRandomNumberInternal(min, max);
+
+    const engine = Random.engines.mt19937();
+    engine.autoSeed();
+    const random = new Random(engine);
+
+    return random.integer(min, max);
+}
+
+function getRandomNumberInternal(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
 
