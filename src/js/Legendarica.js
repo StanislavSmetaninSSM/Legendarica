@@ -3849,7 +3849,7 @@ ${generateStatus ? `
 - Look at the explicit effects, which affectings the player in current turn. Then find the player's status effects (statusDataEffects) in the Context. Compare values of their properties ['name', 'description' ] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found.
 ], then strictly follow the instructions: [ Let's think step by step : [
 #19.3. Mandatory include to the response the key 'statusDataEffects', the value of which is an array of objects, each of which representing the information about explicit effects, that affects the player character.
-#19.4. Mandatory format for recording the value of each item of 'effects' array: { 'name': 'explicit_effect_name', 'description': 'explicit_effect_description' } .
+#19.4. Mandatory format for recording the value of each item of 'statusDataEffects' array: { 'name': 'explicit_effect_name', 'description': 'explicit_effect_description' } .
 #19.5. To the value of the 'name' key, include the name of explicit effect.
 #19.6. To the value of the 'description' key, include the string that describes information about explicit effect.
 #19.7. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. 
