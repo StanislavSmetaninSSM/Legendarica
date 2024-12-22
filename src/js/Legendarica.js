@@ -1403,9 +1403,15 @@ function setOrChangeSkills(skills, newSkills) {
 }
 
 function removeSkill(name, isActive) {
-    const skills = isActive ? activeSkills : passiveSkills;
-    if (!skills[name])
+    if (!name)
         return;
+    
+    const skills = isActive ? activeSkills : passiveSkills;
+    const index = skills.findIndex(skill => skill.name === name);
+    if (index == -1)
+        return;
+
+    skills.splice(index, 1);
     
     const messageId = translationModule.setSkillRemovedMessage(name, isActive);
     const message = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
