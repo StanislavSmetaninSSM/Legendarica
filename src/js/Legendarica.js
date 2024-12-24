@@ -1179,8 +1179,11 @@ function showInventoryInfo(id, itemsArray) {
     }
 
     function processCustomProperties() {
-        if (!Array.isArray(currentItem.customProperties) || currentItem.customProperties.length == 0)
+        if (!Array.isArray(currentItem.customProperties) || currentItem.customProperties.length == 0) {
+            ELEMENTS.inventoryInfoCustomProperties.innerHTML = '';
+            ELEMENTS.inventoryInfoCustomProperties.classList.remove(displayNoneClass);
             return;
+        }
         
         const elementsHtml = currentItem.customProperties.map(property => {
             const nameAndValue = `${property.name}: ${property.value}`;
