@@ -235,7 +235,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                         <div id="system-instructions-box" class="chat-box rulesBox" data-show="false" style="display:none">
                             <span id="system-instructions-explanaition">Это системные инструкции для выбранного провайдера нейросети. Они имеют высший приоритет для нейросети.</span><br>
-                            <textarea id="system-instructions" class="instructionsArea" placeholder="Введите свои системные инструкции и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                            <textarea id="system-instructions" class="instructionsArea" placeholder="Введите свои системные инструкции и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="setContentHeight(this)" onclick="setContentHeight(this)"></textarea>
                             <br>
                             <button id="download-system-instructions-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="saveSystemInstructions()">Скачать системные инструкции в файл</button>
                             <button id="load-system-instructions-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="loadSystemInstructions()">Загрузить системные инструкции из файла</button>
@@ -243,7 +243,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                         <div id="my-rules-box" class="chat-box rulesBox" style="display: none;">
                             <span id="my-rules-explanaition">Здесь вы можете изменить или дополнить правила игры или просто повлиять на поведение ведущего. Просто введите тут инструкцию и оставьте. Например: "В инвентаре персонажа должен быть список в виде отдельного предмета, в котором указаны вообще все бонусы в сумме со всех предметов в инвентаре, а если такого списка в инвентаре нет, то добавить его" или "пусть в каждой локации будут монстры". Предупреждение: внесённые изменения могут сломать какие-нибудь механики игры. А могут и не сломать. Дерзайте!</span><br>
-                            <textarea id="my-rules" class="instructionsArea" placeholder="Введите свои правила и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                            <textarea id="my-rules" class="instructionsArea" placeholder="Введите свои правила и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="setContentHeight(this)" onclick="setContentHeight(this)"></textarea>
                             <br>
                             <button id="download-my-rules-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="saveMyRules()">Скачать правила в файл</button>
                             <button id="load-my-rules-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="loadMyRules()">Загрузить правила из файла</button>
@@ -728,7 +728,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <p id="inventory-info-available-volume"></p>
             <p id="inventory-info-capacity"></p>
             <p id="inventory-info-available-capacity"></p>
-            <p id="inventory-info-customProperty"></p>
+            <div id="inventory-info-customProperties"></div>
             <p id="inventory-info-description"></p>
             <div id="inventory-info-bonuses"></div>
             <p id="inventory-info-contents-description"></p>
