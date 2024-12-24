@@ -1829,9 +1829,11 @@ function addNpcJournal(name, lastNote) {
     if (existingJournalIndex !== -1) {
         //If the NPC log already exists, move it to the top of the list.
         const existingJournal = npcJournals[existingJournalIndex];
-        existingJournal.notes += `\n\n${lastNote}`;
-        npcJournals.splice(existingJournalIndex, 1);
-        npcJournals.unshift(existingJournal);
+        if (isUniqDiaryNote(existingJournal, lastNote)) {
+            existingJournal.notes += `\n\n${lastNote}`;
+            npcJournals.splice(existingJournalIndex, 1);
+            npcJournals.unshift(existingJournal);
+        }
     } else {
         //If this is a new NPC log.
         //Add a new NPC log to the top of the list.
@@ -1848,15 +1850,42 @@ function addNpcMemoryDiary(name, lastNote) {
     if (existingDiaryIndex !== -1) {
         //If the NPC log already exists, move it to the top of the list.
         const existingDiary = npcMemoryDiaries[existingDiaryIndex];
-        existingDiary.notes += `\n\n${lastNote}`;
-        npcMemoryDiaries.splice(existingDiaryIndex, 1);
-        npcMemoryDiaries.unshift(existingDiary);
+        if (isUniqDiaryNote(existingDiary, lastNote)) {
+            existingDiary.notes += `\n\n${lastNote}`;
+            npcMemoryDiaries.splice(existingDiaryIndex, 1);
+            npcMemoryDiaries.unshift(existingDiary);
+        }
     } else {
         const notes = lastNote;
         npcMemoryDiaries.unshift({ name, notes });
     }
 
     showNpcInfoIfNeeded();
+}
+
+function isUniqDiaryNote(diary, note) {
+    if (!diary || !diary.notes)
+        return true;
+
+    const parsedNote = getTextAfterHashDot(note);
+    if (parsedNote === null) {
+        //let's assume that the format of data is different. Ok...
+        return true;
+    }
+
+    return !diary.notes.includes(parsedNote);
+
+    function getTextAfterHashDot(text) {
+        if (!text?.startsWith('#')) 
+            return null;
+        
+        const dotIndex = text.indexOf('.');
+
+        if (dotIndex === -1)
+            return null;        
+
+        return text.substring(dotIndex + 1).trim();
+    }
 }
 
 //---- QUESTS ----//
