@@ -2837,7 +2837,7 @@ function deleteItem(currentItem, itemsArray, recalculate) {
     if (removeIndex > -1)
         itemsArray.splice(removeIndex, 1);
 
-    if (recalculate && isNestedItem(currentItem))
+    if (recalculate)
         calculateParametersForItemsArray(inventory);    
 
     updateInventoryInfoWindows(currentItem, itemsArray, itemsArray);
