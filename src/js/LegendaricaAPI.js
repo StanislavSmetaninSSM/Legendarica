@@ -566,7 +566,7 @@ const APIModule = (function getAPIModule() {
             if (presencePenalty)
                 settings.presence_penalty = Number(presencePenalty);
 
-            const request = await fetch("https://openaio1api.com/v1/chat/completions", {
+            const request = await fetch("https://chat01.ai/v1/chat/completions", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -126,6 +126,29 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                         </div>
                                     </div>
                                 </div>
+                                <div class="statsGroup" id="statsGroup-weight-container">
+                                    <button id="statsGroup-weight-button-label" class="infoDataLabelSmall" onclick="toggleElementVisible('statsGroup-weight')">Вес</button>
+                                    <div id="statsGroup-weight">
+                                        <div class="stat">
+                                            <span class="stat-name" id="total-weight-label">Общий вес (кг):</span>
+                                            <span id="total-weight-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="tooltip tooltipAuto">???<span class="tooltiptext" id="tooltip-max-weight"></span></span><br />
+                                            <span class="stat-name" id="max-weight-label">Максимальный вес (кг):</span>
+                                            <span id="max-weight-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="tooltip tooltipAuto">???<span class="tooltiptext" id="tooltip-critical-weight"></span></span><br />
+                                            <span class="stat-name" id="critical-weight-label">Критический вес (кг):</span>
+                                            <span id="critical-weight-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="weight-status-label">Состояние:</span>
+                                            <span id="weight-status-value"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -172,6 +195,12 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         <ul id="locations-list" class="infoDataList"></ul>
                     </div>
 
+                    <div id="player-inventory-basket" class="infoData displayNone">
+                        <span class="tooltip tooltipAuto">???<span class="tooltiptext" id="tooltip-inventory-basket"></span></span><br />
+                        <button id="inventory-basket-button-label" class="infoDataLabel" onclick="toggleElementVisible('inventory-basket-list')">Корзина (Инвентарь)</button>
+                        <ul id="inventory-basket-list" class="inventoryList infoDataList"></ul>
+                    </div>
+
                     <div id="player-passive-skills" class="infoData displayNone listContainer">
                         <button id="passive-skills-button-label" class="infoDataLabel" onclick="toggleElementVisible('passive-skills-list')">Пассивные навыки</button>
                         <ul id="passive-skills-list" class="infoDataList listWithInheritedList"></ul>
@@ -198,6 +227,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <button id="buttonInfoAdjust" class="buttonInfo" onclick="togglePlayerInfoWidth()"><i class="uil uil-align-center-h"></i></button>
                             <button id="buttonInfoStats" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-stats-and-status'])"><i class="uil uil-user-square"></i></button>
                             <button id="buttonInfoMain" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-inventory', 'visited-locations'])"><i class="uil uil-globe"></i></button>
+                            <button id="buttonInfoMain" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-inventory-basket'])"><i class="uil uil-shopping-basket"></i></button>
                             <button id="buttonInfoSkills" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-passive-skills', 'player-active-skills'])"><i class="uil uil-book-open"></i></button>
                             <button id="buttonInfoStatus" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-npc', 'player-quests'])"><i class="uil uil-users-alt"></i></button>
                         </div>
@@ -250,6 +280,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         </div>
 
                         <div id="settings-box" class="chat-box" style="display: none;">
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useWeightControl" name="useWeightControl" checked />
+                                <label for="useWeightControl" id="use-weight-control-label">Использовать вес в игре</label>
+                            </div>
+
                             <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useStatus" name="useStatus" checked />
                                 <label for="useStatus" id="use-status-label">Использовать статус (отключите для экономии токенов)</label>
@@ -734,6 +769,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <p id="inventory-info-contents-description"></p>
             <h4 id="inventory-container-open" class="infoOpen">Открыть</h4>
             <h4 id="inventory-delete" class="infoDelete">Выбросить этот предмет</h4>
+            <h4 id="inventory-restore" class="infoRestore">Восстановить</h4>
             <input type="hidden" id="inventory-info-id" name="inventory-info-id">
         </div>
 

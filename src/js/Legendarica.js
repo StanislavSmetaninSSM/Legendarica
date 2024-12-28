@@ -108,9 +108,15 @@ const ELEMENTS = {
     perceptionValue: document.getElementById('perception-value'),
     luckValue: document.getElementById('luck-value'),
     speedValue: document.getElementById('speed-value'),
+    totalWeight: document.getElementById('total-weight-value'),
+    maxWeight: document.getElementById('max-weight-value'),
+    criticalWeight: document.getElementById('critical-weight-value'),
+    weightStatus: document.getElementById('weight-status-value'),
+    weightGroupContainer: document.getElementById('statsGroup-weight-container'),
 
     //inventory
     inventory: document.getElementById('inventory-list'),
+    inventoryBasket: document.getElementById('inventory-basket-list'),
     inventoryInfo: document.getElementById('inventory-info'),
     inventoryInfoId: document.getElementById('inventory-info-id'),
     inventoryInfoName: document.getElementById('inventory-info-name'),
@@ -120,6 +126,7 @@ const ELEMENTS = {
     inventoryInfoAvailableVolume: document.getElementById('inventory-info-available-volume'),
     inventoryInfoClose: document.getElementById('inventory-info-close'),
     inventoryInfoDelete: document.getElementById('inventory-delete'),
+    inventoryInfoRestore: document.getElementById('inventory-restore'),
     inventoryContainerOpen: document.getElementById('inventory-container-open'),
     inventoryInfoCount: document.getElementById('inventory-info-count'),
     inventoryInfoPrice: document.getElementById('inventory-info-price'),
@@ -232,6 +239,7 @@ const ELEMENTS = {
     useQuestsList: document.getElementById('useQuestsList'),
     makeGameQuestOriented: document.getElementById('makeGameQuestOriented'),
     useThinkingModule: document.getElementById('useThinkingModule'),
+    useWeightControl: document.getElementById('useWeightControl'),
 
     //Graphics
     floatingImg: document.getElementById('floating'), // Splash screen
@@ -280,10 +288,11 @@ let characterStats = {
     perception: 0,
     luck: 0,
     speed: 0,
-    money: 0,
+    money: 0
 };
 
 let inventory = [];
+let inventoryBasket = [];
 let visitedLocations = [];
 let encounteredNPCs = [];
 let npcJournals = [];
@@ -294,6 +303,8 @@ let statusDataEffects = [];
 let passiveSkills = [];
 let activeSkills = [];
 let lastUserMessage = 'game';
+let maxWeight = undefined;
+const criticalExcessWeight = 10;
 
 //--------------------------------------------------------------------MAIN GAME FEATURES---------------------------------------------------------------------//
 
@@ -393,7 +404,7 @@ ELEMENTS.createCharacterButton.onclick = function () {
             vampire: () => { characterStats.perception += 1; characterStats.attractiveness += 1; characterStats.dexterity += 1; characterStats.luck -= 1; },
             golem: () => { characterStats.strength += 3; characterStats.constitution += 2; characterStats.intelligence -= 1; characterStats.attractiveness -= 1; characterStats.wisdom -= 1; },
             angel: () => { characterStats.strength += 1; characterStats.attractiveness += 1; characterStats.wisdom += 1; characterStats.trade -= 1; },
-            demon: () => { characterStats.dexterity += 1; characterStats.attractiveness += 2; characterStats.persuasion += 1; characterStats.wisdom -= 1; characterStats.luck -= 1  },
+            demon: () => { characterStats.dexterity += 1; characterStats.attractiveness += 2; characterStats.persuasion += 1; characterStats.wisdom -= 1; characterStats.luck -= 1 },
         };
 
         gameRaces[race]();
@@ -827,7 +838,7 @@ function generateLoot(arr, numberOfItems) {
 function calculateTotalInventoryWeight() {
     let totalWeight = 0;
     for (const item of inventory)
-        totalWeight += item.weight; 
+        totalWeight += item.weight;
 
     return totalWeight;
 }
@@ -896,6 +907,74 @@ function adjustInventoryContainerVolume(itemsArray) {
                 updateContentsPathForNestedItems(excessedItem);
             }
         }
+    }
+}
+
+function adjustInventoryContainerWeight(itemsArray, maxWeight, addedItems) {
+    if (!itemsArray || maxWeight <= 0 || !addedItems)
+        return;
+
+    const removedItems = [];
+
+    calculateParametersForItemsArray(itemsArray);
+    let totalWeight = itemsArray.reduce((sum, item) => sum + item.weight, 0);
+
+    for (let i = addedItems.length - 1; i >= 0 && totalWeight > maxWeight; i--) {
+        const itemToRemove = addedItems[i];
+        const containerItems = getContainerContentsByPath(itemsArray, itemToRemove.contentsPath);
+
+        const itemIndex = containerItems.findIndex(item =>
+            item.name === itemToRemove.name &&
+            item.originalWeight === itemToRemove.originalWeight
+        );
+
+        if (itemIndex !== -1) {
+            containerItems.splice(itemIndex, 1);
+            removedItems.push(itemToRemove);
+            itemToRemove.removed = true;
+
+            calculateParametersForItemsArray(itemsArray);
+            totalWeight = itemsArray.reduce((sum, item) => sum + item.weight, 0);
+        }
+    }
+
+    if (totalWeight > maxWeight) {
+        const allItems = getAllItems(itemsArray)
+            .filter(({ item }) => !item.isContainer); 
+
+        for (let i = allItems.length - 1; i >= 0 && totalWeight > maxWeight; i--) {
+            const { item, path } = allItems[i];
+            const containerItems = getContainerContentsByPath(itemsArray, path);
+
+            const itemIndex = containerItems.findIndex(containerItem =>
+                containerItem.name === item.name &&
+                containerItem.originalWeight === item.originalWeight
+            );
+
+            if (itemIndex !== -1) {
+                const removedItem = containerItems.splice(itemIndex, 1)[0];
+                removedItems.push(removedItem);
+
+                calculateParametersForItemsArray(itemsArray);
+                totalWeight = itemsArray.reduce((sum, item) => sum + item.weight, 0);
+            }
+        }
+    }
+
+    return {
+        inventory: itemsArray,
+        removedItems,
+        totalWeight: totalWeight
+    };
+}
+
+function adjustInventoryWeightAndRemoveNeeded(maxWeight, newItemsArray) {
+    const adjustResult = adjustInventoryContainerWeight(inventory, maxWeight, newItemsArray);
+    if (adjustResult.removedItems.length > 0) {
+        for (const removedItem of adjustResult.removedItems)
+            inventoryBasket.push(removedItem);
+        const removedItemsText = adjustResult.removedItems.map(item => item.name).join(", ");
+        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["maximum-weight-exceeded-label"] + removedItemsText, 'system');
     }
 }
 
@@ -973,7 +1052,7 @@ function increasePlayerStat(name, value) {
 
     if (oldValue >= newValue)
         return;
-    
+
     characterStats[key] = newValue;
 
     const statName = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][key.toLowerCase()];
@@ -1022,6 +1101,344 @@ function getPlayerStatByName(name) {
     return filteredKeys[0];
 }
 
+function getPostApocalypticWorldRaces() {
+    const racesStats = {
+        human: () => {
+            characterStats.persuasion += 1;
+            characterStats.luck += 1;
+        },
+        superhuman: () => {
+            characterStats.intelligence += 2;
+            characterStats.wisdom += 1;
+            characterStats.constitution -= 1;
+        },
+        infected: () => {
+            characterStats.strength += 2;
+            characterStats.constitution += 1;
+            characterStats.intelligence -= 1;
+        },
+        ratman: () => {
+            characterStats.dexterity += 2;
+            characterStats.perception += 1;
+            characterStats.attractiveness -= 1;
+        },
+        ghoul: () => {
+            characterStats.constitution += 3;
+            characterStats.speed += 1;
+            characterStats.intelligence -= 1;
+            characterStats.attractiveness -= 1;
+        },
+        mutant: () => {
+            characterStats.strength += 1;
+            characterStats.speed += 1;
+            characterStats.perception += 1;
+            characterStats.constitution -= 1;
+        },
+        supermutant: () => {
+            characterStats.strength += 3;
+            characterStats.constitution += 2;
+            characterStats.intelligence -= 1;
+            characterStats.wisdom -= 1;
+            characterStats.perception -= 1;
+        },
+        cyborg: () => {
+            characterStats.dexterity += 1;
+            characterStats.perception += 2;
+            characterStats.persuasion -= 1;
+        },
+        android: () => {
+            characterStats.intelligence += 1;
+            characterStats.attractiveness += 2;
+            characterStats.constitution -= 1;
+        },
+        robot: () => {
+            characterStats.strength += 1;
+            characterStats.intelligence += 2;
+            characterStats.persuasion -= 1;
+        },
+        gray: () => {
+            characterStats.intelligence += 3;
+            characterStats.dexterity -= 1;
+        },
+        alien: () => {
+            characterStats.perception += 2;
+            characterStats.luck += 1;
+            characterStats.trade -= 1;
+        },
+        hybrid: () => {
+            characterStats.attractiveness += 1;
+            characterStats.persuasion += 1;
+            characterStats.constitution -= 1;
+            characterStats.strength -= 1;
+            characterStats.speed += 2;
+        },
+        ancient: () => {
+            characterStats.wisdom += 2;
+            characterStats.intelligence += 1;
+            characterStats.strength -= 1;
+        },
+    };
+
+    const raceInventory = {
+        human: 'survival_kit',
+        superhuman: 'psionic_headband',
+        infected: 'adrenaline_syringe',
+        ratman: 'grappling_hook',
+        ghoul: 'bone_blade',
+        mutant: 'mutant_serum',
+        supermutant: 'crude_bonehammer',
+        cyborg: 'hacking_device',
+        android: 'skin_repair_paste',
+        robot: 'EMP_Generator',
+        gray: 'communication_implant',
+        alien: 'cloaking_device',
+        hybrid: 'symbiotic_implant',
+        ancient: 'ancient_artifact'
+    };
+
+
+    return {
+        stats: racesStats,
+        inventory: raceInventory
+    };
+}
+
+function getPostApocalypticWorldClasses() {
+    const classes = {
+        hacker: {
+            name: "hacker",
+            addClassBonus: () => {
+                characterStats.intelligence += 1;
+            }
+        },
+        scout: {
+            name: "scout",
+            addClassBonus: () => {
+                characterStats.perception += 1;
+            }
+        },
+        bounty_hunter: {
+            name: "bounty_hunter",
+            addClassBonus: () => {
+                characterStats.speed += 1;
+            }
+        },
+        survivor: {
+            name: "survivor",
+            addClassBonus: () => {
+                characterStats.constitution += 1;
+            }
+        },
+        raider: {
+            name: "raider",
+            addClassBonus: () => {
+                characterStats.strength += 1;
+            }
+        },
+        bandit: {
+            name: "bandit",
+            addClassBonus: () => {
+                characterStats.dexterity += 1;
+            }
+        },
+        wanderer: {
+            name: "wanderer",
+            addClassBonus: () => {
+                characterStats.luck += 1;
+            }
+        },
+        veteran: {
+            name: "veteran",
+            addClassBonus: () => {
+                characterStats.wisdom += 1;
+            }
+        },
+        mercenary: {
+            name: "mercenary",
+            addClassBonus: () => {
+                characterStats.dexterity += 1;
+            }
+        },
+        stalker: {
+            name: "stalker",
+            addClassBonus: () => {
+                characterStats.perception += 1;
+            }
+        },
+        citizen: {
+            name: "citizen",
+            addClassBonus: () => {
+                characterStats.trade += 1;
+            }
+        },
+        vault_dweller: {
+            name: "vault_dweller",
+            addClassBonus: () => {
+                characterStats.intelligence += 1;
+            }
+        },
+        savage: {
+            name: "savage",
+            addClassBonus: () => {
+                characterStats.strength += 1;
+            }
+        },
+        soldier: {
+            name: "soldier",
+            addClassBonus: () => {
+                characterStats.constitution += 1;
+            }
+        },
+        engineer: {
+            name: "engineer",
+            addClassBonus: () => {
+                characterStats.intelligence += 1;
+            }
+        },
+        medic: {
+            name: "medic",
+            addClassBonus: () => {
+                characterStats.wisdom += 1;
+            }
+        },
+        sniper: {
+            name: "sniper",
+            addClassBonus: () => {
+                characterStats.dexterity += 1;
+            }
+        },
+        virologist: {
+            name: "virologist",
+            addClassBonus: () => {
+                characterStats.intelligence += 1;
+            }
+        },
+        biotechnician: {
+            name: "biotechnician",
+            addClassBonus: () => {
+                characterStats.wisdom += 1;
+            }
+        },
+        reborn: {
+            name: "reborn",
+            addClassBonus: () => {
+                characterStats.constitution += 1;
+            }
+        },
+        xenomant: {
+            name: "xenomant",
+            addClassBonus: () => {
+                characterStats.attractiveness += 1;
+            }
+        },
+        psionic: {
+            name: "psionic",
+            addClassBonus: () => {
+                characterStats.wisdom += 1;
+            }
+        },
+        telekinetic: {
+            name: "telekinetic",
+            addClassBonus: () => {
+                characterStats.speed += 1;
+            }
+        },
+        telepath: {
+            name: "telepath",
+            addClassBonus: () => {
+                characterStats.persuasion += 1;
+            }
+        },
+        pyromancer: {
+            name: "pyromancer",
+            addClassBonus: () => {
+                characterStats.luck += 1;
+            }
+        },
+        cryomancer: {
+            name: "cryomancer",
+            addClassBonus: () => {
+                characterStats.wisdom += 1;
+            }
+        },
+        mechanized_soldier: {
+            name: "mechanized_soldier",
+            addClassBonus: () => {
+                characterStats.strength += 1;
+            }
+        },
+        mechanical_guardian: {
+            name: "mechanical_guardian",
+            addClassBonus: () => {
+                characterStats.constitution += 1;
+            }
+        },
+        cybernetic_assassin: {
+            name: "cybernetic_assassin",
+            addClassBonus: () => {
+                characterStats.dexterity += 1;
+            }
+        },
+        cybernetic_spy: {
+            name: "cybernetic_spy",
+            addClassBonus: () => {
+                characterStats.persuasion += 1;
+            }
+        },
+        precursor_agent: {
+            name: "precursor_agent",
+            addClassBonus: () => {
+                characterStats.speed += 1;
+            }
+        },
+        precursor_scientist: {
+            name: "precursor_scientist",
+            addClassBonus: () => {
+                characterStats.intelligence += 1;
+            }
+        },
+        precursor_soldier: {
+            name: "precursor_soldier",
+            addClassBonus: () => {
+                characterStats.strength += 1;
+            }
+        },
+        alien_scout: {
+            name: "alien_scout",
+            addClassBonus: () => {
+                characterStats.perception += 1;
+            }
+        },
+        space_architect: {
+            name: "space_architect",
+            addClassBonus: () => {
+                characterStats.intelligence += 1;
+            }
+        },
+        galactic_explorer: {
+            name: "galactic_explorer",
+            addClassBonus: () => {
+                characterStats.luck += 1;
+            }
+        },
+        alien_soldier: {
+            name: "alien_soldier",
+            addClassBonus: () => {
+                characterStats.constitution += 1;
+            }
+        }
+    };
+
+    for (const classId in classes) {
+        classes[classId].descriptionId = classes[classId].name + "_descr";
+        classes[classId].inventory = [];
+        for (let i = 1; i <= 4; i++)
+            classes[classId].inventory.push(`${classId}_${i}`);
+    }
+
+    return classes;
+}
+
 //--------------------------------------------------------------------UPDATE PLAYER INFO WINDOWS------------------------------------------------------------------//
 
 function updateElements() {
@@ -1037,6 +1454,8 @@ function updateElements() {
     ELEMENTS.moneyValue.textContent = characterStats.money;
 
     updateInventoryList(ELEMENTS.inventory, inventory);
+    updateInventoryList(ELEMENTS.inventoryBasket, inventoryBasket);
+
     updateStatus();
     updateLocationsList();
     updateNPCsList();
@@ -1108,7 +1527,7 @@ function updateInventoryInfoWindows(currentItem, originalItemsArray, destination
                 } else {
                     const data = getItemByNameAndPath(container.name, null);
                     if (data.item)
-                        showInventoryInfo(container.id, data.parentItemsArray);                  
+                        showInventoryInfo(container.id, data.parentItemsArray);
                 }
             }
         }
@@ -1122,7 +1541,7 @@ function showInventoryInfo(id, itemsArray) {
     const currentItem = itemsArray.find(item => item.id === id);
     if (!currentItem)
         return false;
-          
+
     const displayNoneClass = "displayNone";
     const description = currentItem.description ? markdown(currentItem.description) : translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["item_not_descripted"];
     const countLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-count-label"];
@@ -1143,6 +1562,14 @@ function showInventoryInfo(id, itemsArray) {
     ELEMENTS.inventoryInfoCapacity.innerHTML = `${capacityLabel}: ${currentItem.capacity ?? '-'}`;
     ELEMENTS.inventoryInfoVolume.innerHTML = `${volumeLabel}: ${currentItem.volume?.toFixed(2) ?? '-'}`;
 
+    if (currentItem.removed) {
+        ELEMENTS.inventoryInfoDelete.classList.add(displayNoneClass);
+        ELEMENTS.inventoryInfoRestore.classList.remove(displayNoneClass);
+    } else {
+        ELEMENTS.inventoryInfoDelete.classList.remove(displayNoneClass);
+        ELEMENTS.inventoryInfoRestore.classList.add(displayNoneClass);
+    }
+
     processDurability();
     processCustomProperties();
     processResource();
@@ -1153,14 +1580,20 @@ function showInventoryInfo(id, itemsArray) {
         if (!confirmAction())
             return;
 
-        deleteItem(currentItem, itemsArray, true);
+        deleteItem(currentItem, itemsArray, true, true);
         ELEMENTS.inventoryInfo.style.display = 'none';
     };
+
+    ELEMENTS.inventoryInfoRestore.onclick = function () {
+        moveItem(currentItem, itemsArray, inventory, true, true);
+
+        ELEMENTS.inventoryInfo.style.display = 'none';
+    }
 
     ELEMENTS.inventoryInfoImage.style.display = ELEMENTS.imageToggleSettings.checked ? "inline-block" : "none";
     ELEMENTS.inventoryInfoImage.onclick = function () {
         showImageInfo(currentItem.name, currentItem.imageUrl, currentItem.image_prompt, currentItem);
-    }   
+    }
 
     ELEMENTS.inventoryContainerOpen.onclick = function () {
         showInventoryInfoContainer(currentItem);
@@ -1184,7 +1617,7 @@ function showInventoryInfo(id, itemsArray) {
             ELEMENTS.inventoryInfoCustomProperties.classList.add(displayNoneClass);
             return;
         }
-        
+
         const elementsHtml = currentItem.customProperties.map(property => {
             const nameAndValue = `${property.name}: ${property.value}`;
             const description = property.description ? markdown(property.description) : '';
@@ -1205,7 +1638,7 @@ function showInventoryInfo(id, itemsArray) {
 
     function processResource() {
         const resourceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-resource-label"];
-        let resourceValue = `${currentItem.resource ?? '-'}/${currentItem.maximumResource ?? '-'}`;       
+        let resourceValue = `${currentItem.resource ?? '-'}/${currentItem.maximumResource ?? '-'}`;
         if (currentItem.resourceType)
             resourceValue += ` (${currentItem.resourceType})`;
 
@@ -1215,7 +1648,7 @@ function showInventoryInfo(id, itemsArray) {
         else
             ELEMENTS.inventoryInfoResource.classList.remove(displayNoneClass);
     }
-    
+
     function processContainerProperties() {
         if (currentItem.isContainer && currentItem.capacity > 0 && currentItem.volume > 0) {
             ELEMENTS.inventoryContainerOpen.classList.remove(displayNoneClass);
@@ -1227,7 +1660,7 @@ function showInventoryInfo(id, itemsArray) {
             let contentsDescription = describeItemContainerContents(currentItem);
             if (!contentsDescription)
                 contentsDescription = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-container-label"];
-            ELEMENTS.inventoryInfoContentsDescription.innerHTML = `<p>${contentsDescriptionLabel}:</p><p>${markdown(contentsDescription)}</p>`;            
+            ELEMENTS.inventoryInfoContentsDescription.innerHTML = `<p>${contentsDescriptionLabel}:</p><p>${markdown(contentsDescription)}</p>`;
 
             ELEMENTS.inventoryInfoAvailableCapacity.classList.remove(displayNoneClass);
             ELEMENTS.inventoryInfoAvailableVolume.classList.remove(displayNoneClass);
@@ -1267,7 +1700,7 @@ function setOrChangeItemResource(name, contentsPath, resource, maximumResource, 
     const data = getItemByNameAndPath(name, contentsPath, inventory);
     if (!data.item)
         return;
-          
+
     const item = data.item;
     item.resource = resource > 0 ? resource : 0;
     if (item.resource > maximumResource)
@@ -1280,9 +1713,9 @@ function setOrChangeItemResource(name, contentsPath, resource, maximumResource, 
     const existingItemIndex = data.index;
     inventoryArray.splice(existingItemIndex, 1);
 
-    if (item.isConsumption && item.resource == 0 && !item.isContainer) {       
+    if (item.isConsumption && item.resource == 0 && !item.isContainer) {
         item.count -= 1;
-        item.resource = maximumResource;         
+        item.resource = maximumResource;
     }
 
     if (item.count > 0)
@@ -1325,6 +1758,7 @@ function addInventoryItem(itemParams) {
         item.customProperties = itemParams.customProperties;
         item.isContainer = !!itemParams.isContainer;
         item.weight = itemParams.weight;
+        item.originalWeight = itemParams.weight;
         item.volume = itemParams.volume;
         item.containerWeight = itemParams.containerWeight;
         item.capacity = itemParams.capacity;
@@ -1335,7 +1769,7 @@ function addInventoryItem(itemParams) {
     } else {
         if (itemParams.count == 0)
             return;
-
+        
         //Add a new item to the top of the list.
         inventoryArray.unshift({
             name: itemParams.name,
@@ -1344,7 +1778,7 @@ function addInventoryItem(itemParams) {
             quality: itemParams.quality,
             price: itemParams.price,
             isConsumption: itemParams.isConsumption,
-            durability: itemParams.durability,           
+            durability: itemParams.durability,
             bonuses: itemParams.bonuses,
             customProperties: itemParams.customProperties,
             image_prompt: itemParams.image_prompt,
@@ -1356,6 +1790,7 @@ function addInventoryItem(itemParams) {
             capacity: itemParams.capacity,
             contents: itemParams.isContainer ? [] : undefined
         });
+        itemParams.newItem = inventoryArray[0];
     }
 
     if (isNestedItem(itemParams) && ELEMENTS.inventoryContainerInfo.style.display === 'block') {
@@ -1375,18 +1810,20 @@ function addInventoryItem(itemParams) {
 function generateInventoryItemContextMenu(currentItem, parentItemsArray) {
     ELEMENTS.inventoryItemContextMenu.innerHTML = '';
     ELEMENTS.inventoryItemContextMenuName.innerHTML = currentItem.name;
-    
+
     generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["inventory-item-inspect"], () => showInventoryInfo(currentItem.id, parentItemsArray));
-    if (currentItem.contentsPath)
-        generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["move-to-inventory"], () => moveItem(currentItem, parentItemsArray, inventory, true));  
-    generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"], () => deleteItemWithConfirmation(currentItem, parentItemsArray, true));
-    
-    for (const item of parentItemsArray) {
-        if (item.id != currentItem.id
-            && item.isContainer && Array.isArray(item.contents)
-            && item.capacity >= item.contents.length + 1
-            && item.volume >= (item.contentsVolume ?? 0) + currentItem.volume)
-            generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["place-item-to"] + item.name, () => moveItem(currentItem, parentItemsArray, item.contents, true));        
+    if (currentItem.contentsPath || currentItem.removed)
+        generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["move-to-inventory"], () => moveItem(currentItem, parentItemsArray, inventory, true, !!currentItem.removed));
+    if (!currentItem.removed) {
+        generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"], () => deleteItemWithConfirmation(currentItem, parentItemsArray, true));
+
+        for (const item of parentItemsArray) {
+            if (item.id != currentItem.id
+                && item.isContainer && Array.isArray(item.contents)
+                && item.capacity >= item.contents.length + 1
+                && item.volume >= (item.contentsVolume ?? 0) + currentItem.volume)
+                generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["place-item-to"] + item.name, () => moveItem(currentItem, parentItemsArray, item.contents, true));
+        }
     }
 
     function generateMenuItem(label, action) {
@@ -1396,7 +1833,7 @@ function generateInventoryItemContextMenu(currentItem, parentItemsArray) {
             action();
             hideInventoryItemContextMenu();
         });
-        ELEMENTS.inventoryItemContextMenu.appendChild(listItem);    
+        ELEMENTS.inventoryItemContextMenu.appendChild(listItem);
     }
 }
 
@@ -1465,14 +1902,14 @@ function setOrChangeSkills(skills, newSkills) {
 function removeSkill(name, isActive) {
     if (!name)
         return;
-    
+
     const skills = isActive ? activeSkills : passiveSkills;
     const index = skills.findIndex(skill => skill.name === name);
     if (index == -1)
         return;
 
     skills.splice(index, 1);
-    
+
     const messageId = translationModule.setSkillRemovedMessage(name, isActive);
     const message = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
     sendMessageToChat(message, 'system');
@@ -1689,7 +2126,7 @@ function showNPCInfo(id) {
     const worldviewLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["npc-info-worldview-label"];
     const raceLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["npc-info-race-label"];
     const classLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["npc-info-class-label"];
-    
+
     ELEMENTS.npcInfoId.value = id;
     ELEMENTS.npcInfoJournal.innerHTML = journalNotes;
     ELEMENTS.npcInfoMemoryDiary.innerHTML = memoryNotes;
@@ -1700,14 +2137,14 @@ function showNPCInfo(id) {
     ELEMENTS.npcInfoWorldview.innerHTML = `${worldviewLabel}: ${currentNPC.worldview ?? '-'}`;
     ELEMENTS.npcInfoRace.innerHTML = `${raceLabel}: ${currentNPC.race ?? '-'}`;
     ELEMENTS.npcInfoClass.innerHTML = `${classLabel}: ${currentNPC.class ?? '-'}`;
-    
+
     renderDescriptionElement(currentNPC.appearanceDescription, ELEMENTS.npcInfoAppearanceDescription);
     renderDescriptionElement(currentNPC.history, ELEMENTS.npcInfoHistory);
     renderDescriptionElement(currentNPC.attitude, ELEMENTS.npcInfoAttitude);
     renderListElements(currentNPC.stats, ELEMENTS.npcInfoStats, "npc-info-stats-list", "npc-info-stats-label");
     renderListElements(currentNPC.skills, ELEMENTS.npcInfoSkills, "npc-info-skills-list", "npc-info-skills-label");
     renderListElements(currentNPC.effects, ELEMENTS.npcInfoEffects, "npc-info-effects-list", "npc-info-effects-label");
-    
+
     ELEMENTS.npcInfoDelete.onclick = function () {
         if (!confirmAction())
             return;
@@ -1876,13 +2313,13 @@ function isUniqDiaryNote(diary, note) {
     return !diary.notes.includes(parsedNote);
 
     function getTextAfterHashDot(text) {
-        if (!text?.startsWith('#')) 
+        if (!text?.startsWith('#'))
             return null;
-        
+
         const dotIndex = text.indexOf('.');
 
         if (dotIndex === -1)
-            return null;        
+            return null;
 
         return text.substring(dotIndex + 1).trim();
     }
@@ -1946,7 +2383,7 @@ function showQuestInfo(id) {
     const punishment = currentQuest.punishmentForFailingQuest ? markdown(`${punishmentLabel}: ${currentQuest.punishmentForFailingQuest}`) : '-';
     const questGiverLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quest-info-questGiver-label"];
     const questGiver = currentQuest.questGiver ? markdown(`${questGiverLabel}: ${currentQuest.questGiver}`) : '-';
-    
+
     ELEMENTS.questInfoId.value = id;
     ELEMENTS.questInfoName.innerHTML = `${markdown(currentQuest.name)}`;
     ELEMENTS.questInfoQuestGiver.innerHTML = questGiver;
@@ -1958,7 +2395,7 @@ function showQuestInfo(id) {
     renderDescriptionElement(currentQuest.questBackground, ELEMENTS.questInfoQuestBackground);
     renderDescriptionElement(currentQuest.description, ELEMENTS.questInfoDescription);
     renderListElements(currentQuest.purposes, ELEMENTS.questInfoPurposes, "quest-info-purposes-list", "quest-purposes-label");
-        
+
     ELEMENTS.questInfoDelete.onclick = function () {
         if (!confirmAction())
             return;
@@ -2002,8 +2439,8 @@ function addQuest(questParams) {
                 }
             }
 
-            if (indexToRemove !== -1) 
-                quests.splice(indexToRemove, 1);            
+            if (indexToRemove !== -1)
+                quests.splice(indexToRemove, 1);
         }
 
         //Add a new quest to the top of the list.
@@ -2081,7 +2518,7 @@ function updateStatus() {
     ELEMENTS.statusAge.innerHTML = `${ageLabel}: ${statusData.age > 0 ? statusData.age : '-'}`;
     ELEMENTS.statusRace.innerHTML = `${raceLabel}: ${statusData.race ?? '-'}`;
     ELEMENTS.statusClass.innerHTML = `${classLabel}: ${statusData.class ?? '-'}`;
-        
+
     renderDescriptionElement(statusData.appearanceDescription, ELEMENTS.statusAppearanceDescription);
     renderDescriptionElement(statusData.statusInSociety, ELEMENTS.statusStatusInSociety);
     renderDescriptionElement(statusData.positionInSociety, ELEMENTS.statusPositionInSociety);
@@ -2091,7 +2528,7 @@ function updateStatus() {
     function processEffects() {
         const effectsLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["status-effects-label"];
         const effectsNoneLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["status-effect-none-label"];
-        
+
         statusDataEffects ??= [];
 
         let effectOptions = statusDataEffects.map(effect => {
@@ -2105,8 +2542,8 @@ function updateStatus() {
         ELEMENTS.statusEffects.innerHTML = `
             <p>${effectsLabel}</p>
             <ul>${effectOptions}</ul>
-        `;       
-    }    
+        `;
+    }
 }
 
 function setStatus(statusParams) {
@@ -2134,6 +2571,25 @@ function setStatusEffects(statusEffects) {
         statusDataEffects = [];
 
     statusDataEffects = statusEffects;
+}
+
+//---- WEIGHT ----//
+function updateWeight() {
+    const totalWeight = calculateTotalInventoryWeight();
+    ELEMENTS.totalWeight.innerHTML = totalWeight.toFixed(2);
+    if (maxWeight) {
+        ELEMENTS.maxWeight.innerHTML = maxWeight;
+        ELEMENTS.criticalWeight.innerHTML = maxWeight + criticalExcessWeight;
+
+        if (totalWeight <= maxWeight)
+            ELEMENTS.weightStatus.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["weight-status-value-normal"];
+        else
+            ELEMENTS.weightStatus.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["weight-status-value-bad"];
+    } else {
+        ELEMENTS.maxWeight.innerHTML = "-";
+        ELEMENTS.criticalWeight.innerHTML = "-";
+        ELEMENTS.weightStatus.innerHTML = "-";
+    }
 }
 
 //---- CLOSE ACTIONS ----//
@@ -2664,6 +3120,33 @@ function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null
     }
 }
 
+function getContainerContentsByPath(itemsArray, contentsPath) {
+    if (!contentsPath || contentsPath.length === 0)
+        return itemsArray;
+
+    const [currentContainer, ...remainingPath] = contentsPath;
+    const container = itemsArray.find(item => item.name === currentContainer && item.isContainer);
+
+    if (!container || !container.contents)
+        return [];
+
+    return getContainerContentsByPath(container.contents, remainingPath);
+}
+
+function getAllItems(items, path = []) {
+    let result = [];
+    for (const item of items) {
+        const itemPath = [...path];
+        if (item.isContainer && item.contents) {
+            result.push({ item, path: itemPath });
+            result = result.concat(getAllItems(item.contents, [...itemPath, item.name]));
+        } else {
+            result.push({ item, path: itemPath });
+        }
+    }
+    return result;
+}
+
 //calculate various parameters for items in the array (weight, contentsItemCount, etc.)
 function calculateParametersForItemsArray(itemsArray) {
     for (const item of itemsArray) {
@@ -2677,19 +3160,28 @@ function calculateParametersForItemsArray(itemsArray) {
     }
 }
 
-function getCalculatedItemParameters(item) {
-    let weight = item.weight;
+function getCalculatedItemParameters(item, parentWeightReduction = 0) {
+    if (item.originalWeight === undefined)
+        item.originalWeight = item.weight;    
+
+    if (parentWeightReduction > 0)
+        item.weight = item.originalWeight * (1 - parentWeightReduction / 100);
+    else
+        item.weight = item.originalWeight;
+    
+    let totalWeight = item.weight;
     let contentsItemCount = undefined;
     let contentsVolume = undefined;
 
     if (item.isContainer && Array.isArray(item.contents)) {
-        weight = item.containerWeight ?? 0;
         contentsItemCount = item.contents.length;
         contentsVolume = 0;
 
+        const currentWeightReduction = item.weightReduction ?? 0;
+
         for (const nestedItem of item.contents) {
-            const params = getCalculatedItemParameters(nestedItem);
-            weight += params.weight;
+            const params = getCalculatedItemParameters(nestedItem, currentWeightReduction);
+            totalWeight += params.weight;
 
             const nestedItemVolume = nestedItem.volume ?? 0;
             contentsVolume += nestedItemVolume;
@@ -2697,7 +3189,7 @@ function getCalculatedItemParameters(item) {
     }
 
     return {
-        weight: weight,
+        weight: totalWeight,
         contentsItemCount: contentsItemCount,
         contentsVolume: contentsVolume
     };
@@ -2783,7 +3275,7 @@ function moveItemWithConfirmation(currentItem, originalItemsArray, destinationIt
     moveItem(currentItem, originalItemsArray, destinationItemsArray, recalculate);
 }
 
-function moveItem(currentItem, originalItemsArray, destinationItemsArray, recalculate) {
+function moveItem(currentItem, originalItemsArray, destinationItemsArray, recalculate, moveFromBasket) {
     if (!currentItem || !Array.isArray(originalItemsArray) || !Array.isArray(destinationItemsArray))
         return;
 
@@ -2795,19 +3287,28 @@ function moveItem(currentItem, originalItemsArray, destinationItemsArray, recalc
     destinationItemsArray.push(currentItem);
 
     if (recalculate) {
+        if (moveFromBasket) {
+            delete currentItem.removed;
+            updateInventoryList(ELEMENTS.inventoryBasket, inventoryBasket);
+        }
         let destinationContainer = null;
         if (inventory !== destinationItemsArray)
             destinationContainer = findItemContainerByContentsArray(inventory, destinationItemsArray);
 
         currentItem.contentsPath = null;
         if (destinationContainer)
-            currentItem.contentsPath = [...destinationContainer.contentsPath ?? [], destinationContainer.name];           
+            currentItem.contentsPath = [...destinationContainer.contentsPath ?? [], destinationContainer.name];
 
         updateContentsPathForNestedItems(currentItem);
         calculateParametersForItemsArray(inventory);
         adjustInventoryContainerCapacity(inventory);
         adjustInventoryContainerVolume(inventory);
         calculateParametersForItemsArray(inventory);
+        if (ELEMENTS.useWeightControl.checked) {
+            adjustInventoryWeightAndRemoveNeeded(maxWeight + criticalExcessWeight, [currentItem]);
+            updateWeight();
+            updateInventoryList(ELEMENTS.inventoryBasket, inventoryBasket);
+        }
     }
 
     updateInventoryInfoWindows(currentItem, originalItemsArray, destinationItemsArray);
@@ -2826,10 +3327,10 @@ function deleteItemWithConfirmation(currentItem, itemsArray, recalculate) {
     if (!confirmAction())
         return;
 
-    deleteItem(currentItem, itemsArray, recalculate);
+    deleteItem(currentItem, itemsArray, recalculate, true);
 }
 
-function deleteItem(currentItem, itemsArray, recalculate) {
+function deleteItem(currentItem, itemsArray, recalculate, pushToBasket) {
     if (!currentItem || !itemsArray)
         return;
 
@@ -2837,14 +3338,22 @@ function deleteItem(currentItem, itemsArray, recalculate) {
     if (removeIndex > -1)
         itemsArray.splice(removeIndex, 1);
 
-    if (recalculate)
-        calculateParametersForItemsArray(inventory);    
+    if (recalculate) {
+        calculateParametersForItemsArray(inventory);
+        if (ELEMENTS.useWeightControl.checked)
+            updateWeight();
+    }
+
+    if (pushToBasket) {
+        currentItem.removed = true;
+        inventoryBasket.push(currentItem);
+        updateInventoryList(ELEMENTS.inventoryBasket, inventoryBasket);
+    }
 
     updateInventoryInfoWindows(currentItem, itemsArray, itemsArray);
 }
 
-function getHtmlListItems(element)
-{
+function getHtmlListItems(element) {
     const parsedData = markdown(element);
     return `<li>${parsedData}</li>`;
 }
@@ -3180,7 +3689,7 @@ async function sendRequest(currentMessage) {
 
         //General
         const myPrompt = ELEMENTS.myRules.value;
-        const totalWeight = calculateTotalInventoryWeight();
+        let totalWeight = calculateTotalInventoryWeight() ?? 0;
         const strengthPlusConstitution = characterStats.strength + characterStats.constitution;
 
         //NPC
@@ -3250,6 +3759,7 @@ async function sendRequest(currentMessage) {
             'weight': 'weight_of_item',
             'volume': 'volume_of_item',
             'containerWeight': 'weight_of_container_without_items',
+            'weightReduction': 'weight_reduction_of_container_contents',
             'isConsumption' : 'whether_item_intended_for_consumption'
         }`;
         const itemsQualityList = [
@@ -3314,6 +3824,9 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
         }
         if (ELEMENTS.useQuestsList.checked)
             responseTemplate += ` , \n "questsData": []`;
+        if (ELEMENTS.useWeightControl.checked)
+            responseTemplate += ` , \n "calculatedWeightData": {}`;
+
         responseTemplate += ' }';
 
         //------- Prompt -------//
@@ -3413,6 +3926,46 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #3.13.4. If you need to remove active player skill, include to the response the 'removeActiveSkills' key.
 #3.13.4.1. The value of 'removeActiveSkills' key is an array of strings, each of which is equal to player's active skill name. It's mandatory to use active skill names in exactly same format like in the active skills known from Context.
 
+${ELEMENTS.useWeightControl.checked ? `
+#3.14. You need to calculate the player character's weight related data to help game system making the checks on server-side. To do this: [
+#3.14.1. Include to the response the key 'calculatedWeightData', value of which is player character related weight data.
+#3.14.2. Mandatory the format for 'calculatedWeightData' object: { 'maxWeight': 'calculated_max_weight', 'additionalEnergyExpenditure': 'additional_energy_expenditure_due_to_weight_overload' } .
+#3.14.3. To the value of 'maxWeight' key include the numeric value (type of value: double), which is calculated using this formula:
+MaxWeight = (StrengthPlusConstitution + Bonuses) * 3 + 10, where
+• StrengthPlusConstitution - the sum of 'strength' and 'constitution' of player. This value is:  ${strengthPlusConstitution} .
+• Bonuses - all bonuses, which affects the 'strength' or 'constitution' of player.
+#3.14.4. To the value of 'additionalEnergyExpenditure' include the numeric value, which representing the additional energy expenditure due to weight overload.
+#3.14.4.1. When a player character carries too much weight, they become overload. When a player character is overloaded, they lose more energy per turn than normal.
+#3.14.4.2. This is the items weight of all items in player's inventory in the start of current turn. Let's call it CurrentTurnItemsWeight = ${totalWeight}.
+#3.14.4.3. You already have MaxWeight value, representing the maximum weight a character can carry without becoming overloaded.
+#3.14.4.4. If CurrentTurnItemsWeight > MaxWeight check is true, then player character is overloaded. Then follow this instruction: [
+#3.14.4.4.1. Calculate difference between CurrentTurnItemsWeight and MaxWeight. Let's call it WeightOverload:
+WeightOverload = CurrentTurnItemsWeight - MaxWeight
+#3.14.4.4.2. Include to the 'additionalEnergyExpenditure' the value = WeightOverload * 2, which is energy costs that the player's character will additionally spend each turn.
+#3.14.4.4.3. Note: The server will automatically calculate and account for additional energy consumption due to overload. The GM should not change 'currentEnergyChange' due to overload.
+], otherwise: [
+#3.14.4.5. Write to the 'additionalEnergyExpenditure' the null value.
+] ]
+
+#3.15. Remember the weight check when adding a new item to the player's inventory: [
+#3.15.1. This is the current sum of 'strength' + 'constitution' of player. Let's call it StrengthPlusConstitution = ${strengthPlusConstitution}.
+#3.15.2. Calculate all values from all item bonuses, all active and passive skill bonuses, and all possible effects affecting 'constitution' or 'strength' of player. Let's call it Bonuses.
+#3.15.3. Calculate MaxWeight property using this formula: MaxWeight = (StrengthPlusConstitution + Bonuses) * 3 + 10, where
+• StrengthPlusConstitution - the sum of 'strength' and 'constitution' of player.
+• Bonuses - all bonuses, which affects the 'strength' or 'constitution' of player.
+#3.15.4. This is the items weight of all items in player's inventory in the start of current turn. Let's call it CurrentTurnItemsWeight = ${totalWeight}.
+#3.15.5. Remember the sum of item weights of new items, which you already calculated before current check and added to the player's inventory. Let's call it NewItemsCalculatedWeight.
+#3.15.6. Calculate TotalWeight property using this formula: TotalWeight = CurrentTurnItemsWeight + NewItemsCalculatedWeight + NewItemWeight, where
+• NewItemWeight - the weight of new item, which player is trying to receive.
+#3.15.7. This is the critical weight that the character can carry. Let's call it CriticalWeight = MaxWeight + ${criticalExcessWeight} .
+#3.15.7.1. Information for understanding: MaxWeightValue - determines the weight that the character can carry without being overloaded, and CriticalWeight is the weight that the character can lift at all.
+#3.15.8. Make the final check using this formula: CriticalWeight > TotalWeight .
+#3.15.9. Return the boolean result of check: true if CriticalWeight > TotalWeight, and false otherwise. 
+#3.15.9.1. This check is mandatory and its result has priority over the result of any other skill check. Even a critical success on another check cannot override a failed weight check.
+#3.15.10. Mandatory output the calculation and result of check to 'items_and_stat_calculations'.
+]. Let's call it WeightCheck.
+`: ``}
+
 #4  If one of these conditions are true: [
 - The player receives an item (receives means: to take in hand, put on wear, or place in pockets, backpack or bag) in current turn.
 - For each item in the player's inventory in the current turn, find an item with the same name in the Context. If such an item is found, compare the values of its properties ['bonuses', 'description, 'quality', 'count', 'price', 'durability', 'customProperties', 'isContainer', 'capacity', 'weight' ] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no item with the same name in the Context (i.e., the item is new), the rule is not applied to this item and continues checking the rest.
@@ -3421,6 +3974,9 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.2. Mandatory the format for each object of 'inventoryItemsData' array: ${inventoryTemplate} . 
 #4.3. Include to the 'inventoryItemsData' only new items or items which data were changed. It's important to note, that this array only represents the data about changes and new items, and not the information about all player's inventory.
 #4.4. If player receives the new item, then: [
+${ELEMENTS.useWeightControl.checked ? `
+#4.4.0. Make a WeightCheck for the item. If the result of WeightCheck is true, then go to the next point. If the result is false, then mandatory skip any actions with current item (loop continue operator), and go to next one.
+` : ``}
 #4.4.1. Here is the original list of item templates available to the player in the current turn: items_list = ${JSON.stringify(loot)}. 
 #4.4.2. To assign a new item to the player, the gamemaster extracts the first item (template) from the items_list that has not yet been assigned in the current turn. Use item templates only from the original list of items in order, starting with the very first one in the items_list. It is forbidden to assign to the player any other items whose structure does not correspond to the template from the original list.
 #4.4.3. It is necessary to rename the received item from the original list of items (rename thing_[number] using ${translationModule.currentLanguage}) in accordance with the plot. ${CHARACTER_INFO.nonMagicMode ? ' Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.)' : ' '}
@@ -3446,7 +4002,7 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.5. Set to the 'description' the description about the item in as much detail and artistic language as possible. ${CHARACTER_INFO.nonMagicMode ? 'Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.' : ''}
 #4.6. Set to the 'quality' one of the selected values: ${JSON.stringify(itemsQualityList)}. If it is the new item, then follow the previous instructions to determinate the item quality.
 #4.6.1. If quality of item was changed, then add some additional bonuses to it.
-#4.7. To the 'count' set the numeric value, that describes the count of current item.
+#4.7. To the 'count' set the numeric value (type of value: integer), that describes the count of current item.
 #4.8. The value 'bonuses' is an array of strings, each of which represents the inventory item bonus description.
 #4.8.1. Each bonus can be: [
 - An interesting effect (choose one of the following): [
@@ -3454,6 +4010,7 @@ ${CHARACTER_INFO.nonMagicMode ? `
    • New active skill that item gives to player.
    • The interesting and rare capability of item, but without numerical bonus representation'.
    • If an item's 'isConsumption' property is true, then the bonus could restore health or energy when consumed, if it makes logical sense to do so. For example, food, water, medicines, magic potions, and so on could restore health or energy. It's mandatory for such bonuses to have a numerical value, for example, '+15 to health when consumed' or '+20 to energy when consumed'.
+   • If an item's 'isContainer' property is true, then the bonus could be the weight reduction of container contents, if it makes logical sense to do so (for example, a magical material or high technology, that allows to reduce weight). For example: -50% of container contents weight, or -10% of container contents weight. If such bonus is present in item, then mandatory include the 'weightReduction' property with the corresponding numerical value.
 ] . It's forbidden to use another effect types. ${CHARACTER_INFO.nonMagicMode ? '(Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items. Effects should be as much realistic, as possible' : ''}
 - The permanent bonus to one of player stats. You must mandatory add this bonus to specified player stat. It's forbidden use 'random characteristic' as a bonus. It's forbidden to use stats that are not in the list: ${statsList} .
 - The bonus to one of player stats, but only for certain situations. The bonus is not permanent and used only if described conditions are met. It's forbidden to use stats that are not in the list: ${statsList} .
@@ -3463,6 +4020,7 @@ ${CHARACTER_INFO.nonMagicMode ? `
     - The player's existing stats. It's forbidden to use stats that are not in the list: ${statsList} .
     - Skills of the player.
     - For 'isConsumption' items only: bonus to health or energy.
+    - For 'isContainer' items only: bonus to contents weight reduction.
 ] .
 #4.8.4. If it is the new item, then also follow the previous instructions to determinate the item bonuses.
 #4.8.5. If 'isConsumption' value of key of item is true and item doesn't have other bonuses: [
@@ -3487,15 +4045,19 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #4.15.2. The description of an item (container) should not include information about its contents.
 Example 1 (incorrect): 'This is an emergency first aid kit. Inside are bandages and iodine.' The description of this container explicitly states that bandages and iodine are inside. This is an incorrect description.
 Example 2 (correct): 'This is an emergency first aid kit.'
-#4.15.3. Include to the 'capacity' value of key the numeric value, representing the number of items the container can hold.
+#4.15.3. Include to the 'capacity' value of key the numeric value (type of value: integer), representing the number of items the container can hold.
 #4.15.4. It's forbidden to add more items to a container than its 'capacity' allows.
 ]
 #4.16. If 'isContainer' is false, then set the 'capacity' value to null.
-#4.17. To the value of 'weight' key include the numeric value, representing the weight of item. Each item has the weight. Unit of weight: kilogram.
+#4.17. To the value of 'weight' key include the numeric value (type of value: double), representing the weight of item. Each item has the weight. Unit of weight: kilogram.
 #4.17.1. If the item is a container, you need to set additionally 'containerWeight' value of key. This is the weight of container without items inside it.
-#4.17.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to 0) if it is an item with the appropriate special properties.
-#4.18. To the value of 'volume' key include the numeric value, representing the volume of item. Each item has the volume. Unit of volume: dm³.
+#4.17.2. An item may weigh significantly less than it should, or weigh nothing at all ('weight' value is equal to 0) if it is an item with the appropriate special properties. It's forbidden to set weight of item to 0 if there are no logical reasons for it.
+#4.17.3. It's forbidden to set the item's weight to 0 if the player is overweight and can't take the item. Just don't allow the player to take the item in this case.
+#4.17.4. The weight of an item must be logically justified.
+#4.18. To the value of 'volume' key include the numeric value (type of value: double), representing the volume of item. Each item has the volume. Unit of volume: dm³.
 #4.19. Add a boolean value to the 'isConsumption' key, representing whether the current item is intended for consumption. Examples of such items: bandages, plasters, duct tape, food, cigarettes, torches, etc.
+#4.20. If 'isContainer' is true, and item has bonus for weight reduction of container contents, then mandatory include the numeric (type of value: double, must be non-negative) property 'weightReduction'. 
+#4.20.1. Value of the 'weightReduction' - is a percentages by which the weight of the container contents is reduced. For example: 50 - is a 50%, 10 - is a 10%.
 #4.20. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
 #4.21. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
 #4.22. Mandatory record information about this event in 'items_and_stat_calculations'.
@@ -3718,32 +4280,6 @@ For 'Critical Failure':
 #9.2.2. Note that the player has completely failed at what player was trying to do. You should develop the game's plot based on this.
 #9.2.3. Output to 'items_and_stat_calculations' that the player's action failed completely.
 `)}
-#9.4. Before the player receives new items in the inventory, make this check for possibility to receive them: [
-#9.4.1. This is the current sum of 'strength' + 'constitution' of player. Let's call it StrengthPlusConstitution = ${strengthPlusConstitution} .
-#9.4.2. Calculate all values ​​from all item bonuses, all active and passive skill bonuses, and all possible effects affecting 'constitution' or 'strength' of player. Let's call it Bonuses.
-#9.4.3. Calculate MaxWeightValue property using this formula:
-MaxWeightValue = (StrengthPlusConstitution + Bonuses) * 3 + 10, where
-• StrengthPlusConstitution - the sum of 'strength' and 'constitution' of player.
-• Bonuses - all bonuses, which affects the 'strength' or 'constitution' of player.
-#9.4.4. This is the current items weight of all items in player's inventory. Let's call it CurrentItemsWeight = ${totalWeight} .
-#9.4.5. Sum item weights of all new items, which player trying to receive this turn. Let's call it NewItemsWeight.
-#9.4.6. Sum up all bonuses that affect the reduction of items weight. These can be spells, player skills, special properties of items, etc. Let's call it WeightReduction.
-#9.4.7. Calculate TotalWeight property using this formula:
-TotalWeight = CurrentItemsWeight + NewItemsWeight - WeightReduction, where
-• CurrentItemsWeight - the current weight of all items in the inventory for current turn.
-• NewItemsWeight - the sum of item weights of all new items, which player trying to receive this turn.
-• WeightReduction - all bonuses that affect the reduction of item weights.
-#9.4.8. Make the final check using this formula:
-MaxWeightValue >= TotalWeight, where
-• MaxWeightValue - the maximum allowed value of weight, which player can hold.
-• TotalWeight - the total weight of all items, which player will have in the end of this turn.
-#9.4.9. If the check result is true:
-- Player can receive the items. Add items to the inventory.
-If the check result is false:
-- The player cannot receive these items because it's too heavy - player is overencumbered by the total weight. Don't add items to the inventory, and mark in the 'response' the reason.
-- It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
-#9.4.10. Output to 'items_and_stat_calculations' the formula and describe calculation of this check.
-]
 #9.5. When items are need to be added inside the container item, located in the player's inventory, make this check for possibility to do it: [
 #9.5.1. Read the value of 'capacity' property of the container. Let's call it Capacity.
 #9.5.2. Calculate ContentsItemCount. To do this: [
@@ -3774,16 +4310,17 @@ TotalItemsVolume = ContentsVolume + NewItemsVolume, where
 Volume >= TotalItemsVolume, where
 • Volume - the volume of container.
 • TotalItemsVolume - the total sum of item volumes which will be placed inside the container in the end of this turn.
-#9.5.6.6. If the check result is true:
+#9.5.6.6. If the check result is true: [
 - Items can be added inside the container.
-If the check result is false:
+], else: [
 - Don't add new items to the container and mark in the 'response' the reason. 
 - It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
-#9.5.6.7. Output to 'items_and_stat_calculations' the formula and describe calculation of this check.
 ]
-If the check result is false:
+#9.5.6.7. Output to 'items_and_stat_calculations' the formula and describe calculation of this check.
+], else: [
 - Don't add new items to the container and mark in the 'response' the reason. 
-- It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. 
+- It's forbidden to include these new items to 'moveInventoryItems', 'removeInventoryItems' or 'inventoryItemsData'. ]
+]
 #9.5.7. Make sure that you made both checks: for capacity and volume. Only if both of them returns true as result, you can include these items to 'moveInventoryItems' or 'inventoryItemsData'.
 #9.5.8. Output to 'items_and_stat_calculations' the formula and describe calculation of this check.
 ]
@@ -3865,7 +4402,7 @@ ${ELEMENTS.useNpcMemoriesDiary.checked ? `
 #10.12.3.7. The value of 'lastDiaryNote' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of note: '#${turn}. {Note text}', where '{' and '}' represents the notation of a variable and should not be used in the note.
 #10.12.3.8. The data which you recorded in the 'lastDiaryNote' should only be related with current turn. Do not copy the notes for previous turns, instead of it always record to 'lastDiaryNote' the new data, related with current turn only. 
 #10.12.3.9. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-]` : '' }
+]` : ''}
 ] ]` : ''}
 ` : ''}
 ${ELEMENTS.useQuestsList.checked ? `
@@ -3944,14 +4481,17 @@ ${ELEMENTS.useQuestsList.checked ? `
 #13.10. The value of 'lastEventsDescription' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of this value: '#${turn}. {lastEventsDescription text}'.
 
 #14 Calculate the change in energy, experience, and health according to the following instruction: [ Let's think step by step :
-#14.1. All character actions spend or restore their energy, in an amount logically dependent on the action. The amount of energy changed is entered in the value of the currentEnergyChange key (value type: positive or negative integer)
-#14.2. When energy falls, the character begins to receive various debuffs to skill checks and combat for every 10 energy points spent, and if the current energy is less than 20, then the character loses 1 or 2 health each turn
+#14.1. All character actions spend or restore their energy, in an amount logically dependent on the action. The amount of energy changed is entered in the value of the 'currentEnergyChange' key (value type: positive or negative integer)
+#14.1.1. Note: it's mandatory that 'currentEnergyChange' must only reflect the base energy change associated with the player's action, without any additional modifications.
+${characterStats.currentEnergy < 40 && characterStats.currentEnergy > 10 ? `#14.2. The current energy of player character is less than 40. It means, that player character mandatory loses additional 1 or 2 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is tired and needs to rest, otherwise it will affect player's health.` : ``}
+${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player character is less than 10. It means, that player character mandatory loses additional 10 or 20 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is very tired and needs to rest, otherwise it will affect player's health very fast.` : ``}
 #14.3. All successful player actions give experience to the character, in an amount logically dependent on the scale of success. The amount of experience is entered in the value of the experienceGained key (value type: positive integer)
 #14.4. Spending or restoring health is recorded in the value of the currentHealthChange key (value type: positive or negative integer) ]
+#14.5. Output to the 'items_and_stat_calculations' the current value of 'currentEnergyChange'.
 
 #15 The value of the actions key is passed an array of proposed actions (should not contain nested arrays or other objects)
-#15.1. among the proposed actions, there should not be options for actions that are similar to events that have already recently occurred
-#15.2. proposed actions should not be in the value of the response key, but should only be in actions
+#15.1. Among the proposed actions, there should not be options for actions that are similar to events that have already recently occurred
+#15.2. Proposed actions should not be in the value of the response key, but should only be in actions
 
 #16 In the value of the image_prompt key, it is necessary to form in each answer only in English an extensive detailed prompt for generating an image that will illustrate what the main character sees in your given answer, but the number of characters in the value of this key should not exceed 150 characters, while the prompt for generating the illustration should be formulated in such a way that the main character himself is not in the illustration - it should be a description of what he sees
 
@@ -4115,7 +4655,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 16. The economy and value of money in the game is built relative to known prices for items that exist in the current world according to inventory (known from Context).
 
 17. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
- ] ]`; 
+ ] ]`;
 
         console.log(prompt);
         lastUserMessage = currentMessage;
@@ -4188,6 +4728,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             turn++;
             tokenCostSum = APIModule.tokenCostSum;
             tokenCostCurrent = APIModule.tokenCostCurrent;
+            inventoryBasket = [];
 
             if (Array.isArray(data))
                 data = data[0];
@@ -4196,6 +4737,8 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             //console.log(data);
             ELEMENTS.chatBox.removeChild(loadingElement);
             sendMessageToChat(data.response, 'gm');
+
+            maxWeight = ELEMENTS.useWeightControl.checked ? Number(data.calculatedWeightData.maxWeight) : undefined;
 
             if (data.moveInventoryItems && data.moveInventoryItems.length > 0) {
                 for (const item of data.moveInventoryItems)
@@ -4207,17 +4750,18 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                     findAndDeleteItem(item.name, item.contentsPath);
             }
 
+            const newItemsArray = [];
             if (data.inventoryItemsData && data.inventoryItemsData.length > 0) {
                 for (const item of data.inventoryItemsData.sort(compareItemsByContainerAsc)) {
                     if (item.name) {
-                        addInventoryItem({
+                        const itemData = {
                             name: item.name,
                             description: item.description,
                             count: Number(item.count),
                             quality: item.quality,
                             price: item.price,
                             isConsumption: !!item.isConsumption,
-                            durability: item.durability,                           
+                            durability: item.durability,
                             bonuses: item.bonuses,
                             image_prompt: item.image_prompt,
                             customProperties: item.customProperties,
@@ -4227,18 +4771,23 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             volume: Number(item.volume),
                             containerWeight: item.containerWeight ? Number(item.containerWeight) : undefined,
                             capacity: Number(item.capacity),
-                            resources: data.inventoryItemsResources
-                        });
+                            resources: data.inventoryItemsResources,
+                        };
+                        addInventoryItem(itemData);
+                        newItemsArray.push(itemData.newItem ?? []);
                     }
                 }
             }
 
             if (data.inventoryItemsResources && data.inventoryItemsResources.length > 0) {
                 for (const resourceData of data.inventoryItemsResources)
-                    setOrChangeItemResource(resourceData.name, resourceData.contentsPath, Number(resourceData.resource), Number(resourceData.maximumResource), resourceData.resourceType);                
+                    setOrChangeItemResource(resourceData.name, resourceData.contentsPath, Number(resourceData.resource), Number(resourceData.maximumResource), resourceData.resourceType);
             }
-           
+
             if (data.moveInventoryItems?.length > 0 || data.removeInventoryItems?.length > 0 || data.inventoryItemsData?.length > 0) {
+                if (ELEMENTS.useWeightControl.checked && newItemsArray.length > 0)
+                    adjustInventoryWeightAndRemoveNeeded(maxWeight + criticalExcessWeight, newItemsArray);
+
                 calculateParametersForItemsArray(inventory);
                 adjustInventoryContainerCapacity(inventory);
                 adjustInventoryContainerVolume(inventory);
@@ -4252,6 +4801,8 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             };
 
             if (data.currentEnergyChange) {
+                const additionalEnergyCost = ELEMENTS.useWeightControl.checked ? Number(data.calculatedWeightData.additionalEnergyExpenditure) : 0;
+                data.currentEnergyChange -= additionalEnergyCost;
                 characterStats.currentEnergy = characterStats.currentEnergy + Math.floor(data.currentEnergyChange);
                 if (characterStats.currentEnergy > characterStats.maxEnergy)
                     characterStats.currentEnergy = characterStats.maxEnergy;
@@ -4267,7 +4818,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             if (data.statsDecreased && data.statsDecreased.length > 0) {
                 for (data of data.statsDecreased)
-                    decreasePlayerStat(data.name, Number(data.value ?? 0));                
+                    decreasePlayerStat(data.name, Number(data.value ?? 0));
             }
 
             if (data.statsIncreased && data.statsIncreased.length > 0) {
@@ -4288,7 +4839,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             if (data.NPCsRenameData && data.NPCsRenameData.length > 0) {
                 for (const npcData of data.NPCsRenameData)
-                    renameNPC(npcData.oldName, npcData.newName);                
+                    renameNPC(npcData.oldName, npcData.newName);
             }
 
             if (data.NPCsData && data.NPCsData.length > 0) {
@@ -4335,7 +4886,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (data.removeActiveSkills && data.removeActiveSkills.length > 0) {
                 for (const name of data.removeActiveSkills)
                     removeSkill(name, true);
-            }            
+            }
 
             if (data.newPassiveSkills && data.newPassiveSkills.length > 0) {
                 setOrChangeSkills(passiveSkills, data.newPassiveSkills);
@@ -4361,7 +4912,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 }
             }
 
-            if (data.items_and_stat_calculations && data.items_and_stat_calculations.length > 0) {                
+            if (data.items_and_stat_calculations && data.items_and_stat_calculations.length > 0) {
                 logMessage(data.items_and_stat_calculations.join('\n\n'), data.currentHealthChange, data.currentEnergyChange, data.moneyChange);
             }
 
@@ -4372,10 +4923,10 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 handlePlayerActionHints(data.actions);
 
             if (data.statusData)
-                setStatus(data.statusData);            
+                setStatus(data.statusData);
 
             if (data.statusDataEffects)
-                setStatusEffects(data.statusDataEffects);            
+                setStatusEffects(data.statusDataEffects);
 
             if (ELEMENTS.imageToggleSettings.checked && data.image_prompt) {
                 generateBackgroundImage(data.image_prompt);
@@ -4390,6 +4941,9 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             }
 
             updateElements();
+            if (ELEMENTS.useWeightControl.checked)
+                updateWeight();           
+            
             ELEMENTS.chatBox.scrollTop = ELEMENTS.chatBox.scrollHeight;
         } catch (error) {
             if (loadingElement && ELEMENTS.chatBox.contains(loadingElement)) {
@@ -4634,7 +5188,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
 
         if (event.target !== ELEMENTS.inventoryItemContextMenu)
-            hideInventoryItemContextMenu();        
+            hideInventoryItemContextMenu();
     });
 
     const npcInfoTabs = document.querySelectorAll("#npc-info-tabs .tab");
@@ -4667,4 +5221,14 @@ document.addEventListener('DOMContentLoaded', function () {
             logButton.classList.add(displayNoneClass);
         }
     }
+
+    ELEMENTS.useWeightControl.onchange = function (e) {
+        const displayNoneClass = 'displayNone';
+        
+        if (e.target.checked) 
+            ELEMENTS.weightGroupContainer.classList.remove(displayNoneClass);
+        else
+            ELEMENTS.weightGroupContainer.classList.add(displayNoneClass);        
+    }
+
 });

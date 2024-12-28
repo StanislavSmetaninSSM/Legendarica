@@ -340,10 +340,10 @@ input:checked + .slider {
         z-index: 10;
         bottom: 125%;
         left: 50%;
-        margin-left: -100px;
         opacity: 0;
         transition: opacity 0.3s;
         width: 500px;
+        white-space: pre-wrap;
     }
 
 .tooltipAuto .tooltiptext {
@@ -514,7 +514,8 @@ input:checked + .slider {
 }
 
 .infoDelete,
-.infoOpen {
+.infoOpen,
+.infoRestore {
     cursor: pointer;
     margin-top: 20px;
 }
@@ -992,3 +993,11 @@ img.rounded-corners {
             background-color: #d4af37;
             color: white;
         }
+
+#player-inventory-basket {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-top: 10px;
+    margin-left: 20px;
+}

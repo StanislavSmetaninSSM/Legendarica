@@ -482,6 +482,285 @@ Enjoy the game!`,
             "use-thinking-module-label": "Add a response-thinking module (disable to save tokens). Theoretically makes the AI smarter",
             "log-thinking-button-label": "Thought Log",
             "persuasion": "Persuasion",
+            "human_desc": `A person of the modern world, living in the 21st century`,
+            "superhuman_desc": `Superhuman - a person with super abilities derived from the power of their advanced mind`,
+            "infected_desc": "A person infected with a zombie virus",
+            "ratman_desc": "Descendant of ordinary rats mutated by radiation and gained intelligence. From afar, resembles an ugly human",
+            "ghoul_desc": "A person who was once infected with a zombie virus but managed to retain their sanity despite changes in their body",
+            "mutant_desc": "A person whose body has undergone various mutations due to radiation exposure",
+            "supermutant_desc": "A person whose body has become massive and strong due to radiation exposure, but has undergone repulsive changes",
+            "cyborg_desc": "A person with cybernetic implants embedded in their body",
+            "android_desc": "A robot covered with synthetic skin and having analogs of human organs",
+            "robot_desc": "A steel machine with advanced artificial intelligence",
+            "gray_desc": "An alien with gray skin, a large head, and black eyes, who arrived on Earth from a distant planet",
+            "alien_desc": "An alien who arrived on Earth from another planet",
+            "hybrid_desc": "A hybrid of an alien who arrived on Earth from another planet and a modern human",
+            "ancient_desc": "A descendant of an ancient precursor race who spent many thousands of years in cryosleep. The world around has changed incredibly during their sleep",
+            "survival_kit": `Survival kit`,
+            "psionic_headband": `Psionic Amplifier Headband`,
+            "adrenaline_syringe": `Infected's Adrenaline Syringe`,
+            "grappling_hook": `Tunneler's Grappling Hook`,
+            "bone_blade": `Ghoul's Irradiated Bone Blade`,
+            "mutant_serum": `Unstable Mutant Serum`,
+            "crude_bonehammer": `Supermutant's Crude Bonehammer`,
+            "hacking_device": `Integrated Hacking Device`,
+            "skin_repair_paste": `Synthetic Skin Repair Paste`,
+            "EMP_Generator": `Portable EMP Generator`,
+            "communication_implant": `Telepathic Communication Implant`,
+            "cloaking_device": `Alien Cloaking Device`,
+            "symbiotic_implant": `Alien-Human Hybrid's Symbiotic Implant`,
+            "ancient_artifact": `Ancient Forerunner Artifact`,
+            "survival_kit": `Survival kit`,
+            "hacker": "Hacker",
+            "scout": "Scout",
+            "bounty_hunter": "Bounty Hunter",
+            "survivor": "Survivor",
+            "raider": "Raider",
+            "bandit": "Bandit",
+            "wanderer": "Wanderer",
+            "veteran": "Veteran",
+            "mercenary": "Mercenary",
+            "stalker": "Stalker",
+            "citizen": "Citizen",
+            "vault_dweller": "Vault Dweller",
+            "savage": "Savage",
+            "soldier": "Soldier",
+            "engineer": "Engineer",
+            "medic": "Medic",
+            "sniper": "Sniper",
+            "virologist": "Virologist",
+            "biotechnician": "Biotechnician",
+            "reborn": "Reborn",
+            "psionic": "Psionic",
+            "telekinetic": "Telekinetic",
+            "telepath": "Telepath",
+            "pyromancer": "Pyromancer",
+            "cryomancer": "Cryomancer",
+            "mechanized_soldier": "Mechanized Soldier",
+            "mechanical_guardian": "Mechanical Guardian",
+            "cybernetic_assassin": "Cybernetic Assassin",
+            "cybernetic_spy": "Cybernetic Spy",
+            "precursor_agent": "Precursor Agent",
+            "precursor_scientist": "Precursor Scientist",
+            "precursor_soldier": "Precursor Soldier",
+            "xenomant": "Xenomant",
+            "alien_scout": "Alien Scout",
+            "space_architect": "Space Architect",
+            "galactic_explorer": "Galactic Explorer",
+            "alien_soldier": "Alien Soldier",
+            "hacker_descr": "Specialist in hacking computer systems and networks. Uses their skills to gain access to information and control devices.",
+            "scout_descr": "Agile and stealthy reconnaissance specialist, specializing in infiltration, information gathering, and discreetly eliminating targets.",
+            "bounty_hunter_descr": "Experienced bounty hunter tracking and capturing criminals for rewards. Accurate shooter and hand-to-hand combat master.",
+            "survivor_descr": "Experienced survivalist adapted to the harsh conditions of the post-apocalyptic world. Skilled in finding resources, building shelters, and defending against dangers.",
+            "raider_descr": "Brutal marauder living off looting and violence. Strong and aggressive fighter, ruthless.",
+            "bandit_descr": "Clever and cunning criminal engaged in robbery and brigandage. Masterfully wields crowbars and lockpicks.",
+            "wanderer_descr": "Lonely wanderer traveling the post-apocalyptic world in search of a better life. Resilient and resourceful, able to survive in any conditions.",
+            "veteran_descr": "Experienced soldier who has been through numerous battles. Possesses excellent combat training, disciplined, and cool-headed.",
+            "mercenary_descr": "Mercenary fighting for money. Skilled fighter proficient with various weapons and tactics.",
+            "stalker_descr": "Experienced guide through anomalous zones. Knows how to avoid dangers and find valuable artifacts.",
+            "citizen_descr": "Resident of one of the few surviving cities. Possesses basic skills and knowledge necessary for living in society.",
+            "vault_dweller_descr": "Outcast from the Vault, adapted to life in an underground bunker. Possesses technical skills and knowledge of the pre-war world.",
+            "savage_descr": "Savage living away from civilization. Strong and agile hunter relying on primal instincts and weapons.",
+            "soldier_descr": "Professional military trained to fight in any conditions. Disciplined and accurate shooter.",
+            "engineer_descr": "Technical specialist capable of creating and repairing various devices. Valuable ally in the post-apocalyptic world.",
+            "medic_descr": "Field doctor capable of treating wounds and illnesses. An indispensable member of any group of survivors.",
+            "sniper_descr": "Accurate shooter capable of eliminating targets from a long distance. Patient and observant fighter.",
+            "virologist_descr": "Scientist specializing in the study of viruses. Develops vaccines and antiviral medications.",
+            "biotechnician_descr": "Scientist working with living organisms. Capable of creating genetic modifications and growing artificial tissues.",
+            "reborn_descr": "Reborn is an infected individual who has partially overcome the virus and retained their sanity. They are stronger and more resilient than ordinary people and can mutate but continue to rot.",
+            "psionic_descr": "Individual possessing psionic abilities. Can influence the minds of other beings and control psionic energy.",
+            "telekinetic_descr": "Psionic with telekinesis abilities. Can move objects with the power of thought.",
+            "telepath_descr": "Psionic with telepathy abilities. Can read minds and communicate with other beings at a distance.",
+            "pyromancer_descr": "Psionic with pyrokinetic abilities. Can control fire with the power of thought.",
+            "cryomancer_descr": "Psionic with cryokinetic abilities. Can control cold and create ice.",
+            "mechanized_soldier_descr": "Heavily armed soldier in an exoskeleton. Possesses high firepower and protection.",
+            "mechanical_guardian_descr": "Robot guardian programmed to protect a territory or object. Equipped with advanced surveillance systems and powerful weapons.",
+            "cybernetic_assassin_descr": "Cybernetic assassin modified for stealth infiltration and target elimination. Equipped with built-in weapons and advanced sensors.",
+            "cybernetic_spy_descr": "Cybernetic spy modified for information gathering and sabotage. Equipped with an invisibility generator and holographic projector.",
+            "precursor_agent_descr": "Precursor Agent possessing advanced technologies and knowledge. Specializes in reconnaissance, sabotage, and threat elimination.",
+            "precursor_scientist_descr": "Precursor Scientist with extensive knowledge in various scientific fields. Capable of creating and using advanced devices.",
+            "precursor_soldier_descr": "Precursor Soldier equipped with high-tech weapons and armor. Trained to fight in any conditions.",
+            "xenomant_descr": "Xenomant is a specialist skilled in mysterious artifacts and technologies of an alien race. Can use them for protection, attack, and exploration.",
+            "alien_scout_descr": "Alien scout specializing in exploring new worlds and gathering information. Equipped with advanced camouflage and scanning technologies.",
+            "space_architect_descr": "Space Architect is an alien capable of altering space and matter with the power of thought. Can create and destroy objects, as well as build bases and structures.",
+            "galactic_explorer_descr": "Galactic Explorer is an alien dedicated to studying space and searching for new life forms. Possesses extensive knowledge and advanced technologies.",
+            "alien_soldier_descr": "Alien soldier trained to fight using advanced weaponry and technologies. Disciplined and effective fighter.",
+            "survival_kit": `Survival kit`,
+            "hacker_1": "Hacking Interface",
+            "hacker_2": "KPK",
+            "hacker_3": "EMP Grenade",
+            "hacker_4": "Network Scanner",
+            "scout_1": "Stealth Suit",
+            "scout_2": "Lockpick Set",
+            "scout_3": "Gas Mask",
+            "scout_4": "Silenced Pistol",
+            "bounty_hunter_1": "Two Pistols",
+            "bounty_hunter_2": "Target Tracking Device",
+            "bounty_hunter_3": "Energy Grid",
+            "bounty_hunter_4": "Combat Knife",
+            "survivor_1": "Cheap Dagger",
+            "survivor_2": "Homemade Armor",
+            "survivor_3": "Camouflage Tent",
+            "survivor_4": "Hunting Knife",
+            "raider_1": "Homemade Rifle",
+            "raider_2": "Spiked Club",
+            "raider_3": "Flask with Gasoline",
+            "raider_4": "Favorite Lighter",
+            "bandit_1": "Heavy Crowbar",
+            "bandit_2": "Bandit Mask",
+            "bandit_3": "Leather Vest",
+            "bandit_4": "Lockpick Set",
+            "wanderer_1": "Universal Backpack",
+            "wanderer_2": "Compact Tent",
+            "wanderer_3": "Sporting Crossbow",
+            "wanderer_4": "Multifunctional Knife",
+            "veteran_1": "Reward Pistol",
+            "veteran_2": "Old Bulletproof Vest",
+            "veteran_3": "Tactical Belt",
+            "veteran_4": "Medical Kit",
+            "mercenary_1": "Pistol",
+            "mercenary_2": "Sniper Rifle",
+            "mercenary_3": "Combat Helmet",
+            "mercenary_4": "Dynamite",
+            "stalker_1": "Anomaly Detector",
+            "stalker_2": "Modified Gas Mask",
+            "stalker_3": "Assault Rifle",
+            "stalker_4": "Rope with Grappling Hook",
+            "citizen_1": "Citizenship Documents",
+            "citizen_2": "Phone",
+            "citizen_3": "Supply Bag",
+            "citizen_4": "Utility Knife",
+            "vault_dweller_1": "Multifunctional Tool",
+            "vault_dweller_2": "Water Module",
+            "vault_dweller_3": "Modified Pistol",
+            "vault_dweller_4": "Vault Communication Module",
+            "savage_1": "Bone Axe",
+            "savage_2": "Bone Amulet",
+            "savage_3": "Game Trap",
+            "savage_4": "Homemade Bow",
+            "soldier_1": "Automatic Rifle",
+            "soldier_2": "Ammunition",
+            "soldier_3": "Grenade",
+            "soldier_4": "Bulletproof Vest",
+            "engineer_1": "Tool Set",
+            "engineer_2": "Flying Drone",
+            "engineer_3": "Welding Apparatus",
+            "engineer_4": "Blueprint Scanner",
+            "medic_1": "First Aid Kit",
+            "medic_2": "Painkiller",
+            "medic_3": "Bandages",
+            "medic_4": "Portable Defibrillator",
+            "sniper_1": "Sniper Rifle",
+            "sniper_2": "Binoculars",
+            "sniper_3": "Camouflage Cloak",
+            "sniper_4": "Combat Knife",
+            "virologist_1": "Biological Analyzer",
+            "virologist_2": "Antiviral Medications",
+            "virologist_3": "Virus Research Station",
+            "virologist_4": "Infected Samples",
+            "biotechnician_1": "Genetic Modifier",
+            "biotechnician_2": "Biosynthesizer",
+            "biotechnician_3": "Laboratory Kit",
+            "biotechnician_4": "Experimental Serum",
+            "reborn_1": "Reborn's Anti-Rot Serum",
+            "reborn_2": "Enhancement Serum",
+            "reborn_3": "Controlled Mutation Serum",
+            "reborn_4": "Uncontrolled Mutation Serum",
+            "psionic_1": "Mind Amplifier",
+            "psionic_2": "Telepathic Device",
+            "psionic_3": "Focusing Crystal",
+            "psionic_4": "Psi Amplifier",
+            "telekinetic_1": "Concentration Hoop",
+            "telekinetic_2": "Hovering Mini-Platform",
+            "telekinetic_3": "Anti-Gravity Gloves",
+            "telekinetic_4": "Focusing Crystal",
+            "telepath_1": "Focusing Ring",
+            "telepath_2": "Mind Reading Hoop",
+            "telepath_3": "Thought Communication Amulet",
+            "telepath_4": "Infected Control Staff",
+            "pyromancer_1": "Molotov Cocktail",
+            "pyromancer_2": "Pyrokinetic Staff",
+            "pyromancer_3": "Pyro-Mutation Serum",
+            "pyromancer_4": "Fire-Resistant Suit",
+            "cryomancer_1": "Polar Thermal Suit",
+            "cryomancer_2": "Thermos with Liquid Nitrogen",
+            "cryomancer_3": "Cryo-Mutation Serum",
+            "cryomancer_4": "Cryo Battery",
+            "mechanized_soldier_1": "Exoskeleton",
+            "mechanized_soldier_2": "Powerful Shotgun",
+            "mechanized_soldier_3": "Energy Shield",
+            "mechanized_soldier_4": "Repair Kit",
+            "mechanical_guardian_1": "Advanced Surveillance Module",
+            "mechanical_guardian_2": "Repair Module",
+            "mechanical_guardian_3": "Protective Panel",
+            "mechanical_guardian_4": "Integrated Machine Gun",
+            "cybernetic_assassin_1": "Hidden Blade",
+            "cybernetic_assassin_2": "Nano-Acceleration Cocktail",
+            "cybernetic_assassin_3": "Sound Suppression System",
+            "cybernetic_assassin_4": "Optical Night Vision Sensors",
+            "cybernetic_spy_1": "Invisibility Generator",
+            "cybernetic_spy_2": "Holographic Projector",
+            "cybernetic_spy_3": "Cybernetic Lockpick",
+            "cybernetic_spy_4": "Explosive Nano-Whip",
+            "precursor_agent_1": "Plasma Pistol",
+            "precursor_agent_2": "Teleportation Device",
+            "precursor_agent_3": "Spy Equipment Kit",
+            "precursor_agent_4": "Portable Holographic Projector",
+            "precursor_scientist_1": "Universal Scanner",
+            "precursor_scientist_2": "Molecular Synthesis Station",
+            "precursor_scientist_3": "Energy Shield",
+            "precursor_scientist_4": "Plasma Cutter",
+            "precursor_soldier_1": "Energy Laser Carbine",
+            "precursor_soldier_2": "Precursor Force Shield",
+            "precursor_soldier_3": "Cybernetic Enhancer",
+            "precursor_soldier_4": "Gravity Generator",
+            "xenomant_1": "Alien Artifact",
+            "xenomant_2": "Portable Teleporter",
+            "xenomant_3": "Holographic Shield",
+            "xenomant_4": "Energy Sword",
+            "alien_scout_1": "Gravitational Boots",
+            "alien_scout_2": "Portable Teleporter",
+            "alien_scout_3": "Hidden Object Scanner",
+            "alien_scout_4": "Laser Pistol",
+            "space_architect_1": "Gravity Projector",
+            "space_architect_2": "Materializing Spacesuit",
+            "space_architect_3": "Space Map",
+            "space_architect_4": "Planetary Stabilizer",
+            "galactic_explorer_1": "Multispectral Scanner",
+            "galactic_explorer_2": "Xeno Translator",
+            "galactic_explorer_3": "Bio-Laboratory Module",
+            "galactic_explorer_4": "Personal Drone Assistant",
+            "alien_soldier_1": "Magnetic Rail Carbine",
+            "alien_soldier_2": "Nanostructured Shield",
+            "alien_soldier_3": "Integrated Bionic System",
+            "alien_soldier_4": "Tactical Holographic Companion",
+            "superhuman": "Superhuman",
+            "infected": "Infected",
+            "ratman": "Ratman",
+            "ghoul": "Ghoul",
+            "mutant": "Mutant",
+            "supermutant": "Super-Mutant",
+            "cyborg": "Cyborg",
+            "android": "Android",
+            "robot": "Robot",
+            "gray": "Gray",
+            "alien": "Alien",
+            "hybrid": "Hybrid",
+            "ancient": "Ancient",
+            "total-weight-label": "Total Weight (kg):",
+            "tooltip-max-weight": "Calculated by the GM at the end of each turn. Maximum weight = (Strength + Stamina) * 3 + 10",
+            "max-weight-label": "Maximum Weight (kg):",
+            "use-weight-control-label": "Use Weight in Game",
+            "maximum-weight-exceeded-label": "Character's maximum weight exceeded! The specified items have been moved to the cart: ",
+            "statsGroup-weight-button-label": "Weight",
+            "tooltip-inventory-basket": "Items removed from the inventory are placed here. Automatically cleared at the end of each turn. You can restore them before they disappear.",
+            "inventory-basket-button-label": "Basket (Inventory)",
+            "inventory-restore": "Restore",
+            "tooltip-critical-weight": "When exceeding the maximum weight, the character can still receive items into the inventory for some time, but becomes overloaded. An overloaded character quickly loses energy. After exceeding the critical weight, the character can no longer carry new items.",
+            "critical-weight-label": "Critical Weight (kg):",
+            "weight-status-label": "Status:",
+            "weight-status-value-normal": "Normal",
+            "weight-status-value-bad": "Overloaded",
         },
         "russian-language": {
             // placeholders
@@ -944,6 +1223,285 @@ Websim. Зависит от нейросети, которую использу�
             "use-thinking-module-label": "Добавить модуль обдумывания ответов (отключите для экономии токенов). Теоретически сделает АИ более умным",
             "log-thinking-button-label": "Лог мыслей",
             "persuasion": "Убеждение",
+            "human_desc": `Человек современного мира, живущий в 21-го веке`,
+            "superhuman_desc": `Сверхчеловек - человек с супер-способностями, происходящими от силы его развитого разума`,
+            "infected_desc": "Человек, инфицированный зомби-вирусом",
+            "ratman_desc": "Потомок обычных крыс, мутировавших под воздействием радиации и обретших разум. Издали напоминает уродливого человека",
+            "ghoul_desc": "Человек, когда-то зараженный зомби-вирусом, но сумевший сохранить разум, несмотря на изменения в своем теле",
+            "mutant_desc": "Человек, чье тело претерпело различные мутации под воздействием радиации",
+            "supermutant_desc": "Человек, чье тело стало массивным и сильным под воздействием радиации, но претерпело отталкивающие изменения",
+            "cyborg_desc": "Человек с кибер-имплантами, встроенными в его тело",
+            "android_desc": "Робот, покрытый синтетической кожей и имеющий аналоги человеческих органов",
+            "robot_desc": "Стальная машина, имеющая продвинутый искусственный интеллект",
+            "gray_desc": "Пришелец с серой кожей, большой головой и черными глазами, прилетевший на Землю с далекой планеты",
+            "alien_desc": "Пришелец, прибывший на Землю с другой планеты",
+            "hybrid_desc": "Гибрид пришельца, который прибыл на Землю с другой планеты, и современного человека",
+            "ancient_desc": "Потомок древней расы предтеч, который много тысяч лет провел в криосне. Мир вокруг невероятно изменился за время его сна",
+            "survival_kit": `Набор выживальщика`,
+            "psionic_headband": `Псионический усиливающий обруч`,
+            "adrenaline_syringe": `Адреналиновый шприц инфицированного`,
+            "grappling_hook": `Крюк-кошка туннельщика`,
+            "bone_blade": `Радиационно-зараженное костяное лезвие гуля`,
+            "mutant_serum": `Нестабильная сыворотка мутанта`,
+            "crude_bonehammer": `Грубый костяной молот Супермутанта`,
+            "hacking_device": `Интегрированное устройство киборга для взлома`,
+            "skin_repair_paste": `Синтетический гель для ремонта кожи андроида`,
+            "EMP_Generator": `Портативный генератор ЭМП`,
+            "communication_implant": `Телепатический коммуникационный имплант`,
+            "cloaking_device": `Инопланетное маскировочное устройство`,
+            "symbiotic_implant": `Симбиотический имплант гибрида инопланетянина и человека`,
+            "ancient_artifact": `Древний артефакт предтеч`,
+            "survival_kit": `Набор выживания`,
+            "hacker": "Хакер",
+            "scout": "Разведчик",
+            "bounty_hunter": "Охотник за головами",
+            "survivor": "Выживший",
+            "raider": "Рейдер",
+            "bandit": "Бандит",
+            "wanderer": "Скиталец",
+            "veteran": "Ветеран",
+            "mercenary": "Наёмник",
+            "stalker": "Сталкер",
+            "citizen": "Горожанин",
+            "vault_dweller": "Житель Убежища",
+            "savage": "Дикарь",
+            "soldier": "Солдат",
+            "engineer": "Инженер",
+            "medic": "Медик",
+            "sniper": "Снайпер",
+            "virologist": "Вирусолог",
+            "biotechnician": "Биотехник",
+            "reborn": "Возрожденный",
+            "psionic": "Псионик",
+            "telekinetic": "Телекинетик",
+            "telepath": "Телепат",
+            "pyromancer": "Пиромант",
+            "cryomancer": "Криомант",
+            "mechanized_soldier": "Механизированный солдат",
+            "mechanical_guardian": "Механический страж",
+            "cybernetic_assassin": "Кибернетический ассассин",
+            "cybernetic_spy": "Кибернетический шпион",
+            "precursor_agent": "Агент Предтеч",
+            "precursor_scientist": "Ученый Предтеч",
+            "precursor_soldier": "Солдат Предтеч",
+            "xenomant": "Ксеномант",
+            "alien_scout": "Инопланетный разведчик",
+            "space_architect": "Космический архитектор",
+            "galactic_explorer": "Галактический исследователь",
+            "alien_soldier": "Инопланетный солдат",
+            "hacker_descr": "Специалист по взлому компьютерных систем и сетей. Использует свои навыки для получения доступа к информации и управления устройствами.",
+            "scout_descr": "Ловкий и скрытный разведчик, специализирующийся на проникновении, сборе информации и незаметном устранении целей.",
+            "bounty_hunter_descr": "Опытный охотник за головами, выслеживающий и захватывающий преступников за вознаграждение. Меткий стрелок и мастер рукопашного боя.",
+            "survivor_descr": "Опытный выживальщик, приспособившийся к суровым условиям постапокалиптического мира. Умеет находить ресурсы, строить укрытия и защищаться от опасностей.",
+            "raider_descr": "Жестокий мародер, живущий за счет грабежей и насилия. Сильный и агрессивный боец, не знающий пощады.",
+            "bandit_descr": "Ловкий и хитрый преступник, промышляющий грабежами и разбоем. Мастерски владеет ломом и отмычками.",
+            "wanderer_descr": "Одинокий странник, путешествующий по постапокалиптическому миру в поисках лучшей жизни. Выносливый и находчивый, умеет выживать в любых условиях.",
+            "veteran_descr": "Опытный солдат, прошедший через множество сражений. Обладает отличной боевой подготовкой, дисциплинирован и хладнокровен.",
+            "mercenary_descr": "Наемник, сражающийся за деньги. Опытный боец, владеющий различным оружием и тактикой.",
+            "stalker_descr": "Опытный проводник по аномальным зонам. Знает, как обходить опасности и находить ценные артефакты.",
+            "citizen_descr": "Житель одного из немногих уцелевших городов. Обладает базовыми навыками и знаниями, необходимыми для жизни в обществе.",
+            "vault_dweller_descr": "Выходец из Убежища, приспособленный к жизни в подземном бункере. Обладает техническими навыками и знаниями о довоенном мире.",
+            "savage_descr": "Дикарь, живущий вдали от цивилизации. Сильный и ловкий охотник, полагающийся на первобытные инстинкты и оружие.",
+            "soldier_descr": "Профессиональный военный, обученный сражаться в любых условиях. Дисциплинированный и меткий стрелок.",
+            "engineer_descr": "Технический специалист, способный создавать и ремонтировать различные устройства. Ценный союзник в постапокалиптическом мире.",
+            "medic_descr": "Полевой врач, способный лечить раны и болезни. Незаменимый член любой группы выживших.",
+            "sniper_descr": "Меткий стрелок, способный устранять цели с большого расстояния. Терпеливый и наблюдательный боец.",
+            "virologist_descr": "Ученый, специализирующийся на изучении вирусов. Разрабатывает вакцины и антивирусные препараты.",
+            "biotechnician_descr": "Ученый, работающий с живыми организмами. Способен создавать генетические модификации и выращивать искусственные ткани.",
+            "reborn_descr": "Возрожденный - это зараженный, который смог частично побороть вирус и сохранить разум. Они сильнее и выносливее обычных людей, и могут мутировать, но продолжают гнить.",
+            "psionic_descr": "Индивид, обладающий псионическими способностями. Может воздействовать на разум других существ и управлять псионической энергией.",
+            "telekinetic_descr": "Псионик, обладающий способностью к телекинезу. Может перемещать предметы силой мысли.",
+            "telepath_descr": "Псионик, обладающий способностью к телепатии. Может читать мысли и общаться с другими существами на расстоянии.",
+            "pyromancer_descr": "Псионик, обладающий способностью к пирокинезу. Может управлять огнем силой мысли.",
+            "cryomancer_descr": "Псионик, обладающий способностью к криокинезу. Может управлять холодом и создавать лед.",
+            "mechanized_soldier_descr": "Тяжеловооруженный солдат в экзоскелете. Обладает высокой огневой мощью и защитой.",
+            "mechanical_guardian_descr": "Робот-охранник, запрограммированный на защиту территории или объекта. Обладает продвинутой системой слежения и мощным оружием.",
+            "cybernetic_assassin_descr": "Кибернетический убийца, модифицированный для скрытного проникновения и устранения целей. Обладает встроенным оружием и продвинутыми сенсорами.",
+            "cybernetic_spy_descr": "Кибернетический шпион, модифицированный для сбора информации и диверсий. Оснащен генератором невидимости и голографическим проектором.",
+            "precursor_agent_descr": "Агент Предтеч, владеющий продвинутыми технологиями и знаниями. Специализируется на разведке, диверсиях и устранении угроз.",
+            "precursor_scientist_descr": "Ученый Предтеч, обладающий обширными знаниями в различных областях науки. Способен создавать и использовать продвинутые устройства.",
+            "precursor_soldier_descr": "Солдат Предтеч, оснащенный высокотехнологичным оружием и броней. Обучен ведению боя в любых условиях.",
+            "xenomant_descr": "Ксеномант - это специалист, владеющий таинственными артефактами и технологиями инопланетной расы. Он может использовать их для защиты, нападения и исследования.",
+            "alien_scout_descr": "Инопланетный разведчик, специализирующийся на исследовании новых миров и сборе информации. Обладает продвинутыми технологиями маскировки и сканирования.",
+            "space_architect_descr": "Космический архитектор - это инопланетянин, способный изменять пространство и материю силой мысли. Он может создавать и разрушать объекты, а также строить базы и сооружения.",
+            "galactic_explorer_descr": "Галактический исследователь - это инопланетянин, посвятивший себя изучению космоса и поиску новых форм жизни. Он обладает обширными знаниями и продвинутыми технологиями.",
+            "alien_soldier_descr": "Инопланетный солдат, обученный ведению боя с использованием передового вооружения и технологий. Дисциплинированный и эффективный боец.",
+            "survival_kit": `Набор выживания`,
+            "hacker_1": "Интерфейс для взлома",
+            "hacker_2": "КПК",
+            "hacker_3": "EMP-граната",
+            "hacker_4": "Сканер сети",
+            "scout_1": "Стелс-костюм",
+            "scout_2": "Набор отмычек",
+            "scout_3": "Противогаз",
+            "scout_4": "Пистолет с глушителем",
+            "bounty_hunter_1": "Два пистолета",
+            "bounty_hunter_2": "Устройство отслеживания целей",
+            "bounty_hunter_3": "Энергосеть",
+            "bounty_hunter_4": "Боевой нож",
+            "survivor_1": "Дешевый обрез",
+            "survivor_2": "Самодельная броня",
+            "survivor_3": "Маскировочная палатка",
+            "survivor_4": "Охотничий нож",
+            "raider_1": "Самодельное ружье",
+            "raider_2": "Шипованная дубинка",
+            "raider_3": "Фляга с бензином",
+            "raider_4": "Любимая зажигалка",
+            "bandit_1": "Тяжелый лом",
+            "bandit_2": "Маска бандита",
+            "bandit_3": "Кожаный жилет",
+            "bandit_4": "Набор отмычек",
+            "wanderer_1": "Универсальный рюкзак",
+            "wanderer_2": "Компактная палатка",
+            "wanderer_3": "Спортивный арбалет",
+            "wanderer_4": "Многофункциональный нож",
+            "veteran_1": "Наградной пистолет",
+            "veteran_2": "Старый бронежилет",
+            "veteran_3": "Тактический пояс",
+            "veteran_4": "Медицинский набор",
+            "mercenary_1": "Пистолет",
+            "mercenary_2": "Снайперская винтовка",
+            "mercenary_3": "Боевой шлем",
+            "mercenary_4": "Динамит",
+            "stalker_1": "Детектор аномалий",
+            "stalker_2": "Модифицированный противогаз",
+            "stalker_3": "Штурмовая винтовка",
+            "stalker_4": "Веревка с крюком-кошкой",
+            "citizen_1": "Документы о гражданстве",
+            "citizen_2": "Телефон",
+            "citizen_3": "Сумка с припасами",
+            "citizen_4": "Утилитарный нож",
+            "vault_dweller_1": "Многофункциональный инструмент",
+            "vault_dweller_2": "Водяной модуль",
+            "vault_dweller_3": "Модифицированный пистолет",
+            "vault_dweller_4": "Модуль связи с Убежищем",
+            "savage_1": "Костяной топор",
+            "savage_2": "Костяной амулет",
+            "savage_3": "Ловушка для дичи",
+            "savage_4": "Самодельный лук",
+            "soldier_1": "Автоматическая винтовка",
+            "soldier_2": "Боеприпасы",
+            "soldier_3": "Граната",
+            "soldier_4": "Бронежилет",
+            "engineer_1": "Набор инструментов",
+            "engineer_2": "Летающий дрон",
+            "engineer_3": "Сварочный аппарат",
+            "engineer_4": "Сканер чертежей",
+            "medic_1": "Аптечка первой помощи",
+            "medic_2": "Обезболивающее",
+            "medic_3": "Бинты",
+            "medic_4": "Портативный дефибриллятор",
+            "sniper_1": "Снайперская винтовка",
+            "sniper_2": "Бинокль",
+            "sniper_3": "Камуфляжный плащ",
+            "sniper_4": "Боевой нож",
+            "virologist_1": "Биологический анализатор",
+            "virologist_2": "Антивирусные препараты",
+            "virologist_3": "Станция исследования вирусов",
+            "virologist_4": "Зараженные образцы",
+            "biotechnician_1": "Генетический модификатор",
+            "biotechnician_2": "Биосинтезатор",
+            "biotechnician_3": "Лабораторный набор",
+            "biotechnician_4": "Экспериментальная сыворотка",
+            "reborn_1": "Сыворотка от гниения Возрожденного",
+            "reborn_2": "Сыворотка усиления",
+            "reborn_3": "Сыворотка контролируемой мутации",
+            "reborn_4": "Сыворотка неконтролируемой мутации",
+            "psionic_1": "Усилитель разума",
+            "psionic_2": "Телепатическое устройство",
+            "psionic_3": "Фокусирующий кристалл",
+            "psionic_4": "Пси-усилитель",
+            "telekinetic_1": "Обруч концентрации",
+            "telekinetic_2": "Парящий мини-платформа",
+            "telekinetic_3": "Перчатки антигравитации",
+            "telekinetic_4": "Кристалл фокусировки",
+            "telepath_1": "Фокусирующее кольцо",
+            "telepath_2": "Обруч чтения мыслей",
+            "telepath_3": "Амулет мыслесвязи",
+            "telepath_4": "Жезл управления зараженными",
+            "pyromancer_1": "Коктейль Молотова",
+            "pyromancer_2": "Пирокинетический посох",
+            "pyromancer_3": "Сыворотка пиро-мутации",
+            "pyromancer_4": "Огнеупорный костюм",
+            "cryomancer_1": "Полярный термокостюм",
+            "cryomancer_2": "Термос с жидким азотом",
+            "cryomancer_3": "Сыворотка крио-мутации",
+            "cryomancer_4": "Криобатарея",
+            "mechanized_soldier_1": "Экзоскелет",
+            "mechanized_soldier_2": "Мощный дробовик",
+            "mechanized_soldier_3": "Энергетический щит",
+            "mechanized_soldier_4": "Ремонтный набор",
+            "mechanical_guardian_1": "Продвинутый модуль слежения",
+            "mechanical_guardian_2": "Ремонтный модуль",
+            "mechanical_guardian_3": "Защитная панель",
+            "mechanical_guardian_4": "Встроенный пулемет",
+            "cybernetic_assassin_1": "Скрытый клинок",
+            "cybernetic_assassin_2": "Нано-коктейль ускорения",
+            "cybernetic_assassin_3": "Система подавления звука",
+            "cybernetic_assassin_4": "Оптические сенсоры ночного видения",
+            "cybernetic_spy_1": "Генератор невидимости",
+            "cybernetic_spy_2": "Голографический проектор",
+            "cybernetic_spy_3": "Кибернетический отмычка",
+            "cybernetic_spy_4": "Разрывной нано-кнут",
+            "precursor_agent_1": "Плазменный пистолет",
+            "precursor_agent_2": "Телепортационное устройство",
+            "precursor_agent_3": "Комплект шпионского оборудования",
+            "precursor_agent_4": "Портативный голографический проектор",
+            "precursor_scientist_1": "Универсальный сканер",
+            "precursor_scientist_2": "Станция молекулярного синтеза",
+            "precursor_scientist_3": "Энергетический щит",
+            "precursor_scientist_4": "Плазменный резак",
+            "precursor_soldier_1": "Энергетический лазерный карабин",
+            "precursor_soldier_2": "Силовой щит предтеч",
+            "precursor_soldier_3": "Кибернетический усилитель",
+            "precursor_soldier_4": "Гравитационный генератор",
+            "xenomant_1": "Инопланетный артефакт",
+            "xenomant_2": "Портативный телепортатор",
+            "xenomant_3": "Голографический щит",
+            "xenomant_4": "Энергетический меч",
+            "alien_scout_1": "Гравитационные ботинки",
+            "alien_scout_2": "Портативный телепортатор",
+            "alien_scout_3": "Сканер скрытых объектов",
+            "alien_scout_4": "Лазерный пистолет",
+            "space_architect_1": "Гравитационный проектор",
+            "space_architect_2": "Материализующий скафандр",
+            "space_architect_3": "Космическая карта",
+            "space_architect_4": "Планетарный стабилизатор",
+            "galactic_explorer_1": "Мультиспектральный сканер",
+            "galactic_explorer_2": "Ксенопереводчик",
+            "galactic_explorer_3": "Биолабораторный модуль",
+            "galactic_explorer_4": "Личный дрон-помощник",
+            "alien_soldier_1": "Магнитный рельсовый карабин",
+            "alien_soldier_2": "Наноструктурированный щит",
+            "alien_soldier_3": "Интегрированная бионическая система",
+            "alien_soldier_4": "Тактический голографический компаньон",
+            "superhuman": "Сверхчеловек",
+            "infected": "Зараженный",
+            "ratman": "Крысолюд",
+            "ghoul": "Гуль",
+            "mutant": "Мутант",
+            "supermutant": "Супер-Мутант",
+            "cyborg": "Киборг",
+            "android": "Андроид",
+            "robot": "Робот",
+            "gray": "Серый",
+            "alien": "Пришелец",
+            "hybrid": "Гибрид",
+            "ancient": "Древний",
+            "total-weight-label": "Общий вес (кг):",
+            "tooltip-max-weight": "Рассчитывается ГМ-ом в конце каждого хода. Максимальный вес = (Сила + Выносливость) * 3 + 10",
+            "max-weight-label": "Максимальный вес (кг):",
+            "use-weight-control-label": "Использовать вес в игре",
+            "maximum-weight-exceeded-label": "Превышен максимальный вес персонажа! Указанные предметы были перенесены в корзину: ",
+            "statsGroup-weight-button-label": "Вес",
+            "tooltip-inventory-basket": "Сюда попадают удаленные из инвентаря предметы. Автоматически очищается в конце каждого хода. Вы можете восстановить их, пока они не исчезли.",
+            "inventory-basket-button-label": "Корзина (Инвентарь)",
+            "inventory-restore": "Восстановить",
+            "tooltip-critical-weight": "При превышении максимального веса, персонаж ещё некоторое время может получать предметы в инвентарь, но оказывается перегружен. Перегруженный персонаж быстро теряет энергию. После превышения критического веса, персонаж больше не может брать новые вещи.",
+            "critical-weight-label": "Критический вес (кг):",
+            "weight-status-label": "Состояние:",
+            "weight-status-value-normal": "Нормальное",
+            "weight-status-value-bad": "Перегружен",
         },
         "spanish-language": {
             // placeholders
@@ -1413,6 +1971,285 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "use-thinking-module-label": "Agregar un módulo de reflexión de respuestas (desactivar para ahorrar tokens). Teóricamente hace la IA más inteligente",
             "log-thinking-button-label": "Registro de Pensamientos",
             "persuasion": "Persuasión",
+            "human_desc": `Una persona del mundo moderno, viviendo en el siglo XXI`,
+            "superhuman_desc": `Sobrehumano - una persona con superhabilidades derivadas del poder de su mente avanzada`,
+            "infected_desc": "Una persona infectada con un virus zombi",
+            "ratman_desc": "Descendiente de ratas ordinarias mutadas por radiación y que han adquirido inteligencia. Desde lejos, se parece a un humano feo",
+            "ghoul_desc": "Una persona que una vez estuvo infectada con un virus zombi pero logró mantener su cordura a pesar de los cambios en su cuerpo",
+            "mutant_desc": "Una persona cuyo cuerpo ha sufrido varias mutaciones debido a la exposición a radiación",
+            "supermutant_desc": "Una persona cuyo cuerpo se ha vuelto masivo y fuerte debido a la exposición a radiación, pero ha sufrido cambios repulsivos",
+            "cyborg_desc": "Una persona con implantes cibernéticos incrustados en su cuerpo",
+            "android_desc": "Un robot cubierto con piel sintética y que tiene análogos de órganos humanos",
+            "robot_desc": "Una máquina de acero con inteligencia artificial avanzada",
+            "gray_desc": "Un extraterrestre con piel gris, cabeza grande y ojos negros, que llegó a la Tierra desde un planeta lejano",
+            "alien_desc": "Un extraterrestre que llegó a la Tierra desde otro planeta",
+            "hybrid_desc": "Un híbrido de un extraterrestre que llegó a la Tierra desde otro planeta y un humano moderno",
+            "ancient_desc": "Un descendiente de una antigua raza precursora que pasó muchos miles de años en criosueño. El mundo alrededor ha cambiado increíblemente durante su sueño",
+            "survival_kit": `Kit de supervivencia`,
+            "psionic_headband": `Diadema Amplificadora Psiónica`,
+            "adrenaline_syringe": `Jeringa de adrenalina del infectado`,
+            "grappling_hook": `Gancho de escalada del escavador`,
+            "bone_blade": `Espada de hueso irradiada del ghoul`,
+            "mutant_serum": `Suero mutante inestable`,
+            "crude_bonehammer": `Martillo de hueso rudimentario del supermutante`,
+            "hacking_device": `Dispositivo de hackeo integrado`,
+            "skin_repair_paste": `Pasta de reparación de piel sintética`,
+            "EMP_Generator": `Generador EMP portátil`,
+            "communication_implant": `Implante de comunicación telepática`,
+            "cloaking_device": `Dispositivo de camuflagem alienígena`,
+            "symbiotic_implant": `Implante simbiótico del híbrido alienígena-humano`,
+            "ancient_artifact": `Artefacto de los antiguos precursores`,
+            "survival_kit": `Kit de supervivencia`,
+            "hacker": "Hacker",
+            "scout": "Explorador",
+            "bounty_hunter": "Cazador de Recompensas",
+            "survivor": "Superviviente",
+            "raider": "Asaltante",
+            "bandit": "Bandido",
+            "wanderer": "Errante",
+            "veteran": "Veterano",
+            "mercenary": "Mercenario",
+            "stalker": "Acechador",
+            "citizen": "Ciudadano",
+            "vault_dweller": "Habitante del Refugio",
+            "savage": "Salvaje",
+            "soldier": "Soldado",
+            "engineer": "Ingeniero",
+            "medic": "Médico",
+            "sniper": "Francotirador",
+            "virologist": "Virologista",
+            "biotechnician": "Biotecnólogo",
+            "reborn": "Renacido",
+            "psionic": "Psiónico",
+            "telekinetic": "Telequinético",
+            "telepath": "Telepata",
+            "pyromancer": "Pirocántico",
+            "cryomancer": "Criomántico",
+            "mechanized_soldier": "Soldado Mecanizado",
+            "mechanical_guardian": "Guardia Mecánico",
+            "cybernetic_assassin": "Asesino Cibernético",
+            "cybernetic_spy": "Espía Cibernético",
+            "precursor_agent": "Agente Precursor",
+            "precursor_scientist": "Científico Precursor",
+            "precursor_soldier": "Soldado Precursor",
+            "xenomant": "Xenomántico",
+            "alien_scout": "Explorador Alienígena",
+            "space_architect": "Arquitecto Espacial",
+            "galactic_explorer": "Explorador Galáctico",
+            "alien_soldier": "Soldado Alienígena",
+            "hacker_descr": "Especialista en hackear sistemas y redes informáticas. Utiliza sus habilidades para acceder a información y controlar dispositivos.",
+            "scout_descr": "Especialista en reconocimiento ágil y sigiloso, especializado en infiltración, recolección de información y eliminación discreta de objetivos.",
+            "bounty_hunter_descr": "Cazador de recompensas experimentado que rastrea y captura criminales por recompensas. Tirador preciso y maestro en combate cuerpo a cuerpo.",
+            "survivor_descr": "Superviviente experimentado adaptado a las duras condiciones del mundo post-apocalíptico. Hábil para encontrar recursos, construir refugios y defenderse de peligros.",
+            "raider_descr": "Marañón brutal que vive de saqueos y violencia. Luchador fuerte y agresivo, sin piedad.",
+            "bandit_descr": "Criminal astuto y engañoso que se dedica a robos y asaltos. Maneja hábilmente palancas y ganzúas.",
+            "wanderer_descr": "Vagabundo solitario que viaja por el mundo post-apocalíptico en busca de una vida mejor. Resistente e ingenioso, capaz de sobrevivir en cualquier condición.",
+            "veteran_descr": "Soldado experimentado que ha pasado por numerosas batallas. Posee excelente entrenamiento de combate, disciplinado y frío.",
+            "mercenary_descr": "Mercenario que lucha por dinero. Combatiente experimentado competente con diversas armas y tácticas.",
+            "stalker_descr": "Guía experimentado a través de zonas anómalas. Sabe cómo evitar peligros y encontrar artefactos valiosos.",
+            "citizen_descr": "Residente de una de las pocas ciudades sobrevivientes. Posee habilidades y conocimientos básicos necesarios para vivir en sociedad.",
+            "vault_dweller_descr": "Marginado del Refugio, adaptado a la vida en un búnker subterráneo. Posee habilidades técnicas y conocimientos del mundo pre-guerra.",
+            "savage_descr": "Salvaje que vive lejos de la civilización. Cazador fuerte y ágil que confía en instintos primitivos y armas.",
+            "soldier_descr": "Militar profesional entrenado para luchar en cualquier condición. Tirador disciplinado y preciso.",
+            "engineer_descr": "Especialista técnico capaz de crear y reparar diversos dispositivos. Aliado valioso en el mundo post-apocalíptico.",
+            "medic_descr": "Doctor de campo capaz de tratar heridas y enfermedades. Miembro indispensable de cualquier grupo de supervivientes.",
+            "sniper_descr": "Tirador preciso capaz de eliminar objetivos desde largas distancias. Combatiente paciente y observador.",
+            "virologist_descr": "Científico especializado en el estudio de virus. Desarrolla vacunas y medicamentos antivirales.",
+            "biotechnician_descr": "Científico que trabaja con organismos vivos. Capaz de crear modificaciones genéticas y cultivar tejidos artificiales.",
+            "reborn_descr": "Renacido es un individuo infectado que ha superado parcialmente el virus y ha mantenido su cordura. Son más fuertes y resistentes que las personas comunes y pueden mutar pero continúan pudriéndose.",
+            "psionic_descr": "Individuo con habilidades psiónicas. Puede influir en las mentes de otros seres y controlar la energía psiónica.",
+            "telekinetic_descr": "Psiónico con habilidades de telequinesis. Puede mover objetos con el poder del pensamiento.",
+            "telepath_descr": "Psiónico con habilidades de telepatía. Puede leer mentes y comunicarse con otros seres a distancia.",
+            "pyromancer_descr": "Psiónico con habilidades de piroquinesis. Puede controlar el fuego con el poder del pensamiento.",
+            "cryomancer_descr": "Psiónico con habilidades de criokinesis. Puede controlar el frío y crear hielo.",
+            "mechanized_soldier_descr": "Soldado fuertemente armado en un exoesqueleto. Posee alta potencia de fuego y protección.",
+            "mechanical_guardian_descr": "Robot guardián programado para proteger un territorio u objeto. Equipado con sistemas avanzados de vigilancia y armas poderosas.",
+            "cybernetic_assassin_descr": "Asesino cibernético modificado para infiltración sigilosa y eliminación de objetivos. Equipado con armas integradas y sensores avanzados.",
+            "cybernetic_spy_descr": "Espía cibernético modificado para recolección de información y sabotajes. Equipado con un generador de invisibilidad y proyector holográfico.",
+            "precursor_agent_descr": "Agente Precursor que posee tecnologías avanzadas y conocimientos. Especializado en reconocimiento, sabotajes y eliminación de amenazas.",
+            "precursor_scientist_descr": "Científico Precursor con amplio conocimiento en diversas áreas científicas. Capaz de crear y usar dispositivos avanzados.",
+            "precursor_soldier_descr": "Soldado Precursor equipado con armas y armaduras de alta tecnología. Entrenado para combatir en cualquier condición.",
+            "xenomant_descr": "Xenomántico es un especialista experto en artefactos misteriosos y tecnologías de una raza alienígena. Puede usarlos para protección, ataque y exploración.",
+            "alien_scout_descr": "Explorador alienígena especializado en explorar nuevos mundos y recolectar información. Equipado con tecnologías avanzadas de camuflaje y escaneo.",
+            "space_architect_descr": "Arquitecto Espacial es un alienígena capaz de alterar el espacio y la materia con el poder del pensamiento. Puede crear y destruir objetos, así como construir bases y estructuras.",
+            "galactic_explorer_descr": "Explorador Galáctico es un alienígena dedicado a estudiar el espacio y buscar nuevas formas de vida. Posee amplio conocimiento y tecnologías avanzadas.",
+            "alien_soldier_descr": "Soldado alienígena entrenado para luchar usando armamento y tecnologías avanzadas. Combatiente disciplinado y efectivo.",
+            "survival_kit": `Kit de supervivencia`,
+            "hacker_1": "Interfaz de Hackeo",
+            "hacker_2": "KPK",
+            "hacker_3": "EMP-Granada",
+            "hacker_4": "Escáner de Red",
+            "scout_1": "Traje de Sigilo",
+            "scout_2": "Juego de ganzúas",
+            "scout_3": "Mascarilla de Gas",
+            "scout_4": "Pistola Silenciada",
+            "bounty_hunter_1": "Dos pistolas",
+            "bounty_hunter_2": "Dispositivo de Seguimiento de Objetivos",
+            "bounty_hunter_3": "Red de Energía",
+            "bounty_hunter_4": "Cuchillo de Combate",
+            "survivor_1": "Daga Barata",
+            "survivor_2": "Armadura Casera",
+            "survivor_3": "Tienda de Camuflaje",
+            "survivor_4": "Cuchillo de Caza",
+            "raider_1": "Rifle Casero",
+            "raider_2": "Porra con Pinchos",
+            "raider_3": "Frasco con Gasolina",
+            "raider_4": "Encendedor Favorito",
+            "bandit_1": "Piedra de Barra Pesada",
+            "bandit_2": "Máscara de Bandido",
+            "bandit_3": "Chaleco de Cuero",
+            "bandit_4": "Juego de ganzúas",
+            "wanderer_1": "Mochila Universal",
+            "wanderer_2": "Tienda Compacta",
+            "wanderer_3": "Ballesta Deportiva",
+            "wanderer_4": "Cuchillo Multifuncional",
+            "veteran_1": "Pistola de Recompensa",
+            "veteran_2": "Chaleco Antibalas Viejo",
+            "veteran_3": "Cinturón Táctico",
+            "veteran_4": "Kit Médico",
+            "mercenary_1": "Pistola",
+            "mercenary_2": "Rifle de Francotirador",
+            "mercenary_3": "Casco de Combate",
+            "mercenary_4": "Dinamita",
+            "stalker_1": "Detector de Anomalías",
+            "stalker_2": "Mascarilla de Gas Modificada",
+            "stalker_3": "Rifle de Asalto",
+            "stalker_4": "Cuerda con Gancho de Gato",
+            "citizen_1": "Documentos de Ciudadanía",
+            "citizen_2": "Teléfono",
+            "citizen_3": "Bolsa de Suministros",
+            "citizen_4": "Cuchillo de Utilidad",
+            "vault_dweller_1": "Herramienta Multifuncional",
+            "vault_dweller_2": "Módulo de Agua",
+            "vault_dweller_3": "Pistola Modificada",
+            "vault_dweller_4": "Módulo de Comunicación del Refugio",
+            "savage_1": "Hacha de Hueso",
+            "savage_2": "Amuleto de Hueso",
+            "savage_3": "Trampa para Caza",
+            "savage_4": "Arco Casero",
+            "soldier_1": "Rifle Automático",
+            "soldier_2": "Municiones",
+            "soldier_3": "Granada",
+            "soldier_4": "Chaleco Antibalas",
+            "engineer_1": "Juego de Herramientas",
+            "engineer_2": "Drone Volador",
+            "engineer_3": "Aparato de Soldadura",
+            "engineer_4": "Escáner de Planos",
+            "medic_1": "Kit de Primeros Auxilios",
+            "medic_2": "Analgésico",
+            "medic_3": "Vendas",
+            "medic_4": "Desfibrilador Portátil",
+            "sniper_1": "Rifle de Francotirador",
+            "sniper_2": "Binoculares",
+            "sniper_3": "Capa de Camuflaje",
+            "sniper_4": "Cuchillo de Combate",
+            "virologist_1": "Analizador Biológico",
+            "virologist_2": "Medicamentos Antivirales",
+            "virologist_3": "Estación de Investigación de Virus",
+            "virologist_4": "Muestras Infectadas",
+            "biotechnician_1": "Modificador Genético",
+            "biotechnician_2": "Biosintetizador",
+            "biotechnician_3": "Kit de Laboratorio",
+            "biotechnician_4": "Suero Experimental",
+            "reborn_1": "Suero Anti-Descomposición del Renacido",
+            "reborn_2": "Suero de Mejora",
+            "reborn_3": "Suero de Mutación Controlada",
+            "reborn_4": "Suero de Mutación Incontrolada",
+            "psionic_1": "Amplificador Mental",
+            "psionic_2": "Dispositivo Telepático",
+            "psionic_3": "Cristal Focalizador",
+            "psionic_4": "Amplificador Psi",
+            "telekinetic_1": "Aro de Concentración",
+            "telekinetic_2": "Mini-Plataforma Flotante",
+            "telekinetic_3": "Guantes Antigravedad",
+            "telekinetic_4": "Cristal de Focalización",
+            "telepath_1": "Anillo Focalizador",
+            "telepath_2": "Aro de Lectura de Pensamientos",
+            "telepath_3": "Amuleto de Comunicación Mental",
+            "telepath_4": "Báculo de Control de Infectados",
+            "pyromancer_1": "Cóctel Molotov",
+            "pyromancer_2": "Báculo Pirolítico",
+            "pyromancer_3": "Suero de Mutación Piro",
+            "pyromancer_4": "Traje Resistente al Fuego",
+            "cryomancer_1": "Traje Térmico Polar",
+            "cryomancer_2": "Termo con Nitrógeno Líquido",
+            "cryomancer_3": "Suero de Mutación Crio",
+            "cryomancer_4": "Batería Crio",
+            "mechanized_soldier_1": "Exoesqueleto",
+            "mechanized_soldier_2": "Escopeta Potente",
+            "mechanized_soldier_3": "Escudo de Energía",
+            "mechanized_soldier_4": "Kit de Reparación",
+            "mechanical_guardian_1": "Módulo de Vigilancia Avanzado",
+            "mechanical_guardian_2": "Módulo de Reparación",
+            "mechanical_guardian_3": "Panel Protector",
+            "mechanical_guardian_4": "Ametralladora Integrada",
+            "cybernetic_assassin_1": "Hoja Oculta",
+            "cybernetic_assassin_2": "Cóctel de Aceleración Nano",
+            "cybernetic_assassin_3": "Sistema de Supresión de Sonido",
+            "cybernetic_assassin_4": "Sensores Ópticos de Visión Nocturna",
+            "cybernetic_spy_1": "Generador de Invisibilidad",
+            "cybernetic_spy_2": "Proyector Holográfico",
+            "cybernetic_spy_3": "Ganzúa Cibernética",
+            "cybernetic_spy_4": "Látigo Nano Explosivo",
+            "precursor_agent_1": "Pistola de Plasma",
+            "precursor_agent_2": "Dispositivo de Teleportación",
+            "precursor_agent_3": "Kit de Equipamiento de Espía",
+            "precursor_agent_4": "Proyector Holográfico Portátil",
+            "precursor_scientist_1": "Escáner Universal",
+            "precursor_scientist_2": "Estación de Síntesis Molecular",
+            "precursor_scientist_3": "Escudo de Energía",
+            "precursor_scientist_4": "Cortador de Plasma",
+            "precursor_soldier_1": "Carabina Láser de Energía",
+            "precursor_soldier_2": "Escudo de Fuerza Precursor",
+            "precursor_soldier_3": "Potenciador Cibernético",
+            "precursor_soldier_4": "Generador de Gravedad",
+            "xenomant_1": "Artefacto Alienígena",
+            "xenomant_2": "Teletransportador Portátil",
+            "xenomant_3": "Escudo Holográfico",
+            "xenomant_4": "Espada de Energía",
+            "alien_scout_1": "Botas Gravitacionales",
+            "alien_scout_2": "Teletransportador Portátil",
+            "alien_scout_3": "Escáner de Objetos Ocultos",
+            "alien_scout_4": "Pistola Láser",
+            "space_architect_1": "Proyector de Gravedad",
+            "space_architect_2": "Traje Espacial Materializador",
+            "space_architect_3": "Mapa Espacial",
+            "space_architect_4": "Estabilizador Planetario",
+            "galactic_explorer_1": "Escáner Multiespectral",
+            "galactic_explorer_2": "Traductor Xeno",
+            "galactic_explorer_3": "Módulo de Bio-Laboratorio",
+            "galactic_explorer_4": "Asistente Drone Personal",
+            "alien_soldier_1": "Carabina de Riel Magnético",
+            "alien_soldier_2": "Escudo Nanotecnológico",
+            "alien_soldier_3": "Sistema Biónico Integrado",
+            "alien_soldier_4": "Compañero Holográfico Táctico",
+            "superhuman": "Superhumano",
+            "infected": "Infectado",
+            "ratman": "Ratman",
+            "ghoul": "Ghoul",
+            "mutant": "Mutante",
+            "supermutant": "Super-Mutante",
+            "cyborg": "Ciborg",
+            "android": "Androide",
+            "robot": "Robot",
+            "gray": "Gris",
+            "alien": "Alienígena",
+            "hybrid": "Híbrido",
+            "ancient": "Antiguo",
+            "total-weight-label": "Peso Total (kg):",
+            "tooltip-max-weight": "Calculado por el GM al final de cada turno. Peso máximo = (Fuerza + Resistencia) * 3 + 10",
+            "max-weight-label": "Peso Máximo (kg):",
+            "use-weight-control-label": "Usar peso en el juego",
+            "maximum-weight-exceeded-label": "¡Peso máximo del personaje excedido! Los objetos especificados han sido movidos al carrito: ",
+            "statsGroup-weight-button-label": "Peso",
+            "tooltip-inventory-basket": "Los objetos eliminados del inventario se colocan aquí. Se limpia automáticamente al final de cada turno. Puedes restaurarlos antes de que desaparezcan.",
+            "inventory-basket-button-label": "Cesta (Inventario)",
+            "inventory-restore": "Restaurar",
+            "tooltip-critical-weight": "Al exceder el peso máximo, el personaje aún puede recibir objetos en el inventario durante algún tiempo, pero se sobrecarga. Un personaje sobrecargado pierde energía rápidamente. Después de exceder el peso crítico, el personaje ya no puede llevar nuevos objetos.",
+            "critical-weight-label": "Peso Crítico (kg):",
+            "weight-status-label": "Estado:",
+            "weight-status-value-normal": "Normal",
+            "weight-status-value-bad": "Sobrecargado",
         },
         "portuguese-language": {
             // placeholders
@@ -1882,6 +2719,285 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "use-thinking-module-label": "Adicionar módulo de raciocínio das respostas (desative para economizar tokens). Teoricamente torna a IA mais inteligente",
             "log-thinking-button-label": "Registro de Pensamentos",
             "persuasion": "Persuasão",
+            "human_desc": `Uma pessoa do mundo moderno, vivendo no século XXI`,
+            "superhuman_desc": `Sobre-humano - uma pessoa com super habilidades derivadas do poder de sua mente avançada`,
+            "infected_desc": "Uma pessoa infectada com um vírus zumbi",
+            "ratman_desc": "Descendente de ratos comuns mutados por radiação e que ganharam inteligência. De longe, assemelha-se a um humano feio",
+            "ghoul_desc": "Uma pessoa que uma vez foi infectada com um vírus zumbi, mas conseguiu manter a sanidade apesar das mudanças em seu corpo",
+            "mutant_desc": "Uma pessoa cujo corpo sofreu várias mutações devido à exposição à radiação",
+            "supermutant_desc": "Uma pessoa cujo corpo se tornou massivo e forte devido à exposição à radiação, mas sofreu mudanças repulsivas",
+            "cyborg_desc": "Uma pessoa com implantes cibernéticos embutidos em seu corpo",
+            "android_desc": "Um robô coberto com pele sintética e que possui análogos de órgãos humanos",
+            "robot_desc": "Uma máquina de aço com inteligência artificial avançada",
+            "gray_desc": "Um alienígena com pele cinza, grande cabeça e olhos negros, que chegou à Terra de um planeta distante",
+            "alien_desc": "Um alienígena que chegou à Terra de outro planeta",
+            "hybrid_desc": "Um híbrido de um alienígena que chegou à Terra de outro planeta e um humano moderno",
+            "ancient_desc": "Um descendente de uma antiga raça precursora que passou muitos milhares de anos em criossueño. O mundo ao redor mudou incrivelmente durante seu sono",
+            "survival_kit": `Kit de sobrevivência`,
+            "psionic_headband": `Diadema Amplificador Psiónico`,
+            "adrenaline_syringe": `Seringa de adrenalina do infectado`,
+            "grappling_hook": `Gancho de escalada do escavador`,
+            "bone_blade": `Lâmina de osso irradiada do ghoul`,
+            "mutant_serum": `Soro mutante instável`,
+            "crude_bonehammer": `Martelo de osso rudimentar do supermutante`,
+            "hacking_device": `Dispositivo de hackeamento integrado`,
+            "skin_repair_paste": `Pasta de reparo de pele sintética`,
+            "EMP_Generator": `Gerador EMP portátil`,
+            "communication_implant": `Implante de comunicação telepática`,
+            "cloaking_device": `Dispositivo de camuflagem alienígena`,
+            "symbiotic_implant": `Implante simbiótico do híbrido alienígena-humano`,
+            "ancient_artifact": `Artefato antigo dos precursores`,
+            "survival_kit": `Kit de sobrevivência`,
+            "hacker": "Hacker",
+            "scout": "Explorador",
+            "bounty_hunter": "Caçador de Recompensas",
+            "survivor": "Sobrevivente",
+            "raider": "Assaltante",
+            "bandit": "Bandido",
+            "wanderer": "Errante",
+            "veteran": "Veterano",
+            "mercenary": "Mercenário",
+            "stalker": "Acechador",
+            "citizen": "Cidadão",
+            "vault_dweller": "Habitante do Refúgio",
+            "savage": "Selvagem",
+            "soldier": "Soldado",
+            "engineer": "Engenheiro",
+            "medic": "Médico",
+            "sniper": "Atirador de Elite",
+            "virologist": "Virologista",
+            "biotechnician": "Biotecnólogo",
+            "reborn": "Renascido",
+            "psionic": "Psiónico",
+            "telekinetic": "Telequinético",
+            "telepath": "Telepata",
+            "pyromancer": "Pirocántico",
+            "cryomancer": "Criomántico",
+            "mechanized_soldier": "Soldado Mecanizado",
+            "mechanical_guardian": "Guardião Mecânico",
+            "cybernetic_assassin": "Assassino Cibernético",
+            "cybernetic_spy": "Espião Cibernético",
+            "precursor_agent": "Agente Precursor",
+            "precursor_scientist": "Cientista Precursor",
+            "precursor_soldier": "Soldado Precursor",
+            "xenomant": "Xenomante",
+            "alien_scout": "Explorador Alienígena",
+            "space_architect": "Arquiteto Espacial",
+            "galactic_explorer": "Explorador Galáctico",
+            "alien_soldier": "Soldado Alienígena",
+            "hacker_descr": "Especialista em invadir sistemas e redes de computadores. Usa suas habilidades para acessar informações e controlar dispositivos.",
+            "scout_descr": "Especialista em reconhecimento ágil e furtivo, especializado em infiltração, coleta de informações e eliminação discreta de alvos.",
+            "bounty_hunter_descr": "Caçador de recompensas experiente que rastreia e captura criminosos por recompensas. Atirador preciso e mestre em combate corpo a corpo.",
+            "survivor_descr": "Sobrevivente experiente adaptado às duras condições do mundo pós-apocalíptico. Hábil em encontrar recursos, construir abrigos e se defender contra perigos.",
+            "raider_descr": "Maraudador brutal que vive de saques e violência. Lutador forte e agressivo, sem piedade.",
+            "bandit_descr": "Criminoso astuto e enganoso envolvido em roubos e saques. Maneja habilmente barras de ferro e ganzúas.",
+            "wanderer_descr": "Vagabundo solitário que viaja pelo mundo pós-apocalíptico em busca de uma vida melhor. Resistente e engenhoso, capaz de sobreviver em quaisquer condições.",
+            "veteran_descr": "Soldado experiente que passou por inúmeras batalhas. Possui excelente treinamento de combate, disciplinado e frio.",
+            "mercenary_descr": "Mercenário que luta por dinheiro. Combatente experiente proficiente com várias armas e táticas.",
+            "stalker_descr": "Guia experiente por zonas anômalas. Sabe como evitar perigos e encontrar artefatos valiosos.",
+            "citizen_descr": "Residente de uma das poucas cidades sobreviventes. Possui habilidades e conhecimentos básicos necessários para viver em sociedade.",
+            "vault_dweller_descr": "Exilado do Refúgio, adaptado à vida em um bunker subterrâneo. Possui habilidades técnicas e conhecimentos sobre o mundo pré-guerra.",
+            "savage_descr": "Selvagem que vive longe da civilização. Caçador forte e ágil que confia em instintos primitivos e armas.",
+            "soldier_descr": "Militar profissional treinado para lutar em quaisquer condições. Atirador disciplinado e preciso.",
+            "engineer_descr": "Especialista técnico capaz de criar e reparar diversos dispositivos. Aliado valioso no mundo pós-apocalíptico.",
+            "medic_descr": "Médico de campo capaz de tratar ferimentos e doenças. Membro indispensável de qualquer grupo de sobreviventes.",
+            "sniper_descr": "Atirador preciso capaz de eliminar alvos de longa distância. Combatente paciente e observador.",
+            "virologist_descr": "Cientista especializado no estudo de vírus. Desenvolve vacinas e medicamentos antivirais.",
+            "biotechnician_descr": "Cientista que trabalha com organismos vivos. Capaz de criar modificações genéticas e cultivar tecidos artificiais.",
+            "reborn_descr": "Renascido é um indivíduo infectado que conseguiu superar parcialmente o vírus e manter sua sanidade. Eles são mais fortes e resilientes que pessoas comuns e podem mutar, mas continuam a apodrecer.",
+            "psionic_descr": "Indivíduo com habilidades psiónicas. Pode influenciar as mentes de outros seres e controlar a energia psiónica.",
+            "telekinetic_descr": "Psiónico com habilidades de telecinesia. Pode mover objetos com o poder do pensamento.",
+            "telepath_descr": "Psiónico com habilidades de telepatia. Pode ler mentes e se comunicar com outros seres à distância.",
+            "pyromancer_descr": "Psiónico com habilidades de pirocinesia. Pode controlar o fogo com o poder do pensamento.",
+            "cryomancer_descr": "Psiónico com habilidades de criocinesia. Pode controlar o frio e criar gelo.",
+            "mechanized_soldier_descr": "Soldado fortemente armado em um exoesqueleto. Possui alta potência de fogo e proteção.",
+            "mechanical_guardian_descr": "Guardião robótico programado para proteger um território ou objeto. Equipado com sistemas avançados de vigilância e armas poderosas.",
+            "cybernetic_assassin_descr": "Assassino cibernético modificado para infiltração furtiva e eliminação de alvos. Equipado com armas integradas e sensores avançados.",
+            "cybernetic_spy_descr": "Espião cibernético modificado para coleta de informações e sabotagens. Equipado com gerador de invisibilidade e projetor holográfico.",
+            "precursor_agent_descr": "Agente Precursor que possui tecnologias avançadas e conhecimentos. Especializado em reconhecimento, sabotagens e eliminação de ameaças.",
+            "precursor_scientist_descr": "Cientista Precursor com amplo conhecimento em várias áreas científicas. Capaz de criar e usar dispositivos avançados.",
+            "precursor_soldier_descr": "Soldado Precursor equipado com armas e armaduras de alta tecnologia. Treinado para combater em quaisquer condições.",
+            "xenomant_descr": "Xenomant é um especialista habilidoso em artefatos misteriosos e tecnologias de uma raça alienígena. Pode usá-los para proteção, ataque e exploração.",
+            "alien_scout_descr": "Explorador alienígena especializado em explorar novos mundos e coletar informações. Equipado com tecnologias avançadas de camuflagem e escaneamento.",
+            "space_architect_descr": "Arquiteto Espacial é um alienígena capaz de alterar o espaço e a matéria com o poder do pensamento. Pode criar e destruir objetos, bem como construir bases e estruturas.",
+            "galactic_explorer_descr": "Explorador Galáctico é um alienígena dedicado a estudar o espaço e buscar novas formas de vida. Possui amplo conhecimento e tecnologias avançadas.",
+            "alien_soldier_descr": "Soldado alienígena treinado para lutar usando armamentos e tecnologias avançadas. Combatente disciplinado e eficaz.",
+            "survival_kit": `Kit de sobrevivência`,
+            "hacker_1": "Interface de Hackeo",
+            "hacker_2": "KPK",
+            "hacker_3": "Granada EMP",
+            "hacker_4": "Escâner de Rede",
+            "scout_1": "Traje de Furtividade",
+            "scout_2": "Conjunto de Ganzúas",
+            "scout_3": "Máscara de Gás",
+            "scout_4": "Pistola Silenciada",
+            "bounty_hunter_1": "Duas Pistolas",
+            "bounty_hunter_2": "Dispositivo de Rastreamento de Alvos",
+            "bounty_hunter_3": "Rede de Energia",
+            "bounty_hunter_4": "Faca de Combate",
+            "survivor_1": "Adaga Barata",
+            "survivor_2": "Armadura Caseira",
+            "survivor_3": "Tenda de Camuflagem",
+            "survivor_4": "Faca de Caça",
+            "raider_1": "Rifle Caseiro",
+            "raider_2": "Clava com Espinhos",
+            "raider_3": "Garrafa com Gasolina",
+            "raider_4": "Isqueiro Favorito",
+            "bandit_1": "Pé de Cabra Pesado",
+            "bandit_2": "Máscara de Bandido",
+            "bandit_3": "Colete de Couro",
+            "bandit_4": "Conjunto de Ganzúas",
+            "wanderer_1": "Mochila Universal",
+            "wanderer_2": "Tenda Compacta",
+            "wanderer_3": "Balestra Esportiva",
+            "wanderer_4": "Faca Multifuncional",
+            "veteran_1": "Pistola de Recompensa",
+            "veteran_2": "Colete à Prova de Balas Antigo",
+            "veteran_3": "Cinto Tático",
+            "veteran_4": "Kit Médico",
+            "mercenary_1": "Pistola",
+            "mercenary_2": "Rifle de Sniper",
+            "mercenary_3": "Capacete de Combate",
+            "mercenary_4": "Dinamite",
+            "stalker_1": "Detector de Anomalias",
+            "stalker_2": "Máscara de Gás Modificada",
+            "stalker_3": "Rifle de Assalto",
+            "stalker_4": "Corda com Gancho de Gato",
+            "citizen_1": "Documentos de Cidadania",
+            "citizen_2": "Telefone",
+            "citizen_3": "Bolsa de Suprimentos",
+            "citizen_4": "Faca de Utilidade",
+            "vault_dweller_1": "Ferramenta Multifuncional",
+            "vault_dweller_2": "Módulo de Água",
+            "vault_dweller_3": "Pistola Modificada",
+            "vault_dweller_4": "Módulo de Comunicação do Refúgio",
+            "savage_1": "Machado de Osso",
+            "savage_2": "Amuleto de Osso",
+            "savage_3": "Armadilha para Caça",
+            "savage_4": "Arco Caseiro",
+            "soldier_1": "Rifle Automático",
+            "soldier_2": "Munições",
+            "soldier_3": "Granada",
+            "soldier_4": "Colete à Prova de Balas",
+            "engineer_1": "Conjunto de Ferramentas",
+            "engineer_2": "Drone Voador",
+            "engineer_3": "Aparato de Soldagem",
+            "engineer_4": "Escâner de Plantas",
+            "medic_1": "Kit de Primeiros Socorros",
+            "medic_2": "Analgésico",
+            "medic_3": "Bandagens",
+            "medic_4": "Desfibrilador Portátil",
+            "sniper_1": "Rifle de Sniper",
+            "sniper_2": "Binóculos",
+            "sniper_3": "Manto de Camuflagem",
+            "sniper_4": "Faca de Combate",
+            "virologist_1": "Analisador Biológico",
+            "virologist_2": "Medicamentos Antivirais",
+            "virologist_3": "Estação de Pesquisa de Vírus",
+            "virologist_4": "Amostras Infectadas",
+            "biotechnician_1": "Modificador Genético",
+            "biotechnician_2": "Biosintetizador",
+            "biotechnician_3": "Kit de Laboratório",
+            "biotechnician_4": "Suero Experimental",
+            "reborn_1": "Suero Anti-Decomposição do Renascido",
+            "reborn_2": "Suero de Fortalecimento",
+            "reborn_3": "Suero de Mutação Controlada",
+            "reborn_4": "Suero de Mutação Incontrolada",
+            "psionic_1": "Amplificador Mental",
+            "psionic_2": "Dispositivo Telepático",
+            "psionic_3": "Cristal Focalizador",
+            "psionic_4": "Amplificador Psi",
+            "telekinetic_1": "Arco de Concentração",
+            "telekinetic_2": "Mini-Plataforma Flutuante",
+            "telekinetic_3": "Luvas Antigravidade",
+            "telekinetic_4": "Cristal de Focalização",
+            "telepath_1": "Anel Focalizador",
+            "telepath_2": "Arco de Leitura de Pensamentos",
+            "telepath_3": "Amuleto de Comunicação Mental",
+            "telepath_4": "Báculo de Controle de Infectados",
+            "pyromancer_1": "Coquetel Molotov",
+            "pyromancer_2": "Báculo Pirolítico",
+            "pyromancer_3": "Suero de Mutação Piro",
+            "pyromancer_4": "Traje Resistente ao Fogo",
+            "cryomancer_1": "Traje Térmico Polar",
+            "cryomancer_2": "Termo com Nitrogênio Líquido",
+            "cryomancer_3": "Suero de Mutação Crio",
+            "cryomancer_4": "Bateria Crio",
+            "mechanized_soldier_1": "Exoesqueleto",
+            "mechanized_soldier_2": "Escopeta Potente",
+            "mechanized_soldier_3": "Escudo de Energia",
+            "mechanized_soldier_4": "Kit de Reparação",
+            "mechanical_guardian_1": "Módulo de Vigilância Avançado",
+            "mechanical_guardian_2": "Módulo de Reparação",
+            "mechanical_guardian_3": "Painel de Proteção",
+            "mechanical_guardian_4": "Metralhadora Integrada",
+            "cybernetic_assassin_1": "Lâmina Oculta",
+            "cybernetic_assassin_2": "Coquetel de Aceleração Nano",
+            "cybernetic_assassin_3": "Sistema de Supressão de Som",
+            "cybernetic_assassin_4": "Sensores Ópticos de Visão Noturna",
+            "cybernetic_spy_1": "Gerador de Invisibilidade",
+            "cybernetic_spy_2": "Proyector Holográfico",
+            "cybernetic_spy_3": "Ganzúa Cibernética",
+            "cybernetic_spy_4": "Chicote Nano Explosivo",
+            "precursor_agent_1": "Pistola de Plasma",
+            "precursor_agent_2": "Dispositivo de Teleportação",
+            "precursor_agent_3": "Kit de Equipamento de Espião",
+            "precursor_agent_4": "Proyector Holográfico Portátil",
+            "precursor_scientist_1": "Escâner Universal",
+            "precursor_scientist_2": "Estação de Síntese Molecular",
+            "precursor_scientist_3": "Escudo de Energia",
+            "precursor_scientist_4": "Cortador de Plasma",
+            "precursor_soldier_1": "Carabina Laser de Energia",
+            "precursor_soldier_2": "Escudo de Força Precursor",
+            "precursor_soldier_3": "Potenciador Cibernético",
+            "precursor_soldier_4": "Gerador de Gravidade",
+            "xenomant_1": "Artefato Alienígena",
+            "xenomant_2": "Teletransportador Portátil",
+            "xenomant_3": "Escudo Holográfico",
+            "xenomant_4": "Espada de Energia",
+            "alien_scout_1": "Botas Gravitacionais",
+            "alien_scout_2": "Teletransportador Portátil",
+            "alien_scout_3": "Escâner de Objetos Ocultos",
+            "alien_scout_4": "Pistola Laser",
+            "space_architect_1": "Proyector de Gravidade",
+            "space_architect_2": "Traje Espacial Materializador",
+            "space_architect_3": "Mapa Espacial",
+            "space_architect_4": "Estabilizador Planetário",
+            "galactic_explorer_1": "Escâner Multiespectral",
+            "galactic_explorer_2": "Tradutor Xeno",
+            "galactic_explorer_3": "Módulo de Bio-Laboratório",
+            "galactic_explorer_4": "Assistente Drone Pessoal",
+            "alien_soldier_1": "Carabina de Trilho Magnético",
+            "alien_soldier_2": "Escudo Nanotecnológico",
+            "alien_soldier_3": "Sistema Biónico Integrado",
+            "alien_soldier_4": "Companion Holográfico Tático",
+            "superhuman": "Superhumano",
+            "infected": "Infectado",
+            "ratman": "Ratman",
+            "ghoul": "Ghoul",
+            "mutant": "Mutante",
+            "supermutant": "Super-Mutante",
+            "cyborg": "Ciborgue",
+            "android": "Androide",
+            "robot": "Robô",
+            "gray": "Cinza",
+            "alien": "Alienígena",
+            "hybrid": "Híbrido",
+            "ancient": "Antigo",
+            "total-weight-label": "Peso Total (kg):",
+            "tooltip-max-weight": "Calculado pelo GM no final de cada turno. Peso máximo = (Força + Resistência) * 3 + 10",
+            "max-weight-label": "Peso Máximo (kg):",
+            "use-weight-control-label": "Usar peso no jogo",
+            "maximum-weight-exceeded-label": "Peso máximo do personagem excedido! Os itens especificados foram movidos para o carrinho: ",
+            "statsGroup-weight-button-label": "Peso",
+            "tooltip-inventory-basket": "Os itens removidos do inventário são colocados aqui. Limpa automaticamente no final de cada turno. Você pode restaurá-los antes que desapareçam.",
+            "inventory-basket-button-label": "Cesta (Inventário)",
+            "inventory-restore": "Restaurar",
+            "tooltip-critical-weight": "Ao exceder o peso máximo, o personagem ainda pode receber itens no inventário por algum tempo, mas fica sobrecarregado. Um personagem sobrecarregado perde energia rapidamente. Após exceder o peso crítico, o personagem não pode mais carregar novos itens.",
+            "critical-weight-label": "Peso Crítico (kg):",
+            "weight-status-label": "Estado:",
+            "weight-status-value-normal": "Normal",
+            "weight-status-value-bad": "Sobrecarregado",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -2348,6 +3464,286 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "use-thinking-module-label": "उत्तर सोचने वाला मॉड्यूल जोड़ें (टोकन बचाने के लिए बंद करें)। सैद्धांतिक रूप से यह एआई को अधिक बुद्धिमान बनाता है",
             "log-thinking-button-label": "सोच लॉग",
             "persuasion": "प्रभाव",
+            "human_desc": `आधुनिक दुनिया का व्यक्ति, 21वीं सदी में जीवन यापन करता है`,
+            "superhuman_desc": `सुपरह्यूमन - एक व्यक्ति जिसमें उनके विकसित मस्तिष्क की शक्ति से उत्पन्न सुपर क्षमताएँ होती हैं`,
+            "infected_desc": "एक व्यक्ति जिसे ज़ोंबी वायरस से संक्रमित किया गया है",
+            "ratman_desc": "साधारण चूहों के वंशज, जो विकिरण के प्रभाव से उत्परिवर्तित होकर बुद्धिमत्ता प्राप्त कर चुके हैं। दूर से एक बदसूरत मानव की याद दिलाता है",
+            "ghoul_desc": "एक व्यक्ति जिसे कभी ज़ोंबी वायरस से संक्रमित किया गया था, लेकिन अपने शरीर में परिवर्तनों के बावजूद अपनी समझदारी बनाए रखने में सफल रहा",
+            "mutant_desc": "एक व्यक्ति जिसका शरीर विकिरण के संपर्क के कारण विभिन्न उत्परिवर्तनों से गुजरा है",
+            "supermutant_desc": "एक व्यक्ति जिसका शरीर विकिरण के संपर्क के कारण विशाल और मजबूत हो गया है, लेकिन उसने अप्रिय परिवर्तनों से गुजरना पड़ा है",
+            "cyborg_desc": "एक व्यक्ति जिसके शरीर में साइबर इम्प्लांट लगे हुए हैं",
+            "android_desc": "एक रोबोट जिसे सिंथेटिक त्वचा से ढका गया है और जिसमें मानव अंगों के समानताएं हैं",
+            "robot_desc": "एक स्टील मशीन जिसमें उन्नत कृत्रिम बुद्धिमत्ता है",
+            "gray_desc": "एक एलियन जिसके पास धूसर त्वचा, बड़ा सिर और काले आंखें हैं, जो एक दूर ग्रह से पृथ्वी पर आया है",
+            "alien_desc": "एक एलियन जो एक अन्य ग्रह से पृथ्वी पर आया है",
+            "hybrid_desc": "एक ऐसा हाइब्रिड जो एक अन्य ग्रह से पृथ्वी पर आए एलियन और एक आधुनिक मानव का मिश्रण है",
+            "ancient_desc": "प्राचीन पूर्वजों की एक प्राचीन नस्ल का वंशज जिसने कई हज़ार सालों तक क्रायोस्लीप में सोया और खेल की शुरुआत में ही जागा। उसके सोने के दौरान चारों ओर की दुनिया अविश्वसनीय रूप से बदल गई है",
+            "survival_kit": `जीवन रक्षा किट`,
+            "psionic_headband": `साइओनिक एम्पलीफायर हेडबैंड`,
+            "adrenaline_syringe": `संक्रमित की एड्रेनालाईन सिरिंज`,
+            "grappling_hook": `खननकर्ता का ग्रैपलिंग हुक`,
+            "bone_blade": `घूल का विकिरणित हड्डी की तलवार`,
+            "mutant_serum": `अस्थिर म्यूटेंट सीरम`,
+            "crude_bonehammer": `सुपरम्यूटेंट का कच्चा हड्डी का हथौड़ा`,
+            "hacking_device": `एकीकृत हैकिंग डिवाइस`,
+            "skin_repair_paste": `सिंथेटिक त्वचा मरम्मत पेस्ट`,
+            "EMP_Generator": `पोर्टेबल ईएमपी जनरेटर`,
+            "communication_implant": `टेलीपैथिक संचार इम्प्लांट`,
+            "cloaking_device": `एलियन क्लोकिंग डिवाइस`,
+            "symbiotic_implant": `एलियन-मानव हाइब्रिड का सहजीवी इम्प्लांट`,
+            "ancient_artifact": `प्राचीन फॉररनर कलाकृति`,
+            "survival_kit": `जीवन रक्षा किट`,
+            "hacker": "हैकर",
+            "scout": "स्काउट",
+            "bounty_hunter": "बाउंटी हंटर",
+            "survivor": "जीवित बचने वाला",
+            "raider": "रेडर",
+            "bandit": "बैंडिट",
+            "wanderer": "भटकने वाला",
+            "veteran": "वीटेरन",
+            "mercenary": "भाड़े का सैनिक",
+            "stalker": "स्टॉकर",
+            "citizen": "नागरिक",
+            "vault_dweller": "सलामी निवासी",
+            "savage": "जंगली",
+            "soldier": "सैनिक",
+            "engineer": "इंजीनियर",
+            "medic": "मेडिक",
+            "sniper": "स्नाइपर",
+            "virologist": "वायरोलॉजिस्ट",
+            "biotechnician": "बायोटेक्नीशियन",
+            "reborn": "पुनर्जन्मित",
+            "psionic": "प्सायोनिक",
+            "telekinetic": "टेलीकिनेटिक",
+            "telepath": "टेलीपैथ",
+            "pyromancer": "पायरोमांसर",
+            "cryomancer": "क्रायोमांसर",
+            "mechanized_soldier": "यंत्रीकृत सैनिक",
+            "mechanical_guardian": "यांत्रिक संरक्षक",
+            "cybernetic_assassin": "साइबरनेटिक हत्यारा",
+            "cybernetic_spy": "साइबरनेटिक जासूस",
+            "precursor_agent": "प्रीकर्सर एजेंट",
+            "precursor_scientist": "प्रीकर्सर वैज्ञानिक",
+            "precursor_soldier": "प्रीकर्सर सैनिक",
+            "xenomant": "क्सेनोमांट",
+            "alien_scout": "एलियन स्काउट",
+            "space_architect": "स्पेस आर्किटेक्ट",
+            "galactic_explorer": "गैलेक्सिक एक्सप्लोरर",
+            "alien_soldier": "एलियन सैनिक",
+            "survival_kit": `जीवन रक्षा किट`,
+            "hacker_descr": "कंप्यूटर सिस्टम और नेटवर्क को हैक करने का विशेषज्ञ। अपनी क्षमताओं का उपयोग करके जानकारी तक पहुँचने और उपकरणों को नियंत्रित करने के लिए करता है।",
+            "scout_descr": "चतुर और गुप्त खुफिया विशेषज्ञ, जो घुसपैठ, सूचना संग्रहण और लक्ष्यों को बिना ध्यान दिए समाप्त करने में माहिर है।",
+            "bounty_hunter_descr": "अनुभवी बाउंटी हंटर जो पुरस्कार के लिए अपराधियों का पीछा और गिरफ्तारी करता है। सटीक निशाना साधने वाला और हाथ से लड़ने का मास्टर।",
+            "survivor_descr": "अनुभवी जीवित बचने वाला जो पोस्ट-अपोकैलिप्टिक दुनिया की कठोर परिस्थितियों के अनुकूल हो चुका है। संसाधनों को खोजने, आश्रयों का निर्माण करने और खतरों से बचने में माहिर है।",
+            "raider_descr": "क्रूर मरोड़ार जो लूट और हिंसा पर निर्भर होकर जीता है। मजबूत और आक्रामक योद्धा, जो दया नहीं जानता।",
+            "bandit_descr": "चतुर और चालाक अपराधी जो लूट और डकैती में संलग्न है। कुशलतापूर्वक क्रॉबॉर और लॉकपिक्स का उपयोग करता है।",
+            "wanderer_descr": "एकाकी यात्री जो पोस्ट-अपोकैलिप्टिक दुनिया में बेहतर जीवन की तलाश में यात्रा करता है। सहनशील और चतुर, जो किसी भी स्थिति में जीवित रहना जानता है।",
+            "veteran_descr": "अनुभवी सैनिक जिसने कई लड़ाइयों से गुजरा है। उत्कृष्ट युद्ध प्रशिक्षण वाला, अनुशासित और शांत मन वाला।",
+            "mercenary_descr": "मदन के लिए लड़ने वाला भाड़े का सैनिक। विभिन्न हथियारों और रणनीतियों में निपुण अनुभवी योद्धा।",
+            "stalker_descr": "अनाम क्षेत्रों में अनुभवी गाइड। जानकारियाँ इकट्ठा करने और कीमती कलाकृतियों को खोजने में माहिर।",
+            "citizen_descr": "कुछ बची हुई शहरों में से एक का निवासी। समाज में रहने के लिए आवश्यक बुनियादी कौशल और ज्ञान वाला।",
+            "vault_dweller_descr": "बंकर से निकला, भूमिगत बंकर में जीवन के लिए अनुकूलित। तकनीकी कौशल और पूर्व युद्ध दुनिया के ज्ञान वाला।",
+            "savage_descr": "सिविलाइजेशन से दूर रहने वाला जंगली। मजबूत और चतुर शिकारी, जो आदिम प्रवृत्तियों और हथियारों पर निर्भर है।",
+            "soldier_descr": "पेशेवर सैन्य, जिसे किसी भी स्थिति में लड़ने के लिए प्रशिक्षित किया गया है। अनुशासित और सटीक निशाना साधने वाला।",
+            "engineer_descr": "तकनीकी विशेषज्ञ, जो विभिन्न उपकरणों को बनाने और मरम्मत करने में सक्षम है। पोस्ट-अपोकैलिप्टिक दुनिया में मूल्यवान सहयोगी।",
+            "medic_descr": "मैदान में डॉक्टर, जो घावों और बीमारियों का इलाज करने में सक्षम है। किसी भी समूह के जीवित बचने वालों के लिए अनिवार्य सदस्य।",
+            "sniper_descr": "सटीक निशाना साधने वाला, जो लंबे दूरी से लक्ष्यों को समाप्त कर सकता है। धैर्यवान और सतर्क योद्धा।",
+            "virologist_descr": "वायरस का अध्ययन करने वाला वैज्ञानिक। टीके और एंटीवायरल दवाओं का विकास करता है।",
+            "biotechnician_descr": "जीवित जीवों के साथ काम करने वाला वैज्ञानिक। आनुवंशिक संशोधनों को बनाने और कृत्रिम ऊतकों को उगाने में सक्षम।",
+            "reborn_descr": "पुनर्जन्मित एक संक्रमित व्यक्ति है जिसने आंशिक रूप से वायरस को मात दी है और अपनी समझदारी बनाए रखी है। वे सामान्य लोगों की तुलना में मजबूत और अधिक सहनशील हैं, और म्युटेट हो सकते हैं लेकिन सड़ते रहते हैं।",
+            "psionic_descr": "प्सायोनिक क्षमताओं वाला व्यक्ति। अन्य प्राणियों के मन पर प्रभाव डाल सकता है और प्सायोनिक ऊर्जा को नियंत्रित कर सकता है।",
+            "telekinetic_descr": "टेलीकिनेटिक क्षमताओं वाला प्सायोनिक। सोच की शक्ति से वस्तुओं को स्थानांतरित कर सकता है।",
+            "telepath_descr": "टेलीपैथी क्षमताओं वाला प्सायोनिक। मस्तिष्क पढ़ सकता है और दूर से अन्य प्राणियों के साथ संवाद कर सकता है।",
+            "pyromancer_descr": "पायरोकिनेटिक क्षमताओं वाला प्सायोनिक। सोच की शक्ति से आग को नियंत्रित कर सकता है।",
+            "cryomancer_descr": "क्रायोकाइनेसी क्षमताओं वाला प्सायोनिक। ठंड को नियंत्रित कर सकता है और बर्फ बना सकता है।",
+            "mechanized_soldier_descr": "एक्सोस्केलेटन में भारी सशस्त्र सैनिक। उच्च फायरपावर और सुरक्षा वाला।",
+            "mechanical_guardian_descr": "क्षेत्र या वस्तु की रक्षा के लिए प्रोग्राम किया गया रोबोट गार्डियन। उन्नत निगरानी प्रणाली और शक्तिशाली हथियारों से लैस।",
+            "cybernetic_assassin_descr": "साइबरनेटिक हत्यारा, जो चुपके से घुसपैठ और लक्ष्य समाप्त करने के लिए संशोधित है। अंतर्निहित हथियारों और उन्नत सेंसरों से लैस।",
+            "cybernetic_spy_descr": "साइबरनेटिक जासूस, जो सूचना संग्रह और वध के लिए संशोधित है। अदृश्यता जनरेटर और होलोग्राफिक प्रोजेक्टर से लैस।",
+            "precursor_agent_descr": "प्रिकर्सर एजेंट, जो उन्नत तकनीकों और ज्ञान से लैस है। खुफिया, वध और खतरों को समाप्त करने में विशेषज्ञ।",
+            "precursor_scientist_descr": "प्रिकर्सर वैज्ञानिक, जिनके पास विभिन्न वैज्ञानिक क्षेत्रों में व्यापक ज्ञान है। उन्नत उपकरणों को बनाने और उपयोग करने में सक्षम।",
+            "precursor_soldier_descr": "प्रिकर्सर सैनिक, जो उच्च तकनीक के हथियारों और कवच से सुसज्जित है। किसी भी स्थिति में लड़ने के लिए प्रशिक्षित।",
+            "xenomant_descr": "क्सेनोमांट, जो एक एलियन नस्ल के रहस्यमय कलाकृतियों और तकनीकों में माहिर है। सुरक्षा, हमला और खोज के लिए उनका उपयोग कर सकता है।",
+            "alien_scout_descr": "एलियन स्काउट, जो नए ग्रहों का अन्वेषण और सूचना संग्रह में विशेषज्ञ है। उन्नत छद्मावरण और स्कैनिंग तकनीकों से लैस।",
+            "space_architect_descr": "स्पेस आर्किटेक्ट, जो सोच की शक्ति से अंतरिक्ष और पदार्थ को बदलने में सक्षम है। वस्तुओं को बना और नष्ट कर सकता है, साथ ही आधार और संरचनाएं भी बना सकता है।",
+            "galactic_explorer_descr": "गैलेक्सिक एक्सप्लोरर, जो अंतरिक्ष का अध्ययन करने और नई जीवन रूपों की खोज करने के लिए समर्पित है। व्यापक ज्ञान और उन्नत तकनीकों से लैस।",
+            "alien_soldier_descr": "एलियन सैनिक, जो उन्नत हथियार और तकनीकों का उपयोग करके लड़ने के लिए प्रशिक्षित है। अनुशासित और प्रभावी योद्धा।",
+            "survival_kit": `जीवन रक्षा किट`,
+            "hacker_1": "हैकिंग इंटरफेस",
+            "hacker_2": "केपीके",
+            "hacker_3": "ईएमपी-ग्रेनेड",
+            "hacker_4": "नेटवर्क स्कैनर",
+            "scout_1": "स्टेल्थ सूट",
+            "scout_2": "लॉकपिक सेट",
+            "scout_3": "प्रतिकास मास्क",
+            "scout_4": "गुलाम बंद पिस्तौल",
+            "bounty_hunter_1": "दो पिस्तौल",
+            "bounty_hunter_2": "लक्ष्य ट्रैकिंग डिवाइस",
+            "bounty_hunter_3": "ऊर्जा ग्रिड",
+            "bounty_hunter_4": "युद्ध चाकू",
+            "survivor_1": "सस्ता खुरपी",
+            "survivor_2": "स्वनिर्मित कवच",
+            "survivor_3": "कैमौफ्लेज़ टेंट",
+            "survivor_4": "शिकार चाकू",
+            "raider_1": "स्वनिर्मित राइफल",
+            "raider_2": "स्पाइक्स वाला क्लब",
+            "raider_3": "पेट्रोल की बोतल",
+            "raider_4": "पसंदीदा लाइटर",
+            "bandit_1": "भारी कुंजी",
+            "bandit_2": "बैंडिट मास्क",
+            "bandit_3": "चमड़े की जैकेट",
+            "bandit_4": "लॉकपिक सेट",
+            "wanderer_1": "यूनिवर्सल बैकपैक",
+            "wanderer_2": "कंपीक टेंट",
+            "wanderer_3": "खेल बॉलिस्ट",
+            "wanderer_4": "बहुउद्देश्यीय चाकू",
+            "veteran_1": "इनाम पिस्तौल",
+            "veteran_2": "पुराना बुलेटप्रूफ वेस्ट",
+            "veteran_3": "टैक्टिकल बेल्ट",
+            "veteran_4": "मेडिकल किट",
+            "mercenary_1": "पिस्तौल",
+            "mercenary_2": "स्नाइपर राइफल",
+            "mercenary_3": "युद्ध हेलमेट",
+            "mercenary_4": "डायनामाइट",
+            "stalker_1": "एनॉमली डिटेक्टर",
+            "stalker_2": "संशोधित गैस मास्क",
+            "stalker_3": "असॉल्ट राइफल",
+            "stalker_4": "ग्रेपलिंग हुक के साथ रस्सी",
+            "citizen_1": "नागरिकता दस्तावेज",
+            "citizen_2": "फोन",
+            "citizen_3": "सामग्री बैग",
+            "citizen_4": "उपयोगी चाकू",
+            "vault_dweller_1": "बहुउद्देश्यीय उपकरण",
+            "vault_dweller_2": "जल मॉड्यूल",
+            "vault_dweller_3": "संशोधित पिस्तौल",
+            "vault_dweller_4": "अड्डे से संचार मॉड्यूल",
+            "savage_1": "हड्डी की कुल्हाड़ी",
+            "savage_2": "हड्डी का अमुलेट",
+            "savage_3": "शिकार ट्रैप",
+            "savage_4": "स्वनिर्मित धनुष",
+            "soldier_1": "स्वचालित राइफल",
+            "soldier_2": "गोला-बारूद",
+            "soldier_3": "ग्रेनेड",
+            "soldier_4": "बुलेटप्रूफ वेस्ट",
+            "engineer_1": "उपकरण सेट",
+            "engineer_2": "उड़ने वाला ड्रोन",
+            "engineer_3": "वेल्डिंग उपकरण",
+            "engineer_4": "ब्लूप्रिंट स्कैनर",
+            "medic_1": "प्राथमिक चिकित्सा किट",
+            "medic_2": "दर्द निवारक",
+            "medic_3": "पट्टे",
+            "medic_4": "पोर्टेबल डेफिब्रिलेटर",
+            "sniper_1": "स्नाइपर राइफल",
+            "sniper_2": "दोहरे चश्मे",
+            "sniper_3": "कैमौफ्लेज़ कोट",
+            "sniper_4": "युद्ध चाकू",
+            "virologist_1": "जीवविज्ञान विश्लेषक",
+            "virologist_2": "एंटीवायरल दवाएं",
+            "virologist_3": "वायरस अनुसंधान स्टेशन",
+            "virologist_4": "संक्रमित नमूने",
+            "biotechnician_1": "आनुवंशिक संशोधक",
+            "biotechnician_2": "बायोसिंथेसाइज़र",
+            "biotechnician_3": "प्रयोगशाला किट",
+            "biotechnician_4": "प्रयोगात्मक सीरम",
+            "reborn_1": "रिबॉर्न का एंटी-रॉट सीरम",
+            "reborn_2": "सुदृढीकरण सीरम",
+            "reborn_3": "नियंत्रित उत्परिवर्तन सीरम",
+            "reborn_4": "अनियंत्रित उत्परिवर्तन सीरम",
+            "psionic_1": "मस्तिष्क एम्पलीफायर",
+            "psionic_2": "टेलीपैथिक डिवाइस",
+            "psionic_3": "फोकसिंग क्रिस्टल",
+            "psionic_4": "प्सी-एम्पलीफायर",
+            "telekinetic_1": "केंद्रित करने वाला हूप",
+            "telekinetic_2": "फ्लोटिंग मिनी-प्लेटफ़ॉर्म",
+            "telekinetic_3": "एंटी-ग्रेविटी दस्ताने",
+            "telekinetic_4": "फोकसिंग क्रिस्टल",
+            "telepath_1": "फोकसिंग रिंग",
+            "telepath_2": "सोच पढ़ने वाला हूप",
+            "telepath_3": "विचार संचार अमुलेट",
+            "telepath_4": "संक्रमित नियंत्रण स्टाफ",
+            "pyromancer_1": "मोलोटोव कॉकटेल",
+            "pyromancer_2": "पायरोकिनेटिक स्टाफ",
+            "pyromancer_3": "पायरो-म्युटेशन सीरम",
+            "pyromancer_4": "आग प्रतिरोधी सूट",
+            "cryomancer_1": "ध्रुवीय थर्मल सूट",
+            "cryomancer_2": "तरल नाइट्रोजन वाला थर्मस",
+            "cryomancer_3": "क्रायो-म्युटेशन सीरम",
+            "cryomancer_4": "क्रायो बैटरी",
+            "mechanized_soldier_1": "एक्सोस्केलेटन",
+            "mechanized_soldier_2": "शक्तिशाली शॉटगन",
+            "mechanized_soldier_3": "ऊर्जा ढाल",
+            "mechanized_soldier_4": "मरम्मत किट",
+            "mechanical_guardian_1": "उन्नत निगरानी मॉड्यूल",
+            "mechanical_guardian_2": "मरम्मत मॉड्यूल",
+            "mechanical_guardian_3": "सुरक्षात्मक पैनल",
+            "mechanical_guardian_4": "इंटीग्रेटेड मशीन गन",
+            "cybernetic_assassin_1": "छुपा हुआ ब्लेड",
+            "cybernetic_assassin_2": "नैनो-त्वरण कॉकटेल",
+            "cybernetic_assassin_3": "ध्वनि दमन प्रणाली",
+            "cybernetic_assassin_4": "ऑप्टिकल नाइट विजन सेंसर",
+            "cybernetic_spy_1": "गुमनामी जनरेटर",
+            "cybernetic_spy_2": "होलोग्राफिक प्रोजेक्टर",
+            "cybernetic_spy_3": "साइबरनेटिक लॉकपिक",
+            "cybernetic_spy_4": "विस्फोटक नैनो-व्हिप",
+            "precursor_agent_1": "प्लाज्मा पिस्तौल",
+            "precursor_agent_2": "टेलीपोर्टेशन डिवाइस",
+            "precursor_agent_3": "जासूसी उपकरण किट",
+            "precursor_agent_4": "पोर्टेबल होलोग्राफिक प्रोजेक्टर",
+            "precursor_scientist_1": "यूनिवर्सल स्कैनर",
+            "precursor_scientist_2": "मॉलिक्यूलर सिंथेसिस स्टेशन",
+            "precursor_scientist_3": "ऊर्जा ढाल",
+            "precursor_scientist_4": "प्लाज्मा कटर",
+            "precursor_soldier_1": "ऊर्जा लेजर कार्बाइन",
+            "precursor_soldier_2": "प्रीकर्सर फोर्स शील्ड",
+            "precursor_soldier_3": "साइबरनेटिक इंहांस्मेंट",
+            "precursor_soldier_4": "ग्रैविटी जनरेटर",
+            "xenomant_1": "एलियन आर्टिफैक्ट",
+            "xenomant_2": "पोर्टेबल टेलीपोर्टर",
+            "xenomant_3": "होलोग्राफिक शील्ड",
+            "xenomant_4": "ऊर्जा तलवार",
+            "alien_scout_1": "गुरुत्वाकर्षण बूट्स",
+            "alien_scout_2": "पोर्टेबल टेलीपोर्टर",
+            "alien_scout_3": "छिपे हुए वस्तुओं का स्कैनर",
+            "alien_scout_4": "लेजर पिस्तौल",
+            "space_architect_1": "गुरुत्वाकर्षण प्रोजेक्टर",
+            "space_architect_2": "मैटेरियलाइजिंग स्पेससूट",
+            "space_architect_3": "स्पेस मैप",
+            "space_architect_4": "प्लैनेटरी स्टेबलाइज़र",
+            "galactic_explorer_1": "मल्टीस्पेक्ट्रल स्कैनर",
+            "galactic_explorer_2": "जेनो ट्रांसलेटर",
+            "galactic_explorer_3": "बायोलैबोरेटरी मॉड्यूल",
+            "galactic_explorer_4": "पर्सनल ड्रोन असिस्टेंट",
+            "alien_soldier_1": "मैग्नेटिक रेल कार्बाइन",
+            "alien_soldier_2": "नैनोस्ट्रक्चर्ड शील्ड",
+            "alien_soldier_3": "इंटीग्रेटेड बायोनिक सिस्टम",
+            "alien_soldier_4": "टैक्टिकल होलोग्राफिक कॉम्पेनियन",
+            "superhuman": "सुपरह्यूमन",
+            "infected": "जंकृत",
+            "ratman": "चूहे का मानव",
+            "ghoul": "गूल",
+            "mutant": "म्यूटेंट",
+            "supermutant": "सुपर-म्यूटेंट",
+            "cyborg": "साइबोर्ग",
+            "android": "एंड्रॉइड",
+            "robot": "रोबोट",
+            "gray": "ग्रे",
+            "alien": "एलियन",
+            "hybrid": "हाइब्रिड",
+            "ancient": "प्राचीन",
+            "total-weight-label": "कुल वजन (किलोग्राम):",
+            "tooltip-max-weight": "प्रत्येक मोड़ के अंत में जीएम द्वारा गणना की जाती है। अधिकतम वजन = (शक्ति + सहनशक्ति) * 3 + 10",
+            "max-weight-label": "अधिकतम वजन (किलोग्राम):",
+            "use-weight-control-label": "खेल में वजन का उपयोग करें",
+            "maximum-weight-exceeded-label": "पात्र का अधिकतम वजन पार कर गया! निर्दिष्ट आइटमों को कार्ट में स्थानांतरित कर दिया गया है: ",
+            "statsGroup-weight-button-label": "वजन",
+            "tooltip-inventory-basket": "इन्वेंटरी से हटाए गए आइटम यहां रखे जाते हैं। प्रत्येक टर्न के अंत में स्वचालित रूप से साफ हो जाता है। आप उन्हें गायब होने से पहले पुनर्स्थापित कर सकते हैं।",
+            "inventory-basket-button-label": "बास्केट (इन्वेंटरी)",
+            "inventory-restore": "पुनर्स्थापित करें",
+            "tooltip-critical-weight": "अधिकतम वजन को पार करने पर, पात्र कुछ समय के लिए इन्वेंटरी में आइटम प्राप्त कर सकता है, लेकिन वह अधिक भारित हो जाता है। अधिक भारित पात्र तेजी से ऊर्जा खो देता है। क्रिटिकल वजन को पार करने के बाद, पात्र नए आइटम नहीं उठा सकता।",
+            "critical-weight-label": "क्रिटिकल वजन (किलोग्राम):",
+            "weight-status-label": "स्थिति:",
+            "weight-status-value-normal": "सामान्य",
+            "weight-status-value-bad": "अधिक भारित",
         },
         "german-language": {
             // placeholders
@@ -2817,6 +4213,286 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "use-thinking-module-label": "Den Denkmodul für Antworten hinzufügen (deaktivieren, um Tokens zu sparen). Theoretisch macht es die KI intelligenter",
             "log-thinking-button-label": "Gedankenprotokoll",
             "persuasion": "Überzeugung",
+            "human_desc": `Ein Mensch der modernen Welt, der im 21. Jahrhundert lebt`,
+            "superhuman_desc": `Supermensch - eine Person mit Superfähigkeiten, die aus der Kraft ihres fortgeschrittenen Verstandes stammen`,
+            "infected_desc": "Eine Person, die mit einem Zombie-Virus infiziert ist",
+            "ratman_desc": "Nachkomme gewöhnlicher Ratten, die durch Strahlung mutiert sind und Intelligenz erlangt haben. Aus der Ferne erinnert es an einen hässlichen Menschen",
+            "ghoul_desc": "Eine Person, die einst mit einem Zombie-Virus infiziert war, es aber geschafft hat, ihren Verstand trotz Veränderungen an ihrem Körper zu bewahren",
+            "mutant_desc": "Eine Person, deren Körper durch Strahlenexposition verschiedene Mutationen durchlaufen hat",
+            "supermutant_desc": "Eine Person, deren Körper durch Strahlenexposition massiv und stark geworden ist, aber abstoßende Veränderungen erfahren hat",
+            "cyborg_desc": "Eine Person mit kybernetischen Implantaten, die in ihren Körper eingebettet sind",
+            "android_desc": "Ein Roboter, der mit synthetischer Haut bedeckt ist und Analoga menschlicher Organe besitzt",
+            "robot_desc": "Eine Stahlmaschine mit fortschrittlicher künstlicher Intelligenz",
+            "gray_desc": "Ein Außerirdischer mit grauer Haut, großem Kopf und schwarzen Augen, der von einem fernen Planeten zur Erde gekommen ist",
+            "alien_desc": "Ein Außerirdischer, der von einem anderen Planeten zur Erde gekommen ist",
+            "hybrid_desc": "Ein Hybrid eines Außerirdischen, der von einem anderen Planeten zur Erde gekommen ist, und eines modernen Menschen",
+            "ancient_desc": "Ein Nachkomme einer uralten Vorläufer-Rasse, die viele Tausend Jahre in Kryoschlaf verbracht hat. Die Welt um ihn herum hat sich während seines Schlafes unglaublich verändert",
+            "survival_kit": `Überlebenskit`,
+            "psionic_headband": `Psionisches Verstärker-Stirnband`,
+            "adrenaline_syringe": `Adrenalin-Spritze des Infizierten`,
+            "grappling_hook": `Kletterhaken des Tunnelgräbers`,
+            "bone_blade": `Strahlenverseuchte Knochenklinge des Ghoul`,
+            "mutant_serum": `Instabiles Mutanten-Serum`,
+            "crude_bonehammer": `Rudimentärer Knochenhammer des Supermutanten`,
+            "hacking_device": `Integriertes Hack-Gerät`,
+            "skin_repair_paste": `Synthetische Hautreparaturpaste`,
+            "EMP_Generator": `Tragbarer EMP-Generator`,
+            "communication_implant": `Telepathisches Kommunikationsimplantat`,
+            "cloaking_device": `Alien-Verkleidungsgerät`,
+            "symbiotic_implant": `Symbiotisches Implantat des Alien-Mensch-Hybriden`,
+            "ancient_artifact": `Uraltes Artefakt der Vorläufer`,
+            "survival_kit": `Überlebenskit`,
+            "hacker": "Hacker",
+            "scout": "Späher",
+            "bounty_hunter": "Kopfgeldjäger",
+            "survivor": "Überlebender",
+            "raider": "Raider",
+            "bandit": "Bandit",
+            "wanderer": "Wanderer",
+            "veteran": "Veteran",
+            "mercenary": "Söldner",
+            "stalker": "Stalker",
+            "citizen": "Bürger",
+            "vault_dweller": "Hüter des Bunkers",
+            "savage": "Wildling",
+            "soldier": "Soldat",
+            "engineer": "Ingenieur",
+            "medic": "Sanitäter",
+            "sniper": "Scharfschütze",
+            "virologist": "Virologe",
+            "biotechnician": "Biotechniker",
+            "reborn": "Wiedergeborener",
+            "psionic": "Psionisch",
+            "telekinetic": "Telekinetisch",
+            "telepath": "Telepath",
+            "pyromancer": "Pyromant",
+            "cryomancer": "Cryomant",
+            "mechanized_soldier": "Mechanisierter Soldat",
+            "mechanical_guardian": "Mechanischer Wächter",
+            "cybernetic_assassin": "Cybernetischer Assassine",
+            "cybernetic_spy": "Cybernetischer Spion",
+            "precursor_agent": "Agent der Vorläufer",
+            "precursor_scientist": "Wissenschaftler der Vorläufer",
+            "precursor_soldier": "Soldat der Vorläufer",
+            "xenomant": "Xenomant",
+            "alien_scout": "Alien-Späher",
+            "space_architect": "Weltraum-Architekt",
+            "galactic_explorer": "Galaktischer Entdecker",
+            "alien_soldier": "Alien-Soldat",
+            "survival_kit": `Überlebenskit`,
+            "hacker_descr": "Spezialist für das Hacken von Computersystemen und Netzwerken. Nutzt seine Fähigkeiten, um Zugang zu Informationen zu erhalten und Geräte zu steuern.",
+            "scout_descr": "Agiler und heimlicher Aufklärungsspezialist, spezialisiert auf Infiltration, Informationssammlung und diskrete Eliminierung von Zielen.",
+            "bounty_hunter_descr": "Erfahrener Kopfgeldjäger, der Kriminelle für Belohnungen verfolgt und einfängt. Präziser Schütze und Meister im Nahkampf.",
+            "survivor_descr": "Erfahrener Überlebenskünstler, angepasst an die harten Bedingungen der postapokalyptischen Welt. Geschickt im Finden von Ressourcen, Bauen von Unterkünften und Verteidigen gegen Gefahren.",
+            "raider_descr": "Brutaler Marodeur, der von Plünderungen und Gewalt lebt. Starker und aggressiver Kämpfer, gnadenlos.",
+            "bandit_descr": "Cleverer und listiger Krimineller, der sich mit Raub und Plünderung beschäftigt. Meisterhaft im Umgang mit Brecheisen und Dietrichen.",
+            "wanderer_descr": "Einsamer Wanderer, der durch die postapokalyptische Welt reist, auf der Suche nach einem besseren Leben. Belastbar und einfallsreich, kann in allen Bedingungen überleben.",
+            "veteran_descr": "Erfahrener Soldat, der viele Schlachten durchlaufen hat. Besitzt hervorragendes Kampftalent, diszipliniert und kühlen Kopf bewahrend.",
+            "mercenary_descr": "Söldner, der für Geld kämpft. Erfahrener Kämpfer, versiert im Umgang mit verschiedenen Waffen und Taktiken.",
+            "stalker_descr": "Erfahrener Führer durch anomale Zonen. Weiß, wie man Gefahren umgeht und wertvolle Artefakte findet.",
+            "citizen_descr": "Bewohner einer der wenigen überlebenden Städte. Besitzt grundlegende Fähigkeiten und Kenntnisse, die zum Leben in der Gesellschaft notwendig sind.",
+            "vault_dweller_descr": "Ausgestoßener aus dem Bunker, angepasst an das Leben in einem unterirdischen Bunker. Besitzt technische Fähigkeiten und Kenntnisse der vorkriegswelt.",
+            "savage_descr": "Wilder, der fern der Zivilisation lebt. Starker und geschickter Jäger, der sich auf primitive Instinkte und Waffen verlässt.",
+            "soldier_descr": "Professioneller Militär, der darin trainiert ist, unter allen Bedingungen zu kämpfen. Diszipliniert und präziser Schütze.",
+            "engineer_descr": "Technischer Spezialist, der in der Lage ist, verschiedene Geräte zu erstellen und zu reparieren. Wertvoller Verbündeter in der postapokalyptischen Welt.",
+            "medic_descr": "Feldarzt, der in der Lage ist, Wunden und Krankheiten zu behandeln. Unverzichtbares Mitglied jeder Gruppe von Überlebenden.",
+            "sniper_descr": "Präziser Schütze, der in der Lage ist, Ziele aus großer Entfernung auszuschalten. Geduldiger und beobachtender Kämpfer.",
+            "virologist_descr": "Wissenschaftler, der sich auf das Studium von Viren spezialisiert hat. Entwickelt Impfstoffe und antivirale Medikamente.",
+            "biotechnician_descr": "Wissenschaftler, der mit lebenden Organismen arbeitet. Fähig, genetische Modifikationen zu erstellen und künstliche Gewebe zu züchten.",
+            "reborn_descr": "Wiedergeborener ist ein infizierter Individuum, das teilweise das Virus überwunden und seinen Verstand behalten hat. Sie sind stärker und widerstandsfähiger als gewöhnliche Menschen und können mutieren, aber verderben weiterhin.",
+            "psionic_descr": "Individuum mit psionischen Fähigkeiten. Kann auf den Verstand anderer Wesen einwirken und psionische Energie kontrollieren.",
+            "telekinetic_descr": "Psioniker mit telekinetischen Fähigkeiten. Kann Objekte mit der Macht des Gedankens bewegen.",
+            "telepath_descr": "Psioniker mit telepathischen Fähigkeiten. Kann Gedanken lesen und mit anderen Wesen aus der Ferne kommunizieren.",
+            "pyromancer_descr": "Psioniker mit pyrokinetischen Fähigkeiten. Kann Feuer mit der Macht des Gedankens kontrollieren.",
+            "cryomancer_descr": "Psioniker mit cryokinetischen Fähigkeiten. Kann Kälte kontrollieren und Eis erschaffen.",
+            "mechanized_soldier_descr": "Stark bewaffneter Soldat in einem Exoskelett. Besitzt hohe Feuerkraft und Schutz.",
+            "mechanical_guardian_descr": "Roboterwächter, der programmiert ist, ein Territorium oder Objekt zu schützen. Ausgestattet mit fortschrittlichen Überwachungssystemen und mächtigen Waffen.",
+            "cybernetic_assassin_descr": "Cybernetischer Assassine, der für stealth Infiltration und Ziel-Eliminierung modifiziert wurde. Ausgestattet mit eingebauten Waffen und fortschrittlichen Sensoren.",
+            "cybernetic_spy_descr": "Cybernetischer Spion, der für Informationssammlung und Sabotage modifiziert wurde. Ausgestattet mit einem Unsichtbarkeitsgenerator und holografischem Projektor.",
+            "precursor_agent_descr": "Precursor-Agent, der fortschrittliche Technologien und Wissen besitzt. Spezialisiert auf Aufklärung, Sabotage und Bedrohungseliminierung.",
+            "precursor_scientist_descr": "Precursor-Wissenschaftler mit umfangreichem Wissen in verschiedenen wissenschaftlichen Bereichen. Fähig, fortschrittliche Geräte zu erstellen und zu nutzen.",
+            "precursor_soldier_descr": "Precursor-Soldat, ausgestattet mit High-Tech-Waffen und -Rüstungen. Trainiert, in allen Bedingungen zu kämpfen.",
+            "xenomant_descr": "Xenomant ist ein Spezialist, der sich mit mysteriösen Artefakten und Technologien einer außerirdischen Rasse auskennt. Kann sie zum Schutz, Angriff und zur Erkundung nutzen.",
+            "alien_scout_descr": "Alien-Späher, spezialisiert auf die Erkundung neuer Welten und das Sammeln von Informationen. Ausgestattet mit fortschrittlichen Tarnungs- und Scan-Technologien.",
+            "space_architect_descr": "Weltraum-Architekt ist ein Außerirdischer, der in der Lage ist, Raum und Materie mit der Macht des Gedankens zu verändern. Kann Objekte erstellen und zerstören sowie Basen und Strukturen bauen.",
+            "galactic_explorer_descr": "Galaktischer Entdecker ist ein Außerirdischer, der sich der Erforschung des Weltraums und der Suche nach neuen Lebensformen widmet. Besitzt umfangreiches Wissen und fortschrittliche Technologien.",
+            "alien_soldier_descr": "Alien-Soldat, der darin trainiert ist, mit fortschrittlicher Bewaffnung und Technologien zu kämpfen. Disziplinierter und effektiver Kämpfer.",
+            "survival_kit": `Überlebenskit`,
+            "hacker_1": "Hacking-Interface",
+            "hacker_2": "KPK",
+            "hacker_3": "EMP-Granate",
+            "hacker_4": "Netzwerkscanner",
+            "scout_1": `Stealth-Anzug`,
+            "scout_2": `Lockpick-Set`,
+            "scout_3": `Gasmaske`,
+            "scout_4": `Schalldämpfer-Pistole`,
+            "bounty_hunter_1": `Zwei Pistolen`,
+            "bounty_hunter_2": `Zielverfolgungsgerät`,
+            "bounty_hunter_3": `Energienetz`,
+            "bounty_hunter_4": `Kampfmesser`,
+            "survivor_1": `Billiger Dolch`,
+            "survivor_2": `Selbstgebaute Rüstung`,
+            "survivor_3": `Tarnzelt`,
+            "survivor_4": `Jagdmesser`,
+            "raider_1": `Selbstgebaute Gewehr`,
+            "raider_2": `Stachelklau`,
+            "raider_3": `Flasche mit Benzin`,
+            "raider_4": `Lieblingsfeuerzeug`,
+            "bandit_1": `Schwerer Brecheisen`,
+            "bandit_2": `Banditenmaske`,
+            "bandit_3": `Lederweste`,
+            "bandit_4": `Lockpick-Set`,
+            "wanderer_1": `Universeller Rucksack`,
+            "wanderer_2": `Kompaktes Zelt`,
+            "wanderer_3": `Sportarmbrust`,
+            "wanderer_4": `Multifunktionales Messer`,
+            "veteran_1": `Belohnungspistole`,
+            "veteran_2": `Alter kugelsicherer Weste`,
+            "veteran_3": `Taktischer Gürtel`,
+            "veteran_4": `Medizinisches Kit`,
+            "mercenary_1": `Pistole`,
+            "mercenary_2": `Scharfschützengewehr`,
+            "mercenary_3": `Kampfhelm`,
+            "mercenary_4": `Dynamit`,
+            "stalker_1": `Anomalie-Detektor`,
+            "stalker_2": `Modifizierte Gasmaske`,
+            "stalker_3": `Sturmgewehr`,
+            "stalker_4": `Seil mit Katzenhaken`,
+            "citizen_1": `Staatsbürgerschaftsdokumente`,
+            "citizen_2": `Telefon`,
+            "citizen_3": `Vorratstasche`,
+            "citizen_4": `Utility-Messer`,
+            "vault_dweller_1": `Multifunktionales Werkzeug`,
+            "vault_dweller_2": `Wassermodul`,
+            "vault_dweller_3": `Modifiziertes Pistole`,
+            "vault_dweller_4": `Vault-Kommunikationsmodul`,
+            "savage_1": `Knochenaxe`,
+            "savage_2": `Knochenamulet`,
+            "savage_3": `Jagdfalle`,
+            "savage_4": `Selbstgebauter Bogen`,
+            "soldier_1": `Automatisches Gewehr`,
+            "soldier_2": `Munition`,
+            "soldier_3": `Granate`,
+            "soldier_4": `Kugelsichere Weste`,
+            "engineer_1": `Werkzeugsatz`,
+            "engineer_2": `Fliegende Drohne`,
+            "engineer_3": `Schweißgerät`,
+            "engineer_4": `Platzplan-Scanner`,
+            "medic_1": `Erste-Hilfe-Kit`,
+            "medic_2": `Schmerzmittel`,
+            "medic_3": `Bandagen`,
+            "medic_4": `Tragbarer Defibrillator`,
+            "sniper_1": `Scharfschützengewehr`,
+            "sniper_2": `Fernglas`,
+            "sniper_3": `Tarnkappenmantel`,
+            "sniper_4": `Kampfmesser`,
+            "virologist_1": `Biologischer Analysator`,
+            "virologist_2": `Antivirale Medikamente`,
+            "virologist_3": `Virusforschungsstation`,
+            "virologist_4": `Infizierte Proben`,
+            "biotechnician_1": `Genetischer Modifikator`,
+            "biotechnician_2": `Biosynthesizer`,
+            "biotechnician_3": `Labor-Kit`,
+            "biotechnician_4": `Experimentelles Serum`,
+            "reborn_1": `Anti-Fäulnis-Serum des Wiedergeborenen`,
+            "reborn_2": `Verstärkungsserum`,
+            "reborn_3": `Kontrolliertes Mutationsserum`,
+            "reborn_4": `Unkontrolliertes Mutationsserum`,
+            "psionic_1": `Geistverstärker`,
+            "psionic_2": `Telepathisches Gerät`,
+            "psionic_3": `Fokussierkristall`,
+            "psionic_4": `Psi-Verstärker`,
+            "telekinetic_1": `Konzentrationsring`,
+            "telekinetic_2": `Schwebende Mini-Plattform`,
+            "telekinetic_3": `Antigravitationshandschuhe`,
+            "telekinetic_4": `Fokussierkristall`,
+            "telepath_1": `Fokussierender Ring`,
+            "telepath_2": `Gedankenlese-Ring`,
+            "telepath_3": `Gedankenkontakt-Amulett`,
+            "telepath_4": `Stab zur Kontrolle von Infizierten`,
+            "pyromancer_1": `Molotow-Cocktail`,
+            "pyromancer_2": `Pyrokinetischer Stab`,
+            "pyromancer_3": `Piro-Mutationsserum`,
+            "pyromancer_4": `Feuerfester Anzug`,
+            "cryomancer_1": `Polarer Thermosuit`,
+            "cryomancer_2": `Thermos mit flüssigem Stickstoff`,
+            "cryomancer_3": `Cryo-Mutationsserum`,
+            "cryomancer_4": `Cryo-Batterie`,
+            "mechanized_soldier_1": `Exoskelett`,
+            "mechanized_soldier_2": `Leistungsstarke Schrotflinte`,
+            "mechanized_soldier_3": `Energieschild`,
+            "mechanized_soldier_4": `Reparaturkit`,
+            "mechanical_guardian_1": `Fortschrittliches Überwachungsmodul`,
+            "mechanical_guardian_2": `Reparaturmodul`,
+            "mechanical_guardian_3": `Schutzpaneel`,
+            "mechanical_guardian_4": `Integrierte Maschinengewehr`,
+            "cybernetic_assassin_1": `Versteckte Klinge`,
+            "cybernetic_assassin_2": `Nano-Beschleunigungs-Cocktail`,
+            "cybernetic_assassin_3": `Schallsuppressionssystem`,
+            "cybernetic_assassin_4": `Optische Nachtsichtsensoren`,
+            "cybernetic_spy_1": `Invisibilitätsgenerator`,
+            "cybernetic_spy_2": `Holographischer Projektor`,
+            "cybernetic_spy_3": `Cybernetische Ganzúa`,
+            "cybernetic_spy_4": `Explosiver Nano-Schlagstock`,
+            "precursor_agent_1": `Plasmagewehr`,
+            "precursor_agent_2": `Teleportationsgerät`,
+            "precursor_agent_3": `Spionageausrüstung-Kit`,
+            "precursor_agent_4": `Tragbarer holographischer Projektor`,
+            "precursor_scientist_1": `Universeller Scanner`,
+            "precursor_scientist_2": `Molekulare Synthese-Station`,
+            "precursor_scientist_3": `Energieschild`,
+            "precursor_scientist_4": `Plasmasegger`,
+            "precursor_soldier_1": `Energie-Laser-Karabiner`,
+            "precursor_soldier_2": `Precursor-Kraftschild`,
+            "precursor_soldier_3": `Cybernetischer Verstärker`,
+            "precursor_soldier_4": `Gravitationsgenerator`,
+            "xenomant_1": `Alien-Artefakt`,
+            "xenomant_2": `Tragbarer Teleporter`,
+            "xenomant_3": `Holographischer Schild`,
+            "xenomant_4": `Energie-Schwert`,
+            "alien_scout_1": `Gravitationsstiefel`,
+            "alien_scout_2": `Tragbarer Teleporter`,
+            "alien_scout_3": `Scanner für versteckte Objekte`,
+            "alien_scout_4": `Laser-Pistole`,
+            "space_architect_1": `Gravitationsprojektor`,
+            "space_architect_2": `Materialisierender Raumanzug`,
+            "space_architect_3": `Raumkarte`,
+            "space_architect_4": `Planetarer Stabilisator`,
+            "galactic_explorer_1": `Multispektraler Scanner`,
+            "galactic_explorer_2": `Xeno-Übersetzer`,
+            "galactic_explorer_3": `Bio-Labor-Modul`,
+            "galactic_explorer_4": `Persönlicher Drohnen-Assistent`,
+            "alien_soldier_1": `Magnetischer Schienen-Karabiner`,
+            "alien_soldier_2": `Nanostrukturierter Schild`,
+            "alien_soldier_3": `Integriertes Bionisches System`,
+            "alien_soldier_4": `Taktischer holographischer Begleiter`,
+            "superhuman": "Übermensch",
+            "infected": "Infiziert",
+            "ratman": "Rattenmann",
+            "ghoul": "Ghul",
+            "mutant": "Mutant",
+            "supermutant": "Super-Mutant",
+            "cyborg": "Cyborg",
+            "android": "Android",
+            "robot": "Roboter",
+            "gray": "Grau",
+            "alien": "Außerirdischer",
+            "hybrid": "Hybrid",
+            "ancient": "Antik",
+            "total-weight-label": "Gesamtgewicht (kg):",
+            "tooltip-max-weight": "Vom GM am Ende jedes Zuges berechnet. Maximales Gewicht = (Stärke + Ausdauer) * 3 + 10",
+            "max-weight-label": "Maximales Gewicht (kg):",
+            "use-weight-control-label": "Gewicht im Spiel verwenden",
+            "maximum-weight-exceeded-label": "Maximales Gewicht des Charakters überschritten! Die angegebenen Gegenstände wurden in den Warenkorb verschoben: ",
+            "statsGroup-weight-button-label": "Gewicht",
+            "tooltip-inventory-basket": "Entfernte Gegenstände aus dem Inventar werden hier platziert. Am Ende jedes Zuges automatisch geleert. Sie können sie wiederherstellen, bevor sie verschwinden.",
+            "inventory-basket-button-label": "Korb (Inventar)",
+            "inventory-restore": "Wiederherstellen",
+            "tooltip-critical-weight": "Beim Überschreiten des maximalen Gewichts kann der Charakter noch eine gewisse Zeit Gegenstände ins Inventar aufnehmen, ist jedoch überladen. Ein überladener Charakter verliert schnell Energie. Nach dem Überschreiten des kritischen Gewichts kann der Charakter keine neuen Gegenstände mehr aufnehmen.",
+            "critical-weight-label": "Kritisches Gewicht (kg):",
+            "weight-status-label": "Status:",
+            "weight-status-value-normal": "Normal",
+            "weight-status-value-bad": "Überladen",
         },
         "french-language": {
             // placeholders
@@ -3287,6 +4963,286 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "use-thinking-module-label": "Ajouter un module de réflexion sur les réponses (désactiver pour économiser des jetons). Théoriquement, cela rend l'IA plus intelligente",
             "log-thinking-button-label": "Journal des Pensées",
             "persuasion": "Persuasion",
+            "human_desc": `Une personne du monde moderne, vivant au 21ème siècle`,
+            "superhuman_desc": `Surhumain - une personne avec des super capacités dérivées de la puissance de leur esprit avancé`,
+            "infected_desc": "Une personne infectée par un virus zombie",
+            "ratman_desc": "Descendant de rats ordinaires mutés par radiation et ayant acquis de l'intelligence. De loin, ressemble à un humain laid",
+            "ghoul_desc": "Une personne qui a été infectée par un virus zombie mais qui a réussi à conserver sa raison malgré les changements dans son corps",
+            "mutant_desc": "Une personne dont le corps a subi diverses mutations en raison de l'exposition aux radiations",
+            "supermutant_desc": "Une personne dont le corps est devenu massif et fort en raison de l'exposition aux radiations, mais a subi des changements répugnants",
+            "cyborg_desc": "Une personne avec des implants cybernétiques intégrés dans son corps",
+            "android_desc": "Un robot recouvert de peau synthétique et possédant des analogues d'organes humains",
+            "robot_desc": "Une machine en acier avec une intelligence artificielle avancée",
+            "gray_desc": "Un extraterrestre à la peau grise, à la grande tête et aux yeux noirs, qui est arrivé sur Terre depuis une planète lointaine",
+            "alien_desc": "Un extraterrestre qui est arrivé sur Terre depuis un autre planète",
+            "hybrid_desc": "Un hybride d'un extraterrestre qui est arrivé sur Terre depuis un autre planète et d'un humain moderne",
+            "ancient_desc": "Un descendant d'une ancienne race précurseur qui a dormi en cryosommeil pendant de nombreuses milliers d'années et s'est réveillé seulement au début du jeu",
+            "survival_kit": `Kit de survie`,
+            "psionic_headband": `Diadème amplificateur psionique`,
+            "adrenaline_syringe": `Seringue d'adrénaline de l'infecté`,
+            "grappling_hook": `Crochet d'escalade du tunnelier`,
+            "bone_blade": `Lame d'os irradiée du ghoul`,
+            "mutant_serum": `Sérum mutant instable`,
+            "crude_bonehammer": `Masse d'os grossière du supermutant`,
+            "hacking_device": `Dispositif de piratage intégré`,
+            "skin_repair_paste": `Pâte de réparation de peau synthétique`,
+            "EMP_Generator": `Générateur EMP portable`,
+            "communication_implant": `Implant de communication télépathique`,
+            "cloaking_device": `Dispositif de dissimulation alien`,
+            "symbiotic_implant": `Implant symbiotique de l'hybride alien-humain`,
+            "ancient_artifact": `Artefact ancien des précurseurs`,
+            "survival_kit": `Kit de survie`,
+            "hacker": "Hacker",
+            "scout": "Éclaireur",
+            "bounty_hunter": "Chasseur de primes",
+            "survivor": "Survivant",
+            "raider": "Raider",
+            "bandit": "Bandit",
+            "wanderer": "Errant",
+            "veteran": "Vétéran",
+            "mercenary": "Mercenaire",
+            "stalker": "Stalker",
+            "citizen": "Citoyen",
+            "vault_dweller": "Habitant du Souterrain",
+            "savage": "Sauvage",
+            "soldier": "Soldat",
+            "engineer": "Ingénieur",
+            "medic": "Médecin",
+            "sniper": "Sniper",
+            "virologist": "Virologue",
+            "biotechnician": "Biotechnicien",
+            "reborn": "René",
+            "psionic": "Psionique",
+            "telekinetic": "Télékinétique",
+            "telepath": "Télépathe",
+            "pyromancer": "Pirocántique",
+            "cryomancer": "Cryomancien",
+            "mechanized_soldier": "Soldat Mécanisé",
+            "mechanical_guardian": "Gardien Mécanique",
+            "cybernetic_assassin": "Assassin Cybernétique",
+            "cybernetic_spy": "Espion Cybernétique",
+            "precursor_agent": "Agent Précursseur",
+            "precursor_scientist": "Scientifique Précursseur",
+            "precursor_soldier": "Soldat Précursseur",
+            "xenomant": "Xénomancien",
+            "alien_scout": "Éclaireur Alien",
+            "space_architect": "Architecte Spatial",
+            "galactic_explorer": "Explorateur Galactique",
+            "alien_soldier": "Soldat Alien",
+            "survival_kit": `Kit de survie`,
+            "hacker_descr": "Spécialiste en piratage de systèmes informatiques et de réseaux. Utilise ses compétences pour accéder à l'information et contrôler les dispositifs.",
+            "scout_descr": "Spécialiste en reconnaissance agile et furtive, spécialisé dans l'infiltration, la collecte d'informations et l'élimination discrète des cibles.",
+            "bounty_hunter_descr": "Chasseur de primes expérimenté traquant et capturant les criminels pour des récompenses. Tireur précis et maître du combat corps à corps.",
+            "survivor_descr": "Survivant expérimenté adapté aux conditions difficiles du monde post-apocalyptique. Compétent pour trouver des ressources, construire des abris et se défendre contre les dangers.",
+            "raider_descr": "Maraudeur brutal vivant de pillages et de violence. Combattant fort et agressif, sans pitié.",
+            "bandit_descr": "Criminel astucieux et rusé engagé dans les vols et les braquages. Manie habilement les barreaux et les crochets.",
+            "wanderer_descr": "Vagabond solitaire parcourant le monde post-apocalyptique à la recherche d'une vie meilleure. Résistant et ingénieux, capable de survivre dans toutes les conditions.",
+            "veteran_descr": "Soldat expérimenté ayant traversé de nombreuses batailles. Possède une excellente formation au combat, discipliné et calme.",
+            "mercenary_descr": "Mercenaire combattant pour de l'argent. Combattant expérimenté maîtrisant diverses armes et tactiques.",
+            "stalker_descr": "Guide expérimenté dans les zones anormales. Sait comment éviter les dangers et trouver des artefacts précieux.",
+            "citizen_descr": "Résident de l'une des rares villes survivantes. Possède des compétences et des connaissances de base nécessaires à la vie en société.",
+            "vault_dweller_descr": "Exilé du Vault, adapté à la vie dans un bunker souterrain. Possède des compétences techniques et des connaissances du monde pré-guerre.",
+            "savage_descr": "Sauvage vivant loin de la civilisation. Chasseur fort et agile, se fiant aux instincts primitifs et aux armes.",
+            "soldier_descr": "Militaire professionnel formé pour combattre dans toutes les conditions. Tireur discipliné et précis.",
+            "engineer_descr": "Spécialiste technique capable de créer et de réparer divers dispositifs. Allié précieux dans le monde post-apocalyptique.",
+            "medic_descr": "Médecin de terrain capable de soigner les blessures et les maladies. Membre indispensable de tout groupe de survivants.",
+            "sniper_descr": "Tireur précis capable d'éliminer des cibles à longue distance. Combattant patient et observateur.",
+            "virologist_descr": "Scientifique spécialisé dans l'étude des virus. Développe des vaccins et des médicaments antiviraux.",
+            "biotechnician_descr": "Scientifique travaillant avec des organismes vivants. Capable de créer des modifications génétiques et de cultiver des tissus artificiels.",
+            "reborn_descr": "René est un individu infecté qui a réussi à partiellement vaincre le virus et à conserver sa raison. Ils sont plus forts et plus résilients que les gens ordinaires et peuvent muter mais continuent de pourrir.",
+            "psionic_descr": "Individu possédant des capacités psioniques. Peut influencer l'esprit d'autres êtres et contrôler l'énergie psionique.",
+            "telekinetic_descr": "Psionique doté de capacités télékinétiques. Peut déplacer des objets par la force de la pensée.",
+            "telepath_descr": "Psionique doté de capacités télépathiques. Peut lire les pensées et communiquer avec d'autres êtres à distance.",
+            "pyromancer_descr": "Psionique doté de capacités pyrokynétiques. Peut contrôler le feu par la force de la pensée.",
+            "cryomancer_descr": "Psionique doté de capacités cryokynétiques. Peut contrôler le froid et créer de la glace.",
+            "mechanized_soldier_descr": "Soldat lourdement armé dans un exosquelette. Possède une puissance de feu et une protection élevées.",
+            "mechanical_guardian_descr": "Gardien robotisé programmé pour protéger un territoire ou un objet. Équipé de systèmes de surveillance avancés et d'armes puissantes.",
+            "cybernetic_assassin_descr": "Assassin cybernétique modifié pour l'infiltration furtive et l'élimination des cibles. Équipé d'armes intégrées et de capteurs avancés.",
+            "cybernetic_spy_descr": "Espion cybernétique modifié pour la collecte d'informations et le sabotage. Équipé d'un générateur d'invisibilité et d'un projecteur holographique.",
+            "precursor_agent_descr": "Agent Précurseur possédant des technologies avancées et des connaissances. Spécialisé en reconnaissance, sabotage et élimination des menaces.",
+            "precursor_scientist_descr": "Scientifique Précurseur avec une vaste connaissance dans divers domaines scientifiques. Capable de créer et d'utiliser des dispositifs avancés.",
+            "precursor_soldier_descr": "Soldat Précurseur équipé d'armes et d'armures de haute technologie. Formé pour combattre dans toutes les conditions.",
+            "xenomant_descr": "Xénomancien est un spécialiste maîtrisant des artefacts mystérieux et des technologies d'une race extraterrestre. Il peut les utiliser pour la protection, l'attaque et l'exploration.",
+            "alien_scout_descr": "Éclaireur alien spécialisé dans l'exploration de nouveaux mondes et la collecte d'informations. Équipé de technologies avancées de camouflage et de scan.",
+            "space_architect_descr": "Architecte Spatial est un extraterrestre capable de modifier l'espace et la matière par la force de la pensée. Il peut créer et détruire des objets, ainsi que construire des bases et des structures.",
+            "galactic_explorer_descr": "Explorateur Galactique est un extraterrestre dédié à l'étude de l'espace et à la recherche de nouvelles formes de vie. Possède une vaste connaissance et des technologies avancées.",
+            "alien_soldier_descr": "Soldat alien formé pour combattre en utilisant des armements et des technologies avancées. Combattant discipliné et efficace.",
+            "survival_kit": `Kit de survie`,
+            "hacker_1": `Interface de Piratage`,
+            "hacker_2": `KPK`,
+            "hacker_3": `EMP-Granade`,
+            "hacker_4": `Scanner de Réseau`,
+            "scout_1": `Combinaison de Furtivité`,
+            "scout_2": `Ensemble de Crochets`,
+            "scout_3": `Masque à Gaz`,
+            "scout_4": `Pistolet Silencieux`,
+            "bounty_hunter_1": `Deux Pistolets`,
+            "bounty_hunter_2": `Dispositif de Suivi des Cibles`,
+            "bounty_hunter_3": `Réseau Énergétique`,
+            "bounty_hunter_4": `Couteau de Combat`,
+            "survivor_1": `Dague Bon Marché`,
+            "survivor_2": `Armure Maison`,
+            "survivor_3": `Tente de Camouflage`,
+            "survivor_4": `Couteau de Chasse`,
+            "raider_1": `Fusil Maison`,
+            "raider_2": `Massue à Épines`,
+            "raider_3": `Flasque avec Essence`,
+            "raider_4": `Briquet Favori`,
+            "bandit_1": `Pied-de-Braise Lourde`,
+            "bandit_2": `Masque de Bandit`,
+            "bandit_3": `Gilet en Cuir`,
+            "bandit_4": `Ensemble de Crochets`,
+            "wanderer_1": `Sac à Dos Universel`,
+            "wanderer_2": `Tente Compacte`,
+            "wanderer_3": `Arbalète Sportive`,
+            "wanderer_4": `Couteau Multifonction`,
+            "veteran_1": `Pistolet de Récompense`,
+            "veteran_2": `Gilet Pare-Balles Ancien`,
+            "veteran_3": `Ceinture Tactique`,
+            "veteran_4": `Kit Médical`,
+            "mercenary_1": `Pistolet`,
+            "mercenary_2": `Fusil de Sniper`,
+            "mercenary_3": `Casque de Combat`,
+            "mercenary_4": `Dynamite`,
+            "stalker_1": `Détecteur d'Anomalies`,
+            "stalker_2": `Masque à Gaz Modifié`,
+            "stalker_3": `Fusil d'Assaut`,
+            "stalker_4": `Corde avec Crochet à Chat`,
+            "citizen_1": `Documents de Citoyenneté`,
+            "citizen_2": `Téléphone`,
+            "citizen_3": `Sac de Provisions`,
+            "citizen_4": `Couteau Utilitaire`,
+            "vault_dweller_1": `Outil Multifonctionnel`,
+            "vault_dweller_2": `Module d'Eau`,
+            "vault_dweller_3": `Pistolet Modifié`,
+            "vault_dweller_4": `Module de Communication du Refuge`,
+            "savage_1": `Hache en Os`,
+            "savage_2": `Amulette en Os`,
+            "savage_3": `Piège à Gibier`,
+            "savage_4": `Arc Maison`,
+            "soldier_1": `Fusil Automatique`,
+            "soldier_2": `Munitions`,
+            "soldier_3": `Grenade`,
+            "soldier_4": `Gilet Pare-Balles`,
+            "engineer_1": `Set d'Outils`,
+            "engineer_2": `Drone Volant`,
+            "engineer_3": `Appareil de Soudage`,
+            "engineer_4": `Scanner de Plans`,
+            "medic_1": `Kit de Premiers Secours`,
+            "medic_2": `Analgésique`,
+            "medic_3": `Bandages`,
+            "medic_4": `Défibrillateur Portable`,
+            "sniper_1": `Fusil de Sniper`,
+            "sniper_2": `Jumelles`,
+            "sniper_3": `Manteau de Camouflage`,
+            "sniper_4": `Couteau de Combat`,
+            "virologist_1": `Analyseur Biologique`,
+            "virologist_2": `Médicaments Antiviraux`,
+            "virologist_3": `Station de Recherche sur les Virus`,
+            "virologist_4": `Échantillons Infectés`,
+            "biotechnician_1": `Modificateur Génétique`,
+            "biotechnician_2": `Biosynthétiseur`,
+            "biotechnician_3": `Kit de Laboratoire`,
+            "biotechnician_4": `Sérum Expérimental`,
+            "reborn_1": `Sérum Anti-Rotation du René`,
+            "reborn_2": `Sérum de Renforcement`,
+            "reborn_3": `Sérum de Mutation Contrôlée`,
+            "reborn_4": `Sérum de Mutation Incontrôlée`,
+            "psionic_1": `Amplificateur Mental`,
+            "psionic_2": `Dispositif Télépathique`,
+            "psionic_3": `Cristal de Focalisation`,
+            "psionic_4": `Amplificateur Psi`,
+            "telekinetic_1": `Anneau de Concentration`,
+            "telekinetic_2": `Mini-Plateforme Flottante`,
+            "telekinetic_3": `Gants Antigravité`,
+            "telekinetic_4": `Cristal de Focalisation`,
+            "telepath_1": `Anneau Focalisateur`,
+            "telepath_2": `Anneau de Lecture des Pensées`,
+            "telepath_3": `Amulette de Communication Mentale`,
+            "telepath_4": `Bâton de Contrôle des Infectés`,
+            "pyromancer_1": `Cocktail Molotov`,
+            "pyromancer_2": `Bâton Pyrokinétique`,
+            "pyromancer_3": `Sérum de Mutation Pyro`,
+            "pyromancer_4": `Combinaison Résistante au Feu`,
+            "cryomancer_1": `Combinaison Thermique Polaire`,
+            "cryomancer_2": `Thermos avec Azote Liquide`,
+            "cryomancer_3": `Sérum de Mutation Cryo`,
+            "cryomancer_4": `Batterie Cryo`,
+            "mechanized_soldier_1": `Exosquelette`,
+            "mechanized_soldier_2": `Fusil de Chasse Puissant`,
+            "mechanized_soldier_3": `Bouclier Énergétique`,
+            "mechanized_soldier_4": `Kit de Réparation`,
+            "mechanical_guardian_1": `Module de Surveillance Avancé`,
+            "mechanical_guardian_2": `Module de Réparation`,
+            "mechanical_guardian_3": `Panneau de Protection`,
+            "mechanical_guardian_4": `Mitrailleuse Intégrée`,
+            "cybernetic_assassin_1": `Lame Cachée`,
+            "cybernetic_assassin_2": `Cocktail d'Accélération Nano`,
+            "cybernetic_assassin_3": `Système de Suppression du Son`,
+            "cybernetic_assassin_4": `Capteurs Optiques de Vision Nocturne`,
+            "cybernetic_spy_1": `Générateur d'Invisibilité`,
+            "cybernetic_spy_2": `Projecteur Holographique`,
+            "cybernetic_spy_3": `Ganzúa Cybernétique`,
+            "cybernetic_spy_4": `Fouet Nano Explosif`,
+            "precursor_agent_1": `Pistolet Plasma`,
+            "precursor_agent_2": `Dispositif de Téléportation`,
+            "precursor_agent_3": `Kit d'Équipement d'Espionnage`,
+            "precursor_agent_4": `Projecteur Holographique Portable`,
+            "precursor_scientist_1": `Scanner Universel`,
+            "precursor_scientist_2": `Station de Synthèse Moléculaire`,
+            "precursor_scientist_3": `Bouclier Énergétique`,
+            "precursor_scientist_4": `Coupe Plasma`,
+            "precursor_soldier_1": `Carabine Laser Énergétique`,
+            "precursor_soldier_2": `Bouclier de Force Precurseur`,
+            "precursor_soldier_3": `Amplificateur Cybernétique`,
+            "precursor_soldier_4": `Générateur de Gravité`,
+            "xenomant_1": `Artefact Alien`,
+            "xenomant_2": `Téléporteur Portable`,
+            "xenomant_3": `Bouclier Holographique`,
+            "xenomant_4": `Épée Énergétique`,
+            "alien_scout_1": `Bottes Gravitationnelles`,
+            "alien_scout_2": `Téléporteur Portable`,
+            "alien_scout_3": `Scanner d'Objets Cachés`,
+            "alien_scout_4": `Pistolet Laser`,
+            "space_architect_1": `Projecteur de Gravité`,
+            "space_architect_2": `Combinaison Spatiale Matérialisante`,
+            "space_architect_3": `Carte Spatiale`,
+            "space_architect_4": `Stabilisateur Planétaire`,
+            "galactic_explorer_1": `Scanner Multispectral`,
+            "galactic_explorer_2": `Traducteur Xeno`,
+            "galactic_explorer_3": `Module de Bio-Laboratoire`,
+            "galactic_explorer_4": `Assistant Drone Personnel`,
+            "alien_soldier_1": `Carabine de Rails Magnétique`,
+            "alien_soldier_2": `Bouclier Nanostructuré`,
+            "alien_soldier_3": `Système Bionique Intégré`,
+            "alien_soldier_4": `Compagnon Holographique Tactique`,
+            "superhuman": "Superhumain",
+            "infected": "Infecté",
+            "ratman": "Ratman",
+            "ghoul": "Goule",
+            "mutant": "Mutant",
+            "supermutant": "Super-Mutant",
+            "cyborg": "Cyborg",
+            "android": "Androïde",
+            "robot": "Robot",
+            "gray": "Gris",
+            "alien": "Extraterrestre",
+            "hybrid": "Hybride",
+            "ancient": "Ancien",
+            "total-weight-label": "Poids Total (kg):",
+            "tooltip-max-weight": "Calculé par le GM à la fin de chaque tour. Poids maximum = (Force + Endurance) * 3 + 10",
+            "max-weight-label": "Poids Maximum (kg):",
+            "use-weight-control-label": "Utiliser le poids dans le jeu",
+            "maximum-weight-exceeded-label": "Poids maximum du personnage dépassé! Les objets spécifiés ont été déplacés dans le panier: ",
+            "statsGroup-weight-button-label": "Poids",
+            "tooltip-inventory-basket": "Les objets retirés de l'inventaire sont placés ici. Vider automatiquement à la fin de chaque tour. Vous pouvez les restaurer avant qu'ils ne disparaissent.",
+            "inventory-basket-button-label": "Panier (Inventaire)",
+            "inventory-restore": "Restaurer",
+            "tooltip-critical-weight": "En dépassant le poids maximum, le personnage peut encore recevoir des objets dans l'inventaire pendant un certain temps, mais devient surchargé. Un personnage surchargé perd rapidement de l'énergie. Après avoir dépassé le poids critique, le personnage ne peut plus porter de nouveaux objets.",
+            "critical-weight-label": "Poids Critique (kg):",
+            "weight-status-label": "État:",
+            "weight-status-value-normal": "Normal",
+            "weight-status-value-bad": "Surchargé",
         }
     };
 
@@ -3379,7 +5335,9 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "npc-info-tab-journal-label", "npc-info-tab-memory-diary-label",
             "npc-info-memory-diary-label", "npc-delete-memory-diary", "use-npc-memories-diary-label",
             "status-appearanceDescription-label", "status-statusInSociety-label", "status-positionInSociety-label", "status-affiliationWithOrganizations-label",
-            "quest-info-questBackground-label", "quest-info-description-label", "use-thinking-module-label", "log-thinking-button-label"
+            "quest-info-questBackground-label", "quest-info-description-label", "use-thinking-module-label", "log-thinking-button-label",
+            "total-weight-label", "tooltip-max-weight", "max-weight-label", "use-weight-control-label", "statsGroup-weight-button-label",
+            "tooltip-inventory-basket", "inventory-basket-button-label", "inventory-restore", "tooltip-critical-weight", "critical-weight-label", "weight-status-label",
         ];
 
         //Update labels
@@ -3937,5 +5895,628 @@ Openrouter (https://openrouter.ai/). Offre des modèles gratuits et payants. Les
 
             return id;
         },
+
+        getRaceDescriptions: function (language, raceInventory) {
+            const raceDescriptions = {
+                human: function () {
+                    const raceName = translations[language]["human"] || "Human";
+                    const statPersuasion = translations[language]["persuasion"] || "Persuasion";
+                    const statLuck = translations[language]["luck"] || "Luck";
+                    const itemKey = raceInventory["human"]; // 'survival_kit'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statPersuasion}+1, ${statLuck}+1, ${itemName}`;
+                },
+                superhuman: function () {
+                    const raceName = translations[language]["superhuman"] || "Superhuman";
+                    const statInt = translations[language]["intelligence"] || "Intelligence";
+                    const statWis = translations[language]["wisdom"] || "Wisdom";
+                    const statCon = translations[language]["constitution"] || "Constitution";
+                    const itemKey = raceInventory["superhuman"]; // 'psionic_headband'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statInt}+2, ${statWis}+1, ${statCon}-1, ${itemName}`;
+                },
+                infected: function () {
+                    const raceName = translations[language]["infected"] || "Infected";
+                    const statStr = translations[language]["strength"] || "Strength";
+                    const statCon = translations[language]["constitution"] || "Constitution";
+                    const statInt = translations[language]["intelligence"] || "Intelligence";
+                    const itemKey = raceInventory["infected"]; // 'adrenaline_syringe'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statStr}+2, ${statCon}+1, ${statInt}-1, ${itemName}`;
+                },
+                ratman: function () {
+                    const raceName = translations[language]["ratman"] || "Ratman";
+                    const statDex = translations[language]["dexterity"] || "Dexterity";
+                    const statPer = translations[language]["perception"] || "Perception";
+                    const statAtt = translations[language]["attractiveness"] || "Attractiveness";
+                    const itemKey = raceInventory["ratman"]; // 'grappling_hook'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statDex}+2, ${statPer}+1, ${statAtt}-1, ${itemName}`;
+                },
+                ghoul: function () {
+                    const raceName = translations[language]["ghoul"] || "Ghoul";
+                    const statCon = translations[language]["constitution"] || "Constitution";
+                    const statSpeed = translations[language]["speed"] || "Speed";
+                    const statInt = translations[language]["intelligence"] || "Intelligence";
+                    const statAtt = translations[language]["attractiveness"] || "Attractiveness";
+                    const itemKey = raceInventory["ghoul"]; // 'bone_blade'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statCon}+3, ${statSpeed}+1, ${statInt}-1, ${statAtt}-1, ${itemName}`;
+                },
+                mutant: function () {
+                    const raceName = translations[language]["mutant"] || "Mutant";
+                    const statStr = translations[language]["strength"] || "Strength";
+                    const statSpeed = translations[language]["speed"] || "Speed";
+                    const statPer = translations[language]["perception"] || "Perception";
+                    const statCon = translations[language]["constitution"] || "Constitution";
+                    const itemKey = raceInventory["mutant"]; // 'mutant_serum'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statStr}+1, ${statSpeed}+1, ${statPer}+1, ${statCon}-1, ${itemName}`;
+                },
+                supermutant: function () {
+                    const raceName = translations[language]["supermutant"] || "Supermutant";
+                    const statStr = translations[language]["strength"] || "Strength";
+                    const statCon = translations[language]["constitution"] || "Constitution";
+                    const statInt = translations[language]["intelligence"] || "Intelligence";
+                    const statWis = translations[language]["wisdom"] || "Wisdom";
+                    const statPer = translations[language]["perception"] || "Perception";
+                    const itemKey = raceInventory["supermutant"]; // 'crude_bonehammer'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statStr}+3, ${statCon}+2, ${statInt}-1, ${statWis}-1, ${statPer}-1, ${itemName}`;
+                },
+                cyborg: function () {
+                    const raceName = translations[language]["cyborg"] || "Cyborg";
+                    const statDex = translations[language]["dexterity"] || "Dexterity";
+                    const statPer = translations[language]["perception"] || "Perception";
+                    const statPers = translations[language]["persuasion"] || "Persuasion";
+                    const itemKey = raceInventory["cyborg"]; // 'hacking_device'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statDex}+1, ${statPer}+2, ${statPers}-1, ${itemName}`;
+                },
+                android: function () {
+                    const raceName = translations[language]["android"] || "Android";
+                    const statInt = translations[language]["intelligence"] || "Intelligence";
+                    const statAtt = translations[language]["attractiveness"] || "Attractiveness";
+                    const statCon = translations[language]["constitution"] || "Constitution";
+                    const itemKey = raceInventory["android"]; // 'skin_repair_paste'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statInt}+1, ${statAtt}+2, ${statCon}-1, ${itemName}`;
+                },
+                robot: function () {
+                    const raceName = translations[language]["robot"] || "Robot";
+                    const statStr = translations[language]["strength"] || "Strength";
+                    const statInt = translations[language]["intelligence"] || "Intelligence";
+                    const statPers = translations[language]["persuasion"] || "Persuasion";
+                    const itemKey = raceInventory["robot"]; // 'EMP_Generator'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statStr}+1, ${statInt}+2, ${statPers}-1, ${itemName}`;
+                },
+                gray: function () {
+                    const raceName = translations[language]["gray"] || "Gray";
+                    const statInt = translations[language]["intelligence"] || "Intelligence";
+                    const statDex = translations[language]["dexterity"] || "Dexterity";
+                    const itemKey = raceInventory["gray"]; // 'communication_implant'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statInt}+3, ${statDex}-1, ${itemName}`;
+                },
+                alien: function () {
+                    const raceName = translations[language]["alien"] || "Alien";
+                    const statPer = translations[language]["perception"] || "Perception";
+                    const statLuck = translations[language]["luck"] || "Luck";
+                    const statTrade = translations[language]["trade"] || "Trade";
+                    const itemKey = raceInventory["alien"]; // 'cloaking_device'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statPer}+2, ${statLuck}+1, ${statTrade}-1, ${itemName}`;
+                },
+                hybrid: function () {
+                    const raceName = translations[language]["hybrid"] || "Hybrid";
+                    const statAtt = translations[language]["attractiveness"] || "Attractiveness";
+                    const statPers = translations[language]["persuasion"] || "Persuasion";
+                    const statCon = translations[language]["constitution"] || "Constitution";
+                    const statStr = translations[language]["strength"] || "Strength";
+                    const statSpeed = translations[language]["speed"] || "Speed";
+                    const itemKey = raceInventory["hybrid"]; // 'symbiotic_implant'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statAtt}+1, ${statPers}+1, ${statCon}-1, ${statStr}-1, ${statSpeed}+2, ${itemName}`;
+                },
+                ancient: function () {
+                    const raceName = translations[language]["ancient"] || "Ancient";
+                    const statWis = translations[language]["wisdom"] || "Wisdom";
+                    const statInt = translations[language]["intelligence"] || "Intelligence";
+                    const statStr = translations[language]["strength"] || "Strength";
+                    const itemKey = raceInventory["ancient"]; // 'ancient_artifact'
+                    const itemName = translations[language][itemKey] || itemKey;
+
+                    return `${raceName}: ${statWis}+2, ${statInt}+1, ${statStr}-1, ${itemName}`;
+                }
+            }
+
+            return raceDescriptions;
+        },
+
+        getRaceBonusesAndDescription: function (language, raceInventory, raceName) {
+            const raceDescriptionsObject = translationModule.getRaceDescriptions(language, raceInventory);
+            const description = translations[language][raceName + "_desc"];
+
+            return raceDescriptionsObject[raceName]() + "\n" + description;
+        },
+
+        setPostApocalypseRacesMessage: function (raceInventory) {            
+            const id = "post-apocalypse-races";
+            this.setTranslation("english-language", id, `Race affects the starting location, generation of racial abilities, storyline, and starting bonuses to skills and items:\n${getDescriptions("english-language")}`);
+            this.setTranslation("russian-language", id, `Раса влияет на стартовую локацию, генерацию расового умения, сюжет и стартовые бонусы к навыкам и предметам:\n${getDescriptions("russian-language")}`);
+            this.setTranslation("spanish-language", id, `La raza afecta la ubicación inicial, la generación de habilidades raciales, la trama y las bonificaciones iniciales a las habilidades y objetos:\n${getDescriptions("spanish-language")}`);
+            this.setTranslation("portuguese-language", id, `A raça afeta a localização inicial, a geração de habilidades raciais, a história e os bônus iniciais para habilidades e itens:\n${getDescriptions("portuguese-language")}`);
+            this.setTranslation("hindi-language", id, `जाति प्रारंभिक स्थान, जातीय क्षमताओं की उत्पत्ति, कहानी और कौशल और वस्तुओं पर प्रारंभिक बोनस को प्रभावित करती है:\n${getDescriptions("hindi-language")}`);
+            this.setTranslation("german-language", id, `Die Rasse beeinflusst den Startort, die Generierung von Rassenfähigkeiten, die Handlung und die Startboni für Fähigkeiten und Gegenstände:\n${getDescriptions("german-language")}`);
+            this.setTranslation("french-language", id, `La race affecte l'emplacement de départ, la génération des capacités raciales, l'histoire et les bonus de départ aux compétences et objets:\n${getDescriptions("french-language")}`);
+
+            return id;
+
+            function getDescriptions(language) {
+                const raceDescriptions = translationModule.getRaceDescriptions(language, raceInventory);
+                const descriptions = [];
+                for (const race in raceDescriptions) {
+                    descriptions.push(raceDescriptions[race]());
+                }
+                return descriptions.join(",\n");
+            }
+        },
+
+        getClassDescriptions: function (language, classes) {
+            const classDescriptions = {
+                hacker: function () {
+                    const className = translations[language]["hacker"] || "Hacker";
+                    const statName = translations[language]["intelligence"] || "Intelligence";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["hacker"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                scout: function () {
+                    const className = translations[language]["scout"] || "Scout";
+                    const statName = translations[language]["perception"] || "Perception";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["scout"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                bounty_hunter: function () {
+                    const className = translations[language]["bounty_hunter"] || "Bounty Hunter";
+                    const statName = translations[language]["speed"] || "Speed";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["bounty_hunter"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                survivor: function () {
+                    const className = translations[language]["survivor"] || "Survivor";
+                    const statName = translations[language]["constitution"] || "Constitution";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["survivor"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                raider: function () {
+                    const className = translations[language]["raider"] || "Raider";
+                    const statName = translations[language]["strength"] || "Strength";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["raider"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                bandit: function () {
+                    const className = translations[language]["bandit"] || "Bandit";
+                    const statName = translations[language]["dexterity"] || "Dexterity";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["bandit"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                wanderer: function () {
+                    const className = translations[language]["wanderer"] || "Wanderer";
+                    const statName = translations[language]["luck"] || "Luck";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["wanderer"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                veteran: function () {
+                    const className = translations[language]["veteran"] || "Veteran";
+                    const statName = translations[language]["wisdom"] || "Wisdom";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["veteran"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                mercenary: function () {
+                    const className = translations[language]["mercenary"] || "Mercenary";
+                    const statName = translations[language]["dexterity"] || "Dexterity";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["mercenary"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                stalker: function () {
+                    const className = translations[language]["stalker"] || "Stalker";
+                    const statName = translations[language]["perception"] || "Perception";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["stalker"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                citizen: function () {
+                    const className = translations[language]["citizen"] || "Citizen";
+                    const statName = translations[language]["trade"] || "Trade";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["citizen"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                vault_dweller: function () {
+                    const className = translations[language]["vault_dweller"] || "Vault Dweller";
+                    const statName = translations[language]["intelligence"] || "Intelligence";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["vault_dweller"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                savage: function () {
+                    const className = translations[language]["savage"] || "Savage";
+                    const statName = translations[language]["strength"] || "Strength";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["savage"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                soldier: function () {
+                    const className = translations[language]["soldier"] || "Soldier";
+                    const statName = translations[language]["constitution"] || "Constitution";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["soldier"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                engineer: function () {
+                    const className = translations[language]["engineer"] || "Engineer";
+                    const statName = translations[language]["intelligence"] || "Intelligence";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["engineer"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                medic: function () {
+                    const className = translations[language]["medic"] || "Medic";
+                    const statName = translations[language]["wisdom"] || "Wisdom";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["medic"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                sniper: function () {
+                    const className = translations[language]["sniper"] || "Sniper";
+                    const statName = translations[language]["dexterity"] || "Dexterity";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["sniper"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                virologist: function () {
+                    const className = translations[language]["virologist"] || "Virologist";
+                    const statName = translations[language]["intelligence"] || "Intelligence";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["virologist"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                biotechnician: function () {
+                    const className = translations[language]["biotechnician"] || "Biotechnician";
+                    const statName = translations[language]["wisdom"] || "Wisdom";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["biotechnician"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                reborn: function () {
+                    const className = translations[language]["reborn"] || "Reborn";
+                    const statName = translations[language]["constitution"] || "Constitution";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["reborn"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                xenomant: function () {
+                    const className = translations[language]["xenomant"] || "Xenomant";
+                    const statName = translations[language]["attractiveness"] || "Attractiveness";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["xenomant"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                psionic: function () {
+                    const className = translations[language]["psionic"] || "Psionic";
+                    const statName = translations[language]["wisdom"] || "Wisdom";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["psionic"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                telekinetic: function () {
+                    const className = translations[language]["telekinetic"] || "Telekinetic";
+                    const statName = translations[language]["speed"] || "Speed";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["telekinetic"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                telepath: function () {
+                    const className = translations[language]["telepath"] || "Telepath";
+                    const statName = translations[language]["persuasion"] || "Persuasion";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["telepath"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                pyromancer: function () {
+                    const className = translations[language]["pyromancer"] || "Pyromancer";
+                    const statName = translations[language]["luck"] || "Luck";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["pyromancer"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                cryomancer: function () {
+                    const className = translations[language]["cryomancer"] || "Cryomancer";
+                    const statName = translations[language]["wisdom"] || "Wisdom";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["cryomancer"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                mechanized_soldier: function () {
+                    const className = translations[language]["mechanized_soldier"] || "Mechanized Soldier";
+                    const statName = translations[language]["strength"] || "Strength";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["mechanized_soldier"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                mechanical_guardian: function () {
+                    const className = translations[language]["mechanical_guardian"] || "Mechanical Guardian";
+                    const statName = translations[language]["constitution"] || "Constitution";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["mechanical_guardian"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                cybernetic_assassin: function () {
+                    const className = translations[language]["cybernetic_assassin"] || "Cybernetic Assassin";
+                    const statName = translations[language]["dexterity"] || "Dexterity";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["cybernetic_assassin"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                cybernetic_spy: function () {
+                    const className = translations[language]["cybernetic_spy"] || "Cybernetic Spy";
+                    const statName = translations[language]["persuasion"] || "Persuasion";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["cybernetic_spy"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                precursor_agent: function () {
+                    const className = translations[language]["precursor_agent"] || "Precursor Agent";
+                    const statName = translations[language]["speed"] || "Speed";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["precursor_agent"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                precursor_scientist: function () {
+                    const className = translations[language]["precursor_scientist"] || "Precursor Scientist";
+                    const statName = translations[language]["intelligence"] || "Intelligence";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["precursor_scientist"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                precursor_soldier: function () {
+                    const className = translations[language]["precursor_soldier"] || "Precursor Soldier";
+                    const statName = translations[language]["strength"] || "Strength";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["precursor_soldier"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                alien_scout: function () {
+                    const className = translations[language]["alien_scout"] || "Alien Scout";
+                    const statName = translations[language]["perception"] || "Perception";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["alien_scout"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                space_architect: function () {
+                    const className = translations[language]["space_architect"] || "Space Architect";
+                    const statName = translations[language]["intelligence"] || "Intelligence";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["space_architect"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                galactic_explorer: function () {
+                    const className = translations[language]["galactic_explorer"] || "Galactic Explorer";
+                    const statName = translations[language]["luck"] || "Luck";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["galactic_explorer"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                },
+
+                alien_soldier: function () {
+                    const className = translations[language]["alien_soldier"] || "Alien Soldier";
+                    const statName = translations[language]["constitution"] || "Constitution";
+                    const statBonus = "+1";
+                    const inventoryItems = classes["alien_soldier"].inventory.map(itemKey => {
+                        return translations[language][itemKey] || itemKey;
+                    }).join(", ");
+
+                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                }
+            };
+
+            return classDescriptions;
+        },
+
+        getClassBonusesAndDescription: function (language, classes, className) {
+            const classDescriptionsObject = translationModule.getClassDescriptions(language, classes);
+            const description = translations[language][className + "_descr"];
+
+            return classDescriptionsObject[className]() + "\n" + description;
+        },
+
+        setPostApocalypseClassesMessage: function (classes) {
+            const id = "post-apocalypse-classes";
+            this.setTranslation("english-language", id, `Class affects the generation of passive abilities upon leveling up, bonuses to starting attributes, and starting items: \n${getDescriptions("english-language")}`);
+            this.setTranslation("russian-language", id, `Класс влияет на генерацию пассивных умений при повышении уровня, бонусы к стартовым характеристикам и на стартовые предметы: \n${getDescriptions("russian-language")}`);
+            this.setTranslation("spanish-language", id, `La clase afecta la generación de habilidades pasivas al subir de nivel, bonificaciones a los atributos iniciales y objetos iniciales: \n${getDescriptions("spanish-language")}`);
+            this.setTranslation("portuguese-language", id, `A classe afeta a geração de habilidades passivas ao subir de nível, bônus para atributos iniciais e itens iniciais: \n${getDescriptions("portuguese-language")}`);
+            this.setTranslation("hindi-language", id, `क्लास स्तर बढ़ाने पर निष्क्रिय क्षमताओं की उत्पत्ति, प्रारंभिक विशेषताओं में बोनस और प्रारंभिक वस्तुओं को प्रभावित करता है: \n${getDescriptions("hindi-language")}`);
+            this.setTranslation("german-language", id, `Die Klasse beeinflusst die Generierung passiver Fähigkeiten beim Aufsteigen, Boni auf Startattribute und Startgegenstände: \n${getDescriptions("german-language")}`);
+            this.setTranslation("french-language", id, `La classe affecte la génération des capacités passives lors de la montée en niveau, les bonus aux attributs de départ et les objets de départ : \n${getDescriptions("french-language")}`);
+
+            return id;
+
+            function getDescriptions(language) {
+                const classDescriptions = translationModule.getClassDescriptions(language, classes);
+
+                const descriptions = [];
+                for (const className in classDescriptions) {
+                    descriptions.push(classDescriptions[className]());
+                }
+                return descriptions.join(",\n");
+            }
+        }
     }
 })();
