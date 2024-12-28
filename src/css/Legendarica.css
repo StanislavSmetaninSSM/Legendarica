@@ -690,6 +690,26 @@ img.rounded-corners {
     margin-left: 20px;
 }
 
+.gameModes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.minorText {
+    font-size: 0.95em;
+}
+
+.marginTop10px {
+    margin-top: 10px !important;
+}
+
+.marginTop20px {
+    margin-top: 20px !important;
+}
+
 #info-panel {
     background-size: cover;
     background-repeat: no-repeat;
@@ -771,7 +791,8 @@ img.rounded-corners {
     }
 }
 
-#character-name {
+#character-name,
+#character-post-apocalyptic-name {
     width: 96%;
 }
 

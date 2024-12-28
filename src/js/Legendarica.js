@@ -36,12 +36,14 @@ const ELEMENTS = {
 
     //window with player character information
     modal: document.getElementById('character-creation-modal'),
+    postApocalypticModal: document.getElementById('character-creation-post-apocalyptic-modal'),
 
     createCharacterButton: document.getElementById('create-character'), //create character button
     startNewSettingButton: document.getElementById('create-setting'), //start game in your own setting button
 
     loadCharacterButton: document.getElementById('load-character'), //autosave load button
     myGameButton: document.getElementById('my-game'), // Create your own game button
+    postApocalypticGameButton: document.getElementById('post-apocalyptic-game'),
     randomCharacterButton: document.getElementById('random-character'), // Generate random character
     rpgModeToggle: document.getElementById('rpg-mode'), // Enable RPG mode
     ttsModeToggle: document.getElementById('tts-mode'), // Voice message toggle
@@ -52,6 +54,12 @@ const ELEMENTS = {
     imageToggleSettings: document.getElementById('image-mode-settings'),
     worldDescription: document.getElementById('world-description'),
     worldSystemInstructions: document.getElementById('world-system-instructions'),
+
+    //post apocalyptic
+    postApocalypticRace: document.getElementById('character-post-apocalyptic-race'),
+    postApocalypticClass: document.getElementById('character-post-apocalyptic-class'),
+    postApocalypticCampaign: document.getElementById('campaign-post-apocalyptic-select'),
+    postApocalypticRandomCharacterButton: document.getElementById('random-character-post-apocalyptic'),
 
     //chat
     chatBox: document.getElementById('chat-box'), // chat window
@@ -332,9 +340,116 @@ ELEMENTS.clearStatus.onclick = function () {
     ELEMENTS.statusContainer.classList.add("displayNone");
 }
 
+ELEMENTS.postApocalypticGameButton.onclick = function () {
+    ELEMENTS.modalSetting.style.display = "none";
+    ELEMENTS.modal.style.display = "none";
+    ELEMENTS.postApocalypticModal.style.display = "block";
+
+    //initialize post apocalyptic world settings
+    const races = getPostApocalypticWorldRaces();
+    const classes = getPostApocalypticWorldClasses();
+    
+    processRaces();
+    processClasses();
+    processCampaigns();
+
+    function processRaces() {
+        const raceTooltipId = translationModule.setPostApocalypseRacesTooltip(races.inventory);
+        document.getElementById('post-apocalypse-races').innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][raceTooltipId];
+
+        const raceOptionsHtml = Object.entries(races.inventory)
+            .map(([race]) => `<option value="${race}" data-translate-key="${race}">${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][race]}</option>`)
+            .join('\n');
+
+        ELEMENTS.postApocalypticRace.innerHTML = `
+            <option value="" data-translate-key="no-choosed-race">${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["no-choosed-race"]}</option>
+            ${raceOptionsHtml}
+        `;
+
+        ELEMENTS.postApocalypticRace.onchange = function (e) {
+            const choosedRace = e.target.value;
+            const raceMessage = document.getElementById('post-apocalypse-race-message');
+            const messageId = translationModule.setPostApocalypseRaceMessage(choosedRace);
+            raceMessage.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
+        }
+    }
+
+    function processClasses() {
+        const classTooltipId = translationModule.setPostApocalypseClassesTooltip(classes);
+        document.getElementById('post-apocalypse-classes').innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][classTooltipId];
+
+        const classOptionsHtml = Object.entries(classes)
+            .map(([classId]) => `<option value="${classId}" data-translate-key="${classId}">${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][classId]}</option>`)
+            .join('\n');
+        ELEMENTS.postApocalypticClass.innerHTML = `
+            <option value="" data-translate-key="no-choosed-class">${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["no-choosed-class"]}</option>
+            ${classOptionsHtml}
+        `;
+
+        ELEMENTS.postApocalypticClass.onchange = function (e) {
+            const choosedClass = e.target.value;
+            const classMessage = document.getElementById('post-apocalypse-class-message');
+            const messageId = translationModule.setPostApocalypseClassMessage(choosedClass);            
+            classMessage.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
+        }
+    }
+
+    function processCampaigns() {
+        const campaignIds = getPostApocalypticWorldCampaignIds();
+        const campaignOptionsHtml = campaignIds.map(id => `<option value="${id}" data-translate-key="${id}">${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][id]}</option>`).join('\n');
+        ELEMENTS.postApocalypticCampaign.innerHTML = `
+            <option value="free-roam" data-translate-key="free-roam">${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["free-roam"]}</option>
+            <option value="random" data-translate-key="random">${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["random"]}</option>
+            ${campaignOptionsHtml}
+        `;
+
+        ELEMENTS.postApocalypticCampaign.onchange = function (e) {
+            const choosedCampaign = e.target.value;
+            const campaignMessage = document.getElementById('post-apocalypse-campaign-message');
+            if (choosedCampaign === "random") {
+                selectRandomCampaign();
+                return;
+            }
+
+            const messageId = translationModule.setPostApocalypseCampaignMessage(choosedCampaign);
+            campaignMessage.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
+        }
+    }
+
+    function selectRandomCampaign() {
+        const count = ELEMENTS.postApocalypticCampaign.options.length;
+        const randomValue = ELEMENTS.postApocalypticCampaign.options[Math.floor(Math.random() * count)].value;
+        ELEMENTS.postApocalypticCampaign.value = randomValue;
+        ELEMENTS.postApocalypticCampaign.onchange({ target: ELEMENTS.postApocalypticCampaign });   
+    }
+
+    ELEMENTS.postApocalypticRandomCharacterButton.onclick = function () {
+        const randomName = "Hero";
+        const genders = ['male', 'female'];
+        const randomGender = genders[Math.floor(Math.random() * genders.length)];
+        const racesArray = Object.entries(races.inventory).map(([race]) => race);
+        const randomRace = racesArray[Math.floor(Math.random() * racesArray.length)];
+        const classesArray = Object.entries(classes).map(([classId]) => classId);
+        const randomClass = classesArray[Math.floor(Math.random() * classesArray.length)];
+
+        const nameInput = document.getElementById('character-post-apocalyptic-name');
+        nameInput.value = nameInput.value ? nameInput.value : randomName;
+        document.getElementById('character-post-apocalyptic-gender').value = randomGender;
+
+        ELEMENTS.postApocalypticRace.value = randomRace;
+        ELEMENTS.postApocalypticRace.onchange({ target: ELEMENTS.postApocalypticRace });
+
+        ELEMENTS.postApocalypticClass.value = randomClass;
+        ELEMENTS.postApocalypticClass.onchange({ target: ELEMENTS.postApocalypticClass });
+
+        selectRandomCampaign();
+    }
+}
+
 ELEMENTS.myGameButton.onclick = function () {
     ELEMENTS.modalSetting.style.display = "block";
     ELEMENTS.modal.style.display = "none";
+    ELEMENTS.postApocalypticModal.style.display = "none";
 }
 
 //Random character generator
@@ -522,6 +637,7 @@ ELEMENTS.startNewSettingButton.onclick = function () {
             CHARACTER_INFO.classDescription = getElementValue(elementIds.classDescription);
 
         ELEMENTS.modalSetting.style.display = "none";
+        ELEMENTS.postApocalypticModal.style.display = "none";
 
         experienceProcessing(Math.floor(getElementValue(elementIds.startExp)));
         updateStatsWithoutGm();
@@ -1437,6 +1553,34 @@ function getPostApocalypticWorldClasses() {
     }
 
     return classes;
+}
+
+function getPostApocalypticWorldCampaignIds() {
+    return [
+        "first_contact", "zero_patient", "doomsday",
+        "experiment", "awakening_ancients", "call_from_space",
+        "infected_city", "dead_zone", "anomalous_territory",
+        "underground_world", "ruins_megapolis", "mutant_lair",
+        "forgotten_laboratory", "fight_with_horde", "vault_life",
+        "besieged_city", "nomadic_life", "pirate_haven",
+        "wild_tribe", "trade_caravan", "last_city",
+        "gang_war", "resistance", "bounty_hunters",
+        "wasteland_mercenaries", "battle_for_resources", "ideology_conflict",
+        "cure_search", "precursors_secret", "alien_first_contact",
+        "paradise_search", "mutant_origin", "vault_secrets",
+        "star_ark", "cyber_rebels", "machine_uprising",
+        "mech_wars", "engineer_guild", "cyber_city",
+        "psionic_war", "psionic_school", "psionic_hunt",
+        "psy_defense", "alien_invasion", "galactic_diplomacy",
+        "star_patrol", "war_of_the_worlds", "artifact_search",
+        "hospital_outbreak", "shopping_mall_siege", "prison_break",
+        "highrise_trap", "subway_escape", "ground_zero",
+        "patient_zero_hunt", "the_last_broadcast", "evacuation_failed",
+        "first_bite", "the_fall", "scorched_earth",
+        "water_wars", "beneath_the_sand", "fortress_of_madness",
+        "ghost_ship", "the_frozen_north", "jungle_hunt",
+        "sky_pirates", "mutant_island", "lost_colony"
+    ];
 }
 
 //--------------------------------------------------------------------UPDATE PLAYER INFO WINDOWS------------------------------------------------------------------//
