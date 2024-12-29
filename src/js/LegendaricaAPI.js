@@ -536,7 +536,7 @@ const APIModule = (function getAPIModule() {
             throw emptyResponseErrorMessage;
         },
 
-        sendOpenAI01APIRequest: async function () {
+        sendChat01APIRequest: async function () {
             const messages = [];
 
             if (systemInstructions) {

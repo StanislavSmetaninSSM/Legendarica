@@ -10,7 +10,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
 <head>
     <meta charset="utf-8">
-    <title>Legendarica Absolute v1.2 - Neural Sandbox</title>
+    <title>Legendarica Absolute v1.3 - Neural Sandbox</title>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="https://raw.githack.com/StanislavSmetaninSSM/Legendarica/main/src/css/Legendarica.css">
 </head>
@@ -126,6 +126,29 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                         </div>
                                     </div>
                                 </div>
+                                <div class="statsGroup" id="statsGroup-weight-container">
+                                    <button id="statsGroup-weight-button-label" class="infoDataLabelSmall" onclick="toggleElementVisible('statsGroup-weight')">Вес</button>
+                                    <div id="statsGroup-weight">
+                                        <div class="stat">
+                                            <span class="stat-name" id="total-weight-label">Общий вес (кг):</span>
+                                            <span id="total-weight-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="tooltip tooltipAuto">???<span class="tooltiptext" id="tooltip-max-weight"></span></span><br />
+                                            <span class="stat-name" id="max-weight-label">Максимальный вес (кг):</span>
+                                            <span id="max-weight-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="tooltip tooltipAuto">???<span class="tooltiptext" id="tooltip-critical-weight"></span></span><br />
+                                            <span class="stat-name" id="critical-weight-label">Критический вес (кг):</span>
+                                            <span id="critical-weight-value"></span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-name" id="weight-status-label">Состояние:</span>
+                                            <span id="weight-status-value"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -172,6 +195,12 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         <ul id="locations-list" class="infoDataList"></ul>
                     </div>
 
+                    <div id="player-inventory-basket" class="infoData displayNone">
+                        <span class="tooltip tooltipAuto">???<span class="tooltiptext" id="tooltip-inventory-basket"></span></span><br />
+                        <button id="inventory-basket-button-label" class="infoDataLabel" onclick="toggleElementVisible('inventory-basket-list')">Корзина (Инвентарь)</button>
+                        <ul id="inventory-basket-list" class="inventoryList infoDataList"></ul>
+                    </div>
+
                     <div id="player-passive-skills" class="infoData displayNone listContainer">
                         <button id="passive-skills-button-label" class="infoDataLabel" onclick="toggleElementVisible('passive-skills-list')">Пассивные навыки</button>
                         <ul id="passive-skills-list" class="infoDataList listWithInheritedList"></ul>
@@ -198,6 +227,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <button id="buttonInfoAdjust" class="buttonInfo" onclick="togglePlayerInfoWidth()"><i class="uil uil-align-center-h"></i></button>
                             <button id="buttonInfoStats" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-stats-and-status'])"><i class="uil uil-user-square"></i></button>
                             <button id="buttonInfoMain" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-inventory', 'visited-locations'])"><i class="uil uil-globe"></i></button>
+                            <button id="buttonInfoMain" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-inventory-basket'])"><i class="uil uil-shopping-basket"></i></button>
                             <button id="buttonInfoSkills" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-passive-skills', 'player-active-skills'])"><i class="uil uil-book-open"></i></button>
                             <button id="buttonInfoStatus" class="buttonInfo" onclick="playerInfoDataSwitch(this, ['player-npc', 'player-quests'])"><i class="uil uil-users-alt"></i></button>
                         </div>
@@ -251,6 +281,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                         <div id="settings-box" class="chat-box" style="display: none;">
                             <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useWeightControl" name="useWeightControl" checked />
+                                <label for="useWeightControl" id="use-weight-control-label">Использовать вес в игре</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useStatus" name="useStatus" checked />
                                 <label for="useStatus" id="use-status-label">Использовать статус (отключите для экономии токенов)</label>
                                 <button type="button" id="clear-status-label" style="margin-left: 10px;">Очистить статус</button>
@@ -299,8 +334,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                 <label for="ai-Hugging Face">Hugging Face</label><br>
                                 <input type="radio" id="ai-mistralAi" name="ai-provider" value="Mistral AI" onchange="setAiProvider(this.value)">
                                 <label for="ai-mistralAi">Mistral AI</label><br>
-                                <input type="radio" id="ai-openAI01" name="ai-provider" value="OpenAI01" onchange="setAiProvider(this.value)">
-                                <label for="ai-openAI01">OpenAI01</label><br>
+                                <input type="radio" id="ai-Chat01" name="ai-provider" value="Chat01" onchange="setAiProvider(this.value)">
+                                <label for="ai-Chat01">Chat01</label><br>
                                 <input type="radio" id="ai-openrouter" name="ai-provider" value="OpenRouter" onchange="setAiProvider(this.value)">
                                 <label for="ai-openrouter">OpenRouter</label><br>
                                 <input type="radio" id="ai-websim" name="ai-provider" value="Websim" onchange="setAiProvider(this.value)">
@@ -518,8 +553,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <label for="ai-Hugging Face2">Hugging Face</label><br>
                     <input type="radio" id="ai-mistralAi2" name="ai-provider2" value="Mistral AI" onchange="setAiProvider(this.value)">
                     <label for="ai-mistralAi2">Mistral AI</label><br>
-                    <input type="radio" id="ai-openAI012" name="ai-provider2" value="OpenAI01" onchange="setAiProvider(this.value)">
-                    <label for="ai-openAI012">OpenAI01</label><br>
+                    <input type="radio" id="ai-Chat012" name="ai-provider2" value="Chat01" onchange="setAiProvider(this.value)">
+                    <label for="ai-Chat012">Chat01</label><br>
                     <input type="radio" id="ai-openrouter2" name="ai-provider2" value="OpenRouter" onchange="setAiProvider(this.value)">
                     <label for="ai-openrouter2">OpenRouter</label><br>
                     <input type="radio" id="ai-websim2" name="ai-provider2" value="Websim" onchange="setAiProvider(this.value)">
@@ -537,14 +572,119 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <input type="text" id="api-key2" placeholder="В целях безопасности убедитесь, что используете АПИ ключ с низким лимитом по расходу" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37; display: none">
                 </div>
 
-                <span id="additional-settings-label2" class="additionalSettingsLabel">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
+                <span id="additional-settings-label2" class="additionalSettingsLabel minorText">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
 
-                <div style="display: flex; justify-content: center; align-items: center; gap: 5px;">
+                <div class="gameModes">
                     <button style="width: auto" id="create-character">Начать игру</button>
                     <button style="width: auto" id="random-character">Случайный персонаж</button>
                     <button style="width: auto" id="load-character">Загрузить автосейв</button>
                     <button style="width: auto" id="load-savefile" onclick="clickLoadGame()">Загрузить файл</button>
                     <button style="width: auto" id="my-game">Свой сеттинг</button>
+                </div>
+                <div class="gameModes">
+                    <button style="width: auto" id="post-apocalyptic-game">Быстрая игра - Постапокалипсис</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="character-creation-post-apocalyptic-modal" class="modal">
+            <div class="modal-content">
+                <h2 id="create-character-post-apocalyptic-label">Создайте своего персонажа</h2>
+                <input type="text" id="character-post-apocalyptic-name" placeholder="Введите имя персонажа">
+                <select id="character-post-apocalyptic-gender">
+                    <option value="" data-translate-key="no-choosed-gender">Выберите пол</option>
+                    <option value="male" data-translate-key="male">Мужской</option>
+                    <option value="female" data-translate-key="female">Женский</option>
+                </select>
+
+                <div class="select-container">
+                    <select id="character-post-apocalyptic-race">
+                    </select>
+
+                    <span class="tooltip tooltipAuto">???<span class="tooltiptext" id="post-apocalypse-races"></span></span>
+                </div>
+
+                <div>
+                    <span id="post-apocalypse-race-message-label">Описание расы: </span>
+                    <span id="post-apocalypse-race-message" class="minorText"></span>
+                </div>
+
+                <div class="select-container marginTop10px">
+                    <select id="character-post-apocalyptic-class">
+                    </select>
+
+                    <span class="tooltip tooltipAuto">???<span class="tooltiptext" id="post-apocalypse-classes"></span></span>
+                </div>
+
+                <div>
+                    <span id="post-apocalypse-class-message-label">Описание класса: </span>
+                    <span id="post-apocalypse-class-message"></span>
+                </div>
+
+                <select id="campaign-post-apocalyptic-select" class="marginTop20px">
+                </select>
+
+                <div>
+                    <span id="post-apocalypse-campaign-message-label">Описание кампании: </span>
+                    <span id="post-apocalypse-campaign-message"></span>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+                    <span>RPG </span><span class="tooltip" style="margin-left: auto;"> (?)<span id="tooltip-post-apocalypse-rpg" class="tooltiptext"></span></span>
+                    <label class="switch">
+                        <input type="checkbox" id="post-apocalypse-rpg-mode" checked="">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                    <span id="post-apocalypse-nonmagic-mode-name">В мире нет магии </span><span class="tooltip" style="margin-left: auto;"> (?)<span class="tooltiptext" id="post-apocalypse-tooltip-noMagic"></span></span>
+                    <label class="switch">
+                        <input type="checkbox" id="post-apocalypse-non-magic-mode" checked="">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="aiProvidersList marginTop20px">
+                    <span id="ai-provider-label4">Провайдер нейросети</span>
+                    <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai4"></span></span><br />
+                    <input type="radio" id="ai-Cohere4" name="ai-provider4" value="Cohere" onchange="setAiProvider(this.value)">
+                    <label for="ai-Cohere4">Cohere</label><br>
+                    <input type="radio" id="ai-googleAiStudio4" name="ai-provider4" value="Google AI Studio" onchange="setAiProvider(this.value)">
+                    <label for="ai-googleAiStudio4">Google AI Studio</label><br>
+                    <input type="radio" id="ai-groq4" name="ai-provider4" value="Groq" onchange="setAiProvider(this.value)">
+                    <label for="ai-groq4">Groq</label><br>
+                    <input type="radio" id="ai-Hugging Face4" name="ai-provider4" value="Hugging Face" onchange="setAiProvider(this.value)">
+                    <label for="ai-Hugging Face4">Hugging Face</label><br>
+                    <input type="radio" id="ai-mistralAi4" name="ai-provider4" value="Mistral AI" onchange="setAiProvider(this.value)">
+                    <label for="ai-mistralAi4">Mistral AI</label><br>
+                    <input type="radio" id="ai-Chat014" name="ai-provider4" value="Chat01" onchange="setAiProvider(this.value)">
+                    <label for="ai-Chat014">Chat01</label><br>
+                    <input type="radio" id="ai-openrouter4" name="ai-provider4" value="OpenRouter" onchange="setAiProvider(this.value)">
+                    <label for="ai-openrouter4">OpenRouter</label><br>
+                    <input type="radio" id="ai-websim4" name="ai-provider4" value="Websim" onchange="setAiProvider(this.value)">
+                    <label for="ai-websim4" id="ai-websim4-label">Websim</label><br id="ai-websim4-br">
+                    <input type="radio" id="ai-none4" name="ai-provider4" value="None" onchange="setAiProvider(this.value)" checked>
+                    <label for="ai-none4" id="ai-none4-label">None</label>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; margin-bottom: 11px;">
+                    <span id="ai-model-label4">Модель нейросети</span>
+                    <input type="text" id="ai-model4" placeholder="Введите название модели нейросети" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
+                    <span id="api-key-label4">Ваш API ключ</span><button class="tab-button" id="api-key-button4" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="showAPIKeyInput()">Показать на 10 секунд</button>
+                    <input type="text" id="api-key4" placeholder="В целях безопасности убедитесь, что используете АПИ ключ с низким лимитом по расходу" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37; display: none">
+                </div>
+
+                <span id="additional-settings-label4" class="additionalSettingsLabel minorText">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
+
+                <div class="gameModes">
+                    <button style="width: auto" id="create-character-post-apocalyptic">Начать игру</button>
+                    <button style="width: auto" id="random-character-post-apocalyptic">Случайный персонаж</button>
+                    <button style="width: auto" id="load-character-post-apocalyptic">Загрузить автосейв</button>
+                    <button style="width: auto" id="load-savefile-post-apocalyptic" onclick="clickLoadGame()">Загрузить файл</button>
+                    <button style="width: auto" id="my-game-post-apocalyptic">Свой сеттинг</button>
                 </div>
             </div>
         </div>
@@ -617,8 +757,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <label for="ai-Hugging Face3">Hugging Face</label><br>
                     <input type="radio" id="ai-mistralAi3" name="ai-provider3" value="Mistral AI" onchange="setAiProvider(this.value)">
                     <label for="ai-mistralAi3">Mistral AI</label><br>
-                    <input type="radio" id="ai-openAI013" name="ai-provider3" value="OpenAI01" onchange="setAiProvider(this.value)">
-                    <label for="ai-openAI013">OpenAI01</label><br>
+                    <input type="radio" id="ai-Chat013" name="ai-provider3" value="Chat01" onchange="setAiProvider(this.value)">
+                    <label for="ai-Chat013">Chat01</label><br>
                     <input type="radio" id="ai-openrouter3" name="ai-provider3" value="OpenRouter" onchange="setAiProvider(this.value)">
                     <label for="ai-openrouter3">OpenRouter</label><br>
                     <input type="radio" id="ai-websim3" name="ai-provider3" value="Websim" onchange="setAiProvider(this.value)">
@@ -636,7 +776,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <input type="text" id="api-key3" placeholder="В целях безопасности убедитесь, что используете АПИ ключ с низким лимитом по расходу" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37; display: none">
                 </div>
 
-                <span id="additional-settings-label3" class="additionalSettingsLabel">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
+                <span id="additional-settings-label3" class="additionalSettingsLabel minorText">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
 
                 <div style="display: flex; justify-content: center; align-items: center; gap: 5px;">
                     <button style="width: auto" id="create-setting" style="flex: 1">Начать игру</button>
@@ -734,6 +874,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <p id="inventory-info-contents-description"></p>
             <h4 id="inventory-container-open" class="infoOpen">Открыть</h4>
             <h4 id="inventory-delete" class="infoDelete">Выбросить этот предмет</h4>
+            <h4 id="inventory-restore" class="infoRestore">Восстановить</h4>
             <input type="hidden" id="inventory-info-id" name="inventory-info-id">
         </div>
 

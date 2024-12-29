@@ -10,7 +10,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
 <head>
     <meta charset="utf-8">
-    <title>Legendarica Absolute v1.2 - Neural Sandbox</title>
+    <title>Legendarica Absolute v1.3 - Neural Sandbox</title>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="../src/css/Legendarica.css">
 </head>
@@ -334,8 +334,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                 <label for="ai-Hugging Face">Hugging Face</label><br>
                                 <input type="radio" id="ai-mistralAi" name="ai-provider" value="Mistral AI" onchange="setAiProvider(this.value)">
                                 <label for="ai-mistralAi">Mistral AI</label><br>
-                                <input type="radio" id="ai-openAI01" name="ai-provider" value="OpenAI01" onchange="setAiProvider(this.value)">
-                                <label for="ai-openAI01">OpenAI01</label><br>
+                                <input type="radio" id="ai-Chat01" name="ai-provider" value="Chat01" onchange="setAiProvider(this.value)">
+                                <label for="ai-Chat01">Chat01</label><br>
                                 <input type="radio" id="ai-openrouter" name="ai-provider" value="OpenRouter" onchange="setAiProvider(this.value)">
                                 <label for="ai-openrouter">OpenRouter</label><br>
                                 <input type="radio" id="ai-websim" name="ai-provider" value="Websim" onchange="setAiProvider(this.value)">
@@ -553,8 +553,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <label for="ai-Hugging Face2">Hugging Face</label><br>
                     <input type="radio" id="ai-mistralAi2" name="ai-provider2" value="Mistral AI" onchange="setAiProvider(this.value)">
                     <label for="ai-mistralAi2">Mistral AI</label><br>
-                    <input type="radio" id="ai-openAI012" name="ai-provider2" value="OpenAI01" onchange="setAiProvider(this.value)">
-                    <label for="ai-openAI012">OpenAI01</label><br>
+                    <input type="radio" id="ai-Chat012" name="ai-provider2" value="Chat01" onchange="setAiProvider(this.value)">
+                    <label for="ai-Chat012">Chat01</label><br>
                     <input type="radio" id="ai-openrouter2" name="ai-provider2" value="OpenRouter" onchange="setAiProvider(this.value)">
                     <label for="ai-openrouter2">OpenRouter</label><br>
                     <input type="radio" id="ai-websim2" name="ai-provider2" value="Websim" onchange="setAiProvider(this.value)">
@@ -582,7 +582,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <button style="width: auto" id="my-game">Свой сеттинг</button>
                 </div>
                 <div class="gameModes">
-                    <button style="width: auto" id="post-apocalyptic-game">Сеттинг постапокалипсиса</button>
+                    <button style="width: auto" id="post-apocalyptic-game">Быстрая игра - Постапокалипсис</button>
                 </div>
             </div>
         </div>
@@ -621,9 +621,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <span id="post-apocalypse-class-message"></span>
                 </div>
 
-                <select id="campaign-post-apocalyptic-select" class="marginTop20px">
-                    <option value="free-roam" data-translate-key="free-roam">Свободное исследование (Делай что хочешь)</option>
-                    <option value="random" data-translate-key="random">Случайная кампания из списка</option>
+                <select id="campaign-post-apocalyptic-select" class="marginTop20px">   
                 </select>
 
                 <div>
@@ -632,7 +630,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                 </div>
 
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
-                    <span>RPG </span><span class="tooltip" style="margin-left: auto;"> (?)<span id="tooltip-post-apocalypse-rpg" class="tooltiptext">Если слайдер красного цвета - то включено. RPG - игровой режим. В RPG режиме геймплей заключается в прокачке персонажа, а навыки и инвентарь имеют ключевое значение. Если выключен, то игра проходит в режиме Roleplay, который заключается в выстраивании интересной художественной истории, а навыки и инвентарь имеют второстепенное значение. </span></span>
+                    <span>RPG </span><span class="tooltip" style="margin-left: auto;"> (?)<span id="tooltip-post-apocalypse-rpg" class="tooltiptext"></span></span>
                     <label class="switch">
                         <input type="checkbox" id="post-apocalypse-rpg-mode" checked="">
                         <span class="slider round"></span>
@@ -640,7 +638,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                 </div>
 
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
-                    <span id="post-apocalypse-nonmagic-mode-name">В мире нет магии </span><span class="tooltip" style="margin-left: auto;"> (?)<span class="tooltiptext" id="post-apocalypse-tooltip-noMagic">Если включено (красный цвет), то гейммастер выстраивает мир без магии и только с реалистичными способностями. Если выключено, то в мире будет магия и нереалистичные способности. </span></span>
+                    <span id="post-apocalypse-nonmagic-mode-name">В мире нет магии </span><span class="tooltip" style="margin-left: auto;"> (?)<span class="tooltiptext" id="post-apocalypse-tooltip-noMagic"></span></span>
                     <label class="switch">
                         <input type="checkbox" id="post-apocalypse-non-magic-mode" checked="">
                         <span class="slider round"></span>
@@ -660,8 +658,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <label for="ai-Hugging Face4">Hugging Face</label><br>
                     <input type="radio" id="ai-mistralAi4" name="ai-provider4" value="Mistral AI" onchange="setAiProvider(this.value)">
                     <label for="ai-mistralAi4">Mistral AI</label><br>
-                    <input type="radio" id="ai-openAI014" name="ai-provider4" value="OpenAI01" onchange="setAiProvider(this.value)">
-                    <label for="ai-openAI014">OpenAI01</label><br>
+                    <input type="radio" id="ai-Chat014" name="ai-provider4" value="Chat01" onchange="setAiProvider(this.value)">
+                    <label for="ai-Chat014">Chat01</label><br>
                     <input type="radio" id="ai-openrouter4" name="ai-provider4" value="OpenRouter" onchange="setAiProvider(this.value)">
                     <label for="ai-openrouter4">OpenRouter</label><br>
                     <input type="radio" id="ai-websim4" name="ai-provider4" value="Websim" onchange="setAiProvider(this.value)">
@@ -759,8 +757,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <label for="ai-Hugging Face3">Hugging Face</label><br>
                     <input type="radio" id="ai-mistralAi3" name="ai-provider3" value="Mistral AI" onchange="setAiProvider(this.value)">
                     <label for="ai-mistralAi3">Mistral AI</label><br>
-                    <input type="radio" id="ai-openAI013" name="ai-provider3" value="OpenAI01" onchange="setAiProvider(this.value)">
-                    <label for="ai-openAI013">OpenAI01</label><br>
+                    <input type="radio" id="ai-Chat013" name="ai-provider3" value="Chat01" onchange="setAiProvider(this.value)">
+                    <label for="ai-Chat013">Chat01</label><br>
                     <input type="radio" id="ai-openrouter3" name="ai-provider3" value="OpenRouter" onchange="setAiProvider(this.value)">
                     <label for="ai-openrouter3">OpenRouter</label><br>
                     <input type="radio" id="ai-websim3" name="ai-provider3" value="Websim" onchange="setAiProvider(this.value)">

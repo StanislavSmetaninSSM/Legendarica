@@ -26,9 +26,11 @@ const ELEMENTS = {
     apiKey: document.getElementById('api-key'),
     apiKey2: document.getElementById('api-key2'),
     apiKey3: document.getElementById('api-key3'),
+    apiKey4: document.getElementById('api-key4'),
     aiModel: document.getElementById('ai-model'),
     aiModel2: document.getElementById('ai-model2'),
     aiModel3: document.getElementById('ai-model3'),
+    aiModel4: document.getElementById('ai-model4'),
 
     //setting creation
     modalSetting: document.getElementById('setting-creation-modal'),
@@ -36,11 +38,9 @@ const ELEMENTS = {
 
     //window with player character information
     modal: document.getElementById('character-creation-modal'),
-    postApocalypticModal: document.getElementById('character-creation-post-apocalyptic-modal'),
 
     createCharacterButton: document.getElementById('create-character'), //create character button
     startNewSettingButton: document.getElementById('create-setting'), //start game in your own setting button
-
     loadCharacterButton: document.getElementById('load-character'), //autosave load button
     myGameButton: document.getElementById('my-game'), // Create your own game button
     postApocalypticGameButton: document.getElementById('post-apocalyptic-game'),
@@ -60,6 +60,10 @@ const ELEMENTS = {
     postApocalypticClass: document.getElementById('character-post-apocalyptic-class'),
     postApocalypticCampaign: document.getElementById('campaign-post-apocalyptic-select'),
     postApocalypticRandomCharacterButton: document.getElementById('random-character-post-apocalyptic'),
+    postApocalypticLoadCharacterButton: document.getElementById('load-character-post-apocalyptic'), //autosave load button
+    postApocalypticModal: document.getElementById('character-creation-post-apocalyptic-modal'),
+    postApocalypticMyGameButton: document.getElementById('my-game-post-apocalyptic'),
+    postApocalypticStartGameButton: document.getElementById('create-character-post-apocalyptic'),
 
     //chat
     chatBox: document.getElementById('chat-box'), // chat window
@@ -276,6 +280,7 @@ const CHARACTER_INFO = {
     rpgMode: false,
     ttsMode: false,
     campaign: 'free roam',
+    campaignDescription: '',
 };
 
 let characterStats = {
@@ -344,6 +349,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
     ELEMENTS.modalSetting.style.display = "none";
     ELEMENTS.modal.style.display = "none";
     ELEMENTS.postApocalypticModal.style.display = "block";
+    ELEMENTS.ttsModeToggleSettings.checked = false;
 
     //initialize post apocalyptic world settings
     const races = getPostApocalypticWorldRaces();
@@ -423,6 +429,31 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
         ELEMENTS.postApocalypticCampaign.onchange({ target: ELEMENTS.postApocalypticCampaign });   
     }
 
+    function getStartInventory(playerClass, playerRace) {
+        const translate = translationModule.translations[ELEMENTS.chooseLanguageMenu.value];
+
+        const classInventory = [];
+        for (let i = 1; i < 5; i++) {
+            classInventory.push(translate[`${playerClass}_${i}`]);
+        }
+        
+        const itemNames = [...classInventory, translate[races.inventory[playerRace]]];
+
+        return itemNames.map(name => {
+            return {
+                id: generateGUID(),
+                name: name,
+                description: "",
+                count: 1,
+                quality: null,
+                durability: null,
+                bonuses: [],
+                image_prompt: null,
+                weight: undefined
+            }
+        });
+    }
+
     ELEMENTS.postApocalypticRandomCharacterButton.onclick = function () {
         const randomName = "Hero";
         const genders = ['male', 'female'];
@@ -443,6 +474,78 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
         ELEMENTS.postApocalypticClass.onchange({ target: ELEMENTS.postApocalypticClass });
 
         selectRandomCampaign();
+    }
+
+    ELEMENTS.postApocalypticLoadCharacterButton.onclick = ELEMENTS.loadCharacterButton.onclick;
+    ELEMENTS.postApocalypticMyGameButton.onclick = ELEMENTS.myGameButton.onclick;
+
+    ELEMENTS.postApocalypticStartGameButton.onclick = function () {
+        ELEMENTS.apiKey.value = ELEMENTS.apiKey4.value;
+        ELEMENTS.aiModel.value = ELEMENTS.aiModel4.value?.trim();
+
+        const collapseButtonMain = document.getElementById('collapseButtonMain');
+        collapseButtonMain.style.display = "flex";
+        const collapseButtonSettings = document.getElementById('collapseButtonSettings');
+        collapseButtonSettings.style.display = "flex";
+        const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
+        collapseButtonInputArea.style.display = "flex";
+
+        styleOfImage = "modern fantasy";
+
+        const name = document.getElementById('character-post-apocalyptic-name').value;
+        const gender = document.getElementById('character-post-apocalyptic-gender').value;
+        const race = document.getElementById('character-post-apocalyptic-race').value;
+        const characterClass = document.getElementById('character-post-apocalyptic-class').value;
+        const selectedCampaign = document.getElementById('campaign-post-apocalyptic-select').value;
+
+        const rpgCheck = document.getElementById('post-apocalypse-rpg-mode').checked;
+        ELEMENTS.rpgModeToggle.checked = rpgCheck;
+
+        const nonMagicCheck = document.getElementById('post-apocalypse-non-magic-mode').checked;
+
+        if (!name || !gender || !race || !characterClass) {
+            alert(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]['alert_cant_start']);
+            return;
+        }
+
+        CHARACTER_INFO.name = name;
+        CHARACTER_INFO.gender = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][gender];
+        CHARACTER_INFO.race = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][race];
+        CHARACTER_INFO.raceDescription = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][race + "_desc"];
+        CHARACTER_INFO.classOfCharacter = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][characterClass];
+        CHARACTER_INFO.classDescription = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][characterClass + "_descr"];
+        CHARACTER_INFO.rpgMode = rpgCheck;
+        CHARACTER_INFO.nonMagicMode = nonMagicCheck;
+        CHARACTER_INFO.ttsMode = ELEMENTS.ttsModeToggleSettings.checked;
+        CHARACTER_INFO.campaign = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][selectedCampaign];
+        CHARACTER_INFO.campaignDescription = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][selectedCampaign + "_desc"];
+
+        const allowedKeys = getStatsList();
+        const startStatValue = 1;
+        Object.keys(characterStats)
+            .filter(key => allowedKeys.includes(key))
+            .forEach(s => characterStats[s] = startStatValue);
+
+        races.stats[race]();
+        classes[characterClass].addClassBonus();
+
+        inventory = getStartInventory(characterClass, race);
+        ELEMENTS.postApocalypticModal.style.display = "none";
+
+        updateStatsWithoutGm();
+       
+        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_description"], 'system');
+        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_donate"], 'system');
+        sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_discord"], 'system');
+
+        const startGameMessageId = translationModule.setPostApocalypticNewGameMessage(
+            CHARACTER_INFO.name, CHARACTER_INFO.gender,
+            CHARACTER_INFO.race, CHARACTER_INFO.raceDescription,
+            CHARACTER_INFO.classOfCharacter, CHARACTER_INFO.classDescription,
+            CHARACTER_INFO.campaign, CHARACTER_INFO.campaignDescription
+        );
+        sendRequest(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][startGameMessageId]);
+        updateElements();
     }
 }
 
@@ -3033,20 +3136,25 @@ function setGameInputsSynch() {
         ELEMENTS.apiKey.value = value;
         ELEMENTS.apiKey2.value = value;
         ELEMENTS.apiKey3.value = value;
+        ELEMENTS.apiKey4.value = value;
     }
     ELEMENTS.apiKey.addEventListener("input", onInputApiKeyFunction);
     ELEMENTS.apiKey2.addEventListener("input", onInputApiKeyFunction);
     ELEMENTS.apiKey3.addEventListener("input", onInputApiKeyFunction);
+    ELEMENTS.apiKey4.addEventListener("input", onInputApiKeyFunction);
 
     const onInputModelFunction = function (e) {
         const value = e.target.value;
         ELEMENTS.aiModel.value = value;
         ELEMENTS.aiModel2.value = value;
         ELEMENTS.aiModel3.value = value;
+        ELEMENTS.aiModel4.value = value;
+
     }
     ELEMENTS.aiModel.addEventListener("input", onInputModelFunction);
     ELEMENTS.aiModel2.addEventListener("input", onInputModelFunction);
     ELEMENTS.aiModel3.addEventListener("input", onInputModelFunction);
+    ELEMENTS.aiModel4.addEventListener("input", onInputModelFunction);
 
     const onInputPromptFunction = function (e) {
         const value = e.target.value;
@@ -3080,10 +3188,13 @@ function showAPIKeyInput() {
     ELEMENTS.apiKey.style.display = 'block';
     ELEMENTS.apiKey2.style.display = 'block';
     ELEMENTS.apiKey3.style.display = 'block';
+    ELEMENTS.apiKey4.style.display = 'block';
+
     setTimeout(function () {
         ELEMENTS.apiKey.style.display = 'none';
         ELEMENTS.apiKey2.style.display = 'none';
         ELEMENTS.apiKey3.style.display = 'none';
+        ELEMENTS.apiKey4.style.display = 'none';
     }, 10000);
 }
 
@@ -3091,8 +3202,11 @@ function checkGameSource() {
     const currentURL = window.location.href;
     isGameStartedFromWebsim = currentURL.includes("websim.ai");
 
-    if (isGameStartedFromWebsim)
+    if (isGameStartedFromWebsim) {
+        translationModule.setProviderTooltip();
+        translationModule.updateCurrentLanguage();
         return;
+    }
 
     translationModule.setProviderTooltipForGithubVersion();
     translationModule.updateCurrentLanguage();
@@ -3100,12 +3214,16 @@ function checkGameSource() {
     document.getElementById('ai-websim').remove();
     document.getElementById('ai-websim2').remove();
     document.getElementById('ai-websim3').remove();
+    document.getElementById('ai-websim4').remove();
     document.getElementById('ai-websim-label').remove();
     document.getElementById('ai-websim2-label').remove();
     document.getElementById('ai-websim3-label').remove();
+    document.getElementById('ai-websim4-label').remove();
     document.getElementById('ai-websim-br').remove();
     document.getElementById('ai-websim2-br').remove();
     document.getElementById('ai-websim3-br').remove();
+    document.getElementById('ai-websim4-br').remove();
+
 }
 
 async function generateBackgroundImage(prompt) {
@@ -3305,6 +3423,9 @@ function calculateParametersForItemsArray(itemsArray) {
 }
 
 function getCalculatedItemParameters(item, parentWeightReduction = 0) {
+    if (item.weight === undefined)
+        item.weight = 0;
+
     if (item.originalWeight === undefined)
         item.originalWeight = item.weight;    
 
@@ -3640,6 +3761,8 @@ function loadGameInternal(savedData) {
     updateStatsWithoutGm();
 
     ELEMENTS.modal.style.display = "none";
+    ELEMENTS.postApocalypticModal.style.display = "none";
+
     lastUserMessage = `${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["message_after_load"]}`;
     sendRequest(lastUserMessage);
 }
@@ -4860,8 +4983,8 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 case "Cohere":
                     data = await APIModule.sendCohereRequest();
                     break;
-                case "OpenAI01":
-                    data = await APIModule.sendOpenAI01APIRequest();
+                case "Chat01":
+                    data = await APIModule.sendChat01APIRequest();
                     break;
                 case "None":
                     throw translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["none-provider-selected-label"];
@@ -4946,7 +5069,8 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             if (data.currentEnergyChange) {
                 const additionalEnergyCost = ELEMENTS.useWeightControl.checked ? Number(data.calculatedWeightData.additionalEnergyExpenditure) : 0;
-                data.currentEnergyChange -= additionalEnergyCost;
+                if (ELEMENTS.useWeightControl.checked && calculateTotalInventoryWeight() > maxWeight)
+                    data.currentEnergyChange -= additionalEnergyCost;
                 characterStats.currentEnergy = characterStats.currentEnergy + Math.floor(data.currentEnergyChange);
                 if (characterStats.currentEnergy > characterStats.maxEnergy)
                     characterStats.currentEnergy = characterStats.maxEnergy;
@@ -5177,7 +5301,7 @@ function setAiProvider(providerName, setAlways) {
             ELEMENTS.repetitionPenalty,
             ELEMENTS.maxTokens
         );
-    } else if (providerName == "OpenAI01") {
+    } else if (providerName == "Chat01") {
         inputsToHide.push(
             ELEMENTS.repetitionPenalty,
             ELEMENTS.topK,

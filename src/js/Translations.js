@@ -322,79 +322,7 @@ Enjoy the game!`,
             "clear-status-label": "Clear status",
             "active-skills-button-label": "Active skills",
             "passive-skills-button-label": "Passive skills",
-            "status-effects-label": "Effects:",
-            "tooltip-provider-ai": `Neural Network Providers
-
-	For all providers except Websim, you need to register on the respective website and create an API key or Access Token. Pay attention to the neural network context - Legendarica uses a very large prompt, and it only increases over time due to chat history and other data used by the GM. A context of at least 128,000 tokens is required. The information described here is current as of the specified date (24.11.2024).
-
-	Cohere (https://coral.cohere.com/). Provides completely free access to Command R models.
-	Getting started: model command-r-plus
-
-	Google AI Studio (https://ai.google.dev/aistudio). All models have a free tier; see the Studio website. Try experimental models - they usually have a larger limit of free messages per day.
-	Getting started: model gemini-1.5-pro
-
-	Groq (https://groq.com/). Groq provides access to various free models but severely limits them by context. Currently, there are no free models on this site that work well in Legendarica, but this may change in the future. Paid models are likely to work well. See the list of models here: https://console.groq.com/docs/models
-
-	Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). A large repository for neural networks. The Inference API is used to access it, and only models that support it are available for the game. There is a limit on the number of messages per day, which increases with a paid subscription. If the models send unreadable text as a response, then either the model is very weak, or the temperature is high. In this case, try lowering the temperature or changing the model.
-	Getting started: model Qwen/Qwen2.5-72B-Instruct (temperature 0.4)
-
-	Mistral AI (https://mistral.ai/). The Mistral AI website offers participation in an "experimental" pricing plan, making all Mistral models free to use.
-	Getting started: model mistral-large-latest
-
-	OpenAI01 (https://openaio1api.com/ - main website: https://openai01.net/). Access to OpenAI o1-preview. There is no free tier. Upon registration, you receive 10 credits; 2 credits are charged per request to o1-preview.
-	Model: o1-preview
-
-	Openrouter (https://openrouter.ai/). Offers both free and paid models. Free models have a daily message limit.
-
-	Websim. Depends on the neural network used by Websim. After Websim changed the AI API from Claude to something very weak, Websim can no longer guarantee a good game or even its execution, as the AI used is very weak. But this may change in the future.`,
-            "tooltip-provider-ai2": `Neural Network Providers
-
-	For all providers except Websim, you need to register on the respective website and create an API key or Access Token. Pay attention to the neural network context - Legendarica uses a very large prompt, and it only increases over time due to chat history and other data used by the GM. A context of at least 128,000 tokens is required. The information described here is current as of the specified date (24.11.2024).
-
-	Cohere (https://coral.cohere.com/). Provides completely free access to Command R models.
-	Getting started: model command-r-plus
-
-	Google AI Studio (https://ai.google.dev/aistudio). All models have a free tier; see the Studio website. Try experimental models - they usually have a larger limit of free messages per day.
-	Getting started: model gemini-1.5-pro
-
-	Groq (https://groq.com/). Groq provides access to various free models but severely limits them by context. Currently, there are no free models on this site that work well in Legendarica, but this may change in the future. Paid models are likely to work well. See the list of models here: https://console.groq.com/docs/models
-
-	Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). A large repository for neural networks. The Inference API is used to access it, and only models that support it are available for the game. There is a limit on the number of messages per day, which increases with a paid subscription. If the models send unreadable text as a response, then either the model is very weak, or the temperature is high. In this case, try lowering the temperature or changing the model.
-	Getting started: model Qwen/Qwen2.5-72B-Instruct (temperature 0.4)
-
-	Mistral AI (https://mistral.ai/). The Mistral AI website offers participation in an "experimental" pricing plan, making all Mistral models free to use.
-	Getting started: model mistral-large-latest
-
-	OpenAI01 (https://openaio1api.com/ - main website: https://openai01.net/). Access to OpenAI o1-preview. There is no free tier. Upon registration, you receive 10 credits; 2 credits are charged per request to o1-preview.
-	Model: o1-preview
-
-	Openrouter (https://openrouter.ai/). Offers both free and paid models. Free models have a daily message limit.
-
-	Websim. Depends on the neural network used by Websim. After Websim changed the AI API from Claude to something very weak, Websim can no longer guarantee a good game or even its execution, as the AI used is very weak. But this may change in the future.`,
-            "tooltip-provider-ai3": `Neural Network Providers
-
-	For all providers except Websim, you need to register on the respective website and create an API key or Access Token. Pay attention to the neural network context - Legendarica uses a very large prompt, and it only increases over time due to chat history and other data used by the GM. A context of at least 128,000 tokens is required. The information described here is current as of the specified date (24.11.2024).
-
-	Cohere (https://coral.cohere.com/). Provides completely free access to Command R models.
-	Getting started: model command-r-plus
-
-	Google AI Studio (https://ai.google.dev/aistudio). All models have a free tier; see the Studio website. Try experimental models - they usually have a larger limit of free messages per day.
-	Getting started: model gemini-1.5-pro
-
-	Groq (https://groq.com/). Groq provides access to various free models but severely limits them by context. Currently, there are no free models on this site that work well in Legendarica, but this may change in the future. Paid models are likely to work well. See the list of models here: https://console.groq.com/docs/models
-
-	Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). A large repository for neural networks. The Inference API is used to access it, and only models that support it are available for the game. There is a limit on the number of messages per day, which increases with a paid subscription. If the models send unreadable text as a response, then either the model is very weak, or the temperature is high. In this case, try lowering the temperature or changing the model.
-	Getting started: model Qwen/Qwen2.5-72B-Instruct (temperature 0.4)
-
-	Mistral AI (https://mistral.ai/). The Mistral AI website offers participation in an "experimental" pricing plan, making all Mistral models free to use.
-	Getting started: model mistral-large-latest
-
-	OpenAI01 (https://openaio1api.com/ - main website: https://openai01.net/). Access to OpenAI o1-preview. There is no free tier. Upon registration, you receive 10 credits; 2 credits are charged per request to o1-preview.
-	Model: o1-preview
-
-	Openrouter (https://openrouter.ai/). Offers both free and paid models. Free models have a daily message limit.
-
-	Websim. Depends on the neural network used by Websim. After Websim changed the AI API from Claude to something very weak, Websim can no longer guarantee a good game or even its execution, as the AI used is very weak. But this may change in the future.`,
+            "status-effects-label": "Effects:",           
             "throw-item": "Throw away",
             "inventory-delete": "Throw away this item",
             "skill_effect_label": "Effect",
@@ -899,6 +827,28 @@ Enjoy the game!`,
             "sky_pirates_desc": "Become an air pirate cruising the skies in a dirigible. Battle rival pirates, trade with floating cities, and explore drifting islands.",
             "mutant_island_desc": "You’ve been stranded on an island inhabited by a tribe of mutants. Befriend them or attempt to escape the island.",
             "lost_colony_desc": "You’re part of a spaceship crew that crash-landed on Earth overrun by zombies. Seek out survivors and build a new settlement while fending off hordes of infected.",
+            "character-post-apocalyptic-name": "Enter character name",
+            "post-apocalypse-race-message-label": "Race Description:",
+            "post-apocalypse-class-message-label": "Class Description:",
+            "tooltip-post-apocalypse-rpg": "If the slider is red, it is enabled. RPG is the game mode. In RPG mode, gameplay involves character development, and skills and inventory are crucial. If disabled, the game is in Roleplay mode, which focuses on creating an interesting narrative, and skills and inventory are secondary.",
+            "post-apocalypse-tooltip-noMagic": "If enabled (red color), the gamemaster creates a world without magic and only with realistic abilities. If disabled, the world will have magic and unrealistic abilities.",
+            "post-apocalypse-nonmagic-mode-name": "No Magic in the World",
+            "create-character-post-apocalyptic": "Start Game",
+            "random-character-post-apocalyptic": "Random Character",
+            "load-character-post-apocalyptic": "Load Autosave",
+            "load-savefile-post-apocalyptic": "Load File",
+            "my-game-post-apocalyptic": "My Setting",
+            "ai-provider-label4": "AI Provider",
+            "ai-none4-label": "None Selected",
+            "ai-model-label4": "AI Model",
+            "ai-model4": "Enter AI model name",
+            "api-key-label4": "Your API Key",
+            "api-key-button4": "Show for 10 seconds",
+            "api-key4": "For security purposes, ensure you are using an API key with a low usage limit",
+            "additional-settings-label4": "You can view additional settings in the dropdown panel on the right. Click the button in the bottom right corner of the screen to access the settings panel.",
+            "post-apocalypse-campaign-message-label": "Campaign Description:",
+            "post-apocalyptic-game": "Quick Game - Post-Apocalypse",
+            "create-character-post-apocalyptic-label": "Create Your Character",
         },
         "russian-language": {
             // placeholders
@@ -1205,75 +1155,6 @@ Enjoy the game!`,
             "active-skills-button-label": "Активные навыки",
             "passive-skills-button-label": "Пассивные навыки",
             "status-effects-label": "Эффекты:",
-            "tooltip-provider-ai": `Провайдеры нейросетей.
-Для всех провайдеров, кроме Websim, вам нужно зарегистрироваться на соответствующем сайте и создать API ключ или Access Token. Обращайте внимание на контекст нейросети - у Легендарики очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, которые используются ГМ-ом. Нужен контекст как минимум 128 000 токенов. Информация, описанная здесь, актуальна на момент указанной даты (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Предоставляет полностью бесплатный доступ к моделям Command R.
-С чего начать: модель command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Все модели имеют бесплатный лимит, смотрите на сайте студии. Попробуйте экспериментальные модели - они обычно имеют больший лимит бесплатных сообщений в день.
-С чего начать: модель gemini-1.5-pro
-
-Groq (https://groq.com/). Groq предоставляет доступ к различным бесплатным моделям, но сильно ограничивает их по контексту. Сейчас на этом сайте нет бесплатных моделей, которые бы хорошо работали в Легендарике, но все может измениться в будущем. Платные модели, скорее всего, работают хорошо. Смотрите список моделей здесь: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Большой репозиторий для нейросетей. Для доступа к нему используется Inference API, и только те модели, которые поддерживают его, доступны для игры. Есть ограничение на количество сообщений в день, которое становится большим с платной подпиской. Если модели посылают нечитаемый текст в качестве ответа, значит либо модель очень слабая, либо температура высокая. В этом случае, попробуйте понизить температуру или сменить модель. 
-С чего начать: модель Qwen/Qwen2.5-72B-Instruct  (температура 0.4)
-
-Mistral AI (https://mistral.ai/). На сайте Mistral AI есть возможность принять участие в "экспериментальном" тарифном плане, что делает все модели Mistral бесплатными для использования.
-С чего начать: модель mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - главный сайт: https://openai01.net/). Доступ к OpenAI o1-preview. Бесплатного тарифа нет. При регистрации дают 10 кредитов, 2 кредита стоит запрос к o1-preview.
-Модель: o1-preview 
-
-Openrouter (https://openrouter.ai/). Есть бесплатные модели, есть платные. У бесплатных моделей есть лимит сообщений в день.
-
-Websim. Зависит от нейросети, которую использует Websim. После того, как Websim изменил AI API с Claude на нечто очень слабое, Websim больше не может гарантировать хорошую игру или вообще её проведение, поскольку используемый AI очень слаб. Но все может измениться в будущем.`,
-            "tooltip-provider-ai2": `Провайдеры нейросетей.
-Для всех провайдеров, кроме Websim, вам нужно зарегистрироваться на соответствующем сайте и создать API ключ или Access Token. Обращайте внимание на контекст нейросети - у Легендарики очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, которые используются ГМ-ом. Нужен контекст как минимум 128 000 токенов. Информация, описанная здесь, актуальна на момент указанной даты (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Предоставляет полностью бесплатный доступ к моделям Command R.
-С чего начать: модель command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Все модели имеют бесплатный лимит, смотрите на сайте студии. Попробуйте экспериментальные модели - они обычно имеют больший лимит бесплатных сообщений в день.
-С чего начать: модель gemini-1.5-pro
-
-Groq (https://groq.com/). Groq предоставляет доступ к различным бесплатным моделям, но сильно ограничивает их по контексту. Сейчас на этом сайте нет бесплатных моделей, которые бы хорошо работали в Легендарике, но все может измениться в будущем. Платные модели, скорее всего, работают хорошо. Смотрите список моделей здесь: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Большой репозиторий для нейросетей. Для доступа к нему используется Inference API, и только те модели, которые поддерживают его, доступны для игры. Есть ограничение на количество сообщений в день, которое становится большим с платной подпиской. Если модели посылают нечитаемый текст в качестве ответа, значит либо модель очень слабая, либо температура высокая. В этом случае, попробуйте понизить температуру или сменить модель. 
-С чего начать: модель Qwen/Qwen2.5-72B-Instruct  (температура 0.4)
-
-Mistral AI (https://mistral.ai/). На сайте Mistral AI есть возможность принять участие в "экспериментальном" тарифном плане, что делает все модели Mistral бесплатными для использования.
-С чего начать: модель mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - главный сайт: https://openai01.net/). Доступ к OpenAI o1-preview. Бесплатного тарифа нет. При регистрации дают 10 кредитов, 2 кредита стоит запрос к o1-preview.
-Модель: o1-preview 
-
-Openrouter (https://openrouter.ai/). Есть бесплатные модели, есть платные. У бесплатных моделей есть лимит сообщений в день.
-
-Websim. Зависит от нейросети, которую использует Websim. После того, как Websim изменил AI API с Claude на нечто очень слабое, Websim больше не может гарантировать хорошую игру или вообще её проведение, поскольку используемый AI очень слаб. Но все может измениться в будущем.`,
-            "tooltip-provider-ai3": `Провайдеры нейросетей.
-Для всех провайдеров, кроме Websim, вам нужно зарегистрироваться на соответствующем сайте и создать API ключ или Access Token. Обращайте внимание на контекст нейросети - у Легендарики очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, которые используются ГМ-ом. Нужен контекст как минимум 128 000 токенов. Информация, описанная здесь, актуальна на момент указанной даты (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Предоставляет полностью бесплатный доступ к моделям Command R.
-С чего начать: модель command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Все модели имеют бесплатный лимит, смотрите на сайте студии. Попробуйте экспериментальные модели - они обычно имеют больший лимит бесплатных сообщений в день.
-С чего начать: модель gemini-1.5-pro
-
-Groq (https://groq.com/). Groq предоставляет доступ к различным бесплатным моделям, но сильно ограничивает их по контексту. Сейчас на этом сайте нет бесплатных моделей, которые бы хорошо работали в Легендарике, но все может измениться в будущем. Платные модели, скорее всего, работают хорошо. Смотрите список моделей здесь: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Большой репозиторий для нейросетей. Для доступа к нему используется Inference API, и только те модели, которые поддерживают его, доступны для игры. Есть ограничение на количество сообщений в день, которое становится большим с платной подпиской. Если модели посылают нечитаемый текст в качестве ответа, значит либо модель очень слабая, либо температура высокая. В этом случае, попробуйте понизить температуру или сменить модель. 
-С чего начать: модель Qwen/Qwen2.5-72B-Instruct  (температура 0.4)
-
-Mistral AI (https://mistral.ai/). На сайте Mistral AI есть возможность принять участие в "экспериментальном" тарифном плане, что делает все модели Mistral бесплатными для использования.
-С чего начать: модель mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - главный сайт: https://openai01.net/). Доступ к OpenAI o1-preview. Бесплатного тарифа нет. При регистрации дают 10 кредитов, 2 кредита стоит запрос к o1-preview.
-Модель: o1-preview 
-
-Openrouter (https://openrouter.ai/). Есть бесплатные модели, есть платные. У бесплатных моделей есть лимит сообщений в день.
-
-Websim. Зависит от нейросети, которую использует Websim. После того, как Websim изменил AI API с Claude на нечто очень слабое, Websim больше не может гарантировать хорошую игру или вообще её проведение, поскольку используемый AI очень слаб. Но все может измениться в будущем.`,
             "throw-item": "Выбросить",
             "inventory-delete": "Выбросить этот предмет",
             "skill_effect_label": "Эффект",
@@ -1778,6 +1659,28 @@ Websim. Зависит от нейросети, которую использу�
             "sky_pirates_desc": "Станьте воздушным пиратом, бороздящим небеса на дирижабле. Сражайтесь с другими пиратами, торгуйте с летающими городами и исследуйте парящие острова.",
             "mutant_island_desc": "Вас выбросило на остров, населенный племенем мутантов. Подружитесь с ними или попытайтесь сбежать с острова.",
             "lost_colony_desc": "Вы — член экипажа космического корабля, потерпевшего крушение на Земле, охваченной зомби-вирусом. Ищите выживших и постройте новое поселение, отбиваясь от полчищ зараженных.",
+            "character-post-apocalyptic-name": "Введите имя персонажа",
+            "post-apocalypse-race-message-label": "Описание расы:",
+            "post-apocalypse-class-message-label": "Описание класса:",
+            "tooltip-post-apocalypse-rpg": "Если слайдер красного цвета - то включено. RPG - игровой режим. В RPG режиме геймплей заключается в прокачке персонажа, а навыки и инвентарь имеют ключевое значение. Если выключен, то игра проходит в режиме Roleplay, который заключается в выстраивании интересной художественной истории, а навыки и инвентарь имеют второстепенное значение.",
+            "post-apocalypse-tooltip-noMagic": "Если включено (красный цвет), то гейммастер выстраивает мир без магии и только с реалистичными способностями. Если выключено, то в мире будет магия и нереалистичные способности.",
+            "post-apocalypse-nonmagic-mode-name": "В мире нет магии",
+            "create-character-post-apocalyptic": "Начать игру",
+            "random-character-post-apocalyptic": "Случайный персонаж",
+            "load-character-post-apocalyptic": "Загрузить автосейв",
+            "load-savefile-post-apocalyptic": "Загрузить файл",
+            "my-game-post-apocalyptic": "Свой сеттинг",
+            "ai-provider-label4": "Провайдер нейросети",
+            "ai-none4-label": "Ничего не выбрано",
+            "ai-model-label4": "Модель нейросети",
+            "ai-model4": "Введите название модели нейросети",
+            "api-key-label4": "Ваш API ключ",
+            "api-key-button4": "Показать на 10 секунд",
+            "api-key4": "В целях безопасности убедитесь, что используете АПИ ключ с низким лимитом по расходу",
+            "additional-settings-label4": "Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.",
+            "post-apocalypse-campaign-message-label": "Описание кампании:",
+            "post-apocalyptic-game": "Быстрая игра - Постапокалипсис",
+            "create-character-post-apocalyptic-label": "Создайте своего персонажа",
         },
         "spanish-language": {
             // placeholders
@@ -2087,79 +1990,7 @@ Por favor, considera apoyarme (Lottarend, el autor del juego). Los enlaces para 
             "clear-status-label": "Borrar estado",
             "active-skills-button-label": "Habilidades activas",
             "passive-skills-button-label": "Habilidades pasivas",
-            "status-effects-label": "Efectos:",
-            "tooltip-provider-ai": `Proveedores de Redes Neuronales
-
-Para todos los proveedores excepto Websim, necesitas registrarte en el sitio web respectivo y crear una clave API o Token de Acceso. Presta atención al contexto de la red neuronal: Legendarica utiliza un prompt muy grande, y este solo aumenta con el tiempo debido al historial del chat y otros datos utilizados por el GM. Se requiere un contexto de al menos 128,000 tokens. La información descrita aquí es actual a la fecha especificada (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Proporciona acceso completamente gratuito a los modelos Command R.
-Para empezar: modelo command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Todos los modelos tienen un límite gratuito; consulta el sitio web de Studio. Prueba los modelos experimentales, generalmente tienen un límite mayor de mensajes gratuitos por día.
-Para empezar: modelo gemini-1.5-pro
-
-Groq (https://groq.com/). Groq proporciona acceso a varios modelos gratuitos, pero los limita severamente por contexto. Actualmente, no hay modelos gratuitos en este sitio que funcionen bien en Legendarica, pero esto puede cambiar en el futuro. Es probable que los modelos de pago funcionen bien. Consulta la lista de modelos aquí: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un gran repositorio para redes neuronales. Se utiliza la API de Inference para acceder a él, y solo los modelos que la soportan están disponibles para el juego. Hay un límite en la cantidad de mensajes por día, que aumenta con una suscripción de pago. Si los modelos envían texto ilegible como respuesta, entonces o el modelo es muy débil o la temperatura es alta. En este caso, intenta bajar la temperatura o cambiar de modelo.
-Para empezar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
-
-Mistral AI (https://mistral.ai/). El sitio web de Mistral AI ofrece la participación en un plan de precios "experimental", lo que hace que todos los modelos de Mistral sean gratuitos.
-Para empezar: modelo mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - sitio web principal: https://openai01.net/). Acceso a OpenAI o1-preview. No hay un plan gratuito. Al registrarte, recibes 10 créditos; se cobran 2 créditos por solicitud a o1-preview.
-Modelo: o1-preview
-
-Openrouter (https://openrouter.ai/). Ofrece modelos gratuitos y de pago. Los modelos gratuitos tienen un límite diario de mensajes.
-
-Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim cambió la API de IA de Claude a algo muy débil, Websim ya no puede garantizar un buen juego o siquiera su ejecución, ya que la IA utilizada es muy débil. Pero esto puede cambiar en el futuro.`,
-            "tooltip-provider-ai2": `Proveedores de Redes Neuronales
-
-Para todos los proveedores excepto Websim, necesitas registrarte en el sitio web respectivo y crear una clave API o Token de Acceso. Presta atención al contexto de la red neuronal: Legendarica utiliza un prompt muy grande, y este solo aumenta con el tiempo debido al historial del chat y otros datos utilizados por el GM. Se requiere un contexto de al menos 128,000 tokens. La información descrita aquí es actual a la fecha especificada (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Proporciona acceso completamente gratuito a los modelos Command R.
-Para empezar: modelo command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Todos los modelos tienen un límite gratuito; consulta el sitio web de Studio. Prueba los modelos experimentales, generalmente tienen un límite mayor de mensajes gratuitos por día.
-Para empezar: modelo gemini-1.5-pro
-
-Groq (https://groq.com/). Groq proporciona acceso a varios modelos gratuitos, pero los limita severamente por contexto. Actualmente, no hay modelos gratuitos en este sitio que funcionen bien en Legendarica, pero esto puede cambiar en el futuro. Es probable que los modelos de pago funcionen bien. Consulta la lista de modelos aquí: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un gran repositorio para redes neuronales. Se utiliza la API de Inference para acceder a él, y solo los modelos que la soportan están disponibles para el juego. Hay un límite en la cantidad de mensajes por día, que aumenta con una suscripción de pago. Si los modelos envían texto ilegible como respuesta, entonces o el modelo es muy débil o la temperatura es alta. En este caso, intenta bajar la temperatura o cambiar de modelo.
-Para empezar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
-
-Mistral AI (https://mistral.ai/). El sitio web de Mistral AI ofrece la participación en un plan de precios "experimental", lo que hace que todos los modelos de Mistral sean gratuitos.
-Para empezar: modelo mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - sitio web principal: https://openai01.net/). Acceso a OpenAI o1-preview. No hay un plan gratuito. Al registrarte, recibes 10 créditos; se cobran 2 créditos por solicitud a o1-preview.
-Modelo: o1-preview
-
-Openrouter (https://openrouter.ai/). Ofrece modelos gratuitos y de pago. Los modelos gratuitos tienen un límite diario de mensajes.
-
-Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim cambió la API de IA de Claude a algo muy débil, Websim ya no puede garantizar un buen juego o siquiera su ejecución, ya que la IA utilizada es muy débil. Pero esto puede cambiar en el futuro.`,
-            "tooltip-provider-ai3": `Proveedores de Redes Neuronales
-
-Para todos los proveedores excepto Websim, necesitas registrarte en el sitio web respectivo y crear una clave API o Token de Acceso. Presta atención al contexto de la red neuronal: Legendarica utiliza un prompt muy grande, y este solo aumenta con el tiempo debido al historial del chat y otros datos utilizados por el GM. Se requiere un contexto de al menos 128,000 tokens. La información descrita aquí es actual a la fecha especificada (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Proporciona acceso completamente gratuito a los modelos Command R.
-Para empezar: modelo command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Todos los modelos tienen un límite gratuito; consulta el sitio web de Studio. Prueba los modelos experimentales, generalmente tienen un límite mayor de mensajes gratuitos por día.
-Para empezar: modelo gemini-1.5-pro
-
-Groq (https://groq.com/). Groq proporciona acceso a varios modelos gratuitos, pero los limita severamente por contexto. Actualmente, no hay modelos gratuitos en este sitio que funcionen bien en Legendarica, pero esto puede cambiar en el futuro. Es probable que los modelos de pago funcionen bien. Consulta la lista de modelos aquí: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un gran repositorio para redes neuronales. Se utiliza la API de Inference para acceder a él, y solo los modelos que la soportan están disponibles para el juego. Hay un límite en la cantidad de mensajes por día, que aumenta con una suscripción de pago. Si los modelos envían texto ilegible como respuesta, entonces o el modelo es muy débil o la temperatura es alta. En este caso, intenta bajar la temperatura o cambiar de modelo.
-Para empezar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
-
-Mistral AI (https://mistral.ai/). El sitio web de Mistral AI ofrece la participación en un plan de precios "experimental", lo que hace que todos los modelos de Mistral sean gratuitos.
-Para empezar: modelo mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - sitio web principal: https://openai01.net/). Acceso a OpenAI o1-preview. No hay un plan gratuito. Al registrarte, recibes 10 créditos; se cobran 2 créditos por solicitud a o1-preview.
-Modelo: o1-preview
-
-Openrouter (https://openrouter.ai/). Ofrece modelos gratuitos y de pago. Los modelos gratuitos tienen un límite diario de mensajes.
-
-Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim cambió la API de IA de Claude a algo muy débil, Websim ya no puede garantizar un buen juego o siquiera su ejecución, ya que la IA utilizada es muy débil. Pero esto puede cambiar en el futuro.`,
+            "status-effects-label": "Efectos:",           
             "throw-item": "Tira la",
             "inventory-delete": "Tira este objeto",
             "skill_effect_label": "Efecto",
@@ -2664,6 +2495,28 @@ Websim. Depende de la red neuronal utilizada por Websim. Después de que Websim 
             "sky_pirates_desc": "Conviértete en un pirata del aire, surcando los cielos en un dirigible. Lucha contra otros piratas, comercia con ciudades flotantes y explora islas suspendidas.",
             "mutant_island_desc": "Has naufragado en una isla habitada por una tribu de mutantes. Hazte amigo de ellos o intenta escapar.",
             "lost_colony_desc": "Eres parte de la tripulación de una nave espacial que se estrelló en una Tierra invadida por zombis. Busca supervivientes y construye un nuevo asentamiento mientras te defiendes de hordas de infectados.",
+            "character-post-apocalyptic-name": "Ingrese el nombre del personaje",
+            "post-apocalypse-race-message-label": "Descripción de la raza:",
+            "post-apocalypse-class-message-label": "Descripción de la clase:",
+            "tooltip-post-apocalypse-rpg": "Si el control deslizante es de color rojo, está habilitado. RPG es el modo de juego. En el modo RPG, la jugabilidad consiste en el desarrollo del personaje, y las habilidades y el inventario son cruciales. Si está deshabilitado, el juego se desarrolla en modo Roleplay, que se centra en crear una narrativa interesante, y las habilidades y el inventario son secundarios.",
+            "post-apocalypse-tooltip-noMagic": "Si está habilitado (color rojo), el maestro de juego crea un mundo sin magia y solo con habilidades realistas. Si está deshabilitado, el mundo tendrá magia y habilidades no realistas.",
+            "post-apocalypse-nonmagic-mode-name": "No hay magia en el mundo",
+            "create-character-post-apocalyptic": "Iniciar juego",
+            "random-character-post-apocalyptic": "Personaje aleatorio",
+            "load-character-post-apocalyptic": "Cargar guardado automático",
+            "load-savefile-post-apocalyptic": "Cargar archivo",
+            "my-game-post-apocalyptic": "Mi configuración",
+            "ai-provider-label4": "Proveedor de IA",
+            "ai-none4-label": "Nada seleccionado",
+            "ai-model-label4": "Modelo de IA",
+            "ai-model4": "Ingrese el nombre del modelo de IA",
+            "api-key-label4": "Tu clave API",
+            "api-key-button4": "Mostrar por 10 segundos",
+            "api-key4": "Por razones de seguridad, asegúrese de usar una clave API con un límite de uso bajo",
+            "additional-settings-label4": "Puede ver configuraciones adicionales en el panel desplegable a la derecha. Haga clic en el botón en la esquina inferior derecha de la pantalla para acceder al panel de configuración.",
+            "post-apocalypse-campaign-message-label": "Descripción de la campaña:",
+            "post-apocalyptic-game": "Juego Rápido - Post-Apocalipsis",
+            "create-character-post-apocalyptic-label": "Crea tu personaje",
         },
         "portuguese-language": {
             // placeholders
@@ -2974,78 +2827,6 @@ Aproveite o jogo!`,
             "active-skills-button-label": "Competências ativas",
             "passive-skills-button-label": "Competências passivas",
             "status-effects-label": "Efeitos:",
-            "tooltip-provider-ai": `Provedores de Redes Neurais
-
-Para todos os provedores, exceto Websim, você precisa se registrar no site correspondente e criar uma chave de API ou Token de Acesso. Preste atenção ao contexto da rede neural - Legendarica usa um prompt muito grande, e ele só aumenta com o tempo devido ao histórico do chat e outros dados usados pelo GM. É necessário um contexto de pelo menos 128.000 tokens. As informações descritas aqui são atuais a partir da data especificada (24/11/2024).
-
-Cohere (https://coral.cohere.com/). Fornece acesso totalmente gratuito aos modelos Command R.
-Para começar: modelo command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Todos os modelos têm um limite gratuito, consulte o site do Studio. Experimente modelos experimentais - eles geralmente têm um limite maior de mensagens gratuitas por dia.
-Para começar: modelo gemini-1.5-pro
-
-Groq (https://groq.com/). Groq fornece acesso a vários modelos gratuitos, mas os limita severamente por contexto. Atualmente, não há modelos gratuitos neste site que funcionem bem no Legendarica, mas isso pode mudar no futuro. Modelos pagos provavelmente funcionam bem. Veja a lista de modelos aqui: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Um grande repositório para redes neurais. A API de Inferência é usada para acessá-lo, e apenas os modelos que a suportam estão disponíveis para o jogo. Há um limite no número de mensagens por dia, que aumenta com uma assinatura paga. Se os modelos enviarem texto ilegível como resposta, então ou o modelo é muito fraco ou a temperatura está alta. Nesse caso, tente diminuir a temperatura ou mudar o modelo.
-Para começar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
-
-Mistral AI (https://mistral.ai/). O site da Mistral AI oferece a participação em um plano de preços "experimental", tornando todos os modelos Mistral gratuitos para uso.
-Para começar: modelo mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - site principal: https://openai01.net/). Acesso ao OpenAI o1-preview. Não há plano gratuito. Ao se registrar, você recebe 10 créditos; 2 créditos são cobrados por solicitação ao o1-preview.
-Modelo: o1-preview
-
-Openrouter (https://openrouter.ai/). Oferece modelos gratuitos e pagos. Modelos gratuitos têm um limite diário de mensagens.
-
-Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a API de IA de Claude para algo muito fraco, o Websim não pode mais garantir um bom jogo ou mesmo sua execução, pois a IA usada é muito fraca. Mas isso pode mudar no futuro.`,
-            "tooltip-provider-ai2": `Provedores de Redes Neurais
-
-Para todos os provedores, exceto Websim, você precisa se registrar no site correspondente e criar uma chave de API ou Token de Acesso. Preste atenção ao contexto da rede neural - Legendarica usa um prompt muito grande, e ele só aumenta com o tempo devido ao histórico do chat e outros dados usados pelo GM. É necessário um contexto de pelo menos 128.000 tokens. As informações descritas aqui são atuais a partir da data especificada (24/11/2024).
-
-Cohere (https://coral.cohere.com/). Fornece acesso totalmente gratuito aos modelos Command R.
-Para começar: modelo command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Todos os modelos têm um limite gratuito, consulte o site do Studio. Experimente modelos experimentais - eles geralmente têm um limite maior de mensagens gratuitas por dia.
-Para começar: modelo gemini-1.5-pro
-
-Groq (https://groq.com/). Groq fornece acesso a vários modelos gratuitos, mas os limita severamente por contexto. Atualmente, não há modelos gratuitos neste site que funcionem bem no Legendarica, mas isso pode mudar no futuro. Modelos pagos provavelmente funcionam bem. Veja a lista de modelos aqui: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Um grande repositório para redes neurais. A API de Inferência é usada para acessá-lo, e apenas os modelos que a suportam estão disponíveis para o jogo. Há um limite no número de mensagens por dia, que aumenta com uma assinatura paga. Se os modelos enviarem texto ilegível como resposta, então ou o modelo é muito fraco ou a temperatura está alta. Nesse caso, tente diminuir a temperatura ou mudar o modelo.
-Para começar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
-
-Mistral AI (https://mistral.ai/). O site da Mistral AI oferece a participação em um plano de preços "experimental", tornando todos os modelos Mistral gratuitos para uso.
-Para começar: modelo mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - site principal: https://openai01.net/). Acesso ao OpenAI o1-preview. Não há plano gratuito. Ao se registrar, você recebe 10 créditos; 2 créditos são cobrados por solicitação ao o1-preview.
-Modelo: o1-preview
-
-Openrouter (https://openrouter.ai/). Oferece modelos gratuitos e pagos. Modelos gratuitos têm um limite diário de mensagens.
-
-Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a API de IA de Claude para algo muito fraco, o Websim não pode mais garantir um bom jogo ou mesmo sua execução, pois a IA usada é muito fraca. Mas isso pode mudar no futuro.`,
-            "tooltip-provider-ai3": `Provedores de Redes Neurais
-
-Para todos os provedores, exceto Websim, você precisa se registrar no site correspondente e criar uma chave de API ou Token de Acesso. Preste atenção ao contexto da rede neural - Legendarica usa um prompt muito grande, e ele só aumenta com o tempo devido ao histórico do chat e outros dados usados pelo GM. É necessário um contexto de pelo menos 128.000 tokens. As informações descritas aqui são atuais a partir da data especificada (24/11/2024).
-
-Cohere (https://coral.cohere.com/). Fornece acesso totalmente gratuito aos modelos Command R.
-Para começar: modelo command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Todos os modelos têm um limite gratuito, consulte o site do Studio. Experimente modelos experimentais - eles geralmente têm um limite maior de mensagens gratuitas por dia.
-Para começar: modelo gemini-1.5-pro
-
-Groq (https://groq.com/). Groq fornece acesso a vários modelos gratuitos, mas os limita severamente por contexto. Atualmente, não há modelos gratuitos neste site que funcionem bem no Legendarica, mas isso pode mudar no futuro. Modelos pagos provavelmente funcionam bem. Veja a lista de modelos aqui: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Um grande repositório para redes neurais. A API de Inferência é usada para acessá-lo, e apenas os modelos que a suportam estão disponíveis para o jogo. Há um limite no número de mensagens por dia, que aumenta com uma assinatura paga. Se os modelos enviarem texto ilegível como resposta, então ou o modelo é muito fraco ou a temperatura está alta. Nesse caso, tente diminuir a temperatura ou mudar o modelo.
-Para começar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
-
-Mistral AI (https://mistral.ai/). O site da Mistral AI oferece a participação em um plano de preços "experimental", tornando todos os modelos Mistral gratuitos para uso.
-Para começar: modelo mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - site principal: https://openai01.net/). Acesso ao OpenAI o1-preview. Não há plano gratuito. Ao se registrar, você recebe 10 créditos; 2 créditos são cobrados por solicitação ao o1-preview.
-Modelo: o1-preview
-
-Openrouter (https://openrouter.ai/). Oferece modelos gratuitos e pagos. Modelos gratuitos têm um limite diário de mensagens.
-
-Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a API de IA de Claude para algo muito fraco, o Websim não pode mais garantir um bom jogo ou mesmo sua execução, pois a IA usada é muito fraca. Mas isso pode mudar no futuro.`,
             "throw-item": "Jogar fora",
             "inventory-delete": "Joga este objeto fora",
             "skill_effect_label": "Efeito",
@@ -3550,6 +3331,28 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "sky_pirates_desc": "Torne-se um pirata dos céus, navegando em um dirigível. Lute contra outros piratas, negocie com cidades flutuantes e explore ilhas suspensas.",
             "mutant_island_desc": "Você naufragou em uma ilha habitada por uma tribo de mutantes. Faça amizade com eles ou tente escapar da ilha.",
             "lost_colony_desc": "Você é parte da tripulação de uma nave espacial que caiu em uma Terra dominada por zumbis. Procure sobreviventes e construa um novo assentamento enquanto repele hordas de infectados.",
+            "character-post-apocalyptic-name": "Digite o nome do personagem",
+            "post-apocalypse-race-message-label": "Descrição da raça:",
+            "post-apocalypse-class-message-label": "Descrição da classe:",
+            "tooltip-post-apocalypse-rpg": "Se o controle deslizante estiver vermelho, está ativado. RPG é o modo de jogo. No modo RPG, a jogabilidade consiste no desenvolvimento do personagem, e habilidades e inventário são cruciais. Se desativado, o jogo estará no modo Roleplay, que foca em criar uma narrativa interessante, e habilidades e inventário são secundários.",
+            "post-apocalypse-tooltip-noMagic": "Se ativado (cor vermelha), o mestre de jogo cria um mundo sem magia e apenas com habilidades realistas. Se desativado, o mundo terá magia e habilidades não realistas.",
+            "post-apocalypse-nonmagic-mode-name": "Sem Magia no Mundo",
+            "create-character-post-apocalyptic": "Iniciar Jogo",
+            "random-character-post-apocalyptic": "Personagem Aleatório",
+            "load-character-post-apocalyptic": "Carregar Autosave",
+            "load-savefile-post-apocalyptic": "Carregar Arquivo",
+            "my-game-post-apocalyptic": "Meu Cenário",
+            "ai-provider-label4": "Provedor de IA",
+            "ai-none4-label": "Nenhum Selecionado",
+            "ai-model-label4": "Modelo de IA",
+            "ai-model4": "Digite o nome do modelo de IA",
+            "api-key-label4": "Sua Chave API",
+            "api-key-button4": "Mostrar por 10 segundos",
+            "api-key4": "Por motivos de segurança, certifique-se de usar uma chave API com baixo limite de uso",
+            "additional-settings-label4": "Você pode ver configurações adicionais no painel suspenso à direita. Clique no botão no canto inferior direito da tela para acessar o painel de configurações.",
+            "post-apocalypse-campaign-message-label": "Descrição da campanha:",
+            "post-apocalyptic-game": "Jogo Rápido - Pós-Apocalipse",
+            "create-character-post-apocalyptic-label": "Crie seu personagem",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -3856,79 +3659,7 @@ Websim. Depende da rede neural usada pelo Websim. Depois que o Websim mudou a AP
             "clear-status-label": "स्थिति साफ़ करें",
             "active-skills-button-label": "सक्रिय कौशल",
             "passive-skills-button-label": "निष्क्रिय कौशल",
-            "status-effects-label": "प्रभाव:",
-            "tooltip-provider-ai": `न्यूरल नेटवर्क प्रदाता
-
-Websim को छोड़कर सभी प्रदाताओं के लिए, आपको संबंधित वेबसाइट पर पंजीकरण करना होगा और एक API कुंजी या एक्सेस टोकन बनाना होगा। न्यूरल नेटवर्क संदर्भ पर ध्यान दें - Legendarica एक बहुत बड़ा प्रॉम्प्ट का उपयोग करता है, और यह चैट इतिहास और GM द्वारा उपयोग किए गए अन्य डेटा के कारण समय के साथ बढ़ता ही जाता है। कम से कम 128,000 टोकन के संदर्भ की आवश्यकता है। यहां वर्णित जानकारी निर्दिष्ट तिथि (24.11.2024) तक वर्तमान है।
-
-Cohere (https://coral.cohere.com/). Command R मॉडल तक पूरी तरह से मुफ्त पहुंच प्रदान करता है।
-शुरू करने के लिए: मॉडल command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio)। सभी मॉडलों की एक मुफ्त सीमा है, स्टूडियो वेबसाइट देखें। प्रायोगिक मॉडलों को आज़माएं - उनके पास आमतौर पर प्रति दिन मुफ्त संदेशों की अधिक सीमा होती है।
-शुरू करने के लिए: मॉडल gemini-1.5-pro
-
-Groq (https://groq.com/)। Groq विभिन्न मुफ्त मॉडलों तक पहुंच प्रदान करता है, लेकिन संदर्भ द्वारा उन्हें बहुत सीमित करता है। वर्तमान में, इस साइट पर कोई मुफ्त मॉडल नहीं है जो Legendarica में अच्छा काम करे, लेकिन यह भविष्य में बदल सकता है। सशुल्क मॉडल संभवतः अच्छा काम करते हैं। यहां मॉडलों की सूची देखें: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending)। न्यूरल नेटवर्क के लिए एक बड़ा भंडार। इसका उपयोग करने के लिए Inference API का उपयोग किया जाता है, और केवल वे मॉडल जो इसका समर्थन करते हैं, वे गेम के लिए उपलब्ध हैं। प्रति दिन संदेशों की संख्या की एक सीमा है, जो सशुल्क सदस्यता के साथ बढ़ जाती है। यदि मॉडल प्रतिक्रिया के रूप में अपठनीय पाठ भेजते हैं, तो या तो मॉडल बहुत कमजोर है, या तापमान अधिक है। इस मामले में, तापमान कम करने या मॉडल बदलने का प्रयास करें।
-शुरू करने के लिए: मॉडल Qwen/Qwen2.5-72B-Instruct (तापमान 0.4)
-
-Mistral AI (https://mistral.ai/)। Mistral AI वेबसाइट "प्रायोगिक" मूल्य निर्धारण योजना में भाग लेने की पेशकश करती है, जिससे सभी Mistral मॉडल उपयोग के लिए मुफ्त हो जाते हैं।
-शुरू करने के लिए: मॉडल mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - मुख्य वेबसाइट: https://openai01.net/)। OpenAI o1-preview तक पहुंच। कोई मुफ्त प्लान नहीं है। पंजीकरण पर, आपको 10 क्रेडिट मिलते हैं; o1-preview के लिए प्रति अनुरोध 2 क्रेडिट शुल्क लिया जाता है।
-मॉडल: o1-preview
-
-Openrouter (https://openrouter.ai/)। मुफ्त और सशुल्क दोनों मॉडल प्रदान करता है। मुफ्त मॉडल में प्रति दिन संदेशों की सीमा होती है।
-
-Websim. Websim द्वारा उपयोग किए जाने वाले न्यूरल नेटवर्क पर निर्भर करता है। Websim द्वारा AI API को Claude से बदलकर कुछ बहुत कमजोर करने के बाद, Websim अब एक अच्छे गेम या यहां तक ​​कि इसके निष्पादन की गारंटी नहीं दे सकता है, क्योंकि उपयोग किया गया AI बहुत कमजोर है। लेकिन यह भविष्य में बदल सकता है।`,
-            "tooltip-provider-ai2": `न्यूरल नेटवर्क प्रदाता
-
-Websim को छोड़कर सभी प्रदाताओं के लिए, आपको संबंधित वेबसाइट पर पंजीकरण करना होगा और एक API कुंजी या एक्सेस टोकन बनाना होगा। न्यूरल नेटवर्क संदर्भ पर ध्यान दें - Legendarica एक बहुत बड़ा प्रॉम्प्ट का उपयोग करता है, और यह चैट इतिहास और GM द्वारा उपयोग किए गए अन्य डेटा के कारण समय के साथ बढ़ता ही जाता है। कम से कम 128,000 टोकन के संदर्भ की आवश्यकता है। यहां वर्णित जानकारी निर्दिष्ट तिथि (24.11.2024) तक वर्तमान है।
-
-Cohere (https://coral.cohere.com/). Command R मॉडल तक पूरी तरह से मुफ्त पहुंच प्रदान करता है।
-शुरू करने के लिए: मॉडल command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio)। सभी मॉडलों की एक मुफ्त सीमा है, स्टूडियो वेबसाइट देखें। प्रायोगिक मॉडलों को आज़माएं - उनके पास आमतौर पर प्रति दिन मुफ्त संदेशों की अधिक सीमा होती है।
-शुरू करने के लिए: मॉडल gemini-1.5-pro
-
-Groq (https://groq.com/)। Groq विभिन्न मुफ्त मॉडलों तक पहुंच प्रदान करता है, लेकिन संदर्भ द्वारा उन्हें बहुत सीमित करता है। वर्तमान में, इस साइट पर कोई मुफ्त मॉडल नहीं है जो Legendarica में अच्छा काम करे, लेकिन यह भविष्य में बदल सकता है। सशुल्क मॉडल संभवतः अच्छा काम करते हैं। यहां मॉडलों की सूची देखें: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending)। न्यूरल नेटवर्क के लिए एक बड़ा भंडार। इसका उपयोग करने के लिए Inference API का उपयोग किया जाता है, और केवल वे मॉडल जो इसका समर्थन करते हैं, वे गेम के लिए उपलब्ध हैं। प्रति दिन संदेशों की संख्या की एक सीमा है, जो सशुल्क सदस्यता के साथ बढ़ जाती है। यदि मॉडल प्रतिक्रिया के रूप में अपठनीय पाठ भेजते हैं, तो या तो मॉडल बहुत कमजोर है, या तापमान अधिक है। इस मामले में, तापमान कम करने या मॉडल बदलने का प्रयास करें।
-शुरू करने के लिए: मॉडल Qwen/Qwen2.5-72B-Instruct (तापमान 0.4)
-
-Mistral AI (https://mistral.ai/)। Mistral AI वेबसाइट "प्रायोगिक" मूल्य निर्धारण योजना में भाग लेने की पेशकश करती है, जिससे सभी Mistral मॉडल उपयोग के लिए मुफ्त हो जाते हैं।
-शुरू करने के लिए: मॉडल mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - मुख्य वेबसाइट: https://openai01.net/)। OpenAI o1-preview तक पहुंच। कोई मुफ्त प्लान नहीं है। पंजीकरण पर, आपको 10 क्रेडिट मिलते हैं; o1-preview के लिए प्रति अनुरोध 2 क्रेडिट शुल्क लिया जाता है।
-मॉडल: o1-preview
-
-Openrouter (https://openrouter.ai/)। मुफ्त और सशुल्क दोनों मॉडल प्रदान करता है। मुफ्त मॉडल में प्रति दिन संदेशों की सीमा होती है।
-
-Websim. Websim द्वारा उपयोग किए जाने वाले न्यूरल नेटवर्क पर निर्भर करता है। Websim द्वारा AI API को Claude से बदलकर कुछ बहुत कमजोर करने के बाद, Websim अब एक अच्छे गेम या यहां तक ​​कि इसके निष्पादन की गारंटी नहीं दे सकता है, क्योंकि उपयोग किया गया AI बहुत कमजोर है। लेकिन यह भविष्य में बदल सकता है।`,
-            "tooltip-provider-ai3": `न्यूरल नेटवर्क प्रदाता
-
-Websim को छोड़कर सभी प्रदाताओं के लिए, आपको संबंधित वेबसाइट पर पंजीकरण करना होगा और एक API कुंजी या एक्सेस टोकन बनाना होगा। न्यूरल नेटवर्क संदर्भ पर ध्यान दें - Legendarica एक बहुत बड़ा प्रॉम्प्ट का उपयोग करता है, और यह चैट इतिहास और GM द्वारा उपयोग किए गए अन्य डेटा के कारण समय के साथ बढ़ता ही जाता है। कम से कम 128,000 टोकन के संदर्भ की आवश्यकता है। यहां वर्णित जानकारी निर्दिष्ट तिथि (24.11.2024) तक वर्तमान है।
-
-Cohere (https://coral.cohere.com/). Command R मॉडल तक पूरी तरह से मुफ्त पहुंच प्रदान करता है।
-शुरू करने के लिए: मॉडल command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio)। सभी मॉडलों की एक मुफ्त सीमा है, स्टूडियो वेबसाइट देखें। प्रायोगिक मॉडलों को आज़माएं - उनके पास आमतौर पर प्रति दिन मुफ्त संदेशों की अधिक सीमा होती है।
-शुरू करने के लिए: मॉडल gemini-1.5-pro
-
-Groq (https://groq.com/)। Groq विभिन्न मुफ्त मॉडलों तक पहुंच प्रदान करता है, लेकिन संदर्भ द्वारा उन्हें बहुत सीमित करता है। वर्तमान में, इस साइट पर कोई मुफ्त मॉडल नहीं है जो Legendarica में अच्छा काम करे, लेकिन यह भविष्य में बदल सकता है। सशुल्क मॉडल संभवतः अच्छा काम करते हैं। यहां मॉडलों की सूची देखें: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending)। न्यूरल नेटवर्क के लिए एक बड़ा भंडार। इसका उपयोग करने के लिए Inference API का उपयोग किया जाता है, और केवल वे मॉडल जो इसका समर्थन करते हैं, वे गेम के लिए उपलब्ध हैं। प्रति दिन संदेशों की संख्या की एक सीमा है, जो सशुल्क सदस्यता के साथ बढ़ जाती है। यदि मॉडल प्रतिक्रिया के रूप में अपठनीय पाठ भेजते हैं, तो या तो मॉडल बहुत कमजोर है, या तापमान अधिक है। इस मामले में, तापमान कम करने या मॉडल बदलने का प्रयास करें।
-शुरू करने के लिए: मॉडल Qwen/Qwen2.5-72B-Instruct (तापमान 0.4)
-
-Mistral AI (https://mistral.ai/)। Mistral AI वेबसाइट "प्रायोगिक" मूल्य निर्धारण योजना में भाग लेने की पेशकश करती है, जिससे सभी Mistral मॉडल उपयोग के लिए मुफ्त हो जाते हैं।
-शुरू करने के लिए: मॉडल mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - मुख्य वेबसाइट: https://openai01.net/)। OpenAI o1-preview तक पहुंच। कोई मुफ्त प्लान नहीं है। पंजीकरण पर, आपको 10 क्रेडिट मिलते हैं; o1-preview के लिए प्रति अनुरोध 2 क्रेडिट शुल्क लिया जाता है।
-मॉडल: o1-preview
-
-Openrouter (https://openrouter.ai/)। मुफ्त और सशुल्क दोनों मॉडल प्रदान करता है। मुफ्त मॉडल में प्रति दिन संदेशों की सीमा होती है।
-
-Websim. Websim द्वारा उपयोग किए जाने वाले न्यूरल नेटवर्क पर निर्भर करता है। Websim द्वारा AI API को Claude से बदलकर कुछ बहुत कमजोर करने के बाद, Websim अब एक अच्छे गेम या यहां तक ​​कि इसके निष्पादन की गारंटी नहीं दे सकता है, क्योंकि उपयोग किया गया AI बहुत कमजोर है। लेकिन यह भविष्य में बदल सकता है।`,
+            "status-effects-label": "प्रभाव:",           
             "throw-item": "फेंक देना",
             "inventory-delete": "यह वस्तु फेंक दो",
             "skill_effect_label": "प्रभाव",
@@ -4434,6 +4165,28 @@ Websim. Websim द्वारा उपयोग किए जाने वा�
             "sky_pirates_desc": "एक हवाई डाकू बनिए, जो एक विशाल एयरशिप में आसमान में सफ़र करता है। दूसरों से लड़ें, उड़ते शहरों से व्यापार करें और तैरते द्वीपों की खोज करें।",
             "mutant_island_desc": "आप एक द्वीप पर फँस गए हैं जहाँ एक म्यूटेंट क़बीला रहता है। उनसे मित्रता करें या वहाँ से भागने का प्रयास करें।",
             "lost_colony_desc": "आप एक अंतरिक्ष यान के दल के सदस्य हैं जो ज़ोंबी वायरस से ग्रस्त पृथ्वी पर दुर्घटनाग्रस्त हो गया। जीवित बचे लोगों को ढूँढें और नए बस्ती का निर्माण करें, संक्रमितों की भीड़ से लड़ते हुए।",
+            "character-post-apocalyptic-name": "पात्र का नाम दर्ज करें",
+            "post-apocalypse-race-message-label": "जाति का विवरण:",
+            "post-apocalypse-class-message-label": "क्लास का विवरण:",
+            "tooltip-post-apocalypse-rpg": "यदि स्लाइडर लाल रंग का है, तो यह सक्षम है। RPG - गेमिंग मोड है। RPG मोड में गेमप्ले चरित्र विकास में निहित है, और कौशल और इन्वेंटरी महत्वपूर्ण हैं। यदि अक्षम है, तो खेल Roleplay मोड में होता है, जो एक रोचक कथा बनाने पर केंद्रित होता है, और कौशल और इन्वेंटरी द्वितीयक महत्व रखते हैं।",
+            "post-apocalypse-tooltip-noMagic": "यदि सक्षम है (लाल रंग), तो गेममास्टर बिना जादू और केवल यथार्थवादी क्षमताओं के साथ दुनिया बनाता है। यदि अक्षम है, तो दुनिया में जादू और अवास्तविक क्षमताएं होंगी।",
+            "post-apocalypse-nonmagic-mode-name": "दुनिया में जादू नहीं है",
+            "create-character-post-apocalyptic": "खेल शुरू करें",
+            "random-character-post-apocalyptic": "रैंडम पात्र",
+            "load-character-post-apocalyptic": "ऑटोसैव लोड करें",
+            "load-savefile-post-apocalyptic": "फाइल लोड करें",
+            "my-game-post-apocalyptic": "अपना सेटिंग",
+            "ai-provider-label4": "आईए प्रदाता",
+            "ai-none4-label": "कुछ भी नहीं चुना",
+            "ai-model-label4": "आईए मॉडल",
+            "ai-model4": "आईए मॉडल का नाम दर्ज करें",
+            "api-key-label4": "आपकी API कुंजी",
+            "api-key-button4": "10 सेकंड के लिए दिखाएँ",
+            "api-key4": "सुरक्षा कारणों से सुनिश्चित करें कि आप कम उपयोग सीमा वाली API कुंजी का उपयोग कर रहे हैं",
+            "additional-settings-label4": "आप दाहिनी ओर के ड्रॉपडाउन पैनल में अतिरिक्त सेटिंग्स देख सकते हैं। सेटिंग्स पैनल तक पहुंचने के लिए स्क्रीन के निचले दाएं कोने में बटन पर क्लिक करें।",
+            "post-apocalypse-campaign-message-label": "अभियान का विवरण:",
+            "post-apocalyptic-game": "त्वरित खेल - पोस्ट-अपोकैलिप्सिस",
+            "create-character-post-apocalyptic-label": "अपना पात्र बनाएँ",
         },
         "german-language": {
             // placeholders
@@ -4743,79 +4496,7 @@ Viel Spaß beim Spielen!`,
             "clear-status-label": "Status löschen",
             "active-skills-button-label": "Aktive Fähigkeiten",
             "passive-skills-button-label": "Passive Fähigkeiten",
-            "status-effects-label": "Effekte:",
-            "tooltip-provider-ai": `Neuronale Netzwerk-Anbieter
-
-Für alle Anbieter außer Websim müssen Sie sich auf der jeweiligen Website registrieren und einen API-Schlüssel oder ein Access Token erstellen. Achten Sie auf den Kontext des neuronalen Netzwerks - Legendarica verwendet einen sehr großen Prompt, der aufgrund des Chatverlaufs und anderer vom GM verwendeter Daten mit der Zeit immer größer wird. Ein Kontext von mindestens 128.000 Token ist erforderlich. Die hier beschriebenen Informationen sind auf dem Stand des angegebenen Datums (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Bietet vollständig kostenlosen Zugriff auf Command R-Modelle.
-Erste Schritte: Modell command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Alle Modelle haben ein kostenloses Kontingent; siehe die Studio-Website. Probieren Sie experimentelle Modelle aus - sie haben in der Regel ein größeres Limit an kostenlosen Nachrichten pro Tag.
-Erste Schritte: Modell gemini-1.5-pro
-
-Groq (https://groq.com/). Groq bietet Zugriff auf verschiedene kostenlose Modelle, begrenzt diese aber stark durch den Kontext. Derzeit gibt es auf dieser Seite keine kostenlosen Modelle, die in Legendarica gut funktionieren, aber das kann sich in Zukunft ändern. Kostenpflichtige Modelle funktionieren wahrscheinlich gut. Eine Liste der Modelle finden Sie hier: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Ein großes Repository für neuronale Netzwerke. Für den Zugriff wird die Inference-API verwendet, und nur Modelle, die diese unterstützen, sind für das Spiel verfügbar. Es gibt eine Begrenzung der Anzahl der Nachrichten pro Tag, die mit einem kostenpflichtigen Abonnement erhöht wird. Wenn die Modelle als Antwort unleserlichen Text senden, ist entweder das Modell sehr schwach oder die Temperatur zu hoch. In diesem Fall versuchen Sie, die Temperatur zu senken oder das Modell zu wechseln.
-Erste Schritte: Modell Qwen/Qwen2.5-72B-Instruct (Temperatur 0.4)
-
-Mistral AI (https://mistral.ai/). Die Mistral AI-Website bietet die Teilnahme an einem "experimentellen" Tarif an, wodurch alle Mistral-Modelle kostenlos nutzbar werden.
-Erste Schritte: Modell mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - Hauptwebsite: https://openai01.net/). Zugang zu OpenAI o1-preview. Es gibt keinen kostenlosen Tarif. Bei der Registrierung erhalten Sie 10 Credits; 2 Credits werden pro Anfrage an o1-preview berechnet.
-Modell: o1-preview
-
-Openrouter (https://openrouter.ai/). Bietet sowohl kostenlose als auch kostenpflichtige Modelle an. Kostenlose Modelle haben ein tägliches Nachrichtenlimit.
-
-Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachdem Websim die AI-API von Claude auf etwas sehr Schwaches umgestellt hat, kann Websim kein gutes Spiel oder gar dessen Ausführung mehr garantieren, da die verwendete KI sehr schwach ist. Dies kann sich jedoch in Zukunft ändern.`,
-            "tooltip-provider-ai2": `Neuronale Netzwerk-Anbieter
-
-Für alle Anbieter außer Websim müssen Sie sich auf der jeweiligen Website registrieren und einen API-Schlüssel oder ein Access Token erstellen. Achten Sie auf den Kontext des neuronalen Netzwerks - Legendarica verwendet einen sehr großen Prompt, der aufgrund des Chatverlaufs und anderer vom GM verwendeter Daten mit der Zeit immer größer wird. Ein Kontext von mindestens 128.000 Token ist erforderlich. Die hier beschriebenen Informationen sind auf dem Stand des angegebenen Datums (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Bietet vollständig kostenlosen Zugriff auf Command R-Modelle.
-Erste Schritte: Modell command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Alle Modelle haben ein kostenloses Kontingent; siehe die Studio-Website. Probieren Sie experimentelle Modelle aus - sie haben in der Regel ein größeres Limit an kostenlosen Nachrichten pro Tag.
-Erste Schritte: Modell gemini-1.5-pro
-
-Groq (https://groq.com/). Groq bietet Zugriff auf verschiedene kostenlose Modelle, begrenzt diese aber stark durch den Kontext. Derzeit gibt es auf dieser Seite keine kostenlosen Modelle, die in Legendarica gut funktionieren, aber das kann sich in Zukunft ändern. Kostenpflichtige Modelle funktionieren wahrscheinlich gut. Eine Liste der Modelle finden Sie hier: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Ein großes Repository für neuronale Netzwerke. Für den Zugriff wird die Inference-API verwendet, und nur Modelle, die diese unterstützen, sind für das Spiel verfügbar. Es gibt eine Begrenzung der Anzahl der Nachrichten pro Tag, die mit einem kostenpflichtigen Abonnement erhöht wird. Wenn die Modelle als Antwort unleserlichen Text senden, ist entweder das Modell sehr schwach oder die Temperatur zu hoch. In diesem Fall versuchen Sie, die Temperatur zu senken oder das Modell zu wechseln.
-Erste Schritte: Modell Qwen/Qwen2.5-72B-Instruct (Temperatur 0.4)
-
-Mistral AI (https://mistral.ai/). Die Mistral AI-Website bietet die Teilnahme an einem "experimentellen" Tarif an, wodurch alle Mistral-Modelle kostenlos nutzbar werden.
-Erste Schritte: Modell mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - Hauptwebsite: https://openai01.net/). Zugang zu OpenAI o1-preview. Es gibt keinen kostenlosen Tarif. Bei der Registrierung erhalten Sie 10 Credits; 2 Credits werden pro Anfrage an o1-preview berechnet.
-Modell: o1-preview
-
-Openrouter (https://openrouter.ai/). Bietet sowohl kostenlose als auch kostenpflichtige Modelle an. Kostenlose Modelle haben ein tägliches Nachrichtenlimit.
-
-Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachdem Websim die AI-API von Claude auf etwas sehr Schwaches umgestellt hat, kann Websim kein gutes Spiel oder gar dessen Ausführung mehr garantieren, da die verwendete KI sehr schwach ist. Dies kann sich jedoch in Zukunft ändern.`,
-            "tooltip-provider-ai3": `Neuronale Netzwerk-Anbieter
-
-Für alle Anbieter außer Websim müssen Sie sich auf der jeweiligen Website registrieren und einen API-Schlüssel oder ein Access Token erstellen. Achten Sie auf den Kontext des neuronalen Netzwerks - Legendarica verwendet einen sehr großen Prompt, der aufgrund des Chatverlaufs und anderer vom GM verwendeter Daten mit der Zeit immer größer wird. Ein Kontext von mindestens 128.000 Token ist erforderlich. Die hier beschriebenen Informationen sind auf dem Stand des angegebenen Datums (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Bietet vollständig kostenlosen Zugriff auf Command R-Modelle.
-Erste Schritte: Modell command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Alle Modelle haben ein kostenloses Kontingent; siehe die Studio-Website. Probieren Sie experimentelle Modelle aus - sie haben in der Regel ein größeres Limit an kostenlosen Nachrichten pro Tag.
-Erste Schritte: Modell gemini-1.5-pro
-
-Groq (https://groq.com/). Groq bietet Zugriff auf verschiedene kostenlose Modelle, begrenzt diese aber stark durch den Kontext. Derzeit gibt es auf dieser Seite keine kostenlosen Modelle, die in Legendarica gut funktionieren, aber das kann sich in Zukunft ändern. Kostenpflichtige Modelle funktionieren wahrscheinlich gut. Eine Liste der Modelle finden Sie hier: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Ein großes Repository für neuronale Netzwerke. Für den Zugriff wird die Inference-API verwendet, und nur Modelle, die diese unterstützen, sind für das Spiel verfügbar. Es gibt eine Begrenzung der Anzahl der Nachrichten pro Tag, die mit einem kostenpflichtigen Abonnement erhöht wird. Wenn die Modelle als Antwort unleserlichen Text senden, ist entweder das Modell sehr schwach oder die Temperatur zu hoch. In diesem Fall versuchen Sie, die Temperatur zu senken oder das Modell zu wechseln.
-Erste Schritte: Modell Qwen/Qwen2.5-72B-Instruct (Temperatur 0.4)
-
-Mistral AI (https://mistral.ai/). Die Mistral AI-Website bietet die Teilnahme an einem "experimentellen" Tarif an, wodurch alle Mistral-Modelle kostenlos nutzbar werden.
-Erste Schritte: Modell mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - Hauptwebsite: https://openai01.net/). Zugang zu OpenAI o1-preview. Es gibt keinen kostenlosen Tarif. Bei der Registrierung erhalten Sie 10 Credits; 2 Credits werden pro Anfrage an o1-preview berechnet.
-Modell: o1-preview
-
-Openrouter (https://openrouter.ai/). Bietet sowohl kostenlose als auch kostenpflichtige Modelle an. Kostenlose Modelle haben ein tägliches Nachrichtenlimit.
-
-Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachdem Websim die AI-API von Claude auf etwas sehr Schwaches umgestellt hat, kann Websim kein gutes Spiel oder gar dessen Ausführung mehr garantieren, da die verwendete KI sehr schwach ist. Dies kann sich jedoch in Zukunft ändern.`,
+            "status-effects-label": "Effekte:",          
             "throw-item": "Wegwerfen",
             "inventory-delete": "Wirf diesen Gegenstand weg",
             "skill_effect_label": "Wirkung",
@@ -5321,6 +5002,28 @@ Websim. Hängt vom neuronalen Netzwerk ab, das von Websim verwendet wird. Nachde
             "sky_pirates_desc": "Werde ein Luftpirat, der mit einem Luftschiff den Himmel durchstreift. Kämpfe gegen andere Piraten, handle mit fliegenden Städten und entdecke schwebende Inseln.",
             "mutant_island_desc": "Du bist auf einer Insel gestrandet, die von einem Mutantenstamm bewohnt wird. Freunde dich mit ihnen an oder versuche zu entkommen.",
             "lost_colony_desc": "Du bist Teil der Besatzung eines Raumschiffs, das auf einer von Zombies überrannten Erde abgestürzt ist. Suche Überlebende und baue eine neue Siedlung auf, während du Horden von Infizierten abwehrst.",
+            "character-post-apocalyptic-name": "Geben Sie den Namen des Charakters ein",
+            "post-apocalypse-race-message-label": "Rassenbeschreibung:",
+            "post-apocalypse-class-message-label": "Klassbeschreibung:",
+            "tooltip-post-apocalypse-rpg": "Wenn der Schieberegler rot ist, ist er aktiviert. RPG ist der Spielmodus. Im RPG-Modus besteht das Gameplay aus der Charakterentwicklung, und Fähigkeiten sowie Inventar sind entscheidend. Wenn deaktiviert, läuft das Spiel im Roleplay-Modus, der sich auf das Erstellen einer interessanten Erzählung konzentriert, und Fähigkeiten sowie Inventar sind sekundär.",
+            "post-apocalypse-tooltip-noMagic": "Wenn aktiviert (rote Farbe), erstellt der Spielleiter eine Welt ohne Magie und nur mit realistischen Fähigkeiten. Wenn deaktiviert, wird die Welt Magie und unrealistische Fähigkeiten haben.",
+            "post-apocalypse-nonmagic-mode-name": "Keine Magie in der Welt",
+            "create-character-post-apocalyptic": "Spiel starten",
+            "random-character-post-apocalyptic": "Zufälliger Charakter",
+            "load-character-post-apocalyptic": "Autosave laden",
+            "load-savefile-post-apocalyptic": "Datei laden",
+            "my-game-post-apocalyptic": "Mein Setting",
+            "ai-provider-label4": "KI-Anbieter",
+            "ai-none4-label": "Keine Auswahl",
+            "ai-model-label4": "KI-Modell",
+            "ai-model4": "Geben Sie den Namen des KI-Modells ein",
+            "api-key-label4": "Ihr API-Schlüssel",
+            "api-key-button4": "Für 10 Sekunden anzeigen",
+            "api-key4": "Aus Sicherheitsgründen stellen Sie sicher, dass Sie einen API-Schlüssel mit niedrigem Nutzungslimit verwenden",
+            "additional-settings-label4": "Sie können zusätzliche Einstellungen im Dropdown-Panel rechts ansehen. Klicken Sie auf die Schaltfläche in der unteren rechten Ecke des Bildschirms, um auf das Einstellungsfenster zuzugreifen.",
+            "post-apocalypse-campaign-message-label": "Kampagnenbeschreibung:",
+            "post-apocalyptic-game": "Schnelles Spiel - Post-Apokalypse",
+            "create-character-post-apocalyptic-label": "Erstelle deinen Charakter",
         },
         "french-language": {
             // placeholders
@@ -5631,79 +5334,7 @@ Bon jeu !`,
             "clear-status-label": "État clair",
             "active-skills-button-label": "Compétences actives",
             "passive-skills-button-label": "Compétences passives",
-            "status-effects-label": "Effets:",
-            "tooltip-provider-ai": `Fournisseurs de réseaux neuronaux
-
-Pour tous les fournisseurs, à l'exception de Websim, vous devez vous inscrire sur le site Web respectif et créer une clé API ou un jeton d'accès. Faites attention au contexte du réseau neuronal : Legendarica utilise une très grande invite, et celle-ci ne fait qu'augmenter avec le temps en raison de l'historique du chat et des autres données utilisées par le MJ. Un contexte d'au moins 128 000 jetons est requis. Les informations décrites ici sont à jour à la date indiquée (24/11/2024).
-
-Cohere (https://coral.cohere.com/). Fournit un accès entièrement gratuit aux modèles Command R.
-Pour commencer : modèle command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Tous les modèles ont une limite gratuite ; consultez le site Web de Studio. Essayez les modèles expérimentaux ; ils ont généralement une limite plus élevée de messages gratuits par jour.
-Pour commencer : modèle gemini-1.5-pro
-
-Groq (https://groq.com/). Groq donne accès à divers modèles gratuits, mais les limite fortement en termes de contexte. Actuellement, il n'y a pas de modèles gratuits sur ce site qui fonctionnent bien dans Legendarica, mais cela pourrait changer à l'avenir. Les modèles payants fonctionnent probablement bien. Consultez la liste des modèles ici : https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un grand référentiel de réseaux neuronaux. L'API d'inférence est utilisée pour y accéder, et seuls les modèles qui la prennent en charge sont disponibles pour le jeu. Il y a une limite au nombre de messages par jour, qui augmente avec un abonnement payant. Si les modèles envoient du texte illisible en réponse, soit le modèle est très faible, soit la température est élevée. Dans ce cas, essayez de baisser la température ou de changer de modèle.
-Pour commencer : modèle Qwen/Qwen2.5-72B-Instruct (température 0,4)
-
-Mistral AI (https://mistral.ai/). Le site Web de Mistral AI propose de participer à un plan tarifaire « expérimental », ce qui rend tous les modèles Mistral gratuits à utiliser.
-Pour commencer : modèle mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - site principal : https://openai01.net/). Accès à OpenAI o1-preview. Il n'y a pas de forfait gratuit. Lors de l'inscription, vous recevez 10 crédits ; 2 crédits sont facturés par requête à o1-preview.
-Modèle : o1-preview
-
-Openrouter (https://openrouter.ai/). Propose des modèles gratuits et payants. Les modèles gratuits ont une limite de messages quotidiens.
-
-Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim a remplacé l'API d'IA de Claude par quelque chose de très faible, Websim ne peut plus garantir un bon jeu ni même son exécution, car l'IA utilisée est très faible. Mais cela pourrait changer à l'avenir.`,
-            "tooltip-provider-ai2": `Fournisseurs de réseaux neuronaux
-
-Pour tous les fournisseurs, à l'exception de Websim, vous devez vous inscrire sur le site Web respectif et créer une clé API ou un jeton d'accès. Faites attention au contexte du réseau neuronal : Legendarica utilise une très grande invite, et celle-ci ne fait qu'augmenter avec le temps en raison de l'historique du chat et des autres données utilisées par le MJ. Un contexte d'au moins 128 000 jetons est requis. Les informations décrites ici sont à jour à la date indiquée (24/11/2024).
-
-Cohere (https://coral.cohere.com/). Fournit un accès entièrement gratuit aux modèles Command R.
-Pour commencer : modèle command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Tous les modèles ont une limite gratuite ; consultez le site Web de Studio. Essayez les modèles expérimentaux ; ils ont généralement une limite plus élevée de messages gratuits par jour.
-Pour commencer : modèle gemini-1.5-pro
-
-Groq (https://groq.com/). Groq donne accès à divers modèles gratuits, mais les limite fortement en termes de contexte. Actuellement, il n'y a pas de modèles gratuits sur ce site qui fonctionnent bien dans Legendarica, mais cela pourrait changer à l'avenir. Les modèles payants fonctionnent probablement bien. Consultez la liste des modèles ici : https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un grand référentiel de réseaux neuronaux. L'API d'inférence est utilisée pour y accéder, et seuls les modèles qui la prennent en charge sont disponibles pour le jeu. Il y a une limite au nombre de messages par jour, qui augmente avec un abonnement payant. Si les modèles envoient du texte illisible en réponse, soit le modèle est très faible, soit la température est élevée. Dans ce cas, essayez de baisser la température ou de changer de modèle.
-Pour commencer : modèle Qwen/Qwen2.5-72B-Instruct (température 0,4)
-
-Mistral AI (https://mistral.ai/). Le site Web de Mistral AI propose de participer à un plan tarifaire « expérimental », ce qui rend tous les modèles Mistral gratuits à utiliser.
-Pour commencer : modèle mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - site principal : https://openai01.net/). Accès à OpenAI o1-preview. Il n'y a pas de forfait gratuit. Lors de l'inscription, vous recevez 10 crédits ; 2 crédits sont facturés par requête à o1-preview.
-Modèle : o1-preview
-
-Openrouter (https://openrouter.ai/). Propose des modèles gratuits et payants. Les modèles gratuits ont une limite de messages quotidiens.
-
-Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim a remplacé l'API d'IA de Claude par quelque chose de très faible, Websim ne peut plus garantir un bon jeu ni même son exécution, car l'IA utilisée est très faible. Mais cela pourrait changer à l'avenir.`,
-            "tooltip-provider-ai3": `Fournisseurs de réseaux neuronaux
-
-Pour tous les fournisseurs, à l'exception de Websim, vous devez vous inscrire sur le site Web respectif et créer une clé API ou un jeton d'accès. Faites attention au contexte du réseau neuronal : Legendarica utilise une très grande invite, et celle-ci ne fait qu'augmenter avec le temps en raison de l'historique du chat et des autres données utilisées par le MJ. Un contexte d'au moins 128 000 jetons est requis. Les informations décrites ici sont à jour à la date indiquée (24/11/2024).
-
-Cohere (https://coral.cohere.com/). Fournit un accès entièrement gratuit aux modèles Command R.
-Pour commencer : modèle command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). Tous les modèles ont une limite gratuite ; consultez le site Web de Studio. Essayez les modèles expérimentaux ; ils ont généralement une limite plus élevée de messages gratuits par jour.
-Pour commencer : modèle gemini-1.5-pro
-
-Groq (https://groq.com/). Groq donne accès à divers modèles gratuits, mais les limite fortement en termes de contexte. Actuellement, il n'y a pas de modèles gratuits sur ce site qui fonctionnent bien dans Legendarica, mais cela pourrait changer à l'avenir. Les modèles payants fonctionnent probablement bien. Consultez la liste des modèles ici : https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un grand référentiel de réseaux neuronaux. L'API d'inférence est utilisée pour y accéder, et seuls les modèles qui la prennent en charge sont disponibles pour le jeu. Il y a une limite au nombre de messages par jour, qui augmente avec un abonnement payant. Si les modèles envoient du texte illisible en réponse, soit le modèle est très faible, soit la température est élevée. Dans ce cas, essayez de baisser la température ou de changer de modèle.
-Pour commencer : modèle Qwen/Qwen2.5-72B-Instruct (température 0,4)
-
-Mistral AI (https://mistral.ai/). Le site Web de Mistral AI propose de participer à un plan tarifaire « expérimental », ce qui rend tous les modèles Mistral gratuits à utiliser.
-Pour commencer : modèle mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - site principal : https://openai01.net/). Accès à OpenAI o1-preview. Il n'y a pas de forfait gratuit. Lors de l'inscription, vous recevez 10 crédits ; 2 crédits sont facturés par requête à o1-preview.
-Modèle : o1-preview
-
-Openrouter (https://openrouter.ai/). Propose des modèles gratuits et payants. Les modèles gratuits ont une limite de messages quotidiens.
-
-Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim a remplacé l'API d'IA de Claude par quelque chose de très faible, Websim ne peut plus garantir un bon jeu ni même son exécution, car l'IA utilisée est très faible. Mais cela pourrait changer à l'avenir.`,
+            "status-effects-label": "Effets:",          
             "throw-item": "Jeter",
             "inventory-delete": "Jette cet objet",
             "skill_effect_label": "Effet",
@@ -6209,6 +5840,28 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "sky_pirates_desc": "Devenez un pirate des airs naviguant à bord d'un dirigeable. Affrontez d'autres pirates, commerçez avec des cités volantes et explorez des îles flottantes.",
             "mutant_island_desc": "Vous avez échoué sur une île peuplée d'une tribu de mutants. Faites-vous des alliés ou tentez de vous échapper.",
             "lost_colony_desc": "Vous faites partie de l'équipage d'un vaisseau spatial qui s'est écrasé sur une Terre envahie de zombies. Cherchez des survivants et bâtissez une nouvelle colonie en repoussant les hordes d'infectés.",
+            "character-post-apocalyptic-name": "Entrez le nom du personnage",
+            "post-apocalypse-race-message-label": "Description de la race :",
+            "post-apocalypse-class-message-label": "Description de la classe :",
+            "tooltip-post-apocalypse-rpg": "Si le curseur est rouge, il est activé. RPG est le mode de jeu. En mode RPG, le gameplay consiste à développer le personnage, et les compétences et l'inventaire sont cruciaux. Si désactivé, le jeu se déroule en mode Roleplay, qui se concentre sur la création d'une histoire intéressante, et les compétences et l'inventaire ont une importance secondaire.",
+            "post-apocalypse-tooltip-noMagic": "Si activé (couleur rouge), le maître de jeu crée un monde sans magie et uniquement avec des capacités réalistes. Si désactivé, le monde aura de la magie et des capacités irréalistes.",
+            "post-apocalypse-nonmagic-mode-name": "Pas de magie dans le monde",
+            "create-character-post-apocalyptic": "Démarrer le jeu",
+            "random-character-post-apocalyptic": "Personnage aléatoire",
+            "load-character-post-apocalyptic": "Charger l'autosauvegarde",
+            "load-savefile-post-apocalyptic": "Charger le fichier",
+            "my-game-post-apocalyptic": "Mon cadre",
+            "ai-provider-label4": "Fournisseur d'IA",
+            "ai-none4-label": "Aucun sélectionné",
+            "ai-model-label4": "Modèle d'IA",
+            "ai-model4": "Entrez le nom du modèle d'IA",
+            "api-key-label4": "Votre clé API",
+            "api-key-button4": "Afficher pendant 10 secondes",
+            "api-key4": "Pour des raisons de sécurité, assurez-vous d'utiliser une clé API avec une faible limite d'utilisation",
+            "additional-settings-label4": "Vous pouvez voir les paramètres supplémentaires dans le panneau déroulant à droite. Cliquez sur le bouton dans le coin inférieur droit de l'écran pour accéder au panneau de configuration.",
+            "post-apocalypse-campaign-message-label": "Description de la campagne :",
+            "post-apocalyptic-game": "Jeu Rapide - Post-Apocalypse",
+            "create-character-post-apocalyptic-label": "Créez votre personnage",
         }
     };
 
@@ -6254,7 +5907,7 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             'character-name-my-game', 'world-description',
             'character-name', 'api-key', 'api-key2', 'api-key3', 'ai-model', 'ai-model2', 'ai-model3',
             'max-gm-symbols', 'my-rules', 'user-input', 'style-of-image-input', 'system-instructions',
-            'world-system-instructions',
+            'world-system-instructions', "character-post-apocalyptic-name", "ai-model4", "api-key4"
         ];
 
         //Update placeholders
@@ -6387,6 +6040,12 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             "alien_scout_descr", "space_architect_descr", "galactic_explorer_descr",
             "alien_soldier_descr", "post-apocalypse-races", "post-apocalypse-classes",
             "post-apocalypse-race-message", "post-apocalypse-class-message", "post-apocalypse-campaign-message",
+            "post-apocalypse-race-message-label", "post-apocalypse-class-message-label", "tooltip-post-apocalypse-rpg",
+            "post-apocalypse-tooltip-noMagic", "post-apocalypse-nonmagic-mode-name", "create-character-post-apocalyptic",
+            "random-character-post-apocalyptic", "load-character-post-apocalyptic", "load-savefile-post-apocalyptic",
+            "my-game-post-apocalyptic", "ai-provider-label4", "ai-none4-label", "ai-model-label4",
+            "api-key-label4", "api-key-button4", "api-key4", "additional-settings-label4", "tooltip-provider-ai4",
+            "post-apocalypse-campaign-message-label", "post-apocalyptic-game", "create-character-post-apocalyptic-label",
         ];
 
         //Update labels
@@ -6684,40 +6343,12 @@ Websim. Cela dépend du réseau neuronal utilisé par Websim. Après que Websim 
             return id;
         },
 
-        setProviderTooltipForGithubVersion: function () {
+        setProviderTooltip: function () {
+            const ids = ["tooltip-provider-ai", "tooltip-provider-ai2", "tooltip-provider-ai3", "tooltip-provider-ai4"];
 
-            const ids = ["tooltip-provider-ai", "tooltip-provider-ai2", "tooltip-provider-ai3"];
-
-            for (const id of ids) {
-
-                // Английский перевод
-                this.setTranslation("english-language", id, `Neural Network Providers
-
-For all providers you need to register on the respective website and create an API key or Access Token. Pay attention to the neural network context - Legendarica uses a very large prompt, and it only increases over time due to chat history and other data used by the GM. A context of at least 128,000 tokens is required. The information described here is current as of the specified date (24.11.2024).
-
-Cohere (https://coral.cohere.com/). Provides completely free access to Command R models.
-Getting started: model command-r-plus
-
-Google AI Studio (https://ai.google.dev/aistudio). All models have a free tier; see the Studio website. Try experimental models - they usually have a larger limit of free messages per day.
-Getting started: model gemini-1.5-pro
-
-Groq (https://groq.com/). Groq provides access to various free models but severely limits them by context. Currently, there are no free models on this site that work well in Legendarica, but this may change in the future. Paid models are likely to work well. See the list of models here: https://console.groq.com/docs/models
-
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). A large repository for neural networks. The Inference API is used to access it, and only models that support it are available for the game. There is a limit on the number of messages per day, which increases with a paid subscription. If the models send unreadable text as a response, then either the model is very weak, or the temperature is high. In this case, try lowering the temperature or changing the model.
-Getting started: model Qwen/Qwen2.5-72B-Instruct (temperature 0.4)
-
-Mistral AI (https://mistral.ai/). The Mistral AI website offers participation in an "experimental" pricing plan, making all Mistral models free to use.
-Getting started: model mistral-large-latest
-
-OpenAI01 (https://openaio1api.com/ - main website: https://openai01.net/). Access to OpenAI o1-preview. There is no free tier. Upon registration, you receive 10 credits; 2 credits are charged per request to o1-preview.
-Model: o1-preview
-
-Openrouter (https://openrouter.ai/). Offers both free and paid models. Free models have a daily message limit.`
-                );
-
-                // Русский перевод
-                this.setTranslation("russian-language", id, `Провайдеры нейросетей.
-Для всех провайдеров, кроме Websim, вам нужно зарегистрироваться на соответствующем сайте и создать API ключ или Access Token. Обращайте внимание на контекст нейросети - у Легендарики очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, которые используются ГМ-ом. Нужен контекст как минимум 128 000 токенов. Информация, описанная здесь, актуальна на момент указанной даты (24.11.2024).
+            const translations = {
+                "russian-language": `Провайдеры нейросетей.
+Для всех провайдеров, кроме Websim, вам нужно зарегистрироваться на соответствующем сайте и создать API ключ или Access Token. Обращайте внимание на контекст нейросети - у Легендарики очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, которые используются ГМ-ом. Нужен контекст как минимум 128 000 токенов. Информация, описанная здесь, актуальна на момент указанной даты (29.12.2024).
 
 Cohere (https://coral.cohere.com/). Предоставляет полностью бесплатный доступ к моделям Command R.
 С чего начать: модель command-r-plus
@@ -6733,139 +6364,306 @@ Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&
 Mistral AI (https://mistral.ai/). На сайте Mistral AI есть возможность принять участие в "экспериментальном" тарифном плане, что делает все модели Mistral бесплатными для использования.
 С чего начать: модель mistral-large-latest
 
-OpenAI01 (https://openaio1api.com/ - главный сайт: https://openai01.net/). Доступ к OpenAI o1-preview. Бесплатного тарифа нет. При регистрации дают 10 кредитов, 2 кредита стоит запрос к o1-preview.
-Модель: o1-preview 
+Chat01 (https://chat01.ai/). Доступ к OpenAI o1. Бесплатного тарифа нет. При регистрации дают 10 кредитов, 2 кредита стоит запрос к o1.
+Модель: o1
 
 Openrouter (https://openrouter.ai/). Есть бесплатные модели, есть платные. У бесплатных моделей есть лимит сообщений в день.
 
-Websim. Зависит от нейросети, которую использует Websim. После того, как Websim изменил AI API с Claude на нечто очень слабое, Websim больше не может гарантировать хорошую игру или вообще её проведение, поскольку используемый AI очень слаб. Но все может измениться в будущем.`
-                );
+Websim. Зависит от нейросети, которую использует Websim.`,
 
-                // Испанский перевод
-                this.setTranslation("spanish-language", id, `Proveedores de Redes Neuronales
+                "english-language": `AI Providers.
+For all providers except Websim, you need to register on the respective website and create an API key or Access Token. Pay attention to the AI's context - Legendary has a very large prompt, and it only increases over time due to chat history and other data used by the GM. A context of at least 128,000 tokens is required. The information described here is accurate as of the specified date (29.12.2024).
 
-Para todos los proveedores, necesita registrarse en el sitio web correspondiente y crear una clave API o Token de Acceso. Preste atención al contexto de la red neuronal: Legendarica utiliza un prompt muy grande, y solo aumenta con el tiempo debido al historial de chat y otros datos utilizados por el GM. Se requiere un contexto de al menos 128,000 tokens. La información descrita aquí es actual a la fecha especificada (24.11.2024).
+Cohere (https://coral.cohere.com/). Provides completely free access to Command R models.
+Where to start: model command-r-plus
+
+Google AI Studio (https://ai.google.dev/aistudio). All models have a free limit, check the studio website. Try experimental models - they usually have a higher limit of free messages per day.
+Where to start: model gemini-1.5-pro
+
+Groq (https://groq.com/). Groq provides access to various free models but heavily restricts them by context. Currently, there are no free models on this site that work well in Legendary, but this may change in the future. Paid models are likely to work well. See the list of models here: https://console.groq.com/docs/models
+
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). A large repository for neural networks. Access is via the Inference API, and only models that support it are available for the game. There is a limit on the number of messages per day, which increases with a paid subscription. If models send unreadable text as a response, it means either the model is very weak or the temperature is high. In this case, try lowering the temperature or changing the model. 
+Where to start: model Qwen/Qwen2.5-72B-Instruct (temperature 0.4)
+
+Mistral AI (https://mistral.ai/). Mistral AI's website offers an "experimental" pricing plan, making all Mistral models free to use.
+Where to start: model mistral-large-latest
+
+Chat01 (https://chat01.ai/). Access to OpenAI o1. There is no free tier. Upon registration, you get 10 credits, and 2 credits per request to o1.
+Model: o1
+
+Openrouter (https://openrouter.ai/). There are free models and paid models. Free models have a daily message limit.
+
+Websim. Depends on the neural network used by Websim.`,
+
+                "spanish-language": `Proveedores de IA.
+Para todos los proveedores, excepto Websim, debe registrarse en el sitio web correspondiente y crear una clave API o Token de Acceso. Preste atención al contexto de la IA: Legendary tiene un prompt muy grande, y solo aumenta con el tiempo debido al historial de chat y otros datos utilizados por el GM. Se requiere un contexto de al menos 128,000 tokens. La información descrita aquí es precisa hasta la fecha especificada (29.12.2024).
 
 Cohere (https://coral.cohere.com/). Proporciona acceso completamente gratuito a los modelos Command R.
-Comenzando: modelo command-r-plus
+Dónde empezar: modelo command-r-plus
 
-Google AI Studio (https://ai.google.dev/aistudio). Todos los modelos tienen un nivel gratuito; vea el sitio web de Studio. Pruebe modelos experimentales: suelen tener un límite mayor de mensajes gratuitos por día.
-Comenzando: modelo gemini-1.5-pro
+Google AI Studio (https://ai.google.dev/aistudio). Todos los modelos tienen un límite gratuito, consulte el sitio web del estudio. Pruebe modelos experimentales: generalmente tienen un límite mayor de mensajes gratuitos por día.
+Dónde empezar: modelo gemini-1.5-pro
 
-Groq (https://groq.com/). Groq proporciona acceso a varios modelos gratuitos pero los limita severamente por contexto. Actualmente, no hay modelos gratuitos en este sitio que funcionen bien en Legendarica, pero esto puede cambiar en el futuro. Es probable que los modelos de pago funcionen bien. Vea la lista de modelos aquí: https://console.groq.com/docs/models
+Groq (https://groq.com/). Groq ofrece acceso a varios modelos gratuitos, pero los limita mucho por contexto. Actualmente, no hay modelos gratuitos en este sitio que funcionen bien en Legendary, pero esto puede cambiar en el futuro. Los modelos de pago probablemente funcionen bien. Vea la lista de modelos aquí: https://console.groq.com/docs/models
 
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un gran repositorio de redes neuronales. Se utiliza la Inference API para acceder, y solo los modelos que la soportan están disponibles para el juego. Hay un límite en el número de mensajes por día, que aumenta con una suscripción de pago. Si los modelos envían texto ilegible como respuesta, entonces o el modelo es muy débil, o la temperatura es alta. En este caso, intente bajar la temperatura o cambiar el modelo.
-Comenzando: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un gran repositorio para redes neuronales. El acceso se realiza a través de la Inference API, y solo los modelos que la soportan están disponibles para el juego. Hay un límite en la cantidad de mensajes por día, que aumenta con una suscripción paga. Si los modelos envían texto ilegible como respuesta, significa que el modelo es muy débil o que la temperatura es alta. En este caso, intente reducir la temperatura o cambiar el modelo.
+Dónde empezar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
 
-Mistral AI (https://mistral.ai/). El sitio web de Mistral AI ofrece participación en un plan de precios "experimental", haciendo que todos los modelos de Mistral sean gratuitos para usar.
-Comenzando: modelo mistral-large-latest
+Mistral AI (https://mistral.ai/). El sitio web de Mistral AI ofrece un plan de precios "experimental", lo que hace que todos los modelos de Mistral sean gratuitos para usar.
+Dónde empezar: modelo mistral-large-latest
 
-OpenAI01 (https://openaio1api.com/ - sitio web principal: https://openai01.net/). Acceso a OpenAI o1-preview. No hay nivel gratuito. Al registrarse, recibe 10 créditos; se cobran 2 créditos por solicitud a o1-preview.
-Modelo: o1-preview
+Chat01 (https://chat01.ai/). Acceso a OpenAI o1. No hay un nivel gratuito. Al registrarse, recibe 10 créditos, y 2 créditos por solicitud a o1.
+Modelo: o1
 
-Openrouter (https://openrouter.ai/). Ofrece modelos gratuitos y de pago. Los modelos gratuitos tienen un límite diario de mensajes.`
-                );
+Openrouter (https://openrouter.ai/). Hay modelos gratuitos y de pago. Los modelos gratuitos tienen un límite de mensajes diarios.
 
-                // Португальский перевод
-                this.setTranslation("portuguese-language", id, `Provedores de Redes Neurais
+Websim. Depende de la red neuronal que utilice Websim.`,
 
-Para todos os provedores, você precisa se registrar no respectivo site e criar uma chave de API ou Token de Acesso. Preste atenção ao contexto da rede neural - Legendarica usa um prompt muito grande, e ele só aumenta com o tempo devido ao histórico de chat e outros dados usados pelo GM. É necessário um contexto de pelo menos 128.000 tokens. As informações descritas aqui são atuais na data especificada (24.11.2024).
+                "portuguese-language": `Provedores de IA.
+Para todos os provedores, exceto Websim, você precisa se registrar no site correspondente e criar uma chave API ou Token de Acesso. Preste atenção ao contexto da IA - Legendary tem um prompt muito grande, e ele só aumenta com o tempo devido ao histórico de chat e outros dados usados pelo GM. É necessário um contexto de pelo menos 128.000 tokens. As informações descritas aqui são precisas até a data especificada (29.12.2024).
 
-Cohere (https://coral.cohere.com/). Fornece acesso totalmente gratuito aos modelos Command R.
-Começando: modelo command-r-plus
+Cohere (https://coral.cohere.com/). Fornece acesso completamente gratuito aos modelos Command R.
+Onde começar: modelo command-r-plus
 
-Google AI Studio (https://ai.google.dev/aistudio). Todos os modelos têm um nível gratuito; veja o site do Studio. Experimente modelos experimentais - eles geralmente têm um limite maior de mensagens gratuitas por dia.
-Começando: modelo gemini-1.5-pro
+Google AI Studio (https://ai.google.dev/aistudio). Todos os modelos têm um limite gratuito, consulte o site do estúdio. Experimente modelos experimentais - geralmente têm um limite maior de mensagens gratuitas por dia.
+Onde começar: modelo gemini-1.5-pro
 
-Groq (https://groq.com/). A Groq fornece acesso a vários modelos gratuitos, mas os limita severamente por contexto. Atualmente, não há modelos gratuitos neste site que funcionem bem no Legendarica, mas isso pode mudar no futuro. Modelos pagos provavelmente funcionarão bem. Veja a lista de modelos aqui: https://console.groq.com/docs/models
+Groq (https://groq.com/). Groq fornece acesso a vários modelos gratuitos, mas os limita muito pelo contexto. Atualmente, não há modelos gratuitos neste site que funcionem bem em Legendary, mas isso pode mudar no futuro. Modelos pagos provavelmente funcionam bem. Veja a lista de modelos aqui: https://console.groq.com/docs/models
 
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Um grande repositório para redes neurais. A Inference API é usada para acessá-lo, e apenas modelos que a suportam estão disponíveis para o jogo. Há um limite no número de mensagens por dia, que aumenta com uma assinatura paga. Se os modelos enviarem texto ilegível como resposta, então ou o modelo é muito fraco, ou a temperatura está alta. Nesse caso, tente baixar a temperatura ou mudar o modelo.
-Começando: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Um grande repositório para redes neurais. O acesso é via Inference API, e apenas os modelos que a suportam estão disponíveis para o jogo. Há um limite no número de mensagens por dia, que aumenta com uma assinatura paga. Se os modelos enviarem texto ilegível como resposta, significa que o modelo é muito fraco ou a temperatura está alta. Nesse caso, tente diminuir a temperatura ou mudar o modelo.
+Onde começar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
 
-Mistral AI (https://mistral.ai/). O site Mistral AI oferece participação em um plano de preços "experimental", tornando todos os modelos Mistral gratuitos para uso.
-Começando: modelo mistral-large-latest
+Mistral AI (https://mistral.ai/). O site da Mistral AI oferece um plano de preços "experimental", tornando todos os modelos Mistral gratuitos para uso.
+Onde começar: modelo mistral-large-latest
 
-OpenAI01 (https://openaio1api.com/ - site principal: https://openai01.net/). Acesso ao OpenAI o1-preview. Não há nível gratuito. Ao se registrar, você recebe 10 créditos; 2 créditos são cobrados por solicitação ao o1-preview.
-Modelo: o1-preview
+Chat01 (https://chat01.ai/). Acesso ao OpenAI o1. Não há um nível gratuito. Ao se registrar, você recebe 10 créditos, e 2 créditos por solicitação ao o1.
+Modelo: o1
 
-Openrouter (https://openrouter.ai/). Oferece modelos gratuitos e pagos. Modelos gratuitos têm um limite diário de mensagens.`
-                );
+Openrouter (https://openrouter.ai/). Existem modelos gratuitos e pagos. Modelos gratuitos têm um limite diário de mensagens.
 
-                // Хинди перевод
-                this.setTranslation("hindi-language", id, `न्यूरल नेटवर्क प्रदाता
+Websim. Depende da rede neural que o Websim utiliza.`,
 
-सभी प्रदाताओं के लिए, आपको संबंधित वेबसाइट पर पंजीकरण करना होगा और एक API कुंजी या एक्सेस टोकन बनाना होगा। न्यूरल नेटवर्क संदर्भ पर ध्यान दें - Legendarica एक बहुत बड़ा प्रॉम्प्ट उपयोग करता है, और यह समय के साथ चैट इतिहास और जीएम द्वारा उपयोग किए जाने वाले अन्य डेटा के कारण बढ़ता ही जाता है। कम से कम 128,000 टोकन का संदर्भ आवश्यक है। यहां वर्णित जानकारी निर्दिष्ट तिथि (24.11.2024) तक वर्तमान है।
+                "hindi-language": `आईए प्रदाता।
+Websim को छोड़कर सभी प्रदाताओं के लिए, आपको संबंधित वेबसाइट पर पंजीकरण करना होगा और एक API कुंजी या Access Token बनाना होगा। आईए के संदर्भ पर ध्यान दें - Legendary के पास बहुत बड़ा प्रॉम्प्ट है, और यह केवल चैट इतिहास और अन्य डेटा के कारण समय के साथ बढ़ता जा रहा है, जिसे GM द्वारा उपयोग किया जाता है। कम से कम 128,000 टोकन का संदर्भ आवश्यक है। यहां वर्णित जानकारी निर्दिष्ट तारीख (29.12.2024) तक सटीक है।
 
-Cohere (https://coral.cohere.com/)। Command R मॉडलों तक पूरी तरह से मुफ्त पहुंच प्रदान करता है।
-प्रारंभ करना: मॉडल command-r-plus
+Cohere (https://coral.cohere.com/). Command R मॉडलों के लिए पूरी तरह से मुफ्त पहुँच प्रदान करता है।
+शुरू करने के लिए: मॉडल command-r-plus
 
-Google AI Studio (https://ai.google.dev/aistudio)। सभी मॉडलों में एक मुफ्त स्तर है; स्टूडियो वेबसाइट देखें। प्रायोगिक मॉडलों को आज़माएं - उनमें आमतौर पर प्रति दिन मुफ्त संदेशों की बड़ी सीमा होती है।
-प्रारंभ करना: मॉडल gemini-1.5-pro
+Google AI Studio (https://ai.google.dev/aistudio). सभी मॉडलों की मुफ्त सीमा है, स्टूडियो वेबसाइट देखें। प्रयोगात्मक मॉडलों को आजमाएं - आमतौर पर उनके पास प्रतिदिन अधिक मुफ्त संदेश सीमा होती है।
+शुरू करने के लिए: मॉडल gemini-1.5-pro
 
-Groq (https://groq.com/)। Groq विभिन्न मुफ्त मॉडलों तक पहुंच प्रदान करता है लेकिन उन्हें संदर्भ द्वारा गंभीर रूप से सीमित करता है। वर्तमान में, इस साइट पर कोई मुफ्त मॉडल नहीं हैं जो Legendarica में अच्छी तरह से काम करते हैं, लेकिन यह भविष्य में बदल सकता है। भुगतान किए गए मॉडल अच्छी तरह से काम कर सकते हैं। मॉडलों की सूची यहां देखें: https://console.groq.com/docs/models
+Groq (https://groq.com/). Groq विभिन्न मुफ्त मॉडलों तक पहुँच प्रदान करता है, लेकिन उन्हें संदर्भ के आधार पर बहुत सीमित करता है। इस साइट पर अभी Legendary में अच्छी तरह से काम करने वाले कोई मुफ्त मॉडल नहीं हैं, लेकिन भविष्य में यह बदल सकता है। भुगतान किए गए मॉडल संभवतः अच्छी तरह से काम करेंगे। मॉडलों की सूची यहाँ देखें: https://console.groq.com/docs/models
 
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending)। न्यूरल नेटवर्क के लिए एक बड़ा भंडार। इसे एक्सेस करने के लिए Inference API का उपयोग किया जाता है, और केवल वे मॉडल जो इसे समर्थन करते हैं, गेम के लिए उपलब्ध हैं। प्रति दिन संदेशों की संख्या पर एक सीमा है, जो एक सशुल्क सदस्यता के साथ बढ़ती है। यदि मॉडल प्रतिक्रिया के रूप में अपठनीय पाठ भेजते हैं, तो या तो मॉडल बहुत कमजोर है, या तापमान उच्च है। इस मामले में, तापमान कम करने या मॉडल बदलने का प्रयास करें।
-प्रारंभ करना: मॉडल Qwen/Qwen2.5-72B-Instruct (तापमान 0.4)
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). न्यूरल नेटवर्क के लिए एक बड़ा रिपॉजिटरी। इसका उपयोग Inference API के माध्यम से होता है, और केवल वे मॉडल जो इसका समर्थन करते हैं, खेल के लिए उपलब्ध हैं। प्रतिदिन संदेशों की संख्या पर एक सीमा है, जो भुगतान सदस्यता के साथ बढ़ती है। यदि मॉडल उत्तर के रूप में अपठनीय पाठ भेजते हैं, तो इसका मतलब है या तो मॉडल बहुत कमजोर है या तापमान अधिक है। इस मामले में, तापमान कम करने या मॉडल बदलने का प्रयास करें।
+शुरू करने के लिए: मॉडल Qwen/Qwen2.5-72B-Instruct (तापमान 0.4)
 
-Mistral AI (https://mistral.ai/)। Mistral AI वेबसाइट एक "प्रायोगिक" मूल्य निर्धारण योजना में भागीदारी प्रदान करती है, जिससे सभी Mistral मॉडल मुफ्त में उपयोग करने के लिए उपलब्ध हो जाते हैं।
-प्रारंभ करना: मॉडल mistral-large-latest
+Mistral AI (https://mistral.ai/). Mistral AI की वेबसाइट पर "प्रयोगात्मक" मूल्य निर्धारण योजना में भाग लेने का विकल्प है, जो सभी Mistral मॉडलों को उपयोग के लिए मुफ्त बना देता है।
+शुरू करने के लिए: मॉडल mistral-large-latest
 
-OpenAI01 (https://openaio1api.com/ - मुख्य वेबसाइट: https://openai01.net/)। OpenAI o1-preview तक पहुंच। कोई मुफ्त स्तर नहीं है। पंजीकरण पर, आपको 10 क्रेडिट मिलते हैं; o1-preview के प्रत्येक अनुरोध पर 2 क्रेडिट चार्ज किए जाते हैं।
-मॉडल: o1-preview
+Chat01 (https://chat01.ai/). OpenAI o1 तक पहुँच। कोई मुफ्त स्तर नहीं है। पंजीकरण पर आपको 10 क्रेडिट मिलते हैं, o1 के लिए प्रत्येक अनुरोध पर 2 क्रेडिट।
+मॉडल: o1
 
-Openrouter (https://openrouter.ai/)। मुफ्त और सशुल्क दोनों मॉडल प्रदान करता है। मुफ्त मॉडलों में दैनिक संदेश सीमा होती है।`
-                );
+Openrouter (https://openrouter.ai/). मुफ्त मॉडल और भुगतान किए गए मॉडल हैं। मुफ्त मॉडलों में प्रतिदिन संदेश सीमा है।
 
-                // Немецкий перевод
-                this.setTranslation("german-language", id, `Neuronale Netzwerk-Anbieter
+Websim. यह Websim द्वारा उपयोग किए जाने वाले न्यूरल नेटवर्क पर निर्भर करता है।`,
 
-Für alle Anbieter müssen Sie sich auf der jeweiligen Website registrieren und einen API-Schlüssel oder Zugriffstoken erstellen. Achten Sie auf den Kontext des neuronalen Netzwerks – Legendarica verwendet einen sehr großen Prompt, und er nimmt im Laufe der Zeit aufgrund des Chatverlaufs und anderer vom Spielleiter verwendeter Daten nur zu. Ein Kontext von mindestens 128.000 Tokens ist erforderlich. Die hier beschriebenen Informationen sind zum angegebenen Datum (24.11.2024) aktuell.
+                "german-language": `KI-Anbieter.
+Für alle Anbieter außer Websim müssen Sie sich auf der jeweiligen Website registrieren und einen API-Schlüssel oder Access Token erstellen. Achten Sie auf den Kontext der KI - Legendary hat einen sehr großen Prompt, und dieser wächst nur im Laufe der Zeit aufgrund der Chat-Historie und anderer Daten, die vom GM verwendet werden. Ein Kontext von mindestens 128.000 Tokens ist erforderlich. Die hier beschriebenen Informationen sind zum angegebenen Datum (29.12.2024) aktuell.
 
-Cohere (https://coral.cohere.com/). Bietet völlig kostenlosen Zugang zu Command R-Modellen.
-Erste Schritte: Modell command-r-plus
+Cohere (https://coral.cohere.com/). Bietet völlig kostenlosen Zugang zu den Command R Modellen.
+Wo anfangen: Modell command-r-plus
 
-Google AI Studio (https://ai.google.dev/aistudio). Alle Modelle haben eine kostenlose Stufe; siehe die Studio-Website. Probieren Sie experimentelle Modelle aus – sie haben normalerweise ein größeres Limit für kostenlose Nachrichten pro Tag.
-Erste Schritte: Modell gemini-1.5-pro
+Google AI Studio (https://ai.google.dev/aistudio). Alle Modelle haben ein kostenloses Limit, sehen Sie sich die Studio-Website an. Probieren Sie experimentelle Modelle aus - sie haben normalerweise ein höheres Limit an kostenlosen Nachrichten pro Tag.
+Wo anfangen: Modell gemini-1.5-pro
 
-Groq (https://groq.com/). Groq bietet Zugriff auf verschiedene kostenlose Modelle, beschränkt sie jedoch stark durch den Kontext. Derzeit gibt es auf dieser Website keine kostenlosen Modelle, die in Legendarica gut funktionieren, aber das kann sich in Zukunft ändern. Bezahlte Modelle werden wahrscheinlich gut funktionieren. Siehe die Liste der Modelle hier: https://console.groq.com/docs/models
+Groq (https://groq.com/). Groq bietet Zugang zu verschiedenen kostenlosen Modellen, beschränkt diese jedoch stark nach Kontext. Derzeit gibt es auf dieser Seite keine kostenlosen Modelle, die gut in Legendary funktionieren, aber das kann sich in Zukunft ändern. Bezahlte Modelle funktionieren wahrscheinlich gut. Sehen Sie sich die Liste der Modelle hier an: https://console.groq.com/docs/models
 
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Ein großes Repository für neuronale Netzwerke. Die Inference API wird verwendet, um darauf zuzugreifen, und nur Modelle, die sie unterstützen, sind für das Spiel verfügbar. Es gibt ein Limit für die Anzahl der Nachrichten pro Tag, das mit einem bezahlten Abonnement erhöht wird. Wenn die Modelle unlesbaren Text als Antwort senden, ist entweder das Modell sehr schwach oder die Temperatur ist hoch. In diesem Fall versuchen Sie, die Temperatur zu senken oder das Modell zu wechseln.
-Erste Schritte: Modell Qwen/Qwen2.5-72B-Instruct (Temperatur 0.4)
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Ein großes Repository für neuronale Netzwerke. Der Zugang erfolgt über die Inference API, und nur Modelle, die diese unterstützen, sind für das Spiel verfügbar. Es gibt ein Limit für die Anzahl der Nachrichten pro Tag, das mit einem kostenpflichtigen Abonnement steigt. Wenn Modelle als Antwort unlesbaren Text senden, bedeutet dies entweder, dass das Modell sehr schwach ist oder die Temperatur hoch ist. Versuchen Sie in diesem Fall, die Temperatur zu senken oder das Modell zu wechseln.
+Wo anfangen: Modell Qwen/Qwen2.5-72B-Instruct (Temperatur 0.4)
 
-Mistral AI (https://mistral.ai/). Die Mistral AI-Website bietet die Teilnahme an einem "experimentellen" Preisplan an, wodurch alle Mistral-Modelle kostenlos nutzbar sind.
-Erste Schritte: Modell mistral-large-latest
+Mistral AI (https://mistral.ai/). Auf der Mistral AI-Website gibt es die Möglichkeit, an einem "experimentellen" Tarifplan teilzunehmen, was alle Mistral-Modelle kostenlos nutzbar macht.
+Wo anfangen: Modell mistral-large-latest
 
-OpenAI01 (https://openaio1api.com/ - Hauptwebsite: https://openai01.net/). Zugriff auf OpenAI o1-preview. Es gibt keine kostenlose Stufe. Bei der Registrierung erhalten Sie 10 Credits; 2 Credits werden pro Anfrage an o1-preview berechnet.
-Modell: o1-preview
+Chat01 (https://chat01.ai/). Zugang zu OpenAI o1. Es gibt keinen kostenlosen Tarif. Bei der Registrierung erhalten Sie 10 Credits, 2 Credits pro Anfrage an o1.
+Modell: o1
 
-Openrouter (https://openrouter.ai/). Bietet sowohl kostenlose als auch kostenpflichtige Modelle an. Kostenlose Modelle haben ein tägliches Nachrichtenlimit.`
-                );
+Openrouter (https://openrouter.ai/). Es gibt kostenlose Modelle und bezahlte Modelle. Kostenlose Modelle haben ein tägliches Nachrichtenlimit.
 
-                // Французский перевод
-                this.setTranslation("french-language", id, `Fournisseurs de Réseaux Neuronaux
+Websim. Hängt von dem neuronalen Netzwerk ab, das Websim verwendet.`,
 
-Pour tous les fournisseurs, vous devez vous inscrire sur le site correspondant et créer une clé API ou un jeton d'accès. Faites attention au contexte du réseau neuronal - Legendarica utilise une invite très grande, et elle augmente avec le temps en raison de l'historique du chat et d'autres données utilisées par le MJ. Un contexte d'au moins 128 000 jetons est requis. Les informations décrites ici sont à jour à la date spécifiée (24.11.2024).
+                "french-language": `Fournisseurs d'IA.
+Pour tous les fournisseurs, sauf Websim, vous devez vous inscrire sur le site Web correspondant et créer une clé API ou un Access Token. Faites attention au contexte de l'IA - Legendary dispose d'un prompt très volumineux, et il ne fait qu'augmenter avec le temps en raison de l'historique des discussions et d'autres données utilisées par le GM. Un contexte d'au moins 128 000 tokens est requis. Les informations décrites ici sont à jour à la date spécifiée (29.12.2024).
 
 Cohere (https://coral.cohere.com/). Fournit un accès entièrement gratuit aux modèles Command R.
-Pour commencer : modèle command-r-plus
+Où commencer : modèle command-r-plus
 
-Google AI Studio (https://ai.google.dev/aistudio). Tous les modèles ont un niveau gratuit ; voir le site Studio. Essayez les modèles expérimentaux - ils ont généralement une limite plus élevée de messages gratuits par jour.
-Pour commencer : modèle gemini-1.5-pro
+Google AI Studio (https://ai.google.dev/aistudio). Tous les modèles ont une limite gratuite, consultez le site du studio. Essayez les modèles expérimentaux - ils ont généralement une limite plus élevée de messages gratuits par jour.
+Où commencer : modèle gemini-1.5-pro
 
-Groq (https://groq.com/). Groq fournit un accès à divers modèles gratuits mais les limite sévèrement par le contexte. Actuellement, il n'y a pas de modèles gratuits sur ce site qui fonctionnent bien dans Legendarica, mais cela peut changer à l'avenir. Les modèles payants fonctionneront probablement bien. Voir la liste des modèles ici : https://console.groq.com/docs/models
+Groq (https://groq.com/). Groq offre un accès à divers modèles gratuits, mais les limite fortement par le contexte. Actuellement, il n'y a pas de modèles gratuits sur ce site qui fonctionnent bien dans Legendary, mais cela pourrait changer à l'avenir. Les modèles payants fonctionnent probablement bien. Voir la liste des modèles ici : https://console.groq.com/docs/models
 
-Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un grand dépôt pour les réseaux neuronaux. L'Inference API est utilisée pour y accéder, et seuls les modèles qui la prennent en charge sont disponibles pour le jeu. Il y a une limite sur le nombre de messages par jour, qui augmente avec un abonnement payant. Si les modèles envoient du texte illisible en réponse, soit le modèle est très faible, soit la température est élevée. Dans ce cas, essayez de baisser la température ou de changer de modèle.
-Pour commencer : modèle Qwen/Qwen2.5-72B-Instruct (température 0.4)
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un grand dépôt pour les réseaux neuronaux. L'accès se fait via l'Inference API, et seuls les modèles qui la supportent sont disponibles pour le jeu. Il y a une limite au nombre de messages par jour, qui augmente avec un abonnement payant. Si les modèles envoient du texte illisible en réponse, cela signifie que le modèle est très faible ou que la température est élevée. Dans ce cas, essayez de baisser la température ou de changer de modèle.
+Où commencer : modèle Qwen/Qwen2.5-72B-Instruct (température 0.4)
 
-Mistral AI (https://mistral.ai/). Le site Mistral AI propose de participer à un plan tarifaire "expérimental", rendant tous les modèles Mistral gratuits à utiliser.
-Pour commencer : modèle mistral-large-latest
+Mistral AI (https://mistral.ai/). Le site de Mistral AI offre la possibilité de participer à un plan tarifaire "expérimental", rendant tous les modèles Mistral gratuits à utiliser.
+Où commencer : modèle mistral-large-latest
 
-OpenAI01 (https://openaio1api.com/ - site principal : https://openai01.net/). Accès à OpenAI o1-preview. Il n'y a pas de niveau gratuit. À l'inscription, vous recevez 10 crédits ; 2 crédits sont facturés par requête à o1-preview.
-Modèle : o1-preview
+Chat01 (https://chat01.ai/). Accès à OpenAI o1. Il n'y a pas de tarif gratuit. Lors de l'inscription, vous recevez 10 crédits, 2 crédits par requête à o1.
+Modèle : o1
 
-Openrouter (https://openrouter.ai/). Offre des modèles gratuits et payants. Les modèles gratuits ont une limite quotidienne de messages.`
-                );
+Openrouter (https://openrouter.ai/). Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite quotidienne de messages.
 
+Websim. Dépend du réseau neuronal utilisé par Websim.`
+            };
+
+            for (const id of ids) {
+                for (const [language, text] of Object.entries(translations)) {
+                    this.setTranslation(language, id, text);
+                }
+            }
+        },
+
+        setProviderTooltipForGithubVersion: function () {
+            const ids = ["tooltip-provider-ai", "tooltip-provider-ai2", "tooltip-provider-ai3", "tooltip-provider-ai4"];
+
+            const translations = {
+                "russian-language": `Провайдеры нейросетей.
+Для всех провайдеров, кроме Websim, вам нужно зарегистрироваться на соответствующем сайте и создать API ключ или Access Token. Обращайте внимание на контекст нейросети - у Легендарики очень большой промпт, и он только увеличивается со временем из-за истории чата и других данных, которые используются ГМ-ом. Нужен контекст как минимум 128 000 токенов. Информация, описанная здесь, актуальна на момент указанной даты (29.12.2024).
+
+Cohere (https://coral.cohere.com/). Предоставляет полностью бесплатный доступ к моделям Command R.
+С чего начать: модель command-r-plus
+
+Google AI Studio (https://ai.google.dev/aistudio). Все модели имеют бесплатный лимит, смотрите на сайте студии. Попробуйте экспериментальные модели - они обычно имеют больший лимит бесплатных сообщений в день.
+С чего начать: модель gemini-1.5-pro
+
+Groq (https://groq.com/). Groq предоставляет доступ к различным бесплатным моделям, но сильно ограничивает их по контексту. Сейчас на этом сайте нет бесплатных моделей, которые бы хорошо работали в Легендарике, но все может измениться в будущем. Платные модели, скорее всего, работают хорошо. Смотрите список моделей здесь: https://console.groq.com/docs/models
+
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Большой репозиторий для нейросетей. Для доступа к нему используется Inference API, и только те модели, которые поддерживают его, доступны для игры. Есть ограничение на количество сообщений в день, которое становится большим с платной подпиской. Если модели посылают нечитаемый текст в качестве ответа, значит либо модель очень слабая, либо температура высокая. В этом случае, попробуйте понизить температуру или сменить модель. 
+С чего начать: модель Qwen/Qwen2.5-72B-Instruct  (температура 0.4)
+
+Mistral AI (https://mistral.ai/). На сайте Mistral AI есть возможность принять участие в "экспериментальном" тарифном плане, что делает все модели Mistral бесплатными для использования.
+С чего начать: модель mistral-large-latest
+
+Chat01 (https://chat01.ai/). Доступ к OpenAI o1. Бесплатного тарифа нет. При регистрации дают 10 кредитов, 2 кредита стоит запрос к o1.
+Модель: o1
+
+Openrouter (https://openrouter.ai/). Есть бесплатные модели, есть платные. У бесплатных моделей есть лимит сообщений в день.`,
+
+                "english-language": `AI Providers.
+For all providers except Websim, you need to register on the respective website and create an API key or Access Token. Pay attention to the AI's context - Legendary has a very large prompt, and it only increases over time due to chat history and other data used by the GM. A context of at least 128,000 tokens is required. The information described here is accurate as of the specified date (29.12.2024).
+
+Cohere (https://coral.cohere.com/). Provides completely free access to Command R models.
+Where to start: model command-r-plus
+
+Google AI Studio (https://ai.google.dev/aistudio). All models have a free limit, check the studio website. Try experimental models - they usually have a higher limit of free messages per day.
+Where to start: model gemini-1.5-pro
+
+Groq (https://groq.com/). Groq provides access to various free models but heavily restricts them by context. Currently, there are no free models on this site that work well in Legendary, but this may change in the future. Paid models are likely to work well. See the list of models here: https://console.groq.com/docs/models
+
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). A large repository for neural networks. Access is via the Inference API, and only models that support it are available for the game. There is a limit on the number of messages per day, which increases with a paid subscription. If models send unreadable text as a response, it means either the model is very weak or the temperature is high. In this case, try lowering the temperature or changing the model.
+Where to start: model Qwen/Qwen2.5-72B-Instruct (temperature 0.4)
+
+Mistral AI (https://mistral.ai/). Mistral AI's website offers an "experimental" pricing plan, making all Mistral models free to use.
+Where to start: model mistral-large-latest
+
+Chat01 (https://chat01.ai/). Access to OpenAI o1. There is no free tier. Upon registration, you get 10 credits, and 2 credits per request to o1.
+Model: o1
+
+Openrouter (https://openrouter.ai/). There are free models and paid models. Free models have a daily message limit.`,
+
+                "spanish-language": `Proveedores de IA.
+Para todos los proveedores, excepto Websim, debe registrarse en el sitio web correspondiente y crear una clave API o Token de Acceso. Preste atención al contexto de la IA: Legendary tiene un prompt muy grande, y solo aumenta con el tiempo debido al historial de chat y otros datos utilizados por el GM. Se requiere un contexto de al menos 128,000 tokens. La información descrita aquí es precisa hasta la fecha especificada (29.12.2024).
+
+Cohere (https://coral.cohere.com/). Proporciona acceso completamente gratuito a los modelos Command R.
+Dónde empezar: modelo command-r-plus
+
+Google AI Studio (https://ai.google.dev/aistudio). Todos los modelos tienen un límite gratuito, consulte el sitio web del estudio. Pruebe modelos experimentales: generalmente tienen un límite mayor de mensajes gratuitos por día.
+Dónde empezar: modelo gemini-1.5-pro
+
+Groq (https://groq.com/). Groq ofrece acceso a varios modelos gratuitos, pero los limita mucho por contexto. Actualmente, no hay modelos gratuitos en este sitio que funcionen bien en Legendary, pero esto puede cambiar en el futuro. Los modelos de pago probablemente funcionen bien. Vea la lista de modelos aquí: https://console.groq.com/docs/models
+
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un gran repositorio para redes neuronales. El acceso se realiza a través de la Inference API, y solo los modelos que la soportan están disponibles para el juego. Hay un límite en la cantidad de mensajes por día, que aumenta con una suscripción paga. Si los modelos envían texto ilegible como respuesta, significa que el modelo es muy débil o que la temperatura es alta. En este caso, intente reducir la temperatura o cambiar el modelo.
+Dónde empezar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
+
+Mistral AI (https://mistral.ai/). El sitio web de Mistral AI ofrece un plan de precios "experimental", lo que hace que todos los modelos de Mistral sean gratuitos para usar.
+Dónde empezar: modelo mistral-large-latest
+
+Chat01 (https://chat01.ai/). Acceso a OpenAI o1. No hay un nivel gratuito. Al registrarse, recibe 10 créditos, y 2 créditos por solicitud a o1.
+Modelo: o1
+
+Openrouter (https://openrouter.ai/). Hay modelos gratuitos y de pago. Los modelos gratuitos tienen un límite de mensajes diarios.`,
+
+                "portuguese-language": `Provedores de IA.
+Para todos os provedores, exceto Websim, você precisa se registrar no site correspondente e criar uma chave API ou Token de Acesso. Preste atenção ao contexto da IA - Legendary tem um prompt muito grande, e ele só aumenta com o tempo devido ao histórico de chat e outros dados usados pelo GM. É necessário um contexto de pelo menos 128.000 tokens. As informações descritas aqui são precisas até a data especificada (29.12.2024).
+
+Cohere (https://coral.cohere.com/). Fornece acesso completamente gratuito aos modelos Command R.
+Onde começar: modelo command-r-plus
+
+Google AI Studio (https://ai.google.dev/aistudio). Todos os modelos têm um limite gratuito, consulte o site do estúdio. Experimente modelos experimentais - geralmente têm um limite maior de mensagens gratuitas por dia.
+Onde começar: modelo gemini-1.5-pro
+
+Groq (https://groq.com/). Groq fornece acesso a vários modelos gratuitos, mas os limita muito pelo contexto. Atualmente, não há modelos gratuitos neste site que funcionem bem em Legendary, mas isso pode mudar no futuro. Modelos pagos provavelmente funcionam bem. Veja a lista de modelos aqui: https://console.groq.com/docs/models
+
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Um grande repositório para redes neurais. O acesso é via Inference API, e apenas os modelos que a suportam estão disponíveis para o jogo. Há um limite no número de mensagens por dia, que aumenta com uma assinatura paga. Se os modelos enviarem texto ilegível como resposta, significa que o modelo é muito fraco ou a temperatura está alta. Nesse caso, tente diminuir a temperatura ou mudar o modelo.
+Onde começar: modelo Qwen/Qwen2.5-72B-Instruct (temperatura 0.4)
+
+Mistral AI (https://mistral.ai/). O site da Mistral AI oferece um plano de preços "experimental", tornando todos os modelos Mistral gratuitos para uso.
+Onde começar: modelo mistral-large-latest
+
+Chat01 (https://chat01.ai/). Acesso ao OpenAI o1. Não há um nível gratuito. Ao se registrar, você recebe 10 créditos, e 2 créditos por solicitação ao o1.
+Modelo: o1
+
+Openrouter (https://openrouter.ai/). Existem modelos gratuitos e pagos. Modelos gratuitos têm um limite diário de mensagens.`,
+
+                "hindi-language": `आईए प्रदाता।
+Websim को छोड़कर सभी प्रदाताओं के लिए, आपको संबंधित वेबसाइट पर पंजीकरण करना होगा और एक API कुंजी या Access Token बनाना होगा। आईए के संदर्भ पर ध्यान दें - Legendary के पास बहुत बड़ा प्रॉम्प्ट है, और यह केवल चैट इतिहास और अन्य डेटा के कारण समय के साथ बढ़ता जा रहा है, जिसे GM द्वारा उपयोग किया जाता है। कम से कम 128,000 टोकन का संदर्भ आवश्यक है। यहां वर्णित जानकारी निर्दिष्ट तारीख (29.12.2024) तक सटीक है।
+
+Cohere (https://coral.cohere.com/). Command R मॉडलों के लिए पूरी तरह से मुफ्त पहुँच प्रदान करता है।
+शुरू करने के लिए: मॉडल command-r-plus
+
+Google AI Studio (https://ai.google.dev/aistudio). सभी मॉडलों की मुफ्त सीमा है, स्टूडियो वेबसाइट देखें। प्रयोगात्मक मॉडलों को आजमाएं - आमतौर पर उनके पास प्रतिदिन अधिक मुफ्त संदेश सीमा होती है।
+शुरू करने के लिए: मॉडल gemini-1.5-pro
+
+Groq (https://groq.com/). Groq विभिन्न मुफ्त मॉडलों तक पहुँच प्रदान करता है, लेकिन उन्हें संदर्भ के आधार पर बहुत सीमित करता है। इस साइट पर अभी Legendary में अच्छी तरह से काम करने वाले कोई मुफ्त मॉडल नहीं हैं, लेकिन भविष्य में यह बदल सकता है। भुगतान किए गए मॉडल संभवतः अच्छी तरह से काम करेंगे। मॉडलों की सूची यहाँ देखें: https://console.groq.com/docs/models
+
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). न्यूरल नेटवर्क के लिए एक बड़ा रिपॉजिटरी। इसका उपयोग Inference API के माध्यम से होता है, और केवल वे मॉडल जो इसका समर्थन करते हैं, खेल के लिए उपलब्ध हैं। प्रतिदिन संदेशों की संख्या पर एक सीमा है, जो भुगतान सदस्यता के साथ बढ़ती है। यदि मॉडल उत्तर के रूप में अपठनीय पाठ भेजते हैं, तो इसका मतलब है या तो मॉडल बहुत कमजोर है या तापमान अधिक है। इस मामले में, तापमान कम करने या मॉडल बदलने का प्रयास करें।
+शुरू करने के लिए: मॉडल Qwen/Qwen2.5-72B-Instruct (तापमान 0.4)
+
+Mistral AI (https://mistral.ai/). Mistral AI की वेबसाइट पर "प्रयोगात्मक" मूल्य निर्धारण योजना में भाग लेने का विकल्प है, जो सभी Mistral मॉडलों को उपयोग के लिए मुफ्त बना देता है।
+शुरू करने के लिए: मॉडल mistral-large-latest
+
+Chat01 (https://chat01.ai/). OpenAI o1 तक पहुँच। कोई मुफ्त स्तर नहीं है। पंजीकरण पर आपको 10 क्रेडिट मिलते हैं, o1 के लिए प्रत्येक अनुरोध पर 2 क्रेडिट।
+मॉडल: o1
+
+Openrouter (https://openrouter.ai/). मुफ्त मॉडल और भुगतान किए गए मॉडल हैं। मुफ्त मॉडलों में प्रतिदिन संदेश सीमा है।`,
+
+                "french-language": `Fournisseurs d'IA.
+Pour tous les fournisseurs, sauf Websim, vous devez vous inscrire sur le site Web correspondant et créer une clé API ou un Access Token. Faites attention au contexte de l'IA - Legendary dispose d'un prompt très volumineux, et il ne fait qu'augmenter avec le temps en raison de l'historique des discussions et d'autres données utilisées par le GM. Un contexte d'au moins 128 000 tokens est requis. Les informations décrites ici sont à jour à la date spécifiée (29.12.2024).
+
+Cohere (https://coral.cohere.com/). Fournit un accès entièrement gratuit aux modèles Command R.
+Où commencer : modèle command-r-plus
+
+Google AI Studio (https://ai.google.dev/aistudio). Tous les modèles ont une limite gratuite, consultez le site du studio. Essayez les modèles expérimentaux - ils ont généralement une limite plus élevée de messages gratuits par jour.
+Où commencer : modèle gemini-1.5-pro
+
+Groq (https://groq.com/). Groq offre un accès à divers modèles gratuits, mais les limite fortement par le contexte. Actuellement, il n'y a pas de modèles gratuits sur ce site qui fonctionnent bien dans Legendary, mais cela pourrait changer à l'avenir. Les modèles payants fonctionnent probablement bien. Voir la liste des modèles ici : https://console.groq.com/docs/models
+
+Hugging Face (https://huggingface.co/models?inference=warm&other=conversational&sort=trending). Un grand dépôt pour les réseaux neuronaux. L'accès se fait via l'Inference API, et seuls les modèles qui la supportent sont disponibles pour le jeu. Il y a une limite au nombre de messages par jour, qui augmente avec un abonnement payant. Si les modèles envoient du texte illisible en réponse, cela signifie que le modèle est très faible ou que la température est élevée. Dans ce cas, essayez de baisser la température ou de changer de modèle.
+Où commencer : modèle Qwen/Qwen2.5-72B-Instruct (température 0.4)
+
+Mistral AI (https://mistral.ai/). Le site de Mistral AI offre la possibilité de participer à un plan tarifaire "expérimental", rendant tous les modèles Mistral gratuits à utiliser.
+Où commencer : modèle mistral-large-latest
+
+Chat01 (https://chat01.ai/). Accès à OpenAI o1. Il n'y a pas de tarif gratuit. Lors de l'inscription, vous recevez 10 crédits, 2 crédits par requête à o1.
+Modèle : o1
+
+Openrouter (https://openrouter.ai/). Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite quotidienne de messages.`
+            };
+
+            for (const id of ids) {
+                for (const [language, text] of Object.entries(translations)) {
+                    this.setTranslation(language, id, text);
+                }
             }
         },
 
@@ -7617,7 +7415,7 @@ Openrouter (https://openrouter.ai/). Offre des modèles gratuits et payants. Les
             this.setTranslation("russian-language", id, `Это начало новой игры. 
                 Место действия игры - эпоха сурового постапокалипсиса на планете Земля. Имя персонажа, начинающего свой путь в этом мире: '${name}', его пол: '${gender}'.
                 Раса: '${race}', описание расы: '${raceDescription}'.
-                Класс: '${characterClass}', описание класса: '${classDescriptions}'.
+                Класс: '${characterClass}', описание класса: '${classDescription}'.
                 Сюжетная кампания: '${campaign}', описание кампании: '${campaignDescription}'.
             `);
 
