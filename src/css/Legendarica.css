@@ -340,10 +340,10 @@ input:checked + .slider {
         z-index: 10;
         bottom: 125%;
         left: 50%;
-        margin-left: -100px;
         opacity: 0;
         transition: opacity 0.3s;
         width: 500px;
+        white-space: pre-wrap;
     }
 
 .tooltipAuto .tooltiptext {
@@ -514,7 +514,8 @@ input:checked + .slider {
 }
 
 .infoDelete,
-.infoOpen {
+.infoOpen,
+.infoRestore {
     cursor: pointer;
     margin-top: 20px;
 }
@@ -689,6 +690,26 @@ img.rounded-corners {
     margin-left: 20px;
 }
 
+.gameModes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.minorText {
+    font-size: 0.95em;
+}
+
+.marginTop10px {
+    margin-top: 10px !important;
+}
+
+.marginTop20px {
+    margin-top: 20px !important;
+}
+
 #info-panel {
     background-size: cover;
     background-repeat: no-repeat;
@@ -770,7 +791,8 @@ img.rounded-corners {
     }
 }
 
-#character-name {
+#character-name,
+#character-post-apocalyptic-name {
     width: 96%;
 }
 
@@ -992,3 +1014,11 @@ img.rounded-corners {
             background-color: #d4af37;
             color: white;
         }
+
+#player-inventory-basket {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-top: 10px;
+    margin-left: 20px;
+}

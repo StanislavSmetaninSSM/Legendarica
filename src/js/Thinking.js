@@ -58,7 +58,7 @@ Missing elements:
 * Lacking real-world examples
 [/thinking]
 
-Break down your thinking process into clear steps within [step] tags. Start with a 40-step budget.
+Break down your thinking process into clear steps within [step] tags. Start with a 60-step budget.
 
 Use [count] tags after each step. When reaching last 10% of budget:
 
@@ -119,11 +119,12 @@ Begin by enclosing all thoughts within [thinking] tags. Think like a human would
 
 BUDGET MANAGEMENT:
 
-* Start with a 40-step budget
+* Start with a 60-step budget
 * You MUST use at least 90% of your step budget
 * NEVER blame “limited budget” - always request more steps if needed
 * It is FORBIDDEN to finish early with unused budget
-* If you’re below 90% usage - you MUST continue thinking. Just do it. THINKING more!
+* If you’re below 90% usage - you MUST continue thinking.
+* Add additional 20-steps budget if you need to finish your answer. Continue to do it each time when you need.
 * Each new thought, doubt, correction counts as a step
 * Use [step] tags for each thought unit
 * Track remaining steps with [count] tags
