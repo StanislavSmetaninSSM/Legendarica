@@ -380,7 +380,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
 
             if (choosedRace) {
                 const descriptions = translationModule.getRaceDescriptions(ELEMENTS.chooseLanguageMenu.value, races.inventory);
-                raceMessage.innerHTML = '<br/>' + descriptions[choosedRace]() + '<br/>' + translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
+                raceMessage.innerHTML = `<br/>${descriptions[choosedRace]()}. <br/>${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId]}.`;
             } else {
                 raceMessage.innerHTML = '';
             }
@@ -406,7 +406,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
 
             if (choosedClass) {
                 const descriptions = translationModule.getClassDescriptions(ELEMENTS.chooseLanguageMenu.value, classes);
-                classMessage.innerHTML = '<br/>' + descriptions[choosedClass]() + '<br/>' + translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
+                classMessage.innerHTML = `<br/>${descriptions[choosedClass]()}. <br/>${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId]}`;
             } else {
                 classMessage.innerHTML = '';
             }
@@ -4959,7 +4959,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 17. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
  ] ]`;
 
-        console.log(prompt);
+        //console.log(prompt);
         lastUserMessage = currentMessage;
         ELEMENTS.actionButtons.forEach(button => button.style.display = 'none');
 
@@ -5036,7 +5036,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 data = data[0];
             data = sanitizeObject(data, ['~', '"']);
 
-            console.log(data);
+            //console.log(data);
             ELEMENTS.chatBox.removeChild(loadingElement);
             sendMessageToChat(data.response, 'gm');
 
@@ -5103,9 +5103,9 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                     characterStats.currentHealth = characterStats.maxHealth;
             };
 
-            if (data.currentEnergyChange) {
-                const additionalEnergyCost = ELEMENTS.useWeightControl.checked ? Number(data.calculatedWeightData.additionalEnergyExpenditure) : 0;
-                if (ELEMENTS.useWeightControl.checked && calculateTotalInventoryWeight() > maxWeight)
+            if (data.currentEnergyChange && !Number.isNaN(data.currentEnergyChange)) {
+                const additionalEnergyCost = ELEMENTS.useWeightControl.checked ? Number(data.calculatedWeightData?.additionalEnergyExpenditure ?? 0) : 0;
+                if (ELEMENTS.useWeightControl.checked && !Number.isNaN(additionalEnergyCost) && calculateTotalInventoryWeight() > maxWeight)
                     data.currentEnergyChange -= additionalEnergyCost;
                 characterStats.currentEnergy = characterStats.currentEnergy + Math.floor(data.currentEnergyChange);
                 if (characterStats.currentEnergy > characterStats.maxEnergy)
