@@ -5105,7 +5105,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             if (data.currentEnergyChange && !Number.isNaN(data.currentEnergyChange)) {
                 const additionalEnergyCost = ELEMENTS.useWeightControl.checked ? Number(data.calculatedWeightData?.additionalEnergyExpenditure ?? 0) : 0;
-                if (ELEMENTS.useWeightControl.checked && !Number.isNaN(additionalEnergyCost) && calculateTotalInventoryWeight() > maxWeight)
+                if (ELEMENTS.useWeightControl.checked && additionalEnergyCost && !Number.isNaN(additionalEnergyCost) && calculateTotalInventoryWeight() > maxWeight)
                     data.currentEnergyChange -= additionalEnergyCost;
                 characterStats.currentEnergy = characterStats.currentEnergy + Math.floor(data.currentEnergyChange);
                 if (characterStats.currentEnergy > characterStats.maxEnergy)
