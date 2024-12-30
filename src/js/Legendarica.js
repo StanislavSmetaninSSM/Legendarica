@@ -146,6 +146,7 @@ const ELEMENTS = {
     inventoryInfoDurability: document.getElementById('inventory-info-durability'),
     inventoryInfoResource: document.getElementById('inventory-info-resource'),
     inventoryInfoWeight: document.getElementById('inventory-info-weight'),
+    inventoryInfoWeightReduction: document.getElementById('inventory-info-weightReduction'),
     inventoryInfoVolume: document.getElementById('inventory-info-volume'),
     inventoryInfoCapacity: document.getElementById('inventory-info-capacity'),
     inventoryInfoCustomProperties: document.getElementById('inventory-info-customProperties'),
@@ -1901,6 +1902,7 @@ function showInventoryInfo(id, itemsArray) {
         if (currentItem.isContainer && currentItem.capacity > 0 && currentItem.volume > 0) {
             ELEMENTS.inventoryContainerOpen.classList.remove(displayNoneClass);
             ELEMENTS.inventoryInfoCapacity.classList.remove(displayNoneClass);
+            ELEMENTS.inventoryInfoWeightReduction.classList.remove(displayNoneClass);
             ELEMENTS.inventoryInfoCount.classList.add(displayNoneClass);
 
             ELEMENTS.inventoryInfoContentsDescription.classList.remove(displayNoneClass);
@@ -1919,6 +1921,8 @@ function showInventoryInfo(id, itemsArray) {
             ELEMENTS.inventoryInfoAvailableCapacity.innerHTML = `${availableCapacityLabel}: ${availableCapacity}`;
             ELEMENTS.inventoryInfoAvailableVolume.innerHTML = `${availableVolumeLabel}: ${availableVolume.toFixed(2)}`;
 
+            const weightReductionLabel = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["weight-reduction-label"];
+            ELEMENTS.inventoryInfoWeightReduction.innerHTML = `${weightReductionLabel}: ${currentItem.weightReduction}%`;
         } else {
             ELEMENTS.inventoryContainerOpen.classList.add(displayNoneClass);
             ELEMENTS.inventoryInfoCapacity.classList.add(displayNoneClass);
@@ -1926,6 +1930,7 @@ function showInventoryInfo(id, itemsArray) {
             ELEMENTS.inventoryInfoContentsDescription.classList.add(displayNoneClass);
             ELEMENTS.inventoryInfoAvailableCapacity.classList.add(displayNoneClass);
             ELEMENTS.inventoryInfoAvailableVolume.classList.add(displayNoneClass);
+            ELEMENTS.inventoryInfoWeightReduction.classList.add(displayNoneClass);
         }
     }
 }
@@ -2004,12 +2009,15 @@ function addInventoryItem(itemParams) {
         item.bonuses = itemParams.bonuses;
         item.description = itemParams.description;
         item.customProperties = itemParams.customProperties;
-        item.isContainer = !!itemParams.isContainer;
+        item.isContainer = itemParams.isContainer;
         item.weight = itemParams.weight;
         item.originalWeight = itemParams.weight;
+        item.weightReduction = itemParams.weightReduction;
         item.volume = itemParams.volume;
         item.containerWeight = itemParams.containerWeight;
         item.capacity = itemParams.capacity;
+        if (item.isContainer && !Array.isArray(item.contents))
+            item.contents = [];
 
         inventoryArray.splice(existingItemIndex, 1);
         if (item.count > 0)
@@ -2036,7 +2044,8 @@ function addInventoryItem(itemParams) {
             volume: itemParams.volume,
             containerWeight: itemParams.containerWeight,
             capacity: itemParams.capacity,
-            contents: itemParams.isContainer ? [] : undefined
+            contents: itemParams.isContainer ? [] : undefined,
+            weightReduction: itemParams.weightReduction
         });
         itemParams.newItem = inventoryArray[0];
     }
@@ -2066,10 +2075,18 @@ function generateInventoryItemContextMenu(currentItem, parentItemsArray) {
         generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["throw-item"], () => deleteItemWithConfirmation(currentItem, parentItemsArray, true));
 
         for (const item of parentItemsArray) {
+            const isContainer = item.isContainer && Array.isArray(item.contents);
+            const isCapacityCheckPassed = isContainer
+                ? item.capacity >= (item.contents?.length ?? 0) + 1
+                : false;
+            const isVolumeCheckPassed = isContainer
+                ? item.volume >= (item.contentsVolume ?? 0) + currentItem.volume
+                : false;
+
             if (item.id != currentItem.id
-                && item.isContainer && Array.isArray(item.contents)
-                && item.capacity >= item.contents.length + 1
-                && item.volume >= (item.contentsVolume ?? 0) + currentItem.volume)
+                && isContainer
+                && isCapacityCheckPassed
+                && isVolumeCheckPassed)
                 generateMenuItem(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["place-item-to"] + item.name, () => moveItem(currentItem, parentItemsArray, item.contents, true));
         }
     }
@@ -4278,7 +4295,6 @@ ${ELEMENTS.useWeightControl.checked ? `
    • New active skill that item gives to player.
    • The interesting and rare capability of item, but without numerical bonus representation'.
    • If an item's 'isConsumption' property is true, then the bonus could restore health or energy when consumed, if it makes logical sense to do so. For example, food, water, medicines, magic potions, and so on could restore health or energy. It's mandatory for such bonuses to have a numerical value, for example, '+15 to health when consumed' or '+20 to energy when consumed'.
-   • If an item's 'isContainer' property is true, then the bonus could be the weight reduction of container contents, if it makes logical sense to do so (for example, a magical material or high technology, that allows to reduce weight). For example: -50% of container contents weight, or -10% of container contents weight. If such bonus is present in item, then mandatory include the 'weightReduction' property with the corresponding numerical value.
 ] . It's forbidden to use another effect types. ${CHARACTER_INFO.nonMagicMode ? '(Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items. Effects should be as much realistic, as possible' : ''}
 - The permanent bonus to one of player stats. You must mandatory add this bonus to specified player stat. It's forbidden use 'random characteristic' as a bonus. It's forbidden to use stats that are not in the list: ${statsList} .
 - The bonus to one of player stats, but only for certain situations. The bonus is not permanent and used only if described conditions are met. It's forbidden to use stats that are not in the list: ${statsList} .
@@ -4288,7 +4304,6 @@ ${ELEMENTS.useWeightControl.checked ? `
     - The player's existing stats. It's forbidden to use stats that are not in the list: ${statsList} .
     - Skills of the player.
     - For 'isConsumption' items only: bonus to health or energy. It's important to have enough consumption items related with energy bonuses in the game, as energy is spent quite quickly and needs to be restored.
-    - For 'isContainer' items only: bonus to contents weight reduction.
 ] .
 #4.8.4. If it is the new item, then also follow the previous instructions to determinate the item bonuses.
 #4.8.5. If 'isConsumption' value of key of item is true and item doesn't have other bonuses: [
@@ -4324,22 +4339,24 @@ Example 2 (correct): 'This is an emergency first aid kit.'
 #4.17.4. The weight of an item must be logically justified.
 #4.18. To the value of 'volume' key include the numeric value (type of value: double), representing the volume of item. Each item has the volume. Unit of volume: dm³.
 #4.19. Add a boolean value to the 'isConsumption' key, representing whether the current item is intended for consumption. Examples of such items: bandages, plasters, duct tape, food, cigarettes, torches, etc.
-#4.20. If 'isContainer' is true, and item has bonus for weight reduction of container contents, then mandatory include the numeric (type of value: double, must be non-negative) property 'weightReduction'. 
-#4.20.1. Value of the 'weightReduction' - is a percentages by which the weight of the container contents is reduced. For example: 50 - is a 50%, 10 - is a 10%.
-#4.20. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
-#4.21. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
-#4.22. Mandatory record information about this event in 'items_and_stat_calculations'.
+#4.20. If 'isContainer' is true and 'isConsumption' is false, then mandatory include the numeric (type of value: double, must be non-negative) property 'weightReduction'. 
+#4.20.1. Value of the 'weightReduction' - is a percentages by which the weight of the container contents is reduced. For example: 50 - is a 50%, 5 - is a 5%. Based on this value, game system will calculate the final weight of container contents items automatically.
+#4.20.2. Magic items or high technology items give a higher percentage of weight reduction, normal items a smaller one.
+#4.20.3. The value of 'weightReduction' must be at least 1% for containers. For non-containers, this value should be null.
+#4.21. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
+#4.22. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
+#4.23. Mandatory record information about this event in 'items_and_stat_calculations'.
 ${turn == 1 ? `
-#4.23. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
+#4.24. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
 It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
 If player has containers in their item, then mandatory generate items inside containers. Carefully read the 'description' of containers and generate items inside it based on the description.
 Note, than you should mandatory generate all predefined items. If they are too heavy (have a lot of weight), then make them lighter so the character can hold them and not be overloaded.
 It's mandatory to use the same names, which predefined items already have. Forbidden to use another item names for predefined items.
 ` : ''}
-#4.24. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#4.25. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
-#4.25. Do not include 'inventoryItemsData' key to the response.
+#4.26. Do not include 'inventoryItemsData' key to the response.
 ]
 
 #5 If any of these conditions are true: [
@@ -4751,6 +4768,7 @@ ${ELEMENTS.useQuestsList.checked ? `
 #14 Calculate the change in energy, experience, and health according to the following instruction: [ Let's think step by step :
 #14.1. All character actions spend or restore their energy, in an amount logically dependent on the action. The amount of energy changed is entered in the value of the 'currentEnergyChange' key (value type: positive or negative integer)
 #14.1.1. Note: it's mandatory that 'currentEnergyChange' must only reflect the base energy change associated with the player's action, without any additional modifications.
+#14.1.2. Each turn, the player spends energy unless they are trying to restore it in some way (for example, by resting or meditating).
 ${characterStats.currentEnergy < 40 && characterStats.currentEnergy > 10 ? `#14.2. The current energy of player character is less than 40. It means, that player character mandatory loses additional 1 or 2 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is tired and needs to rest, otherwise it will affect player's health.` : ``}
 ${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player character is less than 10. It means, that player character mandatory loses additional 10 or 20 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is very tired and needs to rest, otherwise it will affect player's health very fast.` : ``}
 #14.3. All successful player actions give experience to the character, in an amount logically dependent on the scale of success. The amount of experience is entered in the value of the experienceGained key (value type: positive integer)
@@ -5028,16 +5046,17 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             count: Number(item.count),
                             quality: item.quality,
                             price: item.price,
-                            isConsumption: !!item.isConsumption,
+                            isConsumption: item.isConsumption?.toLowerCase() === "true" ? true : false,
                             durability: item.durability,
                             bonuses: item.bonuses,
                             image_prompt: item.image_prompt,
                             customProperties: item.customProperties,
                             contentsPath: item.contentsPath,
-                            isContainer: item.isContainer,
+                            isContainer: item.isContainer?.toLowerCase() === "true" ? true : false,
                             weight: Number(item.weight),
                             volume: Number(item.volume),
                             containerWeight: item.containerWeight ? Number(item.containerWeight) : undefined,
+                            weightReduction: item.weightReduction,
                             capacity: Number(item.capacity),
                             resources: data.inventoryItemsResources,
                         };
