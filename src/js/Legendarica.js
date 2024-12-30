@@ -377,7 +377,13 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
             const choosedRace = e.target.value;
             const raceMessage = document.getElementById('post-apocalypse-race-message');
             const messageId = translationModule.setPostApocalypseRaceMessage(choosedRace);
-            raceMessage.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
+
+            if (choosedRace) {
+                const descriptions = translationModule.getRaceDescriptions(ELEMENTS.chooseLanguageMenu.value, races.inventory);
+                raceMessage.innerHTML = '<br/>' + descriptions[choosedRace]() + '<br/>' + translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
+            } else {
+                raceMessage.innerHTML = '';
+            }
         }
     }
 
@@ -396,8 +402,14 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
         ELEMENTS.postApocalypticClass.onchange = function (e) {
             const choosedClass = e.target.value;
             const classMessage = document.getElementById('post-apocalypse-class-message');
-            const messageId = translationModule.setPostApocalypseClassMessage(choosedClass);            
-            classMessage.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
+            const messageId = translationModule.setPostApocalypseClassMessage(choosedClass);          
+
+            if (choosedClass) {
+                const descriptions = translationModule.getClassDescriptions(ELEMENTS.chooseLanguageMenu.value, classes);
+                classMessage.innerHTML = '<br/>' + descriptions[choosedClass]() + '<br/>' + translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId];
+            } else {
+                classMessage.innerHTML = '';
+            }
         }
     }
 
@@ -5024,7 +5036,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 data = data[0];
             data = sanitizeObject(data, ['~', '"']);
 
-            //console.log(data);
+            console.log(data);
             ELEMENTS.chatBox.removeChild(loadingElement);
             sendMessageToChat(data.response, 'gm');
 
