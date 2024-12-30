@@ -910,6 +910,7 @@ function experienceProcessing(exp) {
 
     const allowedKeys = getStatsList();
     while (characterStats.level < 100 && characterStats.experience >= LEVEL_UP_EXP[characterStats.level - 1]) {
+        characterStats.currentEnergy = characterStats.maxEnergy;
         characterStats.level = characterStats.level + 1;
         const filteredStats = Object.keys(characterStats).filter(key => allowedKeys.includes(key));
         const selectedStatKey = filteredStats[Math.floor(Math.random() * filteredStats.length)];
