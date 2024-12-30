@@ -4287,7 +4287,7 @@ ${ELEMENTS.useWeightControl.checked ? `
 #4.8.3. If the bonus has a numerical value, it must be related to one of the following: [
     - The player's existing stats. It's forbidden to use stats that are not in the list: ${statsList} .
     - Skills of the player.
-    - For 'isConsumption' items only: bonus to health or energy.
+    - For 'isConsumption' items only: bonus to health or energy. It's important to have enough consumption items related with energy bonuses in the game, as energy is spent quite quickly and needs to be restored.
     - For 'isContainer' items only: bonus to contents weight reduction.
 ] .
 #4.8.4. If it is the new item, then also follow the previous instructions to determinate the item bonuses.
