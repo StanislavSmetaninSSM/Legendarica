@@ -3677,6 +3677,10 @@ function setContentHeight(element) {
     element.style.height = (element.scrollHeight) + 'px';
 }
 
+function convertToBoolean(value) {
+    return value?.toString()?.toLowerCase() === "true" ? true : false;
+}
+
 //----------------------------------------------------------------SAVE/LOAD ACTIONS-----------------------------------------------------------------------//
 
 function clickSaveGame() {
@@ -5046,13 +5050,13 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             count: Number(item.count),
                             quality: item.quality,
                             price: item.price,
-                            isConsumption: item.isConsumption?.toString()?.toLowerCase() === "true" ? true : false,
+                            isConsumption: convertToBoolean(item.isConsumption),
                             durability: item.durability,
                             bonuses: item.bonuses,
                             image_prompt: item.image_prompt,
                             customProperties: item.customProperties,
                             contentsPath: item.contentsPath,
-                            isContainer: item.isContainer?.toString()?.toLowerCase() === "true" ? true : false,
+                            isContainer: convertToBoolean(item.isContainer),
                             weight: Number(item.weight),
                             volume: Number(item.volume),
                             containerWeight: item.containerWeight ? Number(item.containerWeight) : undefined,
