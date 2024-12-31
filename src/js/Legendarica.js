@@ -2125,6 +2125,12 @@ function hideInventoryItemContextMenu() {
     ELEMENTS.inventoryItemContextMenuContainer.style.display = 'none';
 }
 
+function removeUnusedItems() {
+    inventory = inventory.filter(item => {
+        return item && item.description !== undefined && item.description !== null && item.description !== "";
+    });
+}
+
 //---- SKILLS ----//
 
 function updateSkills(skills, active) {
@@ -5086,6 +5092,9 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 for (const resourceData of data.inventoryItemsResources)
                     setOrChangeItemResource(resourceData.name, resourceData.contentsPath, Number(resourceData.resource), Number(resourceData.maximumResource), resourceData.resourceType);
             }
+
+            if (turn == 2)
+                removeUnusedItems();
 
             if (data.moveInventoryItems?.length > 0 || data.removeInventoryItems?.length > 0 || data.inventoryItemsData?.length > 0) {
                 if (ELEMENTS.useWeightControl.checked && newItemsArray.length > 0)
