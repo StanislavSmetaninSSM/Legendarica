@@ -7412,55 +7412,69 @@ Openrouter (https://openrouter.ai/). Il existe des modèles gratuits et payants.
         setPostApocalypticNewGameMessage: function (name, gender, race, raceDescription, characterClass, classDescription, campaign, campaignDescription) {
             const id = "post_apocalyptic_game_starting_message";
 
-            this.setTranslation("english-language", id, `This is the start of a new game.
-                The setting of the game is a harsh post-apocalyptic era on planet Earth. The name of the character starting their journey in this world: '${name}', their gender: '${gender}'.
-                Race: '${race}', race description: '${raceDescription}'.
-                Class: '${characterClass}', class description: '${classDescription}'.
-                Campaign: '${campaign}', campaign description: '${campaignDescription}'.
-            `);
-
-            this.setTranslation("russian-language", id, `Это начало новой игры. 
-                Место действия игры - эпоха сурового постапокалипсиса на планете Земля. Имя персонажа, начинающего свой путь в этом мире: '${name}', его пол: '${gender}'.
+            this.setTranslation("russian-language", id, `Это начало новой игры.
+                Место действия игры — эпоха сурового постапокалипсиса на планете Земля. Имя персонажа, начинающего свой путь в этом мире: '${name}', его пол: '${gender}'.
                 Раса: '${race}', описание расы: '${raceDescription}'.
                 Класс: '${characterClass}', описание класса: '${classDescription}'.
                 Сюжетная кампания: '${campaign}', описание кампании: '${campaignDescription}'.
+                Мастер игры: придумай начальную локацию и стартовое развитие сюжета игры, основанное на расе (и описании расы), классе (и описании класса), кампании (и описании кампании).
+                Придумай события, которые привели персонажа игрока в начальную локацию игры и опиши их, основываясь на известных данных.
+            `);
+
+            this.setTranslation("english-language", id, `This is the start of a new game.
+                The setting is a harsh post-apocalyptic era on planet Earth. The character beginning their journey in this world is named '${name}', their gender: '${gender}'.
+                Race: '${race}', race description: '${raceDescription}'.
+                Class: '${characterClass}', class description: '${classDescription}'.
+                Campaign: '${campaign}', campaign description: '${campaignDescription}'.
+                Game Master: come up with the initial location and the starting storyline of the game, based on the race (and its description), the class (and its description), and the campaign (and its description).
+                Think of the events that brought the player's character to the game's starting location and describe them based on the known data.
             `);
 
             this.setTranslation("spanish-language", id, `Este es el comienzo de un nuevo juego.
-                El escenario del juego es una era postapocalíptica dura en el planeta Tierra. El nombre del personaje que comienza su viaje en este mundo: '${name}', su género: '${gender}'.
+                La ambientación es una era postapocalíptica dura en el planeta Tierra. El nombre del personaje que inicia su viaje en este mundo es: '${name}', su género: '${gender}'.
                 Raza: '${race}', descripción de la raza: '${raceDescription}'.
                 Clase: '${characterClass}', descripción de la clase: '${classDescription}'.
                 Campaña: '${campaign}', descripción de la campaña: '${campaignDescription}'.
+                Maestro del juego: idea una ubicación inicial y un desarrollo inicial de la historia del juego, basándote en la raza (y su descripción), la clase (y su descripción) y la campaña (y su descripción).
+                Piensa en los eventos que llevaron al personaje del jugador a la ubicación inicial del juego y descríbelos basándote en los datos conocidos.
             `);
 
             this.setTranslation("portuguese-language", id, `Este é o início de um novo jogo.
-                O cenário do jogo é uma era pós-apocalíptica rigorosa no planeta Terra. O nome do personagem que inicia sua jornada neste mundo: '${name}', seu gênero: '${gender}'.
+                O cenário é uma era pós-apocalíptica rigorosa no planeta Terra. O nome do personagem que inicia sua jornada neste mundo é: '${name}', seu gênero: '${gender}'.
                 Raça: '${race}', descrição da raça: '${raceDescription}'.
                 Classe: '${characterClass}', descrição da classe: '${classDescription}'.
                 Campanha: '${campaign}', descrição da campanha: '${campaignDescription}'.
+                Mestre do jogo: crie o local inicial e o desenvolvimento inicial da história do jogo, com base na raça (e sua descrição), na classe (e sua descrição) e na campanha (e sua descrição).
+                Pense nos eventos que levaram o personagem do jogador ao local inicial do jogo e descreva-os com base nos dados conhecidos.
             `);
 
             this.setTranslation("hindi-language", id, `यह एक नई खेल की शुरुआत है।
-                खेल का सेटिंग सख्त पोस्ट-अपोकैलिप्टिक युग है पृथ्वी ग्रह पर। इस दुनिया में अपनी यात्रा शुरू करने वाले पात्र का नाम: '${name}', उनका लिंग: '${gender}'।
+                इस दुनिया का सेटिंग कठोर पोस्ट-अपोकैलिप्टिक युग है, ग्रह पृथ्वी पर। इस दुनिया में अपनी यात्रा शुरू करने वाले पात्र का नाम: '${name}', उसका लिंग: '${gender}'।
                 जाति: '${race}', जाति का विवरण: '${raceDescription}'।
                 वर्ग: '${characterClass}', वर्ग का विवरण: '${classDescription}'।
                 अभियान: '${campaign}', अभियान का विवरण: '${campaignDescription}'।
+                गेम मास्टर: नस्ल (और उसका विवरण), वर्ग (और उसका विवरण), और अभियान (और उसका विवरण) के आधार पर प्रारंभिक लोकेशन और कहानी की शुरुआत की योजना बनाएं।
+                उन घटनाओं के बारे में सोचें, जिन्होंने खिलाड़ी के पात्र को खेल के प्रारंभिक लोकेशन तक पहुँचाया, और उन्हें ज्ञात जानकारी के आधार पर वर्णित करें।
             `);
 
-            this.setTranslation("german-language", id, `Dies ist der Start eines neuen Spiels.
-                Das Setting des Spiels ist eine harte postapokalyptische Ära auf dem Planeten Erde. Der Name des Charakters, der seine Reise in dieser Welt beginnt: '${name}', sein Geschlecht: '${gender}'.
+            this.setTranslation("german-language", id, `Dies ist der Beginn eines neuen Spiels.
+                Das Setting ist eine raue postapokalyptische Ära auf dem Planeten Erde. Der Name des Charakters, der seine Reise in dieser Welt beginnt, lautet: '${name}', sein Geschlecht: '${gender}'.
                 Rasse: '${race}', Rassenbeschreibung: '${raceDescription}'.
                 Klasse: '${characterClass}', Klassenbeschreibung: '${classDescription}'.
                 Kampagne: '${campaign}', Kampagnenbeschreibung: '${campaignDescription}'.
+                Spielleiter: Denke dir den Startort und die anfängliche Entwicklung der Spielgeschichte aus, basierend auf der Rasse (und ihrer Beschreibung), der Klasse (und ihrer Beschreibung) sowie der Kampagne (und ihrer Beschreibung).
+                Denke an die Ereignisse, die den Charakter des Spielers an den Startort des Spiels gebracht haben, und beschreibe sie anhand der bekannten Informationen.
             `);
 
             this.setTranslation("french-language", id, `Ceci est le début d'un nouveau jeu.
-                Le cadre du jeu est une ère post-apocalyptique dure sur la planète Terre. Le nom du personnage qui commence son voyage dans ce monde : '${name}', son genre : '${gender}'.
+                Le cadre est une ère post-apocalyptique rude sur la planète Terre. Le nom du personnage qui commence son aventure dans ce monde est : '${name}', son genre : '${gender}'.
                 Race : '${race}', description de la race : '${raceDescription}'.
                 Classe : '${characterClass}', description de la classe : '${classDescription}'.
                 Campagne : '${campaign}', description de la campagne : '${campaignDescription}'.
+                Maître du jeu : imagine le lieu de départ et le développement initial de l'histoire du jeu, en te basant sur la race (et sa description), la classe (et sa description) et la campagne (et sa description).
+                Pense aux événements qui ont amené le personnage du joueur au lieu de départ du jeu et décris-les en te basant sur les informations connues.
             `);
-            
+
             return id;
         },
     }

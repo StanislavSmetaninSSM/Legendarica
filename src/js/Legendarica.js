@@ -555,7 +555,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
             CHARACTER_INFO.name, CHARACTER_INFO.gender,
             CHARACTER_INFO.race, CHARACTER_INFO.raceDescription,
             CHARACTER_INFO.classOfCharacter, CHARACTER_INFO.classDescription,
-            CHARACTER_INFO.campaign, CHARACTER_INFO.campaignDescription
+            CHARACTER_INFO.campaign, CHARACTER_INFO.campaignDescription ?? ''
         );
         sendRequest(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][startGameMessageId]);
         updateElements();
@@ -4789,13 +4789,20 @@ ${ELEMENTS.useQuestsList.checked ? `
 
 #14 Calculate the change in energy, experience, and health according to the following instruction: [ Let's think step by step :
 #14.1. All character actions spend or restore their energy, in an amount logically dependent on the action. The amount of energy changed is entered in the value of the 'currentEnergyChange' key (value type: positive or negative integer)
-#14.1.1. Note: it's mandatory that 'currentEnergyChange' must only reflect the base energy change associated with the player's action, without any additional modifications.
+#14.1.1. Note: it's mandatory that 'currentEnergyChange' must only reflect the base energy change associated with the player's action, without any additional modifications. 
 #14.1.2. Each turn, the player spends energy unless they are trying to restore it in some way (for example, by resting or meditating).
+#14.1.3. If the player is rested/meditated/etc. or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate energy restoration effect, then the player's energy should be restored to the required level.
+#14.1.4. If a player takes multiple actions in current turn, sum their energy change up and record the final value in 'currentEnergyChange'.
 ${characterStats.currentEnergy < 40 && characterStats.currentEnergy > 10 ? `#14.2. The current energy of player character is less than 40. It means, that player character mandatory loses additional 1 or 2 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is tired and needs to rest, otherwise it will affect player's health.` : ``}
-${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player character is less than 10. It means, that player character mandatory loses additional 10 or 20 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is very tired and needs to rest, otherwise it will affect player's health very fast.` : ``}
-#14.3. All successful player actions give experience to the character, in an amount logically dependent on the scale of success. The amount of experience is entered in the value of the experienceGained key (value type: positive integer)
-#14.4. Spending or restoring health is recorded in the value of the currentHealthChange key (value type: positive or negative integer) ]
-#14.5. Output to the 'items_and_stat_calculations' the current value of 'currentEnergyChange'.
+${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player character is less than 10. It means, that player character mandatory loses additional 3-10 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is very tired and needs to rest, otherwise it will affect player's health very fast.` : ``}
+#14.3. All successful player actions give experience to the character, in an amount logically dependent on the scale of success. The amount of experience is entered in the value of the 'experienceGained' key (value type: positive integer).
+#14.3.1. Reward the player with experience for even minor successful actions, even if they do not have a significant impact on the world.
+#14.3.2. Carefully measure the amount of experience you give the player. Minor actions, that don't have a major impact on the game world, yield little experience. Actions that have a major impact on the game world, or actions that open up new plot twists, yield more experience.
+#14.4. Spending or restoring health is recorded in the value of the 'currentHealthChange' key (value type: positive or negative integer).
+#14.4.1. If the player is wounded in current turn, his health should decrease.
+#14.4.2. If the player is well rested or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate health restoration effect, then the player's health should be restored to the required level.
+]
+#14.5. Output to the 'items_and_stat_calculations' the current value of 'currentEnergyChange', 'experienceGained'.
 
 #15 The value of the actions key is passed an array of proposed actions (should not contain nested arrays or other objects)
 #15.1. Among the proposed actions, there should not be options for actions that are similar to events that have already recently occurred
