@@ -2062,7 +2062,8 @@ function addInventoryItem(itemParams) {
         itemParams.newItem = inventoryArray[0];
     }
 
-    if (isNestedItem(itemParams) && ELEMENTS.inventoryContainerInfo.style.display === 'block') {
+    const nestedItem = isNestedItem(itemParams);
+    if (nestedItem && ELEMENTS.inventoryContainerInfo.style.display === 'block') {
         const parentContainerId = ELEMENTS.inventoryContainerInfoId.value;
         if (parentContainerId === data.parentId)
             updateInventoryList(ELEMENTS.inventoryContainerInfoItems, inventoryArray);
@@ -2074,6 +2075,13 @@ function addInventoryItem(itemParams) {
     const id = ELEMENTS.inventoryInfoId.value;
     if (inventoryArray.find(item => item.id === id))
         showInventoryInfo(id, inventoryArray);
+    else if (nestedItem && data.parentId === id) {
+        const parentName = itemParams.contentsPath.slice(-1)[0];
+        const parentContentsPath = itemParams.contentsPath.slice(0, itemParams.contentsPath.length - 1);
+        const parentItemData = getItemByNameAndPath(parentName, parentContentsPath);
+        if (parentItemData.item)
+            showInventoryInfo(parentItemData.item.id, parentItemData.parentItemsArray ?? inventory);
+    }
 }
 
 function generateInventoryItemContextMenu(currentItem, parentItemsArray) {
