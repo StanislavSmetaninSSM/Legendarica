@@ -149,7 +149,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-            console.log(response);
+         //   console.log(response);
 
             if (response.error?.message)
                 throw response.error;
@@ -222,7 +222,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-            console.log(response);
+          //  console.log(response);
 
             if (response.error?.message)
                 throw response.error;
@@ -292,7 +292,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-            console.log(response);
+          //  console.log(response);
 
             if (response.message?.detail)
                 throw response.message.detail[0].msg;
@@ -358,7 +358,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-            console.log(response);
+           // console.log(response);
 
             if (response.error)
                 throw response.error;
@@ -448,7 +448,7 @@ const APIModule = (function getAPIModule() {
             }
 
             delete streamingMessages;
-            console.log(finalResponse);
+           // console.log(finalResponse);
             const sanitizedString = sanitizeResponse(finalResponse);
 
             try {
@@ -502,7 +502,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-            console.log(response);
+          //  console.log(response);
 
             if (response.finish_reason == "ERROR") {
                 if (response.message?.content)
@@ -576,7 +576,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-            console.log(response);
+           // console.log(response);
 
             if (response.error)
                 throw response.error;
@@ -630,7 +630,7 @@ const APIModule = (function getAPIModule() {
                 throw new Error(`Websim has returned the HTTP error ${request.status} for this request.`);
             
             const response = await request.text();
-            console.log(response);
+           // console.log(response);
 
             if (response) {
                 const sanitizedString = sanitizeResponse(response);

@@ -4980,7 +4980,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 17. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
  ] ]`;
 
-        console.log(prompt);
+       // console.log(prompt);
         lastUserMessage = currentMessage;
         ELEMENTS.actionButtons.forEach(button => button.style.display = 'none');
 
