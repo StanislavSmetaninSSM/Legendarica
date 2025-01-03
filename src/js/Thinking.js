@@ -1,13 +1,6 @@
 ﻿const thinkingModule = (function getThinkingModule() {
-
-    const systemPrompt = `
-#1. Mandatory write an opening global tag [global].
-#2. Use rules of the content inside [global][/global] tag: [
-#2.1. It's forbidden to use the double quotes, as this interferes with parsing your answer into JSON. Use guillemet quotes («») if needed.
-]
-#3. Strictly follow these instructions to write the content of [global][/global]: [
-
-Begin by enclosing all thoughts within [thinking] tags. Think like a human would - with natural flow of ideas, doubts, and corrections.
+    const thinkingPrompt = `
+    Begin by enclosing all thoughts within [thinking] tags. Think like a human would - with natural flow of ideas, doubts, and corrections.
 
 CRITICAL BUDGET RULES:
 
@@ -124,7 +117,6 @@ BUDGET MANAGEMENT:
 * NEVER blame “limited budget” - always request more steps if needed
 * It is FORBIDDEN to finish early with unused budget
 * If you’re below 90% usage - you MUST continue thinking.
-* Add additional 20-steps budget if you need to finish your answer. Continue to do it each time when you need.
 * Each new thought, doubt, correction counts as a step
 * Use [step] tags for each thought unit
 * Track remaining steps with [count] tags
@@ -223,17 +215,31 @@ Focus on:
 Synthesize final answer within [answer] tags only after thorough exploration and multiple draft iterations.
 
 Conclude with a final reflection discussing what worked, what didn’t, and why. Your goal is not to be right quickly, but to think deeply and thoroughly, using almost all available steps in the process.
-]
-#4. Mandatory write the closing tag [/global].
-#5. After this, finish the current JSON property ('thinkingData') with a " symbol.
 `;
 
     return {
-        getPrompt: function (language) {
-            let thinkingPrompt = systemPrompt;
-            thinkingPrompt += ` It's mandatory to think and respond in ${language}.`;
+        getThinkingPrompt: function (task, language, thinkingData) {
+            if (language == "russian-language")
+                language = "Русский язык";
 
-            return thinkingPrompt;
+            return `
+#0. Understand your goal. You need to think about the task and create the draft of the final answer. You need to return the result as a simple text (not a JSON) to analyze by game system.
+#1. Mandatory write an opening global tag [global].
+#2. Use rules of the content inside [global][/global] tag: [
+#2.1. It's forbidden to use the double quotes, as this interferes with parsing your answer into JSON. Use guillemet quotes («») if needed.
+#2.2. Write content with a human-readable style using markdown. Focus on making your messages as readable as possible.
+#2.3. It's mandatory to think and respond in the selected language: [ ${language} ]. Use only this language. Write your thinking process only using the ${language}.
+]
+#3. Analyze your task: [ ${task} ] .
+#4. Analyze your previous thinking tries: [ ${thinkingData} ] . You must mandatory continue from the last step you described. For example, if you have step 30, you have to continue from step 31, etc.
+#5. Strictly follow these instructions to write the content of [global][/global]: [
+    ${thinkingPrompt}
+]
+#6. Mandatory write the closing tag [/global].
+#7. Mandatory write an opening tag [stepsRequest].
+#8. Write 1 if you need more steps, and write 0 if all is ok and you don't need additional steps.
+#9. Mandatory write the closing tag [/stepsRequest].
+`; 
         }
     }
 })();

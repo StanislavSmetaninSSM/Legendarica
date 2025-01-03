@@ -321,11 +321,20 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                 <label for="useThinkingModule" id="use-thinking-module-label">Добавить модуль обдумывания ответов (отключите для экономии токенов). Теоретически сделает АИ более умным.</label>
                             </div>
 
+                            <div class="settingsContainer displayBlock">
+                                <input type="number" id="thinkingModuleIterations" value="1" min="1" style="color: #2c2c2c;">
+                                <label for="thinkingModuleIterations" id="thinking-module-iterations-label">Количество попыток, которые модуль обдумывания ответов предпримет, чтобы подумать над ответом.</label>
+                            </div>
+
                             <div class="aiProvidersList">
                                 <span id="ai-provider-label">Провайдер нейросети</span>
                                 <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai" style="white-space: pre-wrap;"></span></span><br />
+                                <input type="radio" id="ai-Chat01" name="ai-provider" value="Chat01" onchange="setAiProvider(this.value)">
+                                <label for="ai-Chat01">Chat01</label><br>
                                 <input type="radio" id="ai-Cohere" name="ai-provider" value="Cohere" onchange="setAiProvider(this.value)">
                                 <label for="ai-Cohere">Cohere</label><br>
+                                <input type="radio" id="ai-Gitee" name="ai-provider" value="Gitee AI" onchange="setAiProvider(this.value)">
+                                <label for="ai-Gitee">Gitee AI</label><br>
                                 <input type="radio" id="ai-googleAiStudio" name="ai-provider" value="Google AI Studio" onchange="setAiProvider(this.value)">
                                 <label for="ai-googleAiStudio">Google AI Studio</label><br>
                                 <input type="radio" id="ai-groq" name="ai-provider" value="Groq" onchange="setAiProvider(this.value)">
@@ -334,8 +343,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                 <label for="ai-Hugging Face">Hugging Face</label><br>
                                 <input type="radio" id="ai-mistralAi" name="ai-provider" value="Mistral AI" onchange="setAiProvider(this.value)">
                                 <label for="ai-mistralAi">Mistral AI</label><br>
-                                <input type="radio" id="ai-Chat01" name="ai-provider" value="Chat01" onchange="setAiProvider(this.value)">
-                                <label for="ai-Chat01">Chat01</label><br>
                                 <input type="radio" id="ai-openrouter" name="ai-provider" value="OpenRouter" onchange="setAiProvider(this.value)">
                                 <label for="ai-openrouter">OpenRouter</label><br>
                                 <input type="radio" id="ai-websim" name="ai-provider" value="Websim" onchange="setAiProvider(this.value)">
@@ -386,6 +393,14 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                  style="display: none">
                                 <span id="max-tokens-ai-label">Max tokens</span>
                                 <input type="text" id="max-tokens-ai" value="" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
+                            </div>
+                            <div id="use-streaming-ai-container" class="parameterContainer"
+                                 style="display: none">
+                                <span id="use-streaming-ai-label">Streaming</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="use-streaming-ai">
+                                    <span class="slider round"></span>
+                                </label>                               
                             </div>
 
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
@@ -543,8 +558,12 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                 <div class="aiProvidersList">
                     <span id="ai-provider-label2">Провайдер нейросети</span>
                     <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai2" style="white-space: pre-wrap;"></span></span><br />
+                    <input type="radio" id="ai-Chat012" name="ai-provider2" value="Chat01" onchange="setAiProvider(this.value)">
+                    <label for="ai-Chat012">Chat01</label><br>
                     <input type="radio" id="ai-Cohere2" name="ai-provider2" value="Cohere" onchange="setAiProvider(this.value)">
                     <label for="ai-Cohere2">Cohere</label><br>
+                    <input type="radio" id="ai-Gitee2" name="ai-provider2" value="Gitee AI" onchange="setAiProvider(this.value)">
+                    <label for="ai-Gitee2">Gitee AI</label><br>
                     <input type="radio" id="ai-googleAiStudio2" name="ai-provider2" value="Google AI Studio" onchange="setAiProvider(this.value)">
                     <label for="ai-googleAiStudio2">Google AI Studio</label><br>
                     <input type="radio" id="ai-groq2" name="ai-provider2" value="Groq" onchange="setAiProvider(this.value)">
@@ -553,8 +572,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <label for="ai-Hugging Face2">Hugging Face</label><br>
                     <input type="radio" id="ai-mistralAi2" name="ai-provider2" value="Mistral AI" onchange="setAiProvider(this.value)">
                     <label for="ai-mistralAi2">Mistral AI</label><br>
-                    <input type="radio" id="ai-Chat012" name="ai-provider2" value="Chat01" onchange="setAiProvider(this.value)">
-                    <label for="ai-Chat012">Chat01</label><br>
                     <input type="radio" id="ai-openrouter2" name="ai-provider2" value="OpenRouter" onchange="setAiProvider(this.value)">
                     <label for="ai-openrouter2">OpenRouter</label><br>
                     <input type="radio" id="ai-websim2" name="ai-provider2" value="Websim" onchange="setAiProvider(this.value)">
@@ -648,8 +665,12 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                 <div class="aiProvidersList marginTop20px">
                     <span id="ai-provider-label4">Провайдер нейросети</span>
                     <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai4"></span></span><br />
+                    <input type="radio" id="ai-Chat014" name="ai-provider4" value="Chat01" onchange="setAiProvider(this.value)">
+                    <label for="ai-Chat014">Chat01</label><br>
                     <input type="radio" id="ai-Cohere4" name="ai-provider4" value="Cohere" onchange="setAiProvider(this.value)">
                     <label for="ai-Cohere4">Cohere</label><br>
+                    <input type="radio" id="ai-Gitee4" name="ai-provider4" value="Gitee AI" onchange="setAiProvider(this.value)">
+                    <label for="ai-Gitee4">Gitee AI</label><br>
                     <input type="radio" id="ai-googleAiStudio4" name="ai-provider4" value="Google AI Studio" onchange="setAiProvider(this.value)">
                     <label for="ai-googleAiStudio4">Google AI Studio</label><br>
                     <input type="radio" id="ai-groq4" name="ai-provider4" value="Groq" onchange="setAiProvider(this.value)">
@@ -658,8 +679,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <label for="ai-Hugging Face4">Hugging Face</label><br>
                     <input type="radio" id="ai-mistralAi4" name="ai-provider4" value="Mistral AI" onchange="setAiProvider(this.value)">
                     <label for="ai-mistralAi4">Mistral AI</label><br>
-                    <input type="radio" id="ai-Chat014" name="ai-provider4" value="Chat01" onchange="setAiProvider(this.value)">
-                    <label for="ai-Chat014">Chat01</label><br>
                     <input type="radio" id="ai-openrouter4" name="ai-provider4" value="OpenRouter" onchange="setAiProvider(this.value)">
                     <label for="ai-openrouter4">OpenRouter</label><br>
                     <input type="radio" id="ai-websim4" name="ai-provider4" value="Websim" onchange="setAiProvider(this.value)">
@@ -747,8 +766,12 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                 <div class="aiProvidersList">
                     <span id="ai-provider-label3">Провайдер нейросети</span>
                     <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai3" style="white-space: pre-wrap;"></span></span><br />
+                    <input type="radio" id="ai-Chat013" name="ai-provider3" value="Chat01" onchange="setAiProvider(this.value)">
+                    <label for="ai-Chat013">Chat01</label><br>
                     <input type="radio" id="ai-Cohere3" name="ai-provider3" value="Cohere" onchange="setAiProvider(this.value)">
                     <label for="ai-Cohere3">Cohere</label><br>
+                    <input type="radio" id="ai-Gitee3" name="ai-provider3" value="Gitee AI" onchange="setAiProvider(this.value)">
+                    <label for="ai-Gitee3">Gitee AI</label><br>
                     <input type="radio" id="ai-googleAiStudio3" name="ai-provider3" value="Google AI Studio" onchange="setAiProvider(this.value)">
                     <label for="ai-googleAiStudio3">Google AI Studio</label><br>
                     <input type="radio" id="ai-groq3" name="ai-provider3" value="Groq" onchange="setAiProvider(this.value)">
@@ -757,8 +780,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <label for="ai-Hugging Face3">Hugging Face</label><br>
                     <input type="radio" id="ai-mistralAi3" name="ai-provider3" value="Mistral AI" onchange="setAiProvider(this.value)">
                     <label for="ai-mistralAi3">Mistral AI</label><br>
-                    <input type="radio" id="ai-Chat013" name="ai-provider3" value="Chat01" onchange="setAiProvider(this.value)">
-                    <label for="ai-Chat013">Chat01</label><br>
                     <input type="radio" id="ai-openrouter3" name="ai-provider3" value="OpenRouter" onchange="setAiProvider(this.value)">
                     <label for="ai-openrouter3">OpenRouter</label><br>
                     <input type="radio" id="ai-websim3" name="ai-provider3" value="Websim" onchange="setAiProvider(this.value)">

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 * LegendaricaAPI.js
 * The implementation of Legendarica API module for a Legendarica Absolute game.
 *
@@ -9,6 +9,9 @@
 
 const APIModule = (function getAPIModule() {
     //----- API Params -----//
+
+    let doNotParse = false;
+    let useStreaming = false;
 
     //Connection and prompt data
     let model = "";
@@ -41,7 +44,7 @@ const APIModule = (function getAPIModule() {
     }
 
     function sanitizeResponse(content) {
-        let sanitizedString = sanitizeString(content ?? '').replace(/{\n/g, '{').replace(/\n}/g, '}').replace(/,}/g, '}').replace(/;}/g, '}').replace(/«/g, '').replace(/»/g, '').replace(/\n{/g, '{').replace(/\n{/g, '{');
+        let sanitizedString = sanitizeString(content ?? '').replace(/{\n/g, '{').replace(/\n}/g, '}').replace(/,}/g, '}').replace(/;}/g, '}').replace(/Â«/g, '').replace(/Â»/g, '').replace(/\n{/g, '{').replace(/\n{/g, '{');
         sanitizedString = sanitizedString.replace(/\n/g, '  ');
 
         const indexOfStart = sanitizedString.indexOf("{");
@@ -55,9 +58,49 @@ const APIModule = (function getAPIModule() {
         return sanitizedString;
     }
 
+    function parseMessage(sanitizedString) {
+        try {
+            if (doNotParse)
+                return sanitizedString;
+            return JSON.parse(sanitizedString);
+        } catch {
+            throw messageParseErrorMessage + sanitizedString;
+        }
+    }
+
     async function getStreamingMessageParts(response) {
         const buffer = await receiveStreamingMessage(response);
         return buffer.split('\n').filter(data => data).map(data => data.trim());
+    }
+
+    async function getOpenAIStreamingMessageResponse(response) {
+        const streamingMessages = await getStreamingMessageParts(response);
+        
+        let finalResponse = "";
+        for (const message of streamingMessages) {
+            let jsonData = {};
+
+            const messageStartIndex = message?.indexOf(":");
+            if (!messageStartIndex || messageStartIndex < 0 || messageStartIndex + 1 > message.length - 1) continue;
+            const data = message.substring(messageStartIndex + 1).trim();
+
+            if (!data) continue;
+            if (data == "[DONE]") break;
+
+            try {
+                jsonData = JSON.parse(data);
+            } catch {
+                throw messageParseErrorMessage + finalResponse;
+            }
+
+            if (jsonData.error)
+                throw jsonData.error;
+
+            if (jsonData.choices)
+                finalResponse += jsonData.choices[0]?.delta?.content;
+        }
+
+        return finalResponse;
     }
 
     async function receiveStreamingMessage(response) {
@@ -85,6 +128,9 @@ const APIModule = (function getAPIModule() {
 
     return {
         initialize: function (parameters) {
+            doNotParse = parameters.doNotParse;
+            useStreaming = parameters.useStreaming;
+
             //Connection and prompt data
             model = parameters.model;
             apiKey = parameters.apiKey;
@@ -149,7 +195,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-         //   console.log(response);
+            //console.log(response);
 
             if (response.error?.message)
                 throw response.error;
@@ -169,11 +215,7 @@ const APIModule = (function getAPIModule() {
 
             if (response.choices) {
                 const sanitizedString = sanitizeResponse(response.choices[0]?.message?.content);
-                try {
-                    return JSON.parse(sanitizedString);
-                } catch {
-                    throw messageParseErrorMessage + sanitizedString;
-                }
+                return parseMessage(sanitizedString);
             }
 
             throw emptyResponseErrorMessage;
@@ -213,16 +255,28 @@ const APIModule = (function getAPIModule() {
             if (presencePenalty)
                 settings.generationConfig.presencePenalty = Number(presencePenalty);
 
-            const request = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+            const commandName = useStreaming ? "streamGenerateContent" : "generateContent";
+
+            const request = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:${commandName}?key=${apiKey}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(settings)
             });
-
-            const response = await request.json();
-          //  console.log(response);
+           
+            let response = {};
+            if (useStreaming) {
+                const streamingMessages = await getStreamingMessageParts(request);
+                const streamingMessagesText = streamingMessages?.join("");
+                const responses = JSON.parse(streamingMessagesText);                
+                const responseText = responses.map(r => r.candidates[0]?.content?.parts[0]?.text ?? "").join("");
+                response = responses[responses.length - 1];
+                if (response.candidates[0]?.content?.parts[0])
+                    response.candidates[0].content.parts[0].text = responseText;
+            } else {
+                response = await request.json();
+            }
 
             if (response.error?.message)
                 throw response.error;
@@ -243,11 +297,7 @@ const APIModule = (function getAPIModule() {
             const candidates = response.candidates;
             if (candidates) {
                 const sanitizedString = sanitizeResponse(candidates[0]?.content?.parts[0]?.text);
-                try {
-                    return JSON.parse(sanitizedString);
-                } catch {
-                    throw messageParseErrorMessage + sanitizedString;
-                }
+                return parseMessage(sanitizedString);
             }
 
             if (response.blockReason)
@@ -292,7 +342,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-          //  console.log(response);
+            //console.log(response);
 
             if (response.message?.detail)
                 throw response.message.detail[0].msg;
@@ -309,11 +359,7 @@ const APIModule = (function getAPIModule() {
 
             if (response.choices) {
                 const sanitizedString = sanitizeResponse(response.choices[0]?.message?.content);
-                try {
-                    return JSON.parse(sanitizedString);
-                } catch {
-                    throw messageParseErrorMessage + sanitizedString;
-                }
+                return parseMessage(sanitizedString);
             }
 
             throw emptyResponseErrorMessage;
@@ -358,7 +404,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-           // console.log(response);
+            //console.log(response);
 
             if (response.error)
                 throw response.error;
@@ -372,11 +418,7 @@ const APIModule = (function getAPIModule() {
 
             if (response.choices) {
                 const sanitizedString = sanitizeResponse(response.choices[0]?.message?.content);
-                try {
-                    return JSON.parse(sanitizedString);
-                } catch {
-                    throw messageParseErrorMessage + sanitizedString;
-                }
+                return parseMessage(sanitizedString);
             }
 
             throw emptyResponseErrorMessage;
@@ -412,7 +454,7 @@ const APIModule = (function getAPIModule() {
             if (presencePenalty)
                 settings.presence_penalty = Number(presencePenalty);
 
-            const response = await fetch(`https://api-inference.huggingface.co/models/${model}/v1/chat/completions`, {
+            const request = await fetch(`https://api-inference.huggingface.co/models/${model}/v1/chat/completions`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -422,40 +464,14 @@ const APIModule = (function getAPIModule() {
                 body: JSON.stringify(settings)
             });
 
-            const streamingMessages = await getStreamingMessageParts(response);
-            let finalResponse = "";
-            for (const message of streamingMessages) {
-                let jsonData = {};
-
-                const messageStartIndex = message?.indexOf(":");
-                if (!messageStartIndex || messageStartIndex < 0 || messageStartIndex + 1 > message.length - 1) continue;
-                const data = message.substring(messageStartIndex + 1).trim();
-
-                if (!data) continue;
-                if (data == "[DONE]") break;
-
-                try {
-                    jsonData = JSON.parse(data);
-                } catch {
-                    throw messageParseErrorMessage + finalResponse;
-                }
-
-                if (jsonData.error)
-                    throw jsonData.error;
-
-                if (jsonData.choices)
-                    finalResponse += jsonData.choices[0]?.delta?.content;
+            if (!request.ok) {
+                const errorObject = await request.json();
+                throw errorObject.message;
             }
 
-            delete streamingMessages;
-           // console.log(finalResponse);
-            const sanitizedString = sanitizeResponse(finalResponse);
-
-            try {
-                return JSON.parse(sanitizedString);
-            } catch {
-                throw messageParseErrorMessage + sanitizedString;
-            }
+            const response = await getOpenAIStreamingMessageResponse(request);
+            const sanitizedString = sanitizeResponse(response);
+            return parseMessage(sanitizedString);
 
             throw emptyResponseErrorMessage;
         },
@@ -502,7 +518,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-          //  console.log(response);
+            //console.log(response);
 
             if (response.finish_reason == "ERROR") {
                 if (response.message?.content)
@@ -524,11 +540,7 @@ const APIModule = (function getAPIModule() {
 
             if (response.message?.content) {
                 const sanitizedString = sanitizeResponse(response.message.content[0].text);
-                try {
-                    return JSON.parse(sanitizedString);
-                } catch {
-                    throw messageParseErrorMessage + sanitizedString;
-                }
+                return parseMessage(sanitizedString);
             } else if (typeof response.message == 'string') {
                 throw response.message;
             }
@@ -576,7 +588,7 @@ const APIModule = (function getAPIModule() {
             });
 
             const response = await request.json();
-           // console.log(response);
+            //console.log(response);
 
             if (response.error)
                 throw response.error;
@@ -590,12 +602,60 @@ const APIModule = (function getAPIModule() {
 
             if (response.choices) {
                 const sanitizedString = sanitizeResponse(response.choices[0]?.message?.content);
-                try {
-                    return JSON.parse(sanitizedString);
-                } catch {
-                    throw messageParseErrorMessage + sanitizedString;
-                }
+                return parseMessage(sanitizedString);
             }
+
+            throw emptyResponseErrorMessage;
+        },
+
+        sendGiteeRequest: async function () {
+            const messages = [];
+
+            if (systemInstructions) {
+                messages.push({
+                    role: "system",
+                    content: systemInstructions
+                });
+            }
+            messages.push({
+                role: "user",
+                content: prompt
+            });
+
+            const settings = {
+                model: model,
+                stream: true,
+                messages: messages,
+            };
+
+            if (maxTokens)
+                settings.max_tokens = Number(maxTokens);
+            if (temperature)
+                settings.temperature = Number(temperature);
+            if (topP)
+                settings.top_p = Number(topP);
+            if (frequencyPenalty)
+                settings.frequency_penalty = Number(frequencyPenalty);
+            if (presencePenalty)
+                settings.presence_penalty = Number(presencePenalty);
+                
+            const request = await fetch(`https://ai.gitee.com/v1/chat/completions`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`
+                },
+                body: JSON.stringify(settings)
+            });
+
+            if (!request.ok) {
+                const errorObject = await request.json();
+                throw errorObject.message;
+            }
+
+            const response = await getOpenAIStreamingMessageResponse(request);           
+            const sanitizedString = sanitizeResponse(response);
+            return parseMessage(sanitizedString);
 
             throw emptyResponseErrorMessage;
         },
@@ -630,15 +690,11 @@ const APIModule = (function getAPIModule() {
                 throw new Error(`Websim has returned the HTTP error ${request.status} for this request.`);
             
             const response = await request.text();
-           // console.log(response);
+            //console.log(response);
 
             if (response) {
                 const sanitizedString = sanitizeResponse(response);
-                try {
-                    return JSON.parse(sanitizedString);
-                } catch {
-                    throw messageParseErrorMessage + sanitizedString;
-                }
+                return parseMessage(sanitizedString);
             }
 
             throw emptyResponseErrorMessage;

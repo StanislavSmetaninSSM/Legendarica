@@ -197,7 +197,8 @@ input:checked + .slider {
     text-align: right;
 }
 
-#log-box .message .message-turn-and-close-button {
+#log-box .message .message-turn-and-close-button,
+#thinking-log-box .message .message-turn-and-close-button {
     display: block !important;
 }
 

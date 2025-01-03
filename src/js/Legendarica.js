@@ -101,7 +101,9 @@ const ELEMENTS = {
     topK: document.getElementById('top-k-ai'),
     maxTokensContainer: document.getElementById('max-tokens-ai-container'),
     maxTokens: document.getElementById('max-tokens-ai'),
-
+    useStreamingContainer: document.getElementById('use-streaming-ai-container'),
+    useStreaming: document.getElementById('use-streaming-ai'),
+    
     //stats
     playerStats: document.getElementById('player-stats'), // window with all stats
     healthValue: document.getElementById('health-value'),
@@ -253,6 +255,7 @@ const ELEMENTS = {
     makeGameQuestOriented: document.getElementById('makeGameQuestOriented'),
     useThinkingModule: document.getElementById('useThinkingModule'),
     useWeightControl: document.getElementById('useWeightControl'),
+    thinkingModuleIterations: document.getElementById('thinkingModuleIterations'),
 
     //Graphics
     floatingImg: document.getElementById('floating'), // Splash screen
@@ -994,6 +997,8 @@ function logMessage(message, currentHealthChange, currentEnergyChange, moneyChan
 }
 
 function logThinkingMessage(message) {
+    message = formatTaggedLog(message);
+
     ELEMENTS.thinkingLogBox.innerHTML = "";
 
     const messageContainer = document.createElement('div');
@@ -3992,7 +3997,36 @@ function clickLoadSetting() {
     input.click();
 }
 
+function formatTaggedLog(logText) {
+    let result = '';
+    let buffer = '';
+    let depth = 0;
+
+    for (let i = 0; i < logText.length; i++) {
+        const char = logText[i];
+        buffer += char;
+
+        if (char === '[' && logText[i + 1] !== '/') {
+            // Add newline and indentation before opening tag
+            result += '\n' + '  '.repeat(depth) + buffer;
+            buffer = '';
+            depth++;
+        } else if (char === ']') {
+            if (buffer) {
+                // Add newline and indentation after tag content
+                if (depth > 0) depth--;
+                result += buffer + '\n' + '  '.repeat(depth);
+                buffer = '';
+            }
+        }
+    }
+
+    result += buffer;
+    return result.replace(/\n+/g, '\n').trim();
+}
+
 //----------------------------------------------------------------API------------------------------------------------------------------------------/
+
 async function sendRequest(currentMessage) {
     if (currentMessage) {
         if (turn !== 0) {
@@ -4107,7 +4141,7 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
 
         //Response template
         let responseTemplate = `{ 
-            ${ELEMENTS.useThinkingModule.checked ? `"thinkingData": "" , \n` : ``} "inventoryItemsData": [] ,
+            "inventoryItemsData": [] ,
             "removeInventoryItems": [] ,
             "moveInventoryItems": [] ,
             "inventoryItemsResources": [] ,
@@ -4146,24 +4180,18 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
 
         //------- Prompt -------//
 
-        const prompt = `[ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning. 
+        let prompt = `[ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning. 
 
 ### Instruction ###
 
 Please, Let's think step by step:
 [
-${ELEMENTS.useThinkingModule.checked ? `
-#-1. Include to the response the key 'thinkingData', value of which is a string, representing draft version of 'response' value of key. The purpose of it is to help you to create the nice version of 'response'.
-#-1.1. The value of 'thinkingData' shouldn't contain any JSON data, only the text.
-#-1.2. Before generating your final response, fill the value of 'thinkingData' key according to the following instructions: [ Let's think step by step: [
-${thinkingModule.getPrompt(translationModule.currentLanguage)}
-] ]
-` : ``}
-#0 Carefully study and remember the super instructions, which are more priority in case of contradictions than other parts of the instructions: [ ${myPrompt} ].
+#0 Carefully study and remember the super instructions, which are more priority in case of contradictions than other parts of the instructions: [ ${myPrompt} ] .
 
 #1 Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes. Response template: ${responseTemplate} . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
 #1.1. To the 'items_and_stat_calculations' include array of strings, each of which represents one complete message about various calculations for logs. Fill it only when you see the direct instruction to output something into 'items_and_stat_calculations'.
 #1.1.1. Group messages for 'items_and_stat_calculations' logically. Try not form many small messages. Instead, write one large message for it. 
+#1.1.2. Each string of 'items_and_stat_calculations' array should be formatted in a nice, human-readable style using markdown. Focus on making your log messages as readable as possible.
 
 #2 ${turn == 1 ? `This is the start of a new game. [ Starting message from player: [ ${currentMessage} ]. Let's think step by step : [ 
 #2.1. Briefly tell about the character (without inventing their personality and goals) and their backstory.
@@ -4262,7 +4290,7 @@ WeightOverload = CurrentTurnItemsWeight - MaxWeight
 #3.14.4.5. Write to the 'additionalEnergyExpenditure' the null value.
 ] ]
 
-#3.15. Remember the weight check when adding a new item to the player's inventory: [
+#3.15. This is group of instructions which are called WeightCheck. Follow these instructions when you see the direct command to run WeightCheck: [
 #3.15.1. This is the current sum of 'strength' + 'constitution' of player. Let's call it StrengthPlusConstitution = ${strengthPlusConstitution}.
 #3.15.2. Calculate all values from all item bonuses, all active and passive skill bonuses, and all possible effects affecting 'constitution' or 'strength' of player. Let's call it Bonuses.
 #3.15.3. Calculate MaxWeight property using this formula: MaxWeight = (StrengthPlusConstitution + Bonuses) * 3 + 10, where
@@ -4278,7 +4306,7 @@ WeightOverload = CurrentTurnItemsWeight - MaxWeight
 #3.15.9. Return the boolean result of check: true if CriticalWeight > TotalWeight, and false otherwise. 
 #3.15.9.1. This check is mandatory and its result has priority over the result of any other skill check. Even a critical success on another check cannot override a failed weight check.
 #3.15.10. Mandatory output the calculation and result of check to 'items_and_stat_calculations'.
-]. Let's call it WeightCheck.
+] .
 `: ``}
 
 #4  If one of these conditions are true: [
@@ -4339,7 +4367,7 @@ ${ELEMENTS.useWeightControl.checked ? `
 #4.8.5. If 'isConsumption' value of key of item is true and item doesn't have other bonuses: [
     - If the item is food, medicine or similar, then mandatory add to item the bonus to restore health or energy.
 ]
-#4.9. To the value of the 'image_prompt' key, include an extensive detailed prompt for generating an image that will illustrate the item based on it description. It is necessary to form it only in English. The number of characters in the value of this key should not exceed 150 characters.
+#4.9. To the value of the 'image_prompt' key, include an extensive detailed prompt for generating an image that will illustrate the item based on it description (use maximum 150 characters). It is necessary to form it only in English.
 #4.10. To the value of the 'price' key include the approximate price of the current item, which will be used by the game if it is sold.
 #4.11. To the value of the 'durability' key include the item durability as a percentage value, where 100% - maximum durability. Durability that equals to 0% means that item is broken and its 'count' must be decreased.
 #4.11.1. Use the durability rule to determinate the item durability: [ ${itemsBreakRulesTemplate} ] .
@@ -4380,9 +4408,10 @@ ${turn == 1 ? `
 #4.24. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
 Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
 It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
-If player has containers in their item, then mandatory generate items inside containers. Carefully read the 'description' of containers and generate items inside it based on the description.
+If player has containers in their inventory, then mandatory generate items inside containers - you must generate items inside each container in count of from 1 to container 'capacity' value. Carefully read the 'description' of containers and generate items inside it based on the description.
+When you generate items inside the container, mandatory check the container's volume. Items inside the container must be fitted inside this volume.
 Note, than you should mandatory generate all predefined items. If they are too heavy (have a lot of weight), then make them lighter so the character can hold them and not be overloaded.
-It's mandatory to use the same names, which predefined items already have. Forbidden to use another item names for predefined items.
+It's mandatory to use the same item names, which predefined items already have. Forbidden to use another item names for predefined items.
 ` : ''}
 #4.25. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
@@ -4667,7 +4696,7 @@ ${ELEMENTS.useNpcList.checked ? `
 ], then strictly follow the instructions: [ Let's think step by step : [
 #10.8.1. Include to the response the 'NPCsData' key, the value of which is the array of objects, and each object of the array represents the NPC information.
 #10.8.2. Mandatory format for recording the value of each item of 'NPCsData' array: ${npcTemplate} .
-#10.8.3. To the value of the 'image_prompt' key, include a detailed prompt for generating an image that illustrates the NPC's appearance based on their description. It is necessary to form it only in English. The prompt must be written in English and should not exceed 150 characters.
+#10.8.3. To the value of the 'image_prompt' key, include a detailed prompt for generating an image that illustrates the NPC's appearance based on their description (use maximum 150 characters). It is necessary to form it only in English.
 #10.8.4. To the value of the 'name' key, include the full name of the NPC. If the NPC already exists, retrieve the NPC's name from the Context and write it in the exact same format.
 #10.8.5. To the value of the 'rarity' key, include a string that represents the rarity of the NPC.
 #10.8.6. To the value of the 'age' key, include a number that represents the NPC's age in years.
@@ -4789,7 +4818,7 @@ ${ELEMENTS.useQuestsList.checked ? `
 #13.3. If the character returns to an old existing location, that is, the 'location where the character was on the previous turn' does not correspond to the current location, but the current location is present in the list of all visited locations, then the 'lastEventsDescription' of this current location must be updated. The formatting of location names should correspond to the formatting of other known locations. 
 #13.4. If this is a new location, then give a description of it in the 'description' key, using the most detailed and artistic language as possible.
 #13.5. If the the current location is not new, then leave the 'description' key as empty.
-#13.6. If this is a new location, then to the value of the 'image_prompt' key include an extensive detailed prompt for generating an image, that will illustrate the current location based on its description. It is necessary to form it only in English. The number of characters in the value of this key should not exceed 150 characters.
+#13.6. If this is a new location, then to the value of the 'image_prompt' key include an extensive detailed prompt for generating an image, that will illustrate the current location based on its description (use maximum 150 characters). It is necessary to form it only in English.
 #13.7. If the the current location is not new, then leave the 'image_prompt' key as empty. ]
 #13.8. Each turn, the information about last event for current turn of the location, where the event of the current turn occurred is briefly recorded to the 'lastEventsDescription' value of key for locationData object. Also briefly record the information about all dialogues with the NPC and character for current turn.
 #13.9. The data which you recorded in the 'lastEventsDescription' should only be related with current turn. Do not copy the description of location to 'lastEventsDescription', instead of it always record to 'lastEventsDescription' the new data, related with current turn only.
@@ -4806,11 +4835,15 @@ ${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player charac
 #14.3. All successful player actions give experience to the character, in an amount logically dependent on the scale of success. The amount of experience is entered in the value of the 'experienceGained' key (value type: positive integer).
 #14.3.1. Reward the player with experience for even minor successful actions, even if they do not have a significant impact on the world.
 #14.3.2. Carefully measure the amount of experience you give the player. Minor actions, that don't have a major impact on the game world, yield little experience. Actions that have a major impact on the game world, or actions that open up new plot twists, yield more experience.
+#14.3.3. Limit the amount of experience gained from minor actions to 1-5 experience points. Other actions don't have an experience limit.
 #14.4. Spending or restoring health is recorded in the value of the 'currentHealthChange' key (value type: positive or negative integer).
 #14.4.1. If the player is wounded in current turn, his health should decrease.
 #14.4.2. If the player is well rested or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate health restoration effect, then the player's health should be restored to the required level.
 ]
-#14.5. Output to the 'items_and_stat_calculations' the current value of 'currentEnergyChange', 'experienceGained'.
+${turn == 1 ? `
+#14.5. This is the start of new game. On this turn, mandatory set 'currentEnergyChange' = 0, 'currentHealthChange' = 0, 'experienceGained' = 0.
+` : ``}
+#14.6. Output to the 'items_and_stat_calculations' the current value of 'currentEnergyChange', 'experienceGained'.
 
 #15 The value of the actions key is passed an array of proposed actions (should not contain nested arrays or other objects)
 #15.1. Among the proposed actions, there should not be options for actions that are similar to events that have already recently occurred
@@ -5000,54 +5033,20 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (!["Websim", "None"].includes(aiProvider) && !apiKey)
                 throw translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-ai-key-label"];
 
-            APIModule.initialize({
-                model: model,
-                apiKey: apiKey,
-                prompt: prompt,
-                systemInstructions: ELEMENTS.systemInstructions.value,
-                frequencyPenalty: ELEMENTS.frequencyPenalty.value,
-                presencePenalty: ELEMENTS.presencePenalty.value,
-                repetitionPenalty: ELEMENTS.repetitionPenalty.value,
-                temperature: ELEMENTS.temperature.value,
-                topP: ELEMENTS.topP.value,
-                topK: ELEMENTS.topK.value,
-                maxTokens: ELEMENTS.maxTokens.value,
-                tokenCostSum: tokenCostSum,
-                messageParseErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["gm_message_error_full_gm_answer"],
-                aiProviderStreamingErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["ai-provider-streaming-error-label"]
-            });
-
-            switch (aiProvider) {
-                case "OpenRouter":
-                    data = await APIModule.sendOpenrouterRequest();
-                    break;
-                case "Websim":
-                    data = await APIModule.sendWebsimRequest();
-                    break;
-                case "Google AI Studio":
-                    data = await APIModule.sendGoogleAIRequest();
-                    break;
-                case "Mistral AI":
-                    data = await APIModule.sendMistralAIRequest();
-                    break;
-                case "Groq":
-                    data = await APIModule.sendGroqRequest();
-                    break;
-                case "Hugging Face":
-                    data = await APIModule.sendHuggingFaceRequest();
-                    break;
-                case "Cohere":
-                    data = await APIModule.sendCohereRequest();
-                    break;
-                case "Chat01":
-                    data = await APIModule.sendChat01APIRequest();
-                    break;
-                case "None":
-                    throw translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["none-provider-selected-label"];
-                default:
-                    throw "Wrong provider value";
+            if (ELEMENTS.useThinkingModule.checked) {
+                const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, prompt, tokenCostSum);
+                logThinkingMessage(thinkingData ?? "");
+                if (thinkingData) {
+                    prompt = `
+                    Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log will help you form your answer. Use the information in it to write your final answer: [
+                        ${thinkingData}
+                    ].
+                    ${prompt}`;
+                }
             }
 
+            data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, false);
+            
             turn++;
             tokenCostSum = APIModule.tokenCostSum;
             tokenCostCurrent = APIModule.tokenCostCurrent;
@@ -5061,7 +5060,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             ELEMENTS.chatBox.removeChild(loadingElement);
             sendMessageToChat(data.response, 'gm');
 
-            maxWeight = ELEMENTS.useWeightControl.checked ? Number(data.calculatedWeightData.maxWeight) : undefined;
+            maxWeight = ELEMENTS.useWeightControl.checked && data.calculatedWeightData ? Number(data.calculatedWeightData.maxWeight) : undefined;
 
             if (data.moveInventoryItems && data.moveInventoryItems.length > 0) {
                 for (const item of data.moveInventoryItems)
@@ -5112,7 +5111,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 removeUnusedItems();
 
             if (data.moveInventoryItems?.length > 0 || data.removeInventoryItems?.length > 0 || data.inventoryItemsData?.length > 0) {
-                if (ELEMENTS.useWeightControl.checked && newItemsArray.length > 0)
+                if (ELEMENTS.useWeightControl.checked && maxWeight && newItemsArray.length > 0)
                     adjustInventoryWeightAndRemoveNeeded(maxWeight + criticalExcessWeight, newItemsArray);
 
                 calculateParametersForItemsArray(inventory);
@@ -5128,7 +5127,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             };
 
             if (data.currentEnergyChange && !Number.isNaN(data.currentEnergyChange)) {
-                const additionalEnergyCost = ELEMENTS.useWeightControl.checked ? Number(data.calculatedWeightData?.additionalEnergyExpenditure ?? 0) : 0;
+                const additionalEnergyCost = ELEMENTS.useWeightControl.checked && maxWeight ? Number(data.calculatedWeightData?.additionalEnergyExpenditure ?? 0) : 0;
                 if (ELEMENTS.useWeightControl.checked && additionalEnergyCost && !Number.isNaN(additionalEnergyCost) && calculateTotalInventoryWeight() > maxWeight)
                     data.currentEnergyChange -= additionalEnergyCost;
                 characterStats.currentEnergy = characterStats.currentEnergy + Math.floor(data.currentEnergyChange);
@@ -5244,9 +5243,6 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 logMessage(data.items_and_stat_calculations.join('\n\n'), data.currentHealthChange, data.currentEnergyChange, data.moneyChange);
             }
 
-            if (data.thinkingData)
-                logThinkingMessage(data.thinkingData ?? "");
-
             if (data.actions)
                 handlePlayerActionHints(data.actions);
 
@@ -5307,10 +5303,76 @@ function shouldGeneratePassiveSkills() {
     return skillsToGenerate > 0;
 }
 
+async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum) {
+    const maxSteps = Number(ELEMENTS.thinkingModuleIterations.value ?? 1);
+
+    let thinkingData = "";
+    for (let currentStep = 0; currentStep < maxSteps; currentStep++) {
+        thinkingData = `${thinkingData} \n [TRY${currentStep}]`;
+        const prompt = thinkingModule.getThinkingPrompt(task, translationModule.currentLanguage, thinkingData);
+
+        const result = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, true);
+        thinkingData = `${thinkingData} \n ${result} [/TRY${currentStep}]`;
+        if (!thinkingData.includes('[/global]'))
+            continue;
+        
+        if (!thinkingData.includes('[stepsRequest]1[/stepsRequest]'))
+            return thinkingData;
+    }
+    return thinkingData;  
+}
+
+async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, doNotParse = false) {
+    APIModule.initialize({
+        model: model,
+        apiKey: apiKey,
+        prompt: prompt,
+        systemInstructions: ELEMENTS.systemInstructions.value,
+        frequencyPenalty: ELEMENTS.frequencyPenalty.value,
+        presencePenalty: ELEMENTS.presencePenalty.value,
+        repetitionPenalty: ELEMENTS.repetitionPenalty.value,
+        temperature: ELEMENTS.temperature.value,
+        topP: ELEMENTS.topP.value,
+        topK: ELEMENTS.topK.value,
+        maxTokens: ELEMENTS.maxTokens.value,
+        tokenCostSum: tokenCostSum,
+        messageParseErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["gm_message_error_full_gm_answer"],
+        aiProviderStreamingErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["ai-provider-streaming-error-label"],
+        doNotParse: doNotParse,
+        useStreaming: ELEMENTS.useStreaming.checked
+    });
+
+    switch (aiProvider) {
+        case "OpenRouter":
+            return await APIModule.sendOpenrouterRequest();
+        case "Websim":
+            return await APIModule.sendWebsimRequest();
+        case "Google AI Studio":
+            return await APIModule.sendGoogleAIRequest();
+        case "Mistral AI":
+            return await APIModule.sendMistralAIRequest();
+        case "Groq":
+            return await APIModule.sendGroqRequest();
+        case "Hugging Face":
+            return await APIModule.sendHuggingFaceRequest();
+        case "Cohere":
+            return await APIModule.sendCohereRequest();
+        case "Chat01":
+            return await APIModule.sendChat01APIRequest();
+        case "Gitee AI":
+            return await APIModule.sendGiteeRequest();
+        case "None":
+            throw translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["none-provider-selected-label"];
+        default:
+            throw "Wrong provider value";
+    }
+}
+
 function setAiProvider(providerName, setAlways) {
     document.querySelector(`input[name="ai-provider"][value="${providerName}"`).checked = true;
     document.querySelector(`input[name="ai-provider2"][value="${providerName}"`).checked = true;
     document.querySelector(`input[name="ai-provider3"][value="${providerName}"`).checked = true;
+    document.querySelector(`input[name="ai-provider4"][value="${providerName}"`).checked = true;
 
     const inputsToHide = [];
     const inputsToClear = [];
@@ -5322,6 +5384,7 @@ function setAiProvider(providerName, setAlways) {
     ELEMENTS.topPContainer.style.display = "flex";
     ELEMENTS.topKContainer.style.display = "flex";
     ELEMENTS.maxTokensContainer.style.display = "flex";
+    ELEMENTS.useStreamingContainer.style.display = "flex";
     ELEMENTS.systemInstructionsBox.dataset.show = "true";
     setDefaultProviderParams(!!setAlways);
 
@@ -5342,30 +5405,35 @@ function setAiProvider(providerName, setAlways) {
             ELEMENTS.presencePenalty,
             ELEMENTS.repetitionPenalty,
             ELEMENTS.topK,
-            ELEMENTS.maxTokens
+            ELEMENTS.maxTokens,
+            ELEMENTS.useStreaming,
         );
     } else if (providerName == "Groq") {
         inputsToHide.push(
             ELEMENTS.repetitionPenalty,
             ELEMENTS.topK,
-            ELEMENTS.maxTokens
+            ELEMENTS.maxTokens,
+            ELEMENTS.useStreaming,
         );
     } else if (providerName == "Hugging Face") {
         inputsToHide.push(
             ELEMENTS.repetitionPenalty,
-            ELEMENTS.topK
+            ELEMENTS.topK,
+            ELEMENTS.useStreaming,
         );
     } else if (providerName == "Cohere") {
         inputsToClear.push(ELEMENTS.presencePenalty);
         inputsToHide.push(
             ELEMENTS.repetitionPenalty,
-            ELEMENTS.maxTokens
+            ELEMENTS.maxTokens,
+            ELEMENTS.useStreaming,
         );
     } else if (providerName == "Chat01") {
         inputsToHide.push(
             ELEMENTS.repetitionPenalty,
             ELEMENTS.topK,
-            ELEMENTS.maxTokens
+            ELEMENTS.maxTokens,
+            ELEMENTS.useStreaming,
         );
     } else if (providerName == "Websim") {
         inputsToHide.push(
@@ -5375,11 +5443,22 @@ function setAiProvider(providerName, setAlways) {
             ELEMENTS.repetitionPenalty,
             ELEMENTS.topP,
             ELEMENTS.topK,
-            ELEMENTS.maxTokens
+            ELEMENTS.maxTokens,
+            ELEMENTS.useStreaming,
         );
         ELEMENTS.systemInstructionsBox.dataset.show = "false";
     } else if (providerName == "OpenRouter") {
         inputsToHide.push(
+            ELEMENTS.maxTokens,
+            ELEMENTS.useStreaming,
+        );
+    } else if (providerName == "Gitee AI") {
+        inputsToHide.push(
+            ELEMENTS.repetitionPenalty,
+            ELEMENTS.topK,
+            ELEMENTS.useStreaming,
+        );
+        inputsToClear.push(
             ELEMENTS.maxTokens
         );
     } else if (providerName == "None") {
@@ -5390,7 +5469,8 @@ function setAiProvider(providerName, setAlways) {
             ELEMENTS.repetitionPenalty,
             ELEMENTS.topP,
             ELEMENTS.topK,
-            ELEMENTS.maxTokens
+            ELEMENTS.maxTokens,
+            ELEMENTS.useStreaming,
         );
         ELEMENTS.systemInstructionsBox.dataset.show = "false";
     }
