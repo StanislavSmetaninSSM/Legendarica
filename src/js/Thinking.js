@@ -230,7 +230,7 @@ Conclude with a final reflection discussing what worked, what didn’t, and why.
 #2.2. Write content with a human-readable style using markdown. Focus on making your messages as readable as possible.
 #2.3. It's mandatory to think and respond in the selected language: [ ${language} ]. Use only this language. Write your thinking process only using the ${language}.
 ]
-#3. Analyze your task: [ ${task} ] .
+#3. Analyze your task and focus on the value of 'response' key. Describe it in as much detail, artistically and literary as possible. The task: [ ${task} ] .
 #4. Analyze your previous thinking tries: [ ${thinkingData} ] . You must mandatory continue from the last step you described. For example, if you have step 30, you have to continue from step 31, etc.
 #5. Strictly follow these instructions to write the content of [global][/global]: [
     ${thinkingPrompt}
