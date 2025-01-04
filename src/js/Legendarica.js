@@ -5316,7 +5316,7 @@ async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCost
         if (!thinkingData.includes('[/global]'))
             continue;
         
-        if (!thinkingData.includes('[stepsRequest]1[/stepsRequest]'))
+        if (!thinkingData.includes('stepsRequest'))
             return thinkingData;
     }
     return thinkingData;  

@@ -231,14 +231,12 @@ Conclude with a final reflection discussing what worked, what didn’t, and why.
 #2.3. It's mandatory to think and respond in the selected language: [ ${language} ]. Use only this language. Write your thinking process only using the ${language}.
 ]
 #3. Analyze your task and mandatory focus on the value of 'response' key. Describe it in as much detail, artistically and literary as possible. The task: [ ${task} ] .
-#4. Analyze your previous thinking tries: [ ${thinkingData} ] . You must mandatory continue from the last step you described. For example, if you have step 30, you have to continue from step 31, etc.
+#4. Analyze your previous thinking tries: [ ${thinkingData} ] . You must mandatory continue from the last step you described. Look at the [count] tag to find the last step. For example, if your last [count] is 51/60, then you need to start from step 52/60 etc.
 #5. Strictly follow these instructions to write the content of [global][/global]: [
     ${thinkingPrompt}
 ]
 #6. Mandatory write the closing tag [/global].
-#7. Mandatory write an opening tag [stepsRequest].
-#8. Write 1 if you need more steps, and write 0 if all is ok and you don't need additional steps.
-#9. Mandatory write the closing tag [/stepsRequest].
+#7. If you need more steps, then mandatory write the tag [stepsRequest][/stepsRequest]. Otherwise, do nothing - you are doing great!
 `; 
         }
     }
