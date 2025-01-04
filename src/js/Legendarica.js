@@ -5311,7 +5311,7 @@ async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCost
         thinkingData = `${thinkingData} \n ${result} [/TRY${currentStep}]`;
         logThinkingMessage(thinkingData);
 
-        if (!result.includes('[/global]'))
+        if (!result.includes('successfulWorkСompletion'))
             continue;
         
         if (!result.includes('stepsRequest'))

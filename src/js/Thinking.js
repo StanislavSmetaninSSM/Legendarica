@@ -237,6 +237,7 @@ Conclude with a final reflection discussing what worked, what didn’t, and why.
 ]
 #6. Mandatory write the closing tag [/global].
 #7. If you need more steps, then mandatory write the tag [stepsRequest][/stepsRequest]. Otherwise, do nothing - you are doing great!
+#8. If you have done everything that is necessary and you do not need additional steps, then mandatory write the tag [successfulWorkСompletion][/successfulWorkСompletion] .
 `; 
         }
     }
