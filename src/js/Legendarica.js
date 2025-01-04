@@ -4834,8 +4834,9 @@ ${characterStats.currentEnergy < 40 && characterStats.currentEnergy > 10 ? `#14.
 ${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player character is less than 10. It means, that player character mandatory loses additional 3-10 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is very tired and needs to rest, otherwise it will affect player's health very fast.` : ``}
 #14.3. All successful player actions give experience to the character, in an amount logically dependent on the scale of success. The amount of experience is entered in the value of the 'experienceGained' key (value type: positive integer).
 #14.3.1. Reward the player with experience for even minor successful actions, even if they do not have a significant impact on the world.
-#14.3.2. Carefully measure the amount of experience you give the player. Minor actions, that don't have a major impact on the game world, yield little experience. Actions that have a major impact on the game world, or actions that open up new plot twists, yield more experience.
-#14.3.3. Limit the amount of experience gained from minor actions to 1-5 experience points. Other actions don't have an experience limit.
+#14.3.2. Carefully measure the amount of experience you give the player:
+#14.3.2.1. Minor actions, that don't have a major impact on the game world, yield 1-5 experience points. 
+#14.3.2.2. Actions that have a major impact on the game world, or actions that open up new plot twists, yield more experience. Choose the amount of experience the player receives for such actions based on your choice. For example, 10 experience points, or 20 experience points, etc.
 #14.4. Spending or restoring health is recorded in the value of the 'currentHealthChange' key (value type: positive or negative integer).
 #14.4.1. If the player is wounded in current turn, his health should decrease.
 #14.4.2. If the player is well rested or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate health restoration effect, then the player's health should be restored to the required level.
