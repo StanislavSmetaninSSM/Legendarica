@@ -5313,10 +5313,10 @@ async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCost
 
         const result = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, true);
         thinkingData = `${thinkingData} \n ${result} [/TRY${currentStep}]`;
-        if (!thinkingData.includes('[/global]'))
+        if (!result.includes('[/global]'))
             continue;
         
-        if (!thinkingData.includes('stepsRequest'))
+        if (!result.includes('stepsRequest'))
             return thinkingData;
     }
     return thinkingData;  
