@@ -5035,14 +5035,12 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             if (ELEMENTS.useThinkingModule.checked) {
                 const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, prompt, tokenCostSum);
-                logThinkingMessage(thinkingData ?? "");
-                if (thinkingData) {
-                    prompt = `
-                    Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log will help you form your answer. Use the information in it to write your final answer: [
-                        ${thinkingData}
-                    ].
-                    ${prompt}`;
-                }
+
+                prompt = `
+                Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log will help you form your answer. Use the information in it to write your final answer: [
+                    ${thinkingData}
+                ].
+                ${prompt}`;                
             }
 
             data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, false);
@@ -5304,15 +5302,15 @@ function shouldGeneratePassiveSkills() {
 }
 
 async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum) {
-    const maxSteps = Number(ELEMENTS.thinkingModuleIterations.value ?? 1);
-
     let thinkingData = "";
-    for (let currentStep = 0; currentStep < maxSteps; currentStep++) {
+    for (let currentStep = 0; currentStep < Number(ELEMENTS.thinkingModuleIterations.value ?? 1); currentStep++) {
         thinkingData = `${thinkingData} \n [TRY${currentStep}]`;
         const prompt = thinkingModule.getThinkingPrompt(task, translationModule.currentLanguage, thinkingData);
 
         const result = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, true);
         thinkingData = `${thinkingData} \n ${result} [/TRY${currentStep}]`;
+        logThinkingMessage(thinkingData);
+
         if (!result.includes('[/global]'))
             continue;
         
