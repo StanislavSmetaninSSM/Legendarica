@@ -4832,19 +4832,78 @@ ${ELEMENTS.useQuestsList.checked ? `
 #14.1.4. If a player takes multiple actions in current turn, sum their energy change up and record the final value in 'currentEnergyChange'.
 ${characterStats.currentEnergy < 40 && characterStats.currentEnergy > 10 ? `#14.2. The current energy of player character is less than 40. It means, that player character mandatory loses additional 1 or 2 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is tired and needs to rest, otherwise it will affect player's health.` : ``}
 ${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player character is less than 10. It means, that player character mandatory loses additional 3-10 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is very tired and needs to rest, otherwise it will affect player's health very fast.` : ``}
-#14.3. All successful player actions give experience to the character, in an amount logically dependent on the scale of success. The amount of experience is entered in the value of the 'experienceGained' key (value type: positive integer).
-#14.3.1. Reward the player with experience for even minor successful actions, even if they do not have a significant impact on the world.
-#14.3.2. Carefully measure the amount of experience you give the player:
-#14.3.2.1. Minor actions, that don't have a major impact on the game world, yield 1-5 experience points. 
-#14.3.2.2. Actions that have a major impact on the game world, or actions that open up new plot twists, yield more experience. Choose the amount of experience the player receives for such actions based on your choice. For example, 10 experience points, or 20 experience points, etc.
-#14.4. Spending or restoring health is recorded in the value of the 'currentHealthChange' key (value type: positive or negative integer).
-#14.4.1. If the player is wounded in current turn, his health should decrease.
-#14.4.2. If the player is well rested or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate health restoration effect, then the player's health should be restored to the required level.
+#14.3. All successful player actions give experience (XP) to the player character. The amount of experience is entered in the value of the 'experienceGained' key (value type: positive integer).
+
+#14.4. When a player needs to receive an XP, do following check to calculate the experience: [
+#14.4.1. Let's describe the BaseXP. BaseXP is the foundational experience points awarded for an action based on its complexity and significance:
+#14.4.1.1. Calculate the BaseXP using the instruction: [
+#14.4.1.2. Classify the action into one of these categories:
+Basic actions (1-10 XP):
+• Minor actions (1-3 XP) - basic information gathering, simple social interactions
+• Small tasks (4-6 XP) - successful bargaining, finding hidden items
+• Notable actions (7-10 XP) - complex social interactions, discovering locations
+
+Medium achievements (11-30 XP):
+• Important tasks (11-15 XP) - resolving conflicts, complex trade operations
+• Significant actions (16-22 XP) - improvised side activities, innovative solutions
+• Major tasks (23-30 XP) - resolving complex social situations, crafting rare items
+
+Major achievements (31-100 XP):
+• Regional impact (31-50 XP) - influencing local politics, resolving faction conflicts
+• Major impact (51-75 XP) - creating regional changes, establishing organizations
+• World impact (76-100 XP) - world-changing actions, creating new factions
+]
+
+#14.4.2. Let's describe the CreativityBonus. CreativityBonus is an additional reward for unique solutions and unexpected approaches:
+#14.4.2.1. Calculate the CreativityBonus using this formula:
+CreativityBonus = ActionComplexity * CreativityScale, where
+• ActionComplexity is the base category of action:
+    - Low-level actions: 1-3
+    - Medium-level actions: 3-8
+    - High-level actions: 5-15
+• CreativityScale is a fractional number from 0 to 1 (chosen by the gamemaster based on the uniqueness and cleverness of the solution)
+
+#14.4.3. Let's describe the RiskBonus. RiskBonus represents additional points for actions involving significant risk:
+#14.4.3.1. Calculate the RiskBonus using this formula:
+RiskBonus = ActionRisk * RiskScale, where
+• ActionRisk is the base risk category:
+    - Low-risk actions: 1-5
+    - Medium-risk actions: 3-12
+    - High-risk actions: 5-20
+• RiskScale is a fractional number from 0 to 1 (chosen by the gamemaster based on potential negative outcomes and preparation level)
+
+#14.4.4. Let's describe the ImpactMultiplier. ImpactMultiplier scales rewards based on the scope of impact:
+#14.4.4.1. Calculate the ImpactMultiplier using this formula:
+ImpactMultiplier = 1 + ImpactScale, where
+• ImpactScale is determined by the impact scope:
+    - Local impact: +0 (multiplier of 1)
+    - Regional impact: +0.5 (multiplier of 1.5)
+    - World impact: +1.0 (multiplier of 2.0)
+
+#14.4.5. Let's describe the LevelScaling. LevelScaling adjusts rewards based on character level:
+#14.4.5.1. Calculate the LevelScaling using this formula:
+LevelScaling = 1 + LevelBonus, where
+• LevelBonus is determined by character level range:
+    - Levels 1-5: +0 (multiplier of 1.0)
+    - Levels 6-10: +0.2 (multiplier of 1.2)
+    - Levels 11-20: +0.5 (multiplier of 1.5)
+    - Levels 21-30: +0.8 (multiplier of 1.8)
+    - Levels 31+: +1.0 (multiplier of 2.0)
+
+#14.4.6. Calculate the final experience gained using this formula:
+experienceGained = floor((BaseXP + CreativityBonus + RiskBonus) * ImpactMultiplier * LevelScaling)
+
+#14.4.7. Output to 'items_and_stat_calculations' the experience calculation, showing all components and the final experienceGained value in great detail.
+]
+
+#14.5. Spending or restoring health is recorded in the value of the 'currentHealthChange' key (value type: positive or negative integer).
+#14.5.1. If the player is wounded in current turn, his health should decrease.
+#14.5.2. If the player is well rested or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate health restoration effect, then the player's health should be restored to the required level.
 ]
 ${turn == 1 ? `
-#14.5. This is the start of new game. On this turn, mandatory set 'currentEnergyChange' = 0, 'currentHealthChange' = 0, 'experienceGained' = 0.
+#14.6. This is the start of new game. On this turn, mandatory set 'currentEnergyChange' = 0, 'currentHealthChange' = 0, 'experienceGained' = 0.
 ` : ``}
-#14.6. Output to the 'items_and_stat_calculations' the current value of 'currentEnergyChange', 'experienceGained'.
+#14.7. Output to the 'items_and_stat_calculations' the current value of 'currentEnergyChange'.
 
 #15 The value of the actions key is passed an array of proposed actions (should not contain nested arrays or other objects)
 #15.1. Among the proposed actions, there should not be options for actions that are similar to events that have already recently occurred
