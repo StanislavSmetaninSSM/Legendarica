@@ -10,7 +10,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
 <head>
     <meta charset="utf-8">
-    <title>Legendarica Absolute v1.3 - Neural Sandbox</title>
+    <title>Legendarica Absolute v1.4 - Neural Sandbox</title>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="https://raw.githack.com/StanislavSmetaninSSM/Legendarica/main/src/css/Legendarica.css">
 </head>
@@ -283,6 +283,16 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useWeightControl" name="useWeightControl" checked />
                                 <label for="useWeightControl" id="use-weight-control-label">Использовать вес в игре</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useLiteraryPrompt" name="useLiteraryPrompt" checked />
+                                <label for="useLiteraryPrompt" id="use-literary-prompt-label">ГМ будет писать художественно</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useEroticPrompt" name="useEroticPrompt" />
+                                <label for="useEroticPrompt" id="use-erotic-prompt-label">Разрешить контент 21+ в игре</label>
                             </div>
 
                             <div class="settingsContainer displayBlock">
@@ -969,5 +979,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
         <script src="https://raw.githack.com/StanislavSmetaninSSM/Legendarica/main/src/js/Legendarica.js"></script>
         <script src="https://raw.githack.com/StanislavSmetaninSSM/Legendarica/main/src/js/LegendaricaAPI.js"></script>
         <script src="https://raw.githack.com/StanislavSmetaninSSM/Legendarica/main/src/js/Thinking.js"></script>
+        <script src="https://raw.githack.com/StanislavSmetaninSSM/Legendarica/main/src/js/SystemPrompts.js"></script>
 </body>
 </html>

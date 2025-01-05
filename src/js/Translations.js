@@ -851,6 +851,8 @@ Enjoy the game!`,
             "create-character-post-apocalyptic-label": "Create Your Character",
             "weight-reduction-label": "Content Weight Reduction",
             "thinking-module-iterations-label": "Number of attempts the answer-thinking module will make to ponder the response.",
+            "use-literary-prompt-label": "The Game Master will strive for a literary style",
+            "use-erotic-prompt-label": "Allow 21+ content in the game",
         },
         "russian-language": {
             // placeholders
@@ -1685,6 +1687,8 @@ Enjoy the game!`,
             "create-character-post-apocalyptic-label": "Создайте своего персонажа",
             "weight-reduction-label": "Уменьшение веса содержимого",
             "thinking-module-iterations-label": "Количество попыток, которые модуль обдумывания ответов предпримет, чтобы подумать над ответом.",
+            "use-literary-prompt-label": "Мастер Игры будет стараться писать художественно",
+            "use-erotic-prompt-label": "Разрешить контент 21+ в игре",
         },
         "spanish-language": {
             // placeholders
@@ -2523,6 +2527,8 @@ Por favor, considera apoyarme (Lottarend, el autor del juego). Los enlaces para 
             "create-character-post-apocalyptic-label": "Crea tu personaje",
             "weight-reduction-label": "Reducción del Peso del Contenido",
             "thinking-module-iterations-label": "Cantidad de intentos que el módulo de razonamiento de respuestas realizará para reflexionar sobre la respuesta.",
+            "use-literary-prompt-label": "El Maestro del Juego se esforzará por un estilo literario",
+            "use-erotic-prompt-label": "Permitir contenido para mayores de 21 años en el juego",
         },
         "portuguese-language": {
             // placeholders
@@ -3361,6 +3367,8 @@ Aproveite o jogo!`,
             "create-character-post-apocalyptic-label": "Crie seu personagem",
             "weight-reduction-label": "Redução do Peso do Conteúdo",
             "thinking-module-iterations-label": "Número de tentativas que o módulo de reflexão de respostas fará para pensar sobre a resposta.",
+            "use-literary-prompt-label": "O Mestre do Jogo se esforçará por um estilo literário",
+            "use-erotic-prompt-label": "Permitir conteúdo para maiores de 21 anos no jogo",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -4197,6 +4205,8 @@ Aproveite o jogo!`,
             "create-character-post-apocalyptic-label": "अपना पात्र बनाएँ",
             "weight-reduction-label": "सामग्री के वजन में कमी",
             "thinking-module-iterations-label": "प्रतिक्रिया पर विचार करने के लिए उत्तर-विचार मॉड्यूल द्वारा की जाने वाली प्रयासों की संख्या।",
+            "use-literary-prompt-label": "गेम मास्टर साहित्यिक शैली में लिखने का प्रयास करेगा",
+            "use-erotic-prompt-label": "खेल में 21+ सामग्री की अनुमति दें",
         },
         "german-language": {
             // placeholders
@@ -5036,6 +5046,8 @@ Viel Spaß beim Spielen!`,
             "create-character-post-apocalyptic-label": "Erstelle deinen Charakter",
             "weight-reduction-label": "Reduzierung des Inhaltsgewichts",
             "thinking-module-iterations-label": "Anzahl der Versuche, die das Antwort-Nachdenkmodul unternehmen wird, um über die Antwort nachzudenken.",
+            "use-literary-prompt-label": "Der Spielleiter wird sich um einen literarischen Stil bemühen",
+            "use-erotic-prompt-label": "Inhalte ab 21 Jahren im Spiel erlauben",
         },
         "french-language": {
             // placeholders
@@ -5876,6 +5888,8 @@ Bon jeu !`,
             "create-character-post-apocalyptic-label": "Créez votre personnage",
             "weight-reduction-label": "Réduction du Poids du Contenu",
             "thinking-module-iterations-label": "Nombre de tentatives que le module de réflexion entreprendra pour réfléchir à la réponse.",
+            "use-literary-prompt-label": "Le Maître du Jeu s'efforcera d'adopter un style littéraire",
+            "use-erotic-prompt-label": "Autoriser le contenu 21+ dans le jeu",
         }
     };
 
@@ -6060,7 +6074,7 @@ Bon jeu !`,
             "my-game-post-apocalyptic", "ai-provider-label4", "ai-none4-label", "ai-model-label4",
             "api-key-label4", "api-key-button4", "api-key4", "additional-settings-label4", "tooltip-provider-ai4",
             "post-apocalypse-campaign-message-label", "post-apocalyptic-game", "create-character-post-apocalyptic-label",
-            "thinking-module-iterations-label",
+            "thinking-module-iterations-label", "use-literary-prompt-label", "use-erotic-prompt-label"
         ];
 
         //Update labels

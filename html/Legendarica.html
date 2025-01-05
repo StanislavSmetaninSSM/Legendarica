@@ -10,7 +10,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
 <head>
     <meta charset="utf-8">
-    <title>Legendarica Absolute v1.3 - Neural Sandbox</title>
+    <title>Legendarica Absolute v1.4 - Neural Sandbox</title>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="../src/css/Legendarica.css">
 </head>
@@ -286,6 +286,16 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             </div>
 
                             <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useLiteraryPrompt" name="useLiteraryPrompt" checked />
+                                <label for="useLiteraryPrompt" id="use-literary-prompt-label">ГМ будет писать художественно</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useEroticPrompt" name="useEroticPrompt" />
+                                <label for="useEroticPrompt" id="use-erotic-prompt-label">Разрешить контент 21+ в игре</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useStatus" name="useStatus" checked />
                                 <label for="useStatus" id="use-status-label">Использовать статус (отключите для экономии токенов)</label>
                                 <button type="button" id="clear-status-label" style="margin-left: 10px;">Очистить статус</button>
@@ -400,7 +410,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                 <label class="switch">
                                     <input type="checkbox" id="use-streaming-ai">
                                     <span class="slider round"></span>
-                                </label>                               
+                                </label>
                             </div>
 
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
@@ -638,7 +648,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                     <span id="post-apocalypse-class-message"></span>
                 </div>
 
-                <select id="campaign-post-apocalyptic-select" class="marginTop20px">   
+                <select id="campaign-post-apocalyptic-select" class="marginTop20px">
                 </select>
 
                 <div>
@@ -969,5 +979,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
         <script src="../src/js/Legendarica.js"></script>
         <script src="../src/js/LegendaricaAPI.js"></script>
         <script src="../src/js/Thinking.js"></script>
+        <script src="../src/js/SystemPrompts.js"></script>
 </body>
 </html>

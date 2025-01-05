@@ -256,6 +256,8 @@ const ELEMENTS = {
     useThinkingModule: document.getElementById('useThinkingModule'),
     useWeightControl: document.getElementById('useWeightControl'),
     thinkingModuleIterations: document.getElementById('thinkingModuleIterations'),
+    useLiteraryPrompt: document.getElementById('useLiteraryPrompt'),
+    useEroticPrompt: document.getElementById('useEroticPrompt'),
 
     //Graphics
     floatingImg: document.getElementById('floating'), // Splash screen
@@ -4616,13 +4618,15 @@ For 'Critical Failure':
 ` : (playerCritDice == 20 ? `
 #9.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Success!
 #9.2.1. It means that the player's action is successful automatically and no additional check is required.
-#9.2.2. Note that the player has completely succeeded in doing what player was trying to do. You should develop the game's plot based on this.
-#9.2.3. Output to 'items_and_stat_calculations' that player's action was succeeded.
+#9.2.2. Note that the player has completely succeeded in doing what player was trying to do. You should develop the game's plot based on this. 
+#9.2.3. It's mandatory to add some major positive event to the game's plot to reward the player for a critically successful dice roll.
+#9.2.4. Output to 'items_and_stat_calculations' that player's action was succeeded.
 ` : `
 #9.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Failure!
 #9.2.1. It means that the player's action is failed automatically and no additional check is required. 
 #9.2.2. Note that the player has completely failed at what player was trying to do. You should develop the game's plot based on this.
-#9.2.3. Output to 'items_and_stat_calculations' that the player's action failed completely.
+#9.2.3. It's mandatory to add some major negative event to the game's plot because of the player's dice roll has failed critically.
+#9.2.4. Output to 'items_and_stat_calculations' that the player's action failed completely.
 `)}
 #9.5. When items are need to be added inside the container item, located in the player's inventory, make this check for possibility to do it: [
 #9.5.1. Read the value of 'capacity' property of the container. Let's call it Capacity.
@@ -5093,8 +5097,14 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (!["Websim", "None"].includes(aiProvider) && !apiKey)
                 throw translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-ai-key-label"];
 
+            const predefinedSystemPrompts = [];
+            if (ELEMENTS.useLiteraryPrompt.checked)
+                predefinedSystemPrompts.push(systemPromptsModule.literaryStyle);
+            if (ELEMENTS.useEroticPrompt.checked)
+                predefinedSystemPrompts.push(systemPromptsModule.erotic);
+
             if (ELEMENTS.useThinkingModule.checked) {
-                const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, prompt, tokenCostSum);
+                const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts);
 
                 prompt = `
                 Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log will help you form your answer. Use the information in it to write your final answer: [
@@ -5103,7 +5113,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 ${prompt}`;                
             }
 
-            data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, false);
+            data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, false);
             
             turn++;
             tokenCostSum = APIModule.tokenCostSum;
@@ -5298,7 +5308,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             }
 
             if (data.items_and_stat_calculations && data.items_and_stat_calculations.length > 0) {
-                logMessage(data.items_and_stat_calculations.join('\n\n'), data.currentHealthChange, data.currentEnergyChange, data.moneyChange);
+                logMessage(data.items_and_stat_calculations.join('\n\n'), data.currentHealthChange ?? 0, data.currentEnergyChange ?? 0, data.moneyChange ?? 0);
             }
 
             if (data.actions)
@@ -5361,13 +5371,13 @@ function shouldGeneratePassiveSkills() {
     return skillsToGenerate > 0;
 }
 
-async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum) {
+async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum, predefinedSystemPrompts) {
     let thinkingData = "";
     for (let currentStep = 0; currentStep < Number(ELEMENTS.thinkingModuleIterations.value ?? 1); currentStep++) {
         thinkingData = `${thinkingData} \n [TRY${currentStep}]`;
         const prompt = thinkingModule.getThinkingPrompt(task, translationModule.currentLanguage, thinkingData);
 
-        const result = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, true);
+        const result = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, true);
         thinkingData = `${thinkingData} \n ${result} [/TRY${currentStep}]`;
         logThinkingMessage(thinkingData);
 
@@ -5380,7 +5390,7 @@ async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCost
     return thinkingData;  
 }
 
-async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, doNotParse = false) {
+async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, doNotParse = false) {
     APIModule.initialize({
         model: model,
         apiKey: apiKey,
@@ -5397,7 +5407,8 @@ async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, d
         messageParseErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["gm_message_error_full_gm_answer"],
         aiProviderStreamingErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["ai-provider-streaming-error-label"],
         doNotParse: doNotParse,
-        useStreaming: ELEMENTS.useStreaming.checked
+        useStreaming: ELEMENTS.useStreaming.checked,
+        predefinedSystemPrompts: predefinedSystemPrompts
     });
 
     switch (aiProvider) {

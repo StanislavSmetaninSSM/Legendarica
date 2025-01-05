@@ -37,6 +37,9 @@ const APIModule = (function getAPIModule() {
     let aiProviderStreamingErrorMessage = "";
     const emptyResponseErrorMessage = "Data doesn't contain a response text. Probably blocked by filters";
 
+    //prompts
+    let predefinedSystemPrompts = [];
+
     //----- API Functions -----//
 
     function sanitizeString(str) {
@@ -152,6 +155,10 @@ const APIModule = (function getAPIModule() {
             //other
             messageParseErrorMessage = parameters.messageParseErrorMessage;
             aiProviderStreamingErrorMessage = parameters.aiProviderStreamingErrorMessage;
+
+            predefinedSystemPrompts = parameters.predefinedSystemPrompts ?? [];
+            if (predefinedSystemPrompts.length > 0)
+                systemInstructions = predefinedSystemPrompts.join('\n') + '\n' + systemInstructions;            
         },
 
         get tokenCostCurrent() {
