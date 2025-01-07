@@ -12,6 +12,7 @@ const APIModule = (function getAPIModule() {
 
     let doNotParse = false;
     let useStreaming = false;
+    let signal = null;
 
     //Connection and prompt data
     let model = "";
@@ -36,6 +37,8 @@ const APIModule = (function getAPIModule() {
     let messageParseErrorMessage = "";
     let aiProviderStreamingErrorMessage = "";
     const emptyResponseErrorMessage = "Data doesn't contain a response text. Probably blocked by filters";
+    let abortErrorMessage = "";
+    let otherCommonErrorMessage = "";
 
     //prompts
     let predefinedSystemPrompts = [];
@@ -155,10 +158,14 @@ const APIModule = (function getAPIModule() {
             //other
             messageParseErrorMessage = parameters.messageParseErrorMessage;
             aiProviderStreamingErrorMessage = parameters.aiProviderStreamingErrorMessage;
+            abortErrorMessage = parameters.abortErrorMessage;
+            otherCommonErrorMessage = parameters.otherCommonErrorMessage;
 
             predefinedSystemPrompts = parameters.predefinedSystemPrompts ?? [];
             if (predefinedSystemPrompts.length > 0)
-                systemInstructions = predefinedSystemPrompts.join('\n') + '\n' + systemInstructions;            
+                systemInstructions = predefinedSystemPrompts.join('\n') + '\n' + systemInstructions;
+
+            signal = parameters.signal;
         },
 
         get tokenCostCurrent() {
@@ -198,7 +205,13 @@ const APIModule = (function getAPIModule() {
                     top_k: Number(topK),
                     frequency_penalty: Number(frequencyPenalty),
                     presence_penalty: Number(presencePenalty)
-                })
+                }),
+                signal: signal
+            }).catch(error => {
+                if (error.name === 'AbortError')
+                    throw new Error(abortErrorMessage);
+                else
+                    throw new Error(`${otherCommonErrorMessage}: ${error}`);
             });
 
             const response = await request.json();
@@ -269,7 +282,13 @@ const APIModule = (function getAPIModule() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(settings)
+                body: JSON.stringify(settings),
+                signal: signal
+            }).catch(error => {
+                if (error.name === 'AbortError')
+                    throw new Error(abortErrorMessage);
+                else
+                    throw new Error(`${otherCommonErrorMessage}: ${error}`);
             });
            
             let response = {};
@@ -345,7 +364,13 @@ const APIModule = (function getAPIModule() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${apiKey}`
                 },
-                body: JSON.stringify(settings)
+                body: JSON.stringify(settings),
+                signal: signal
+            }).catch(error => {
+                if (error.name === 'AbortError')
+                    throw new Error(abortErrorMessage);
+                else
+                    throw new Error(`${otherCommonErrorMessage}: ${error}`);
             });
 
             const response = await request.json();
@@ -407,7 +432,13 @@ const APIModule = (function getAPIModule() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${apiKey}`
                 },
-                body: JSON.stringify(settings)
+                body: JSON.stringify(settings),
+                signal: signal
+            }).catch(error => {
+                if (error.name === 'AbortError')
+                    throw new Error(abortErrorMessage);
+                else
+                    throw new Error(`${otherCommonErrorMessage}: ${error}`);
             });
 
             const response = await request.json();
@@ -468,7 +499,13 @@ const APIModule = (function getAPIModule() {
                     "x-wait-for-model": "true",
                     "Authorization": `Bearer ${apiKey}`
                 },
-                body: JSON.stringify(settings)
+                body: JSON.stringify(settings),
+                signal: signal
+            }).catch(error => {
+                if (error.name === 'AbortError')
+                    throw new Error(abortErrorMessage);
+                else
+                    throw new Error(`${otherCommonErrorMessage}: ${error}`);
             });
 
             if (!request.ok) {
@@ -521,7 +558,13 @@ const APIModule = (function getAPIModule() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${apiKey}`
                 },
-                body: JSON.stringify(settings)
+                body: JSON.stringify(settings),
+                signal: signal
+            }).catch(error => {
+                if (error.name === 'AbortError')
+                    throw new Error(abortErrorMessage);
+                else
+                    throw new Error(`${otherCommonErrorMessage}: ${error}`);
             });
 
             const response = await request.json();
@@ -591,7 +634,13 @@ const APIModule = (function getAPIModule() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${apiKey}`
                 },
-                body: JSON.stringify(settings)
+                body: JSON.stringify(settings),
+                signal: signal
+            }).catch(error => {
+                if (error.name === 'AbortError')
+                    throw new Error(abortErrorMessage);
+                else
+                    throw new Error(`${otherCommonErrorMessage}: ${error}`);
             });
 
             const response = await request.json();
@@ -652,7 +701,13 @@ const APIModule = (function getAPIModule() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${apiKey}`
                 },
-                body: JSON.stringify(settings)
+                body: JSON.stringify(settings),
+                signal: signal
+            }).catch(error => {
+                if (error.name === 'AbortError')
+                    throw new Error(abortErrorMessage);
+                else
+                    throw new Error(`${otherCommonErrorMessage}: ${error}`);
             });
 
             if (!request.ok) {
@@ -690,7 +745,13 @@ const APIModule = (function getAPIModule() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(settings)
+                body: JSON.stringify(settings),
+                signal: signal
+            }).catch(error => {
+                if (error.name === 'AbortError')
+                    throw new Error(abortErrorMessage);
+                else
+                    throw new Error(`${otherCommonErrorMessage}: ${error}`);                
             });
 
             if (!request.ok)

@@ -20,6 +20,8 @@ let imageComponentHeight = 1220;
 let imageComponentWidth = 1060;
 let isGameStartedFromWebsim = false;
 
+let controller = new AbortController();
+
 //DOM elements
 const ELEMENTS = {
     //api keys and model names
@@ -69,6 +71,7 @@ const ELEMENTS = {
     chatBox: document.getElementById('chat-box'), // chat window
     userInput: document.getElementById('user-input'), // Action input line
     sendButton: document.getElementById('send-button'), // Send message button
+    cancelButton: document.getElementById('cancel-button'),
     actionButtons: Array.from(document.getElementsByClassName('action-button')), // Suggested actions button list
     clearHalfChatButton: document.getElementById('clear-half-chat'), // Clear chat button
     //menu
@@ -790,6 +793,15 @@ ELEMENTS.startNewSettingButton.onclick = function () {
 
 //Send text to chat on button click.
 ELEMENTS.sendButton.addEventListener('click', () => sendRequest(ELEMENTS.userInput.value.trim()));
+
+//Abort sending message.
+ELEMENTS.cancelButton.addEventListener('click', () => {
+    if (!confirmAction())
+        return;
+
+    controller.abort();
+    controller = new AbortController();
+});
 
 //Send text to chat on Enter key press.
 ELEMENTS.userInput.addEventListener('keypress', (e) => {
@@ -1743,7 +1755,7 @@ function updateInventoryList(inventoryListElement, itemsArray) {
 
         const itemListElement = document.createElement('li');
         const itemSpan = document.createElement('span');
-        itemSpan.textContent = item.name;
+        itemSpan.textContent = item.count > 1 ? `${item.name} (${item.count})` : item.name;
         itemSpan.onclick = () => showInventoryInfo(item.id, itemsArray);
         itemListElement.appendChild(itemSpan);
         inventoryListElement.appendChild(itemListElement);
@@ -3358,7 +3370,7 @@ function markdown(text) {
 }
 
 function getMaxGmSymbols() {
-    return ELEMENTS.maxGmSymbols.value ? Number(ELEMENTS.maxGmSymbols.value) : 10000;
+    return ELEMENTS.maxGmSymbols.value ? Number(ELEMENTS.maxGmSymbols.value) : 20000;
 }
 
 function getRandomNumber(min, max) {
@@ -3478,13 +3490,13 @@ function getCalculatedItemParameters(item, parentWeightReduction = 0) {
         item.weight = 0;
 
     if (item.originalWeight === undefined)
-        item.originalWeight = item.weight;    
+        item.originalWeight = item.weight;
 
     if (parentWeightReduction > 0)
         item.weight = item.originalWeight * (1 - parentWeightReduction / 100);
     else
         item.weight = item.originalWeight;
-    
+
     let totalWeight = item.weight;
     let contentsItemCount = undefined;
     let contentsVolume = undefined;
@@ -3529,7 +3541,7 @@ function describeItemContainerContents(container, depth = 0) {
             else
                 result += containerHeader + subItems;
         } else {
-            result += `${indent}- ${item.name}\n`;
+            result += `${indent}- ${item.name} (${item.count})\n`;
         }
     }
 
@@ -4407,13 +4419,146 @@ Example 2 (correct): 'This is an emergency first aid kit.'
 #4.22. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
 #4.23. Mandatory record information about this event in 'items_and_stat_calculations'.
 ${turn == 1 ? `
-#4.24. Note that this is the start of the game, and player has some predefined items. Generate the properties of items based on the instructions above.
-Be fair and don't give the player obvious starting gear advantages unless the player asks for it.
-It's forbidden to add many bonuses to items unless the player specifically describes them. It will be great if you generate bonuses count from 0 to 1 for each item, based on your choice.
-If player has containers in their inventory, then mandatory generate items inside containers - you must generate items inside each container in count of from 1 to container 'capacity' value. Carefully read the 'description' of containers and generate items inside it based on the description.
-When you generate items inside the container, mandatory check the container's volume. Items inside the container must be fitted inside this volume.
-Note, than you should mandatory generate all predefined items. If they are too heavy (have a lot of weight), then make them lighter so the character can hold them and not be overloaded.
-It's mandatory to use the same item names, which predefined items already have. Forbidden to use another item names for predefined items.
+#4.24. Starting Game Item Generation Rules.
+#4.24.1. General Item Generation Guidelines:
+
+• Generate properties for all predefined items the player starts with
+• Maintain balance - avoid giving unfair advantages through starting gear
+• Limit bonuses to 0-1 per item unless specifically requested by player
+• Keep original names of predefined items - do not modify them
+• Adjust item weights if necessary to prevent player overload
+
+#4.24.2. Container Item Generation (MANDATORY):
+#4.24.2.1. Container Fill Requirements:
+
+• Every container in starting inventory MUST be filled with items
+• Number of items must be between 1 and container's 'capacity' value
+• Total volume of items inside MUST NOT exceed container's volume
+• Items must logically fit the container's purpose and description
+
+#4.24.2.2. Container Analysis Process:
+
+- Read container's 'description' carefully
+- Note container's 'capacity' and 'volume' values
+- Check if description suggests specific item types
+- Generate appropriate items based on:
+    • Container's purpose (backpack vs. potion pouch)
+    • Container's size and volume
+    • Container's description hints
+    • Character's probable needs
+
+#4.24.2.3. Item Selection Guidelines:
+
+Choose items that make logical sense for the container.
+Examples:
+• Backpack: travel supplies, tools, clothing
+• Potion pouch: potions, herbs, medical supplies
+• Tool belt: working tools, repair items
+• Food bag: rations, water, preserved foods
+• Quiver: arrows, bolts, throwing weapons
+
+#4.24.2.4. Volume Management:
+
+• Calculate total available volume in container
+• Track volume of each added item
+• Ensure total item volume stays under container's limit
+• Consider item stacking where appropriate
+• Leave some free space for future items
+
+#4.24.2.5. Common Mistakes to Avoid:
+
+• DO NOT leave containers empty
+• DO NOT exceed container's volume
+• DO NOT ignore container's description
+• DO NOT add items that wouldn't logically fit
+• DO NOT add valuable/powerful items unless specified
+
+#4.24.2.6. Example Process:
+
+Container: "Leather backpack (capacity: 8, volume: 30 dm³)
+Description: A worn traveler's backpack"
+Appropriate fill:
+
+1x Bedroll (volume: 8 dm³) - rolled tightly
+2x Trail rations (volume: 2 dm³ each) - compact dried food
+1x Waterskin (volume: 5 dm³) - when filled
+1x Tinderbox (volume: 0.2 dm³) - small box
+1x Rope, 15m (volume: 3 dm³) - coiled
+1x Spare shirt (volume: 1 dm³) - folded
+1x Basic tools (volume: 2 dm³) - in cloth wrap
+Total items: 8 (within capacity: 8)
+Total volume: 23.2 dm³ (within volume: 30 dm³)
+
+#4.24.3. Final Checks:
+
+• Verify all containers have been filled
+• Note, that first aid kit is also container and must be filled
+• Confirm items fit container volumes
+• Ensure total weight is manageable
+• Validate items match container purposes
+• Check that item count respects capacity limits
+
+#4.24.4. Resource Dependencies (MANDATORY):
+#4.24.4.1. Resource Check Process:
+
+For EACH generated item, check if it requires resources to function
+If resources are required, MANDATORY add them to inventory
+Resources must be in logical and usable counts.
+
+#4.24.4.2. Common Resource Dependencies:
+
+A) Weapons and Ammunition:
+Firearms MUST have ammunition:
+• Pistols: usually 10 rounds
+• Rifles: 20-30 rounds
+• Shotguns: 12-24 shells
+• Quiver: 10-20 arrows
+• [and similar weapon-ammo pairs]
+
+B) Liquid Containers:
+Water containers MUST have water amount specified:
+• Canteen: 8-10 drinks
+• Water bottle: 4-6 drinks
+• Waterskin: 6-8 drinks
+• Flask: 3-4 drinks
+• [and similar]
+
+Other liquid containers:
+• Potion bottles: Specify doses
+• Fuel canisters: Specify remaining fuel
+• Oil lamps: Specify oil amount
+• [and similar]
+
+C) Power-Dependent Items:
+Electronic devices MUST have:
+• Batteries installed (if required)
+• Charge level specified
+
+Powered tools:
+• Fuel amount for gas tools
+• Battery charge for electric tools
+
+D) Consumable Resources:
+Medical supplies:
+• Bandages: Specify number of uses
+• Medicine: Specify doses
+• [and similar]
+
+Tools:
+• Lighters: Specify fuel amount
+• Torches: Specify uses count
+• [and similar]
+
+#4.24.4.3. Final Resource Verification (MANDATORY):
+• Check EACH item for resource dependencies
+• Verify ALL required resources are included
+• Confirm resource counts are logical
+• Note all resource amounts in item descriptions
+
+#4.24.4.4. Common Mistakes to Avoid:
+• DO NOT generate weapons without ammunition
+• DO NOT add powered devices without power sources
+• DO NOT forget to specify resource counts
 ` : ''}
 #4.25. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
@@ -4485,7 +4630,8 @@ It's mandatory to use the same item names, which predefined items already have. 
 #7.3.5. To the value of 'resource' key include number, which represents the current value of item's resource.
 #7.3.6. To the value of 'maximumResource' key include number, which represents the maximum available value of item's resource.
 #7.3.7. To the value of the 'resourceType' key include string, that represetns the type of resource in the 'resource' value of key. For example, bullets or arrows, or uses count for items intended for consumption, etc.
-#7.3.7.1. ${CHARACTER_INFO.nonMagicMode ? 'All resources must be realistic and non-magical. Magical items should be treated as non-functional or have their magical resource replaced with a realistic equivalent.' : ''}
+#7.3.7.1. Note, that if the item is an ammunition, for example 1 arrow, then this item must not have the same resource (arrows for the example case).
+#7.3.7.2. ${CHARACTER_INFO.nonMagicMode ? 'All resources must be realistic and non-magical. Magical items should be treated as non-functional or have their magical resource replaced with a realistic equivalent.' : ''}
 #7.3.8. To the value of 'contentsPath' include the array of strings. Each string is a container name inside which the item is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
 #7.3.8.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
 #7.3.8.2. If the item is not located in any container, set 'contentsPath' to null.
@@ -4595,26 +4741,142 @@ If -10 ≤ Difference < -5:    Result = 'Serious Failure'
 If Difference < -10:         Result = 'Critical Failure'
 ]
 
-#9.3.7. Output to 'items_and_stat_calculations' the check calculation, Difference value and Result type, and describe all of this in great details.
-#9.3.8. Based on the Result type, mandatory proceed with the appropriate development of the plot: [
+#9.3.7. Output to 'items_and_stat_calculations' the check calculation, Difference value and Result type with all mathematical details and formulas used.
+
+#9.3.8. Result Implementation Requirements:
+#9.3.8.1. Universal Rules for All Results:
+• Each mechanical effect recorded in 'items_and_stat_calculations' must have corresponding narrative representation in 'response'.
+• All numerical outcomes (damage, healing, stat changes) must be artistically described in 'response' without showing formulas or calculations.
+• If player loses health, 'items_and_stat_calculations' shows calculations and final value, while 'response' describes how this damage was received in narrative form.
+• It's forbidden to omit describing mechanical effects in narrative response.
+• Story consequences described in 'response' must match mechanical outcomes from 'items_and_stat_calculations'.
+• NPC reactions mandatory persist until explicitly changed by player actions.
+• Story consequences mandatory create concrete changes in game world.
+• Any 'luck' or 'circumstance' factors mandatory be determined before result implementation.
+
+#9.3.8.2. Based on the Result type, mandatory proceed with the appropriate development: [
+
 For 'Critical Success':
-- Character achieves their goal exceptionally well with additional positive effects.
+• Player character achieves their goal exceptionally well with additional positive effects.
+• Action creates new opportunities or advantages for future scenes.
+• NPCs react with increased respect or admiration where applicable.
+• Player character may gain unexpected beneficial information or reward.
+• Success influences the story direction significantly in character's favor.
 
 For 'Full Success':
-- Character completely achieves their intended goal.
+• Player character completely achieves their intended goal.
+• Action proceeds exactly as planned with all intended effects.
+• NPCs react according to the success of the action.
+• Results contribute positively to the current storyline.
 
 For 'Partial Success':
-- Character achieves their goal but with some minor complications or limitations.
+- Player character achieves their goal but with mandatory minor complications.
+- At least one negative effect must be mandatory applied to player character:
+  • Achievement is less effective than intended.
+  • Action requires more effort than expected.
+  • Minor item durability reduced.
+  • Small reputation loss.
+  • Information leak to antagonists.
 
 For 'Minor Failure':
-- Character fails to achieve their goal but without serious consequences.
+- Player character fails to achieve their goal with mandatory minor consequences.
+- At least two negative effects mandatory must be applied to player character:
+  • Loss of unexpected energy.
+  • Character ends up in disadvantageous situation.
+  • Minor injury or fatigue.
+  • Minor item durability reduced.
+  • Loss of unexpected item resource.
+  • Information advantage to opponents.
 
 For 'Serious Failure':
-- Character fails with notable negative consequences.
+- Player character fails with severe mandatory consequences.
+- At least three negative effects mandatory must be applied directly to player character:
+  • Significant player health loss.
+  • Negative health status effect.
+  • Significant item durability reduced.
+  • Position severely compromised.
+  • Tactical disadvantage.
+  • Major reputation damage.
+- Additional mandatory effects:
+  • Opponents mandatory must gain concrete advantage.
+  • Situation dramatically changed and future related checks become harder.
+  • At least one long-term negative consequence established.
 
 For 'Critical Failure':
-- Character fails dramatically with severe consequences.
-]
+- Player character fails catastrophically with maximum negative impact.
+- At least four severe effects mandatory must be applied directly to player character:
+  • Major player health loss.
+  • Serious negative health status effect.
+  • Major item durability reduced.
+  • Position critically compromised.
+  • Severe tactical disadvantage.
+  • Critical reputation damage.
+- Additional mandatory effects:
+  • Opponents gain major concrete advantages.
+  • Multiple long-term negative consequences established.
+  • Story path severely altered against player character's interests.
+  • Future related checks become significantly harder.
+
+#9.4. Combat and Duels: [
+#9.4.1. Combat begins when:
+• Either side declares hostile actions.
+• Weapons are drawn with hostile intent.
+• Surprise attack is attempted.
+• Peaceful negotiation explicitly fails.
+
+#9.4.2. Combat-Specific Implementation:
+#9.4.2.1. Mandatory Combat Principles:
+• Enemies mandatory must use their best available tactics.
+• Enemies tactical advantages mandatory must be used immediately.
+• Enemies retreat only possible if tactically sound.
+• No artificial reduction of enemy capabilities.
+• No convenient circumstances saving player character.
+
+#9.4.2.2. Combat Failure Consequences:
+
+Minor Failure in Combat mandatory must include:
+• Minor direct damage to player character.
+• Minor tactical disadvantage in the position of player's character.
+
+Serious Failure in Combat mandatory must include:
+• Direct damage to player character.
+• Concrete tactical disadvantage (these are examples):
+- A lost position by the player character.
+- A dropped weapon by the player character.
+- Reduced player character defense.
+• Immediate enemy action using advantage.
+
+Critical Failure in Combat mandatory must include:
+• Severe damage to player character.
+• Multiple tactical disadvantages (these are examples):
+  - Worst possible player character's position.
+  - Weapon loss or its malfunction for player character.
+  - Player character defense critically compromised.
+• Immediate enemy action with maximum advantage.
+• Long-term combat penalty for player character.
+
+#9.4.2.3. Enemy Behavior Requirements:
+• Enemies mandatory must attack when having advantage.
+• Enemies mandatory use player character's weaknesses.
+• Enemies mandatory must press their advantage.
+• Enemies mandatory must act according to their established capabilities.
+• Enemy retreat only possible when clearly justified by their condition.
+
+#9.4.2.4. Output Consistency Requirements:
+• Combat calculations are recorded in 'items_and_stat_calculations'.
+• Same combat outcomes must be narratively described in 'response' without technical details.
+• Health changes calculated in 'items_and_stat_calculations' must have clear narrative cause in 'response'.
+• All mechanical advantages/disadvantages must have story representation in 'response'.
+
+#9.4.3. Implementation Restrictions:
+The gamemaster is forbidden to:
+• Create convenient circumstances preventing consequences.
+• Reduce enemy capability without clear reason.
+• Allow 'lucky' events saving player character from consequences.
+• Interpret rules to minimize negative impacts.
+• Invent external factors neutralizing failure effects.
+• Delay mandatory consequence implementation.
+] ]
 ` : (playerCritDice == 20 ? `
 #9.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Success!
 #9.2.1. It means that the player's action is successful automatically and no additional check is required.
@@ -4836,8 +5098,8 @@ ${ELEMENTS.useQuestsList.checked ? `
 #14.1.4. If a player takes multiple actions in current turn, sum their energy change up and record the final value in 'currentEnergyChange'.
 ${characterStats.currentEnergy < 40 && characterStats.currentEnergy > 10 ? `#14.2. The current energy of player character is less than 40. It means, that player character mandatory loses additional 1 or 2 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is tired and needs to rest, otherwise it will affect player's health.` : ``}
 ${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player character is less than 10. It means, that player character mandatory loses additional 3-10 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is very tired and needs to rest, otherwise it will affect player's health very fast.` : ``}
-#14.3. All successful player actions give experience (XP) to the player character. The amount of experience is entered in the value of the 'experienceGained' key (value type: positive integer).
 
+#14.3. All successful player actions give experience (XP) to the player character. The amount of experience is entered in the value of the 'experienceGained' key (value type: positive integer).
 #14.4. When a player needs to receive an XP, do following check to calculate the experience: [
 #14.4.1. Let's describe the BaseXP. BaseXP is the foundational experience points awarded for an action based on its complexity and significance:
 #14.4.1.1. Calculate the BaseXP using the instruction: [
@@ -4900,14 +5162,82 @@ experienceGained = floor((BaseXP + CreativityBonus + RiskBonus) * ImpactMultipli
 #14.4.7. Output to 'items_and_stat_calculations' the experience calculation, showing all components and the final experienceGained value in great detail.
 ]
 
-#14.5. Spending or restoring health is recorded in the value of the 'currentHealthChange' key (value type: positive or negative integer).
-#14.5.1. If the player is wounded in current turn, his health should decrease.
-#14.5.2. If the player is well rested or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate health restoration effect, then the player's health should be restored to the required level.
+#14.5. Any damage or harm received by the player character mandatory must result in health loss. This includes all combat damage, monster attacks, environmental damage, and any other harmful effects. 
+The amount of health lost is recorded in the value of the 'currentHealthChange' key (value type: negative integer for damage, positive for healing).
+#14.5.1. Health Loss Conditions: The player character's health decreases in various situations. 
+Below are common examples, but this list is not exhaustive - any situation that could cause physical harm to the character mandatory must result in appropriate health loss. 
+Use these categories and examples as guidelines to evaluate similar situations: [
+#14.5.1.1. Combat and Direct Damage:
+
+• When receiving wounds from weapons or attacks
+• When hit by projectiles or magical attacks
+• When affected by poison or toxic substances 
+• [and other similar combat-related damage]
+
+#14.5.1.2. Physical Trauma:
+
+• When falling from heights (severity based on distance)
+• When hit by falling objects
+• When crushed by heavy objects
+• When caught in explosions or shockwaves
+• [and other similar physical traumas]
+
+#14.5.1.3. Environmental Damage:
+
+• When exposed to extreme temperatures
+• When affected by caustic or corrosive substances
+• When drowning or suffocating
+• When exposed to harmful radiation or magical energy
+• [and other similar environmental hazards]
+
+#14.5.1.4. Creature Interactions:
+
+• When bitten by animals or monsters
+• When stung by insects or creatures
+• When affected by creature abilities (paralysis, acid, etc.)
+• When infected by parasites or diseases
+• [and other similar creature-based damage]
+
+#14.5.1.5. Accidents and Mishaps:
+
+• When failing dangerous acrobatic attempts
+• When failing to operate dangerous machinery
+• When caught in traps or mechanical devices
+• When burning or scalding occurs
+• [and other similar accidents]
+
+#14.5.1.6. Health Loss Guidelines:
+These ranges are suggestions and can be adjusted based on the specific situation and severity:
+
+• Minor injuries (scratches, small burns): 1-3 health points
+• Moderate injuries (deep cuts, sprains): 4-7 health points
+• Serious injuries (broken bones, concussions): 8-15 health points
+• Severe injuries (internal damage, major trauma): 16-25 health points
+• Critical injuries (life-threatening wounds): 26+ health points
+• [and other similar injuries]
+
+#14.5.2. Health Restoration:
+#14.5.2.1. If the player is well rested or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate health restoration effect, then the player's health should be restored to the required level.
+#14.5.2.2. Health restoration sources include, but are not limited to:
+
+• Natural healing through rest: 1-10 points per full rest
+• Basic medical treatment: 2-5 points per application
+• Professional medical care: 5-20 points per treatment
+• Healing potions (and other healing items): As specified by the item
+• Magical healing: As specified by the spell or ability
+• [and other similar restoration methods]
+
+#14.5.3. Calculating Health Changes:
+#14.5.3.1. For each turn, sum up all health changes from damage and restoration sources
+#14.5.3.2. Apply any relevant modifiers (armor, resistances, vulnerabilities)
+#14.5.3.3. Record the final value in 'currentHealthChange'
+
+#14.5.4. Output to 'items_and_stat_calculations' the health changes, showing all components in great detail.
 ]
 ${turn == 1 ? `
 #14.6. This is the start of new game. On this turn, mandatory set 'currentEnergyChange' = 0, 'currentHealthChange' = 0, 'experienceGained' = 0.
 ` : ``}
-#14.7. Output to the 'items_and_stat_calculations' the current value of 'currentEnergyChange'.
+]
 
 #15 The value of the actions key is passed an array of proposed actions (should not contain nested arrays or other objects)
 #15.1. Among the proposed actions, there should not be options for actions that are similar to events that have already recently occurred
@@ -4928,21 +5258,23 @@ ${turn == 1 ? `
 #17.10. The player cannot use items that they do not have in their inventory or that are not in the current location
 #17.11. The character should not say what the player did not indicate to say
 #17.12. Spending or adding money is recorded in the value of the moneyChange key only specifically from money (value type: positive or negative integer)
-#17.13. It is not allowed to add or subtract in moneyChange, currentHealthChange and currentEnergyChange if this has already been done for the same event
-#17.14. The value of the response key should significantly develop the events of the general plot. The event from the previous turn should be completed.
-#17.15. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters
-#17.16. This answer should be a logical consequence of the current player action, which is their last prompt: ${currentMessage} and should be absolutely different compared to events from previous turns and recent events from the history of previous communication between you (GM) and the player
-#17.17. Each turn should have a new event that has not yet been in the history of previous communication between you (GM) and the player, even if the player's request is repeated.
-#17.18. Each new event should not only be a logical continuation of the last previous turns of previous actions, but also radically differ from those previously described. Make sure that each plot development offers a new interaction or unpredictable turn, which is a plot consequence of the last turns from the history of communication between the GM and the player.
-#17.19. With each new turn, consider that new roles, locations, or items may be present in the game. Include unexpected elements to create plot variety.
-#17.20. The plot should not go back and repeat itself. It is not allowed to forget events that occurred in the most recent turns.
-#17.21. Seek inspiration from various genres and storytelling styles. Let each new event be unexpected and even extraordinary in the context of the current plot.
-#17.22. When describing a new event, offer the player several alternative ways of responding or interacting with the surrounding world to stimulate diversity in plot development.
-#17.23. If the player's action is repetitive, each new answer should present not only a different event, but its context should also be new, thereby overcoming the pattern.
-#17.24. When forming the answer, consider all the passive skills of the character. 
-#17.25. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
-#17.26. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
-#17.27. The value of key 'response' must never be empty.
+#17.13. It's mandatory to monitor situations that may result in player's health loss, and record player's health loss in 'currentHealthChange' value of key. 
+#17.13.1. Pay special attention to fights between the player and monsters/enemies/NPCs/etc. Handle health loss according to the Health Loss Conditions rules described above.
+#17.14. It is not allowed to add or subtract in moneyChange, currentHealthChange and currentEnergyChange if this has already been done for the same event
+#17.15. The value of the response key should significantly develop the events of the general plot. The event from the previous turn should be completed.
+#17.16. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters
+#17.17. This answer should be a logical consequence of the current player action, which is their last prompt: ${currentMessage} and should be absolutely different compared to events from previous turns and recent events from the history of previous communication between you (GM) and the player
+#17.18. Each turn should have a new event that has not yet been in the history of previous communication between you (GM) and the player, even if the player's request is repeated.
+#17.19. Each new event should not only be a logical continuation of the last previous turns of previous actions, but also radically differ from those previously described. Make sure that each plot development offers a new interaction or unpredictable turn, which is a plot consequence of the last turns from the history of communication between the GM and the player.
+#17.20. With each new turn, consider that new roles, locations, or items may be present in the game. Include unexpected elements to create plot variety.
+#17.21. The plot should not go back and repeat itself. It is not allowed to forget events that occurred in the most recent turns.
+#17.22. Seek inspiration from various genres and storytelling styles. Let each new event be unexpected and even extraordinary in the context of the current plot.
+#17.23. When describing a new event, offer the player several alternative ways of responding or interacting with the surrounding world to stimulate diversity in plot development.
+#17.24. If the player's action is repetitive, each new answer should present not only a different event, but its context should also be new, thereby overcoming the pattern.
+#17.25. When forming the answer, consider all the passive skills of the character. 
+#17.26. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
+#17.27. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
+#17.28. The value of key 'response' must never be empty.
 ]
 
 #18 Create an array of five elements using the following format:
@@ -5077,7 +5409,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 17. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
  ] ]`;
 
-       // console.log(prompt);
+        //console.log(prompt);
         lastUserMessage = currentMessage;
         ELEMENTS.actionButtons.forEach(button => button.style.display = 'none');
 
@@ -5392,6 +5724,7 @@ async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCost
 
 async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, doNotParse = false) {
     APIModule.initialize({
+        signal: controller.signal,
         model: model,
         apiKey: apiKey,
         prompt: prompt,
@@ -5406,6 +5739,8 @@ async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, p
         tokenCostSum: tokenCostSum,
         messageParseErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["gm_message_error_full_gm_answer"],
         aiProviderStreamingErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["ai-provider-streaming-error-label"],
+        abortErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["abort-error-message"],
+        otherCommonErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["common-error-message"],
         doNotParse: doNotParse,
         useStreaming: ELEMENTS.useStreaming.checked,
         predefinedSystemPrompts: predefinedSystemPrompts
