@@ -2083,7 +2083,7 @@ function addInventoryItem(itemParams) {
     const nestedItem = isNestedItem(itemParams);
     if (nestedItem && ELEMENTS.inventoryContainerInfo.style.display === 'block') {
         const parentContainerId = ELEMENTS.inventoryContainerInfoId.value;
-        if (parentContainerId === data.parentId)
+        if (data && parentContainerId === data.parentId)
             updateInventoryList(ELEMENTS.inventoryContainerInfoItems, inventoryArray);
     }
 
@@ -2093,7 +2093,7 @@ function addInventoryItem(itemParams) {
     const id = ELEMENTS.inventoryInfoId.value;
     if (inventoryArray.find(item => item.id === id))
         showInventoryInfo(id, inventoryArray);
-    else if (nestedItem && data.parentId === id) {
+    else if (data && nestedItem && data.parentId === id) {
         const parentName = itemParams.contentsPath.slice(-1)[0];
         const parentContentsPath = itemParams.contentsPath.slice(0, itemParams.contentsPath.length - 1);
         const parentItemData = getItemByNameAndPath(parentName, parentContentsPath, null, null, data.parentId);
