@@ -2014,7 +2014,7 @@ function addInventoryItem(itemParams) {
     const inventoryArray = data?.parentItemsArray ?? inventory;
     const existingItemIndex = data?.index ?? -1;
 
-    if (existingItemIndex !== -1) {
+    if (data.item && existingItemIndex > -1) {
         const item = data.item;
         //If the item already exists, move it to the top of the list.
         if (itemParams.quality)
