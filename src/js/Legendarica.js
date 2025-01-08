@@ -1107,14 +1107,14 @@ function adjustInventoryContainerCapacity(itemsArray) {
             continue;
 
         const excessItemsCount = item.contents.length - item.capacity;
-        const excessItems = item.contents.slice(-excessItemsCount);
+        const excessItems = item.contents.slice(0, excessItemsCount);
         const excessItemNames = excessItems.map(excessItem => excessItem.name).join(", ");
 
         const messageId = translationModule.setConteinerItemsExceedCapacityMessage(item.name, excessItemsCount, excessItemNames);
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId], "system");
 
-        item.contents.splice(-excessItemsCount, excessItemsCount);
-        inventory.push(...excessItems);
+        item.contents.splice(0, excessItemsCount);
+        inventory.unshift(...excessItems);
 
         for (const excessedItem of excessItems) {
             excessedItem.contentsPath = null;
@@ -1143,7 +1143,7 @@ function adjustInventoryContainerVolume(itemsArray) {
         const excessItems = [];
 
         while (excessVolume > 0 && item.contents.length > 0) {
-            const removedItem = item.contents.pop();
+            const removedItem = item.contents.shift();
             excessItems.push(removedItem);
             excessVolume -= (removedItem.volume ?? 0);
         }
@@ -1153,7 +1153,7 @@ function adjustInventoryContainerVolume(itemsArray) {
             const messageId = translationModule.setContainerItemsExceedVolumeMessage(item.name, excessItemNames);
             sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId], "system");
 
-            inventory.push(...excessItems);
+            inventory.unshift(...excessItems);
             for (const excessedItem of excessItems) {
                 excessedItem.contentsPath = null;
                 updateContentsPathForNestedItems(excessedItem);
@@ -1171,7 +1171,7 @@ function adjustInventoryContainerWeight(itemsArray, maxWeight, addedItems) {
     calculateParametersForItemsArray(itemsArray);
     let totalWeight = itemsArray.reduce((sum, item) => sum + item.weight, 0);
 
-    for (let i = addedItems.length - 1; i >= 0 && totalWeight > maxWeight; i--) {
+    for (let i = 0; i < addedItems.length && totalWeight > maxWeight; i++) {
         const itemToRemove = addedItems[i];
         const containerItems = getContainerContentsByPath(itemsArray, itemToRemove.contentsPath);
 
@@ -1192,9 +1192,9 @@ function adjustInventoryContainerWeight(itemsArray, maxWeight, addedItems) {
 
     if (totalWeight > maxWeight) {
         const allItems = getAllItems(itemsArray)
-            .filter(({ item }) => !item.isContainer); 
+            .filter(({ item }) => !item.isContainer);
 
-        for (let i = allItems.length - 1; i >= 0 && totalWeight > maxWeight; i--) {
+        for (let i = 0; i < allItems.length && totalWeight > maxWeight; i++) {
             const { item, path } = allItems[i];
             const containerItems = getContainerContentsByPath(itemsArray, path);
 
@@ -1223,8 +1223,7 @@ function adjustInventoryContainerWeight(itemsArray, maxWeight, addedItems) {
 function adjustInventoryWeightAndRemoveNeeded(maxWeight, newItemsArray) {
     const adjustResult = adjustInventoryContainerWeight(inventory, maxWeight, newItemsArray);
     if (adjustResult.removedItems.length > 0) {
-        for (const removedItem of adjustResult.removedItems)
-            inventoryBasket.push(removedItem);
+        inventoryBasket.unshift(...adjustResult.removedItems);
         const removedItemsText = adjustResult.removedItems.map(item => item.name).join(", ");
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["maximum-weight-exceeded-label"] + removedItemsText, 'system');
     }
@@ -1977,11 +1976,11 @@ function showInventoryInfoContainer(container) {
     ELEMENTS.inventoryContainerInfo.style.display = 'block';
 }
 
-function setOrChangeItemResource(name, contentsPath, resource, maximumResource, resourceType) {
+function setOrChangeItemResource(name, contentsPath, resource, maximumResource, resourceType, existedId) {
     if (!name)
         return;
 
-    const data = getItemByNameAndPath(name, contentsPath, inventory);
+    const data = getItemByNameAndPath(name, contentsPath, inventory, null, existedId);
     if (!data.item)
         return;
 
@@ -2009,7 +2008,7 @@ function setOrChangeItemResource(name, contentsPath, resource, maximumResource, 
 }
 
 function addInventoryItem(itemParams) {
-    const data = getItemByNameAndPath(itemParams.name, itemParams.contentsPath, inventory);
+    const data = getItemByNameAndPath(itemParams.name, itemParams.contentsPath, inventory, null, itemParams.existedId);
 
     const inventoryArray = data?.parentItemsArray ?? inventory;
     const existingItemIndex = data?.index ?? -1;
@@ -2097,7 +2096,7 @@ function addInventoryItem(itemParams) {
     else if (nestedItem && data.parentId === id) {
         const parentName = itemParams.contentsPath.slice(-1)[0];
         const parentContentsPath = itemParams.contentsPath.slice(0, itemParams.contentsPath.length - 1);
-        const parentItemData = getItemByNameAndPath(parentName, parentContentsPath);
+        const parentItemData = getItemByNameAndPath(parentName, parentContentsPath, null, null, data.parentId);
         if (parentItemData.item)
             showInventoryInfo(parentItemData.item.id, parentItemData.parentItemsArray ?? inventory);
     }
@@ -3400,47 +3399,99 @@ function isNestedItem(item) {
 }
 
 function compareItemsByContainerAsc(itemFirst, itemSecond) {
-    if (itemFirst.isContainer && itemSecond.isContainer) return 0;
-    if (itemFirst.isContainer && !itemSecond.isContainer) return -1;
-    if (!itemFirst.isContainer && itemSecond.isContainer) return 1;
+    if (itemFirst?.isContainer && itemSecond?.isContainer) return 0;
+    if (itemFirst?.isContainer && !itemSecond?.isContainer) return -1;
+    if (!itemFirst?.isContainer && itemSecond?.isContainer) return 1;
     return 0;
 }
+
+function findItemById(id, itemsArray, expectedName) {
+    if (!Array.isArray(itemsArray))
+        return null;
+    
+    // Search in current array
+    let result = null;
+    const index = itemsArray.findIndex(item => item.id === id);
+    if (index > -1) {
+        const item = itemsArray[index];
+        // Only return if name matches or no name check required
+        if (!expectedName || item.name === expectedName) {
+            return {
+                parentId: null,
+                parentItemsArray: itemsArray,
+                index: index,
+                item: item
+            };
+        }
+    }
+
+    // Search recursively in containers
+    for (let i = 0; i < itemsArray.length; i++) {
+        const container = itemsArray[i];
+        if (container.isContainer && Array.isArray(container.contents)) {
+            result = findItemById(id, container.contents, expectedName);
+            if (result) {
+                // If we found the item, update its parentId
+                result.parentId = container.id;
+                return result;
+            }
+        }
+    }
+
+    return null;
+}
+
 
 //name - item name to find
 //contentsPath - the array of strings, which represents the path to item. Fx, if item is stored in container, then it could be something like ['top level container name', 'second level container name', 'parent container name']. If not stored in container, it should be null.
 //parentItemsArray - array of items where need to find the item (container inventory)
 //parentId - id of parent container
-function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null, parentId = null) {
+function getItemByNameAndPath(name, contentsPath = null, parentItemsArray = null, parentId = null, fallbackId = null) {
     parentItemsArray ??= inventory; //find in global inventory as fallback
     if (!Array.isArray(parentItemsArray))
         return null;
-
     if (contentsPath && !Array.isArray(contentsPath))
         return null;
 
-    if (!contentsPath || contentsPath.length === 0)
-        return getItemAndIndex(name, parentItemsArray, parentId);
+    // Try to find by path first
+    if (!contentsPath || contentsPath.length === 0) {
+        const result = getItemAndIndex(name, parentItemsArray, parentId);
+        if (result?.item || !fallbackId)
+            return result;
 
-    const path = contentsPath[0];
-    const remainingPath = contentsPath.slice(1);
-    const containerData = getItemAndIndex(path, parentItemsArray, parentId);
+    } else {
+        const path = contentsPath[0];
+        const remainingPath = contentsPath.slice(1);
+        const containerData = getItemAndIndex(path, parentItemsArray, parentId);
+        if (containerData?.item && containerData.item.isContainer) {
+            containerData.item.contents ??= [];
+            const result = getItemByNameAndPath(
+                name,
+                remainingPath,
+                containerData.item.contents,
+                containerData.item.id,
+                fallbackId
+            );
 
-    if (!containerData?.item || !containerData.item.isContainer)
-        return null;
+            if (result?.item || !fallbackId)
+                return result;
+        }
+    }
 
-    containerData.item.contents ??= [];
+    // If path search failed and we have fallbackId, try to find by ID
+    if (fallbackId)
+        return findItemById(fallbackId, inventory, name);    
 
-    return getItemByNameAndPath(name, remainingPath, containerData.item.contents, containerData.item.id);
+    return null;
 
     function getItemAndIndex(name, itemsArray, parentId) {
         const index = itemsArray?.findIndex(item => item.name === name);
         const item = index > -1 ? itemsArray[index] : null;
-
         return {
-            parentId: parentId, //id of parent element: some kind of container where item is stored
-            parentItemsArray: itemsArray, //parent element inventory
-            index: index, //index of item in parentArray
-            item: item, //found item
+            parentId: parentId,
+            parentItemsArray: itemsArray,
+            index: index,
+            item: item,
         };
     }
 }
@@ -3541,7 +3592,8 @@ function describeItemContainerContents(container, depth = 0) {
             else
                 result += containerHeader + subItems;
         } else {
-            result += `${indent}- ${item.name} (${item.count})\n`;
+            const nameLabel = item.count > 1 ? `${item.name} (${item.count})` : item.name;
+            result += `${indent}- ${nameLabel}\n`;
         }
     }
 
@@ -3575,8 +3627,8 @@ function updateContentsPathForNestedItems(container) {
     }
 }
 
-function findAndMoveItem(name, contentsPath, contentsPathOfDestinationContainer, destinationContainerName) {
-    const dataItemToMove = getItemByNameAndPath(name, contentsPath);
+function findAndMoveItem(name, contentsPath, movedItemId, contentsPathOfDestinationContainer, destinationContainerName, destinationContainerId) {
+    const dataItemToMove = getItemByNameAndPath(name, contentsPath, null, null, movedItemId);
 
     if (!dataItemToMove?.item)
         return;
@@ -3586,7 +3638,7 @@ function findAndMoveItem(name, contentsPath, contentsPathOfDestinationContainer,
 
     let destinationItemsArray = inventory;
     if (destinationContainerName) {
-        const containerData = getItemByNameAndPath(destinationContainerName, contentsPathOfDestinationContainer);
+        const containerData = getItemByNameAndPath(destinationContainerName, contentsPathOfDestinationContainer, null, null, destinationContainerId);
         if (containerData.item) {
             containerData.item.contents ??= [];
             destinationItemsArray = containerData.item.contents;
@@ -3642,8 +3694,8 @@ function moveItem(currentItem, originalItemsArray, destinationItemsArray, recalc
     updateInventoryInfoWindows(currentItem, originalItemsArray, destinationItemsArray);
 }
 
-function findAndDeleteItem(name, contentsPath) {
-    const data = getItemByNameAndPath(name, contentsPath);
+function findAndDeleteItem(name, contentsPath, existedId) {
+    const data = getItemByNameAndPath(name, contentsPath, null, null, existedId);
 
     if (!data?.item)
         return;
@@ -4123,7 +4175,8 @@ async function sendRequest(currentMessage) {
             'volume': 'volume_of_item',
             'containerWeight': 'weight_of_container_without_items',
             'weightReduction': 'weight_reduction_of_container_contents',
-            'isConsumption' : 'whether_item_intended_for_consumption'
+            'isConsumption' : 'whether_item_intended_for_consumption',
+            'existedId': 'existed_id_of_item_from_Context'
         }`;
         const itemsQualityList = [
             translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"],
@@ -4415,12 +4468,17 @@ Example 2 (correct): 'This is an emergency first aid kit.'
 #4.20.1. Value of the 'weightReduction' - is a percentages by which the weight of the container contents is reduced. For example: 50 - is a 50%, 5 - is a 5%. Based on this value, game system will calculate the final weight of container contents items automatically.
 #4.20.2. Magic items or high technology items give a higher percentage of weight reduction, normal items a smaller one.
 #4.20.3. The value of 'weightReduction' must be at least 1% for containers. For non-containers, this value should be null.
-#4.21. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
-#4.22. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
-#4.23. Mandatory record information about this event in 'items_and_stat_calculations'.
+#4.21. The value of 'existedId' key is GUID string represents id of item. Look at the 'id' property of item in the Context and write it to 'existedId'.
+#4.21.1. Fill the value of 'existedId' key only if it's an item that exists in the Context. Otherwise, leave the 'existedId' value of key empty. It's forbidden to fill it if you cannot find the item in the Context.
+${turn > 1 ? `
+#4.22. If this is a new item, and player specifies in a request the name of an item that is a container (e.g. 'backpack', 'bag', 'box', etc.) and asks to put new item into it, then it should be interpreted as the action of putting item into the container in the player's inventory, and not simply into the player's inventory.
+` : ``}
+#4.23. In the player inventory known from Context, you could see the 'contents' property in the container's properties. It's only for Context and formed automatically, so don't include this property to 'inventoryItemsData'.
+#4.24. It's forbidden to use 'inventoryItemsData' array to manipulate the 'contentsPath' of items. Use 'moveInventoryItems' if you need to move item somewhere.
+#4.25. Mandatory record information about this event in 'items_and_stat_calculations'.
 ${turn == 1 ? `
-#4.24. Starting Game Item Generation Rules.
-#4.24.1. General Item Generation Guidelines:
+#4.26. Starting Game Item Generation Rules.
+#4.26.1. General Item Generation Guidelines:
 
 • Generate properties for all predefined items the player starts with
 • Maintain balance - avoid giving unfair advantages through starting gear
@@ -4428,15 +4486,15 @@ ${turn == 1 ? `
 • Keep original names of predefined items - do not modify them
 • Adjust item weights if necessary to prevent player overload
 
-#4.24.2. Container Item Generation (MANDATORY):
-#4.24.2.1. Container Fill Requirements:
+#4.26.2. Container Item Generation (MANDATORY):
+#4.26.2.1. Container Fill Requirements:
 
 • Every container in starting inventory MUST be filled with items
 • Number of items must be between 1 and container's 'capacity' value
 • Total volume of items inside MUST NOT exceed container's volume
 • Items must logically fit the container's purpose and description
 
-#4.24.2.2. Container Analysis Process:
+#4.26.2.2. Container Analysis Process:
 
 - Read container's 'description' carefully
 - Note container's 'capacity' and 'volume' values
@@ -4447,7 +4505,7 @@ ${turn == 1 ? `
     • Container's description hints
     • Character's probable needs
 
-#4.24.2.3. Item Selection Guidelines:
+#4.26.2.3. Item Selection Guidelines:
 
 Choose items that make logical sense for the container.
 Examples:
@@ -4457,7 +4515,7 @@ Examples:
 • Food bag: rations, water, preserved foods
 • Quiver: arrows, bolts, throwing weapons
 
-#4.24.2.4. Volume Management:
+#4.26.2.4. Volume Management:
 
 • Calculate total available volume in container
 • Track volume of each added item
@@ -4465,7 +4523,7 @@ Examples:
 • Consider item stacking where appropriate
 • Leave some free space for future items
 
-#4.24.2.5. Common Mistakes to Avoid:
+#4.26.2.5. Common Mistakes to Avoid:
 
 • DO NOT leave containers empty
 • DO NOT exceed container's volume
@@ -4473,7 +4531,7 @@ Examples:
 • DO NOT add items that wouldn't logically fit
 • DO NOT add valuable/powerful items unless specified
 
-#4.24.2.6. Example Process:
+#4.26.2.6. Example Process:
 
 Container: "Leather backpack (capacity: 8, volume: 30 dm³)
 Description: A worn traveler's backpack"
@@ -4489,7 +4547,7 @@ Appropriate fill:
 Total items: 8 (within capacity: 8)
 Total volume: 23.2 dm³ (within volume: 30 dm³)
 
-#4.24.3. Final Checks:
+#4.26.3. Final Checks:
 
 • Verify all containers have been filled
 • Note, that first aid kit is also container and must be filled
@@ -4498,14 +4556,14 @@ Total volume: 23.2 dm³ (within volume: 30 dm³)
 • Validate items match container purposes
 • Check that item count respects capacity limits
 
-#4.24.4. Resource Dependencies (MANDATORY):
-#4.24.4.1. Resource Check Process:
+#4.26.4. Resource Dependencies (MANDATORY):
+#4.26.4.1. Resource Check Process:
 
 For EACH generated item, check if it requires resources to function
 If resources are required, MANDATORY add them to inventory
 Resources must be in logical and usable counts.
 
-#4.24.4.2. Common Resource Dependencies:
+#4.26.4.2. Common Resource Dependencies:
 
 A) Weapons and Ammunition:
 Firearms MUST have ammunition:
@@ -4549,20 +4607,20 @@ Tools:
 • Torches: Specify uses count
 • [and similar]
 
-#4.24.4.3. Final Resource Verification (MANDATORY):
+#4.26.4.3. Final Resource Verification (MANDATORY):
 • Check EACH item for resource dependencies
 • Verify ALL required resources are included
 • Confirm resource counts are logical
 • Note all resource amounts in item descriptions
 
-#4.24.4.4. Common Mistakes to Avoid:
+#4.26.4.4. Common Mistakes to Avoid:
 • DO NOT generate weapons without ammunition
 • DO NOT add powered devices without power sources
 • DO NOT forget to specify resource counts
 ` : ''}
-#4.25. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#4.27. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [ 
-#4.26. Do not include 'inventoryItemsData' key to the response.
+#4.28. Do not include 'inventoryItemsData' key to the response.
 ]
 
 #5 If any of these conditions are true: [
@@ -4571,17 +4629,21 @@ Tools:
 ], then strictly follow the instructions: [ Let's think step by step : [ 
 #5.1. Mandatory include to the response the key 'moveInventoryItems'.
 #5.2. The value of 'moveInventoryItems' is an array of object, each of which represents the information about item to move.
-#5.3. Mandatory the format for each object of 'moveInventoryItems' array: { 'name': 'item_name_to_move', 'contentsPath': ['path_to_item_inside_containers'], 'contentsPathOfDestinationContainer': ['path_to_destination_container_inside_containers'], 'destinationContainerName': 'container_name_where_item_will_be_moved', 'isContainer': 'shows_whether_the_moved_item_is_container_or_not' } .
+#5.3. Mandatory the format for each object of 'moveInventoryItems' array: { 'name': 'item_name_to_move', 'contentsPath': ['path_to_item_inside_containers'], 'movedItemId': 'id_of_moved_item_in_the_Context', 'contentsPathOfDestinationContainer': ['path_to_destination_container_inside_containers'], 'destinationContainerName': 'container_name_where_item_will_be_moved', 'destinationContainerId': 'id_of_destination_container_or_null', 'isContainer': 'shows_whether_the_moved_item_is_container_or_not' } .
 #5.3.1. To the value of 'name' key include the item name to move. It's important to use the item name in exactly the same format that you would see in the player's inventory, known from Context.
 #5.3.2. To the value of the 'contentsPath' include the array of strings. Each string is a container name inside which the item to move is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
 #5.3.2.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
 #5.3.2.2. If the item which is needed to move is not located in the container, then set 'contentsPath' to null.
-#5.3.3. To the value of the 'contentsPathOfDestinationContainer' include the array of strings, that describes the contentsPath for destination container. Each string is a container name inside which the destination container is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
-#5.3.3.1. For example, if destination container is located in the container2, and container2 is located in container1, then the 'contentsPathOfDestinationContainer' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
-#5.3.3.2. If the destination container is not located in the container, then set 'contentsPathOfDestinationContainer' to null.
-#5.3.4. The value of 'destinationContainerName' is a string that contains the name of the container into which the item is directly moved.
-#5.3.4.1. If the item is not moved to the container, then set 'destinationContainerName' to null.
-#5.3.4.2. It is important to use the same container names as they appear in the player's inventory, known from the Context.
+#5.3.3. The value of the 'movedItemId' is GUID string represents id of moved item. Look at the 'id' property of item in the Context and write it to 'movedItemId'.
+#5.3.3.1. Fill the value of 'movedItemId' key only if it's an item that exists in the Context. Otherwise, leave the 'movedItemId' value of key empty. It's forbidden to fill it if you cannot find the item in the Context.
+#5.3.4. To the value of the 'contentsPathOfDestinationContainer' include the array of strings, that describes the contentsPath for destination container. Each string is a container name inside which the destination container is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
+#5.3.4.1. For example, if destination container is located in the container2, and container2 is located in container1, then the 'contentsPathOfDestinationContainer' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
+#5.3.4.2. If the destination container is not located in the container, then set 'contentsPathOfDestinationContainer' to null.
+#5.3.5. The value of 'destinationContainerName' is a string that contains the name of the container into which the item is directly moved.
+#5.3.5.1. If the item is not moved to the container, then set 'destinationContainerName' to null.
+#5.3.5.2. It is important to use the same container names as they appear in the player's inventory, known from the Context.
+#5.3.6. The value of the 'destinationContainerId' is GUID string represents id of destination container. Look at the 'id' property of destination container in the Context and write it to 'destinationContainerId'.
+#5.3.6.1. Fill the value of 'destinationContainerId' key only if it's an item that exists in the Context. Otherwise, leave the 'destinationContainerId' value of key empty. It's forbidden to fill it if you cannot find the item in the Context.
 #5.4. To the value of 'isContainer' key include the boolean value, that indicates whether the item being moved is a container or not.
 #5.4.1. It's mandatory to set to 'isContainer' the same value, like in the item with same name known from Context. 
 #5.5. If container is moved, then include to 'moveInventoryItems' only container, without its contents, because the contents of container will be moved to a new place automatically by game system.
@@ -4594,11 +4656,13 @@ Tools:
 ], then strictly follow the instructions: [ Let's think step by step : [ 
 #6.1. Mandatory include to the response the key 'removeInventoryItems'.
 #6.2. The value of 'removeInventoryItems' is an array of object, each of which represents the information about item to remove.
-#6.3. Mandatory the format for each object of 'removeInventoryItems' array: { 'name': 'item_name_to_remove', 'contentsPath': ['path_to_item_inside_container'], 'isContainer': 'shows_whether_the_removed_item_is_container_or_not' } .
+#6.3. Mandatory the format for each object of 'removeInventoryItems' array: { 'name': 'item_name_to_remove', 'contentsPath': ['path_to_item_inside_container'], 'existedId': 'existed_id_of_item_from_Context', 'isContainer': 'shows_whether_the_removed_item_is_container_or_not' } .
 #6.3.1. To the value of 'name' key include the item name to remove. It's important to use the item name in exactly the same format that you would see in the player's inventory, known from Context.
 #6.3.2. To the value of the 'contentsPath' include the array of strings. Each string is a container name inside which the item to remove is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
 #6.3.2.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
 #6.3.2.2. If the item which is needed to remove is not located in the container, then set 'contentsPath' to null.
+#6.3.3. The value of 'existedId' key is GUID string represents id of item. Look at the 'id' property of item in the Context and write it to 'existedId'.
+#6.3.3.1. Fill the value of 'existedId' key only if it's an item that exists in the Context. Otherwise, leave the 'existedId' value of key empty. It's forbidden to fill it if you cannot find the item in the Context.
 #6.4. To the value of 'isContainer' key include the boolean value, that indicates whether the item being removed is a container or not.
 #6.4.1. It's mandatory to set to 'isContainer' the same value, like in the item with same name known from Context. 
 #6.5. If container is removed, then include to 'removeInventoryItems' only container, without its contents, because the contents of container will be removed automatically by game system.
@@ -4625,7 +4689,7 @@ Tools:
 #7.3. For each item in the ItemsToUpdateResource, strictly follow the instructions: [ Let's think step by step : [
 #7.3.1. Mandatory include to the response the key 'inventoryItemsResources'.
 #7.3.2. The value of 'inventoryItemsResources' is an array of objects, each of which represents the information about changes in item resources.
-#7.3.3. Mandatory the format for each object of 'inventoryItemsResources' array: { 'name': 'name_of_item', 'resource': 'current_resource_value', 'maximumResource': 'maximum_resource_value', 'resourceType': 'type_of_resource', 'contentsPath': ['path_to_item_inside_container'] } .
+#7.3.3. Mandatory the format for each object of 'inventoryItemsResources' array: { 'name': 'name_of_item', 'resource': 'current_resource_value', 'maximumResource': 'maximum_resource_value', 'resourceType': 'type_of_resource', 'contentsPath': ['path_to_item_inside_container'], 'existedId': 'existed_id_of_item_from_Context' } .
 #7.3.4. To the value of 'name' key include the item name. It's important to use the item name in exactly the same format that you would see in the player's inventory, known from Context.
 #7.3.5. To the value of 'resource' key include number, which represents the current value of item's resource.
 #7.3.6. To the value of 'maximumResource' key include number, which represents the maximum available value of item's resource.
@@ -4635,19 +4699,21 @@ Tools:
 #7.3.8. To the value of 'contentsPath' include the array of strings. Each string is a container name inside which the item is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
 #7.3.8.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
 #7.3.8.2. If the item is not located in any container, set 'contentsPath' to null.
-#7.3.9. When resource is used, or should be decreased because of any reason: [
+#7.3.9. The value of 'existedId' key is GUID string represents id of item. Look at the 'id' property of item in the Context and write it to 'existedId'.
+#7.3.9.1. Fill the value of 'existedId' key only if it's an item that exists in the Context. Otherwise, leave the 'existedId' value of key empty. It's forbidden to fill it if you cannot find the item in the Context.
+#7.3.10. When resource is used, or should be decreased because of any reason: [
 - Mandatory decrease the 'resource' value of key by appropriate amount. 
 - It's STRICTLY forbidden to change 'count' for this item in current turn. The system will automatically handle count changes when resource is depleted.
 - IMPORTANT: Never confuse resource usage with count changes. These are completely separate systems - resource represents charges/uses within a single item, while count represents the number of separate items.
 ]
-#7.3.10. When resource is restored or increased: [
+#7.3.11. When resource is restored or increased: [
 - Mandatory increase the 'resource' value of key by needed amount.
 - It's forbidden to increase resource value above item's maximum capacity, known from 'maximumResource' value.
 ]
-#7.3.11. Mandatory record all resource-related changes in 'items_and_stat_calculations'.
-#7.3.12. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#7.3.12. Mandatory record all resource-related changes in 'items_and_stat_calculations'.
+#7.3.13. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
 ] ], otherwise, then: [
-#7.3.13. Do not include 'inventoryItemsResources' key to the response.
+#7.3.14. Do not include 'inventoryItemsResources' key to the response.
 ]
 
 #8 Item count rules.
@@ -5464,18 +5530,18 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             if (data.moveInventoryItems && data.moveInventoryItems.length > 0) {
                 for (const item of data.moveInventoryItems)
-                    findAndMoveItem(item.name, item.contentsPath, item.contentsPathOfDestinationContainer, item.destinationContainerName);
+                    findAndMoveItem(item.name, item.contentsPath, item.movedItemId, item.contentsPathOfDestinationContainer, item.destinationContainerName, item.destinationContainerId);
             }
 
             if (data.removeInventoryItems && data.removeInventoryItems.length > 0) {
                 for (const item of data.removeInventoryItems)
-                    findAndDeleteItem(item.name, item.contentsPath);
+                    findAndDeleteItem(item.name, item.contentsPath, item.existedId);
             }
 
             const newItemsArray = [];
             if (data.inventoryItemsData && data.inventoryItemsData.length > 0) {
                 for (const item of data.inventoryItemsData.sort(compareItemsByContainerAsc)) {
-                    if (item.name) {
+                    if (item?.name) {
                         const itemData = {
                             name: item.name,
                             description: item.description,
@@ -5494,6 +5560,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                             containerWeight: item.containerWeight ? Number(item.containerWeight) : undefined,
                             weightReduction: item.weightReduction,
                             capacity: Number(item.capacity),
+                            existedId: item.existedId,
                             resources: data.inventoryItemsResources,
                         };
                         addInventoryItem(itemData);
@@ -5504,7 +5571,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             if (data.inventoryItemsResources && data.inventoryItemsResources.length > 0) {
                 for (const resourceData of data.inventoryItemsResources)
-                    setOrChangeItemResource(resourceData.name, resourceData.contentsPath, Number(resourceData.resource), Number(resourceData.maximumResource), resourceData.resourceType);
+                    setOrChangeItemResource(resourceData.name, resourceData.contentsPath, Number(resourceData.resource), Number(resourceData.maximumResource), resourceData.resourceType, resourceData.existedId);
             }
 
             if (turn == 2)
@@ -5674,7 +5741,14 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 ELEMENTS.chatBox.removeChild(loadingElement);
             }
 
-            const errorMessage = error?.message ?? error ?? "Unknown error";
+            let errorMessage = error?.message ?? error ?? "Unknown error";
+            if (error?.lineNumber)
+                errorMessage += ` Line: ${error.lineNumber}`;
+            if (error?.fileName)
+                errorMessage += ` File: ${error.fileName}`;
+            if (error?.stack)
+                errorMessage += ` Stack: ${error.stack}`;
+
             sendMessageToChat(errorMessage, 'system');
         }
     }
