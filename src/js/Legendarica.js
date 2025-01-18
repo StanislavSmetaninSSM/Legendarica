@@ -1245,68 +1245,27 @@ function getStatsList() {
     ]
 }
 
-function getStatsAvailableForIncrease() {
-    const stats = [];
-
-    if (characterStats.strength <= characterStats.level)
-        stats.push(getStatData("strength", characterStats.strength));
-
-    if (characterStats.dexterity <= characterStats.level)
-        stats.push(getStatData("dexterity", characterStats.dexterity));
-
-    if (characterStats.constitution <= characterStats.level)
-        stats.push(getStatData("constitution", characterStats.constitution));
-
-    if (characterStats.intelligence <= characterStats.level)
-        stats.push(getStatData("intelligence", characterStats.intelligence));
-
-    if (characterStats.wisdom <= characterStats.level)
-        stats.push(getStatData("wisdom", characterStats.wisdom));
-
-    if (characterStats.attractiveness <= characterStats.level)
-        stats.push(getStatData("attractiveness", characterStats.attractiveness));
-
-    if (characterStats.trade <= characterStats.level)
-        stats.push(getStatData("trade", characterStats.trade));
-
-    if (characterStats.persuasion <= characterStats.level)
-        stats.push(getStatData("persuasion", characterStats.persuasion));
-
-    if (characterStats.perception <= characterStats.level)
-        stats.push(getStatData("perception", characterStats.perception));
-
-    if (characterStats.luck <= characterStats.level)
-        stats.push(getStatData("luck", characterStats.luck));
-
-    if (characterStats.speed <= characterStats.level)
-        stats.push(getStatData("speed", characterStats.speed));
-
-    return stats;
-
-    function getStatData(name, value) {
-        return {
-            name: name,
-            maxValue: characterStats.level - value
-        }
-    }
-}
-
-function increasePlayerStat(name, value) {
+function increasePlayerStat(name, value, logs) {
     const key = getPlayerStatByName(name);
     if (!key)
         return;
+
+    const statName = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][key.toLowerCase()];
 
     const oldValue = characterStats[key];
     let newValue = characterStats[key] + value;
     if (newValue > characterStats.level)
         newValue = characterStats.level;
 
-    if (oldValue >= newValue)
+    if (oldValue >= newValue) {
+        if (Array.isArray(logs)) {
+            const errorMessageId = translationModule.setStatIncreaseForbiddenMessage(statName);
+            logs.push(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][errorMessageId]);
+        }
         return;
+    }
 
     characterStats[key] = newValue;
-
-    const statName = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][key.toLowerCase()];
     const valueDifference = newValue - oldValue;
 
     const messageId = translationModule.setStatIncreasedMessage(statName, valueDifference);
@@ -1315,22 +1274,27 @@ function increasePlayerStat(name, value) {
     updateStatsWithoutGm();
 }
 
-function decreasePlayerStat(name, value) {
+function decreasePlayerStat(name, value, logs) {
     const key = getPlayerStatByName(name);
     if (!key)
         return;
+
+    const statName = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][key.toLowerCase()];
 
     const oldValue = characterStats[key];
     let newValue = characterStats[key] - value;
     if (newValue < 0)
         newValue = 0;
 
-    if (newValue >= oldValue)
+    if (newValue >= oldValue) {
+        if (Array.isArray(logs)) {
+            const errorMessageId = translationModule.setStatDecreaseForbiddenMessage(statName);
+            logs.push(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][errorMessageId]);
+        }
         return;
+    }
 
     characterStats[key] = newValue;
-
-    const statName = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][key.toLowerCase()];
     const valueDifference = oldValue - newValue;
 
     const messageId = translationModule.setStatDecreasedMessage(statName, valueDifference);
@@ -3372,6 +3336,21 @@ function getMaxGmSymbols() {
     return ELEMENTS.maxGmSymbols.value ? Number(ELEMENTS.maxGmSymbols.value) : 20000;
 }
 
+//for example, for 3 rolls of 2d10: dieSides - 10, dicesCount - 2, rollsCount - 3
+function getDiceResultsArray(dicesCount, dieSides, rollsCount) {
+    const results = [];
+
+    for (let rollNumber = 0; rollNumber < rollsCount; rollNumber++) {
+        let diceResult = 0;
+        for (diceIndex = 0; diceIndex < dicesCount; diceIndex++)
+            diceResult += getRandomNumber(1, dieSides);
+
+        results.push(diceResult);
+    }
+
+    return results;
+}
+
 function getRandomNumber(min, max) {
     if (!Random)
         return getRandomNumberInternal(min, max);
@@ -4196,14 +4175,11 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_epi
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_legendary"]} - never break.
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_unique"]} - never break.`;
 
-        //Stats training
+        //Stats
         const statsList = JSON.stringify(getStatsList());
-        const statsAvailableForIncrease = getStatsAvailableForIncrease();
-        const statChangeValue = getRandomNumber(0, 3);
 
         //Dice (2d10)
-        const gmDice = getRandomNumber(1, 10) + getRandomNumber(1, 10);
-        const playerDice = getRandomNumber(1, 10) + getRandomNumber(1, 10);
+        const dices2d10 = getDiceResultsArray(2, 10, 4);     
         const playerCritDice = getRandomNumber(1, 20);
 
         //Response template
@@ -4791,8 +4767,8 @@ ActionDifficultModificator = min(120, ActionDifficult * (0.4 + ${characterStats.
 • ActionDifficultModificator - normalized value of ActionDifficult.
 ]
 
-#9.3.3. This is player dice result (2d10). Let's call it PlayerDiceResult = ${playerDice}.
-#9.3.4. This is gamemaster dice result (2d10). Let's call it GMDiceResult = ${gmDice}.
+#9.3.3. This is player dice result (2d10). Let's call it PlayerDiceResult = ${dices2d10.pop()}.
+#9.3.4. This is gamemaster dice result (2d10). Let's call it GMDiceResult = ${dices2d10.pop()}.
 
 #9.3.5. Calculate the difference using this formula:
 Difference = (PlayerDiceResult + StatModificator) - (GMDiceResult + ActionDifficultModificator)
@@ -4806,6 +4782,11 @@ If -5 ≤ Difference < 0:      Result = 'Minor Failure'
 If -10 ≤ Difference < -5:    Result = 'Serious Failure'
 If Difference < -10:         Result = 'Critical Failure'
 ]
+
+#9.3.6.1. If Result = 'Critical Success' (Difference ≥ 10) or
+If Result = 'Full Success' (5 ≤ Difference < 10), then mandatory do following:
+- Increase the most relevant characteristic as a reward for player.
+- Write to 'items_and_stat_calculations' which characteristic was increased and why.
 
 #9.3.7. Output to 'items_and_stat_calculations' the check calculation, Difference value and Result type with all mathematical details and formulas used.
 
@@ -4949,6 +4930,9 @@ The gamemaster is forbidden to:
 #9.2.2. Note that the player has completely succeeded in doing what player was trying to do. You should develop the game's plot based on this. 
 #9.2.3. It's mandatory to add some major positive event to the game's plot to reward the player for a critically successful dice roll.
 #9.2.4. Output to 'items_and_stat_calculations' that player's action was succeeded.
+#9.2.5. Mandatory do following:
+- Increase the most relevant characteristic as a reward for player.
+- Write to 'items_and_stat_calculations' which characteristic was increased and why.
 ` : `
 #9.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Failure!
 #9.2.1. It means that the player's action is failed automatically and no additional check is required. 
@@ -5010,6 +4994,9 @@ Volume >= TotalItemsVolume, where
 #9.7. When moving from location to location, checks are not made
 #9.8. More free interpretation of events
 #9.9. For output in the answer, translate the names of characteristics into natural language
+#9.10. On exceptional success in action check:
+- If the success was particularly impressive, increase the most relevant characteristic as a reward for player.
+- Write to 'items_and_stat_calculations' which characteristic was increased and why.
 `} ]
 		 
 #10 During dialogue or interaction with NPCs: 
@@ -5104,45 +5091,48 @@ ${ELEMENTS.useQuestsList.checked ? `
 	 
 #12. Player characteristics: reward and punishment.
 #12.1. Here is the list of all player characteristics: stats_list = ${statsList} .
-#12.2. During the game, a situation may arise where you need to permanently increase or decrease a certain characteristic of the player. This can happen for many reasons. Here is a list of some of them:
-- A characteristic may be increased as a reward for a task (quest) completed by the player.
-- A characteristic may be decreased due to the player's failure of a task (punishment for a quest failure).
+#12.2. During the game, a situation may arise where you need to permanently increase or decrease a certain characteristic of the player. This can happen for the following reasons:
+
+For characteristic increase:
+${!CHARACTER_INFO.rpgMode ? `
+- A characteristic should be increased when player achieves particularly impressive success result in an action. The increased characteristic should be the one most relevant to the successful action.
+` : `${playerCritDice == 20 ? `
+- A characteristic should be increased when player achieves Critical Success (player's crit dice == 20) in an action. The increased characteristic should be the one most relevant to the successful action.
+` : `
+- A characteristic should be increased when player achieves Critical Success (Difference ≥ 10) in an action. The increased characteristic should be the one most relevant to the successful action.
+- A characteristic should be increased when player achieves Full Success (5 ≤ Difference < 10) in an action. The increased characteristic should be the one most relevant to the successful action.
+`} `}
+- A characteristic may be increased as a reward for a quest completion, but only if this was specifically defined as the quest reward.
 - A characteristic may be increased because the player is blessed by a powerful NPC.
+
+For characteristic decrease:
 - A characteristic may be decreased because the player is cursed by a powerful NPC.
-- A player's characteristic may be decreased due to serious problems with the player character's body. For example, as a result of the loss of limbs or other serious injuries.
-- A player's characteristic may be increased as a result of the player training the chosen characteristic. For example, as a result of physical exercises.
-#12.3. Here is the maximum amount you can increase or decrease a player's characteristics this turn: stat_change_value = ${statChangeValue} .
-#12.3.1. If you want to increase or decrease more than one of the player's characteristics, you can divide the stat_change_value among the characteristics you want to modify. 
-#12.3.2. Each time you increase or decrease a characteristic, you subtract 1 from the stat_change_value. When stat_change_value is equal to 0, you can no longer increase or decrease player's characteristics this turn.
-#12.3.3. Don't increase or decrease the player's characteristics without the clear reason. There must be a reason for it. If there is no reason, then don't increase or decrease the player's characteristics.
-#12.4. Here is the list of player characteristics, that are available to increase: stats_increase_list = ${JSON.stringify(statsAvailableForIncrease)} .
-#12.4.1. The 'name' property of each object in the stats_increase_list is the name of characteristic, that you could increase if needed.
-#12.4.2. The 'maxValue' property of each object in the stats_increase_list is the maximum value, that you can use to increase the player's characteristic.
-#12.4.2.1. If value of 'maxValue' is equal to 0 or less than 0, you can't increase this player's characteristic.
-#12.4.3. You can increase only characteristics that are mentioned in the stats_increase_list.
-#12.5. If it's needed to increase player's characteristics, then include to the response the key 'statsIncreased': [
-#12.5.1. The value of 'statsIncreased' key is an array of objects, each of which represents the information about player's characteristic to increase.
-#12.5.2. Mandatory format for recording the value of each item of 'statsIncreased' array: { 'name': 'name_of_characteristic_to_increase', 'value': 'value_by_which_the_characteristic_is_increased' } .
-#12.5.3. To the 'name' value of key include the name of player's characteristic to increase. It's important to use the name in exactly the same format like in 'name' property of stats_increase_list. Use only english to write this value.
-#12.5.4. To the 'value' value of key include the number to which you decided to increase the player's characteristic.
-#12.5.5. Write to the 'items_and_stat_calculations' the reason of increasing the player's characteristic. 
+- A characteristic may be decreased as punishment for a quest failure, but only if this was specifically defined as the quest failure consequence.
+- A player's characteristic may be decreased due to serious problems with the player character's body (loss of limbs or other serious injuries).
+
+#12.3. Each turn, only one characteristic can be increased or decreased, and only by 1 point.
+#12.3.1. Don't increase or decrease the player's characteristics without the clear reason. There must be a reason for it. If there is no reason, then don't increase or decrease the player's characteristics.
+#12.3.2. Special case - Success rewards:
+${!CHARACTER_INFO.rpgMode ? `
+- Characteristic increase from particularly impressive success result in an action is considered separate from other characteristic changes.
+`: `${playerCritDice == 20 ? `
+- Characteristic increase from Critical Success is considered separate from other characteristic changes.` : `
+- Characteristic increase from Critical Success or Full Success is considered separate from other characteristic changes. `}
+`}
+- When success reward is applied, another characteristic can still be modified this turn for a different reason.
+- They must be logged in 'items_and_stat_calculations' with a clear indication of the success type that triggered the increase.
+
+#12.4. If it's needed to increase player's characteristics, then include to the response the key 'statsIncreased': [
+#12.4.1. The value of 'statsIncreased' key is an array of strings, each of which represents the name of player's characteristic to increase.
+#12.4.2. It's important to use the names in exactly the same format like in stats_list. Use only english to write the characteristic names for this array.
+#12.4.3. Write to the 'items_and_stat_calculations' the reason of increasing the player's characteristic. 
 ]
-#12.6. If it's needed to decrease player's characteristics, then include to the response the key 'statsDecreased': [
-#12.6.1. You can decrease any characteristic from the stats_list if needed.
-#12.6.2. The value of 'statsDecreased' key is an array of objects, each of which represents the information about player's characteristic to decrease.
-#12.6.3. Mandatory format for recording the value of each item of 'statsDecreased' array: { 'name': 'name_of_characteristic_to_decrease', 'value': 'value_by_which_the_characteristic_is_decreased' } .
-#12.6.4. To the 'name' value of key include the name of player's characteristic to decrease. It's important to use the name in exactly the same format like in the stats_list. Use only english to write this value.
-#12.6.5. To the 'value' value of key include the number to which you decided to decrease the player's characteristic.
-#12.6.6. Write to the 'items_and_stat_calculations' the reason of decreasing the player's characteristic. 
+
+#12.5. If it's needed to decrease player's characteristics, then include to the response the key 'statsDecreased': [
+#12.5.1. The value of 'statsDecreased' key is an array of strings, each of which represents the name of player's characteristic to decrease.
+#12.5.2. It's important to use the names in exactly the same format like in stats_list. Use only english to write the characteristic names for this array.
+#12.5.3. Write to the 'items_and_stat_calculations' the reason of decreasing the player's characteristic. 
 ]
-#12.7. Training and Teaching the Player's Character. Rules.
-#12.7.1. Each time the player attempts to train, or learn something new, strictly follow these instructions: [ Let’s think step by step: [
-#12.7.2. Match the player character’s training or learning to a specific characteristic from this list: ${statsList} .
-#12.7.3. If this characteristic is present in the stats_increase_list, then do the following: [
-#12.7.4. Perform the characteristic check against the situation’s difficulty, following the rules set forth in '#7 Checking player actions: steps and requirements' . 
-#12.7.4.1. Note, that instead of 'Current location difficulty' you should use the current characteristic value ('StatValue') to calculate the difficulty.
-#12.7.5. If the check is successful, reward the player by increasing the corresponding characteristic. ]
-] ]
 
 #13 The 'location where the character was on the previous turn' is checked for compliance with the current location - if not, then the response includes the locationData key with the current location according to the following instruction: [ Let's think step by step :
 #13.1. Mandatory format for recording the value in the locationData key: {'name': 'current_location_name', 'difficulty': 'difficulty_in_numerical_value', 'lastEventsDescription': 'location_last_events_description_for_current_turn', 'description': 'current_location_description', 'image_prompt': 'prompt_to_generate_location_image'} . All this values of keys 'name' , 'difficulty' , 'lastEventsDescription' must never be empty.
@@ -5162,9 +5152,9 @@ ${ELEMENTS.useQuestsList.checked ? `
 #14.1.2. Each turn, the player spends energy unless they are trying to restore it in some way (for example, by resting or meditating).
 #14.1.3. If the player is rested/meditated/etc. or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate energy restoration effect, then the player's energy should be restored to the required level.
 #14.1.4. If a player takes multiple actions in current turn, sum their energy change up and record the final value in 'currentEnergyChange'.
-${characterStats.currentEnergy < 40 && characterStats.currentEnergy > 10 ? `#14.2. The current energy of player character is less than 40. It means, that player character mandatory loses additional 1 or 2 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is tired and needs to rest, otherwise it will affect player's health.` : ``}
-${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player character is less than 10. It means, that player character mandatory loses additional 3-10 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is very tired and needs to rest, otherwise it will affect player's health very fast.` : ``}
-
+${characterStats.currentEnergy == 0 ?
+`#14.2.The current energy of player character is 0. It means, that player character mandatory loses additional 1-10 health this turn. Add this health lose to 'currentHealthChange'. You must notify that player is very tired and needs to rest, otherwise it will affect player's health very fast.`
+: ``}
 #14.3. All successful player actions give experience (XP) to the player character. The amount of experience is entered in the value of the 'experienceGained' key (value type: positive integer).
 #14.4. When a player needs to receive an XP, do following check to calculate the experience: [
 #14.4.1. Let's describe the BaseXP. BaseXP is the foundational experience points awarded for an action based on its complexity and significance:
@@ -5475,7 +5465,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 17. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
  ] ]`;
 
-        //console.log(prompt);
+        console.log(prompt);
         lastUserMessage = currentMessage;
         ELEMENTS.actionButtons.forEach(button => button.style.display = 'none');
 
@@ -5611,13 +5601,13 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             }
 
             if (data.statsDecreased && data.statsDecreased.length > 0) {
-                for (data of data.statsDecreased)
-                    decreasePlayerStat(data.name, Number(data.value ?? 0));
+                for (const statName of data.statsDecreased)
+                    decreasePlayerStat(statName, 1, data.items_and_stat_calculations);
             }
 
             if (data.statsIncreased && data.statsIncreased.length > 0) {
-                for (data of data.statsIncreased)
-                    increasePlayerStat(data.name, Number(data.value ?? 0));
+                for (const statName of data.statsIncreased)
+                    increasePlayerStat(statName, 1, data.items_and_stat_calculations);
             }
 
             if (data.experienceGained)

@@ -6817,6 +6817,40 @@ Openrouter (https://openrouter.ai/). Il existe des modèles gratuits et payants.
             return id;
         },
 
+        setStatIncreaseForbiddenMessage: function (statName) {
+            const id = "stat_forbidden_to_increase_message";
+
+            this.setTranslation("russian-language", id,
+                `Внимание! Характеристика '${statName}' не была повышена из-за ограничений по уровню. Характеристика может быть увеличена в качестве награды, только если она меньше значения текущего уровня персонажа игрока.`
+            );
+
+            this.setTranslation("english-language", id,
+                `Attention! The attribute '${statName}' was not increased due to level restrictions. An attribute can only be increased as a reward if it is lower than the player's current character level.`
+            );
+
+            this.setTranslation("spanish-language", id,
+                `¡Atención! La característica '${statName}' no se incrementó debido a restricciones de nivel. Una característica solo puede aumentarse como recompensa si es inferior al nivel actual del personaje del jugador.`
+            );
+
+            this.setTranslation("portuguese-language", id,
+                `Atenção! O atributo '${statName}' não foi aumentado devido a restrições de nível. Um atributo só pode ser aumentado como recompensa se for menor que o nível atual do personagem do jogador.`
+            );
+
+            this.setTranslation("hindi-language", id,
+                `ध्यान दें! '${statName}' विशेषता को स्तर प्रतिबंधों के कारण नहीं बढ़ाया जा सका। किसी विशेषता को इनाम के तौर पर केवल तभी बढ़ाया जा सकता है, जब वह खिलाड़ी के चरित्र के वर्तमान स्तर से कम हो।`
+            );
+
+            this.setTranslation("german-language", id,
+                `Achtung! Der Wert '${statName}' wurde aufgrund von Levelbeschränkungen nicht erhöht. Ein Wert kann nur als Belohnung erhöht werden, wenn er unterhalb des aktuellen Spielercharakter-Levels liegt.`
+            );
+
+            this.setTranslation("french-language", id,
+                `Attention ! La caractéristique '${statName}' n'a pas été augmentée en raison de restrictions de niveau. Une caractéristique ne peut être augmentée en guise de récompense que si elle est inférieure au niveau actuel du personnage du joueur.`
+            );
+
+            return id;
+        },
+
         setStatDecreasedMessage: function (statName, decreaseValue) {
             const id = "stat_decreased_message";
 
@@ -6827,6 +6861,40 @@ Openrouter (https://openrouter.ai/). Il existe des modèles gratuits et payants.
             this.setTranslation("hindi-language", id, `ध्यान दें! '${statName}' गुण ${decreaseValue} से कम हो गया है!`);
             this.setTranslation("german-language", id, `Achtung! Die Eigenschaft '${statName}' hat sich um ${decreaseValue} verringert!`);
             this.setTranslation("french-language", id, `Attention ! La caractéristique '${statName}' a diminué de ${decreaseValue} !`);
+
+            return id;
+        },
+
+        setStatDecreaseForbiddenMessage: function (statName) {
+            const id = "stat_forbidden_to_decrease_message";
+
+            this.setTranslation("russian-language", id,
+                `Внимание! Характеристика '${statName}' не была понижена, поскольку значение характеристики не может быть меньше 0.`
+            );
+
+            this.setTranslation("english-language", id,
+                `Attention! The attribute '${statName}' was not decreased because its value cannot go below 0.`
+            );
+
+            this.setTranslation("spanish-language", id,
+                `¡Atención! La característica '${statName}' no se redujo porque su valor no puede ser inferior a 0.`
+            );
+
+            this.setTranslation("portuguese-language", id,
+                `Atenção! O atributo '${statName}' não foi reduzido porque seu valor não pode ser inferior a 0.`
+            );
+
+            this.setTranslation("hindi-language", id,
+                `ध्यान दें! '${statName}' विशेषता को कम नहीं किया जा सका क्योंकि इसका मान 0 से कम नहीं हो सकता।`
+            );
+
+            this.setTranslation("german-language", id,
+                `Achtung! Der Wert '${statName}' wurde nicht verringert, da er nicht unter 0 fallen kann.`
+            );
+
+            this.setTranslation("french-language", id,
+                `Attention ! La caractéristique '${statName}' n'a pas été réduite car sa valeur ne peut pas être inférieure à 0.`
+            );
 
             return id;
         },
