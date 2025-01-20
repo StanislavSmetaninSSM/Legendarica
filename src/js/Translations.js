@@ -676,7 +676,6 @@ Enjoy the game!`,
             "hybrid": "Hybrid",
             "ancient": "Ancient",
             "total-weight-label": "Total Weight (kg):",
-            "tooltip-max-weight": "Calculated by the GM at the end of each turn. Maximum weight = (Strength + Stamina) * 3 + 10",
             "max-weight-label": "Maximum Weight (kg):",
             "use-weight-control-label": "Use Weight in Game",
             "maximum-weight-exceeded-label": "Character's maximum weight exceeded! The specified items have been moved to the cart: ",
@@ -856,6 +855,15 @@ Enjoy the game!`,
             "abort-error-message": "Request aborted by the player",
             "common-error-message": "Error during the request:",
             "cancel-button": "Cancel",
+            "use-separate-response-label": "Split the answer into two requests for higher quality (consumes many tokens)",
+            "use-thinking-module-for-response-label": "Let the think module think only about the text of the main response (chat message)",
+            "other-settings-section-label": "Other Settings",
+            "image-settings-section-label": "Image Generation Settings",
+            "model-settings-section-label": "Neural Network Provider and Model Settings",
+            "functionality-settings-section-label": "Additional Functionality Settings",
+            "thinking-module-settings-section-label": "Thinking Module Settings",
+            "system-settings-section-label": "System Settings",
+            "tooltip-max-weight": "Maximum weight = Level * 3 + 20",
         },
         "russian-language": {
             // placeholders
@@ -1515,7 +1523,6 @@ Enjoy the game!`,
             "hybrid": "Гибрид",
             "ancient": "Древний",
             "total-weight-label": "Общий вес (кг):",
-            "tooltip-max-weight": "Рассчитывается ГМ-ом в конце каждого хода. Максимальный вес = (Сила + Выносливость) * 3 + 10",
             "max-weight-label": "Максимальный вес (кг):",
             "use-weight-control-label": "Использовать вес в игре",
             "maximum-weight-exceeded-label": "Превышен максимальный вес персонажа! Указанные предметы были перенесены в корзину: ",
@@ -1695,6 +1702,15 @@ Enjoy the game!`,
             "abort-error-message": "Запрос отменен игроком",
             "common-error-message": "Ошибка при запросе:",
             "cancel-button": "Отменить",
+            "use-separate-response-label": "Разделить ответ на два запроса, чтобы писать более качественно (тратится много токенов)",
+            "use-thinking-module-for-response-label": "Пусть модуль обдумывания размышляет только о тексте основного ответа (сообщения чата)",
+            "other-settings-section-label": "Остальные настройки",
+            "image-settings-section-label": "Настройки генерации изображений",
+            "model-settings-section-label": "Настройки провайдера и модели нейросети",
+            "functionality-settings-section-label": "Настройки дополнительного функционала",
+            "thinking-module-settings-section-label": "Настройки модуля обдумывания",
+            "system-settings-section-label": "Системные настройки",
+            "tooltip-max-weight": "Максимальный вес = Уровень * 3 + 20",
         },
         "spanish-language": {
             // placeholders
@@ -2358,7 +2374,6 @@ Por favor, considera apoyarme (Lottarend, el autor del juego). Los enlaces para 
             "hybrid": "Híbrido",
             "ancient": "Antiguo",
             "total-weight-label": "Peso Total (kg):",
-            "tooltip-max-weight": "Calculado por el GM al final de cada turno. Peso máximo = (Fuerza + Resistencia) * 3 + 10",
             "max-weight-label": "Peso Máximo (kg):",
             "use-weight-control-label": "Usar peso en el juego",
             "maximum-weight-exceeded-label": "¡Peso máximo del personaje excedido! Los objetos especificados han sido movidos al carrito: ",
@@ -2538,6 +2553,15 @@ Por favor, considera apoyarme (Lottarend, el autor del juego). Los enlaces para 
             "abort-error-message": "Solicitud cancelada por el jugador",
             "common-error-message": "Error durante la solicitud:",
             "cancel-button": "Cancelar",
+            "use-separate-response-label": "Dividir la respuesta en dos solicitudes para escribir con mayor calidad (consume muchos tokens)",
+            "use-thinking-module-for-response-label": "Permite que el módulo de razonamiento se concentre solo en el texto de la respuesta principal (mensaje de chat)",
+            "other-settings-section-label": "Otras configuraciones",
+            "image-settings-section-label": "Configuraciones de generación de imágenes",
+            "model-settings-section-label": "Configuraciones del proveedor y modelo de red neuronal",
+            "functionality-settings-section-label": "Configuraciones de funcionalidad adicional",
+            "thinking-module-settings-section-label": "Configuraciones del módulo de razonamiento",
+            "system-settings-section-label": "Configuraciones del sistema",
+            "tooltip-max-weight": "Peso máximo = Nivel * 3 + 20",
         },
         "portuguese-language": {
             // placeholders
@@ -3201,7 +3225,6 @@ Aproveite o jogo!`,
             "hybrid": "Híbrido",
             "ancient": "Antigo",
             "total-weight-label": "Peso Total (kg):",
-            "tooltip-max-weight": "Calculado pelo GM no final de cada turno. Peso máximo = (Força + Resistência) * 3 + 10",
             "max-weight-label": "Peso Máximo (kg):",
             "use-weight-control-label": "Usar peso no jogo",
             "maximum-weight-exceeded-label": "Peso máximo do personagem excedido! Os itens especificados foram movidos para o carrinho: ",
@@ -3381,6 +3404,15 @@ Aproveite o jogo!`,
             "abort-error-message": "Solicitação cancelada pelo jogador",
             "common-error-message": "Erro durante a solicitação:",
             "cancel-button": "Cancelar",
+            "use-separate-response-label": "Dividir a resposta em duas solicitações para ter mais qualidade (consome muitos tokens)",
+            "use-thinking-module-for-response-label": "Permitir que o módulo de raciocínio se concentre apenas no texto principal da resposta (mensagem de chat)",
+            "other-settings-section-label": "Outras configurações",
+            "image-settings-section-label": "Configurações de geração de imagem",
+            "model-settings-section-label": "Configurações do provedor e modelo de rede neural",
+            "functionality-settings-section-label": "Configurações de funcionalidade adicional",
+            "thinking-module-settings-section-label": "Configurações do módulo de raciocínio",
+            "system-settings-section-label": "Configurações do sistema",
+            "tooltip-max-weight": "Peso máximo = Nível * 3 + 20",
         },
         "hindi-language": {
             "start-str": "शक्ति",
@@ -4042,7 +4074,6 @@ Aproveite o jogo!`,
             "hybrid": "हाइब्रिड",
             "ancient": "प्राचीन",
             "total-weight-label": "कुल वजन (किलोग्राम):",
-            "tooltip-max-weight": "प्रत्येक मोड़ के अंत में जीएम द्वारा गणना की जाती है। अधिकतम वजन = (शक्ति + सहनशक्ति) * 3 + 10",
             "max-weight-label": "अधिकतम वजन (किलोग्राम):",
             "use-weight-control-label": "खेल में वजन का उपयोग करें",
             "maximum-weight-exceeded-label": "पात्र का अधिकतम वजन पार कर गया! निर्दिष्ट आइटमों को कार्ट में स्थानांतरित कर दिया गया है: ",
@@ -4222,6 +4253,15 @@ Aproveite o jogo!`,
             "abort-error-message": "खिलाड़ी द्वारा अनुरोध रद्द कर दिया गया",
             "common-error-message": "अनुरोध के दौरान त्रुटि:",
             "cancel-button": "रद्द करें",
+            "use-separate-response-label": "उत्तर को दो अनुरोधों में बाँटें ताकि गुणवत्ता बेहतर हो (अधिक टोकन खर्च होते हैं)",
+            "use-thinking-module-for-response-label": "सोचने वाला मॉड्यूल केवल मुख्य उत्तर (चैट संदेश) के पाठ पर विचार करे",
+            "other-settings-section-label": "अन्य सेटिंग्स",
+            "image-settings-section-label": "इमेज जनरेशन सेटिंग्स",
+            "model-settings-section-label": "न्यूरल नेटवर्क प्रोवाइडर और मॉडल सेटिंग्स",
+            "functionality-settings-section-label": "अतिरिक्त कार्यक्षमता की सेटिंग्स",
+            "thinking-module-settings-section-label": "विचार-मॉड्यूल की सेटिंग्स",
+            "system-settings-section-label": "सिस्टम सेटिंग्स",
+            "tooltip-max-weight": "अधिकतम वजन = स्तर * 3 + 20",
         },
         "german-language": {
             // placeholders
@@ -4886,7 +4926,6 @@ Viel Spaß beim Spielen!`,
             "hybrid": "Hybrid",
             "ancient": "Antik",
             "total-weight-label": "Gesamtgewicht (kg):",
-            "tooltip-max-weight": "Vom GM am Ende jedes Zuges berechnet. Maximales Gewicht = (Stärke + Ausdauer) * 3 + 10",
             "max-weight-label": "Maximales Gewicht (kg):",
             "use-weight-control-label": "Gewicht im Spiel verwenden",
             "maximum-weight-exceeded-label": "Maximales Gewicht des Charakters überschritten! Die angegebenen Gegenstände wurden in den Warenkorb verschoben: ",
@@ -5066,6 +5105,15 @@ Viel Spaß beim Spielen!`,
             "abort-error-message": "Anfrage vom Spieler abgebrochen",
             "common-error-message": "Fehler bei der Anfrage:",
             "cancel-button": "Abbrechen",
+            "use-separate-response-label": "Antwort in zwei Anfragen aufteilen, um hochwertiger zu schreiben (verbraucht viele Tokens)",
+            "use-thinking-module-for-response-label": "Das Denkmodul soll nur über den Hauptantworttext (Chat-Nachricht) nachdenken",
+            "other-settings-section-label": "Weitere Einstellungen",
+            "image-settings-section-label": "Einstellungen zur Bilderzeugung",
+            "model-settings-section-label": "Einstellungen für Anbieter und Modell des neuronalen Netzwerks",
+            "functionality-settings-section-label": "Zusätzliche Funktions-Einstellungen",
+            "thinking-module-settings-section-label": "Einstellungen des Denkmoduls",
+            "system-settings-section-label": "Systemeinstellungen",
+            "tooltip-max-weight": "Maximales Gewicht = Stufe * 3 + 20",
         },
         "french-language": {
             // placeholders
@@ -5731,7 +5779,6 @@ Bon jeu !`,
             "hybrid": "Hybride",
             "ancient": "Ancien",
             "total-weight-label": "Poids Total (kg):",
-            "tooltip-max-weight": "Calculé par le GM à la fin de chaque tour. Poids maximum = (Force + Endurance) * 3 + 10",
             "max-weight-label": "Poids Maximum (kg):",
             "use-weight-control-label": "Utiliser le poids dans le jeu",
             "maximum-weight-exceeded-label": "Poids maximum du personnage dépassé! Les objets spécifiés ont été déplacés dans le panier: ",
@@ -5911,6 +5958,15 @@ Bon jeu !`,
             "abort-error-message": "Requête annulée par le joueur",
             "common-error-message": "Erreur lors de la requête :",
             "cancel-button": "Annuler",
+            "use-separate-response-label": "Diviser la réponse en deux requêtes pour une meilleure qualité (consomme beaucoup de jetons)",
+            "use-thinking-module-for-response-label": "Laisser le module de réflexion ne se concentrer que sur le texte principal de la réponse (message de chat)",
+            "other-settings-section-label": "Autres paramètres",
+            "image-settings-section-label": "Paramètres de génération d'images",
+            "model-settings-section-label": "Paramètres du fournisseur et du modèle de réseau neuronal",
+            "functionality-settings-section-label": "Paramètres des fonctionnalités supplémentaires",
+            "thinking-module-settings-section-label": "Paramètres du module de réflexion",
+            "system-settings-section-label": "Paramètres du système",
+            "tooltip-max-weight": "Poids maximum = Niveau * 3 + 20",
         }
     };
 
@@ -6096,6 +6152,10 @@ Bon jeu !`,
             "api-key-label4", "api-key-button4", "api-key4", "additional-settings-label4", "tooltip-provider-ai4",
             "post-apocalypse-campaign-message-label", "post-apocalyptic-game", "create-character-post-apocalyptic-label",
             "thinking-module-iterations-label", "use-literary-prompt-label", "use-erotic-prompt-label", "cancel-button",
+            "use-separate-response-label", "use-thinking-module-for-response-label",
+            "other-settings-section-label", "image-settings-section-label", "model-settings-section-label",
+            "functionality-settings-section-label", "thinking-module-settings-section-label", "system-settings-section-label",
+
         ];
 
         //Update labels
@@ -6817,6 +6877,40 @@ Openrouter (https://openrouter.ai/). Il existe des modèles gratuits et payants.
             return id;
         },
 
+        setStatIncreaseForbiddenMessage: function (statName) {
+            const id = "stat_forbidden_to_increase_message";
+
+            this.setTranslation("russian-language", id,
+                `Внимание! Характеристика '${statName}' не была повышена из-за ограничений по уровню. Характеристика может быть увеличена в качестве награды, только если она меньше значения текущего уровня персонажа игрока.`
+            );
+
+            this.setTranslation("english-language", id,
+                `Attention! The attribute '${statName}' was not increased due to level restrictions. An attribute can only be increased as a reward if it is lower than the player's current character level.`
+            );
+
+            this.setTranslation("spanish-language", id,
+                `¡Atención! La característica '${statName}' no se incrementó debido a restricciones de nivel. Una característica solo puede aumentarse como recompensa si es inferior al nivel actual del personaje del jugador.`
+            );
+
+            this.setTranslation("portuguese-language", id,
+                `Atenção! O atributo '${statName}' não foi aumentado devido a restrições de nível. Um atributo só pode ser aumentado como recompensa se for menor que o nível atual do personagem do jogador.`
+            );
+
+            this.setTranslation("hindi-language", id,
+                `ध्यान दें! '${statName}' विशेषता को स्तर प्रतिबंधों के कारण नहीं बढ़ाया जा सका। किसी विशेषता को इनाम के तौर पर केवल तभी बढ़ाया जा सकता है, जब वह खिलाड़ी के चरित्र के वर्तमान स्तर से कम हो।`
+            );
+
+            this.setTranslation("german-language", id,
+                `Achtung! Der Wert '${statName}' wurde aufgrund von Levelbeschränkungen nicht erhöht. Ein Wert kann nur als Belohnung erhöht werden, wenn er unterhalb des aktuellen Spielercharakter-Levels liegt.`
+            );
+
+            this.setTranslation("french-language", id,
+                `Attention ! La caractéristique '${statName}' n'a pas été augmentée en raison de restrictions de niveau. Une caractéristique ne peut être augmentée en guise de récompense que si elle est inférieure au niveau actuel du personnage du joueur.`
+            );
+
+            return id;
+        },
+
         setStatDecreasedMessage: function (statName, decreaseValue) {
             const id = "stat_decreased_message";
 
@@ -6827,6 +6921,40 @@ Openrouter (https://openrouter.ai/). Il existe des modèles gratuits et payants.
             this.setTranslation("hindi-language", id, `ध्यान दें! '${statName}' गुण ${decreaseValue} से कम हो गया है!`);
             this.setTranslation("german-language", id, `Achtung! Die Eigenschaft '${statName}' hat sich um ${decreaseValue} verringert!`);
             this.setTranslation("french-language", id, `Attention ! La caractéristique '${statName}' a diminué de ${decreaseValue} !`);
+
+            return id;
+        },
+
+        setStatDecreaseForbiddenMessage: function (statName) {
+            const id = "stat_forbidden_to_decrease_message";
+
+            this.setTranslation("russian-language", id,
+                `Внимание! Характеристика '${statName}' не была понижена, поскольку значение характеристики не может быть меньше 0.`
+            );
+
+            this.setTranslation("english-language", id,
+                `Attention! The attribute '${statName}' was not decreased because its value cannot go below 0.`
+            );
+
+            this.setTranslation("spanish-language", id,
+                `¡Atención! La característica '${statName}' no se redujo porque su valor no puede ser inferior a 0.`
+            );
+
+            this.setTranslation("portuguese-language", id,
+                `Atenção! O atributo '${statName}' não foi reduzido porque seu valor não pode ser inferior a 0.`
+            );
+
+            this.setTranslation("hindi-language", id,
+                `ध्यान दें! '${statName}' विशेषता को कम नहीं किया जा सका क्योंकि इसका मान 0 से कम नहीं हो सकता।`
+            );
+
+            this.setTranslation("german-language", id,
+                `Achtung! Der Wert '${statName}' wurde nicht verringert, da er nicht unter 0 fallen kann.`
+            );
+
+            this.setTranslation("french-language", id,
+                `Attention ! La caractéristique '${statName}' n'a pas été réduite car sa valeur ne peut pas être inférieure à 0.`
+            );
 
             return id;
         },

@@ -19,6 +19,7 @@ const APIModule = (function getAPIModule() {
     let apiKey = "";
     let prompt = "";
     let systemInstructions = "";
+    let responseMimeType = "application/json";
 
     //Model parameters
     let frequencyPenalty = "";
@@ -135,6 +136,8 @@ const APIModule = (function getAPIModule() {
     return {
         initialize: function (parameters) {
             doNotParse = parameters.doNotParse;
+            if (doNotParse)
+                responseMimeType = 'text/plain';
             useStreaming = parameters.useStreaming;
 
             //Connection and prompt data
@@ -247,7 +250,7 @@ const APIModule = (function getAPIModule() {
                     parts: [{ "text": prompt }]
                 }],
                 generationConfig: {
-                    responseMimeType: "application/json"
+                    responseMimeType: responseMimeType
                 },
                 safetySettings: [
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },

@@ -257,10 +257,11 @@ const ELEMENTS = {
     useQuestsList: document.getElementById('useQuestsList'),
     makeGameQuestOriented: document.getElementById('makeGameQuestOriented'),
     useThinkingModule: document.getElementById('useThinkingModule'),
-    useWeightControl: document.getElementById('useWeightControl'),
+    useThinkingModuleForResponse: document.getElementById('useThinkingModuleForResponse'),
     thinkingModuleIterations: document.getElementById('thinkingModuleIterations'),
     useLiteraryPrompt: document.getElementById('useLiteraryPrompt'),
     useEroticPrompt: document.getElementById('useEroticPrompt'),
+    useSeparateResponse: document.getElementById('useSeparateResponse'),
 
     //Graphics
     floatingImg: document.getElementById('floating'), // Splash screen
@@ -325,7 +326,6 @@ let statusDataEffects = [];
 let passiveSkills = [];
 let activeSkills = [];
 let lastUserMessage = 'game';
-let maxWeight = undefined;
 const criticalExcessWeight = 10;
 
 //--------------------------------------------------------------------MAIN GAME FEATURES---------------------------------------------------------------------//
@@ -1245,68 +1245,27 @@ function getStatsList() {
     ]
 }
 
-function getStatsAvailableForIncrease() {
-    const stats = [];
-
-    if (characterStats.strength <= characterStats.level)
-        stats.push(getStatData("strength", characterStats.strength));
-
-    if (characterStats.dexterity <= characterStats.level)
-        stats.push(getStatData("dexterity", characterStats.dexterity));
-
-    if (characterStats.constitution <= characterStats.level)
-        stats.push(getStatData("constitution", characterStats.constitution));
-
-    if (characterStats.intelligence <= characterStats.level)
-        stats.push(getStatData("intelligence", characterStats.intelligence));
-
-    if (characterStats.wisdom <= characterStats.level)
-        stats.push(getStatData("wisdom", characterStats.wisdom));
-
-    if (characterStats.attractiveness <= characterStats.level)
-        stats.push(getStatData("attractiveness", characterStats.attractiveness));
-
-    if (characterStats.trade <= characterStats.level)
-        stats.push(getStatData("trade", characterStats.trade));
-
-    if (characterStats.persuasion <= characterStats.level)
-        stats.push(getStatData("persuasion", characterStats.persuasion));
-
-    if (characterStats.perception <= characterStats.level)
-        stats.push(getStatData("perception", characterStats.perception));
-
-    if (characterStats.luck <= characterStats.level)
-        stats.push(getStatData("luck", characterStats.luck));
-
-    if (characterStats.speed <= characterStats.level)
-        stats.push(getStatData("speed", characterStats.speed));
-
-    return stats;
-
-    function getStatData(name, value) {
-        return {
-            name: name,
-            maxValue: characterStats.level - value
-        }
-    }
-}
-
-function increasePlayerStat(name, value) {
+function increasePlayerStat(name, value, logs) {
     const key = getPlayerStatByName(name);
     if (!key)
         return;
+
+    const statName = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][key.toLowerCase()];
 
     const oldValue = characterStats[key];
     let newValue = characterStats[key] + value;
     if (newValue > characterStats.level)
         newValue = characterStats.level;
 
-    if (oldValue >= newValue)
+    if (oldValue >= newValue) {
+        if (Array.isArray(logs)) {
+            const errorMessageId = translationModule.setStatIncreaseForbiddenMessage(statName);
+            logs.push(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][errorMessageId]);
+        }
         return;
+    }
 
     characterStats[key] = newValue;
-
-    const statName = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][key.toLowerCase()];
     const valueDifference = newValue - oldValue;
 
     const messageId = translationModule.setStatIncreasedMessage(statName, valueDifference);
@@ -1315,22 +1274,27 @@ function increasePlayerStat(name, value) {
     updateStatsWithoutGm();
 }
 
-function decreasePlayerStat(name, value) {
+function decreasePlayerStat(name, value, logs) {
     const key = getPlayerStatByName(name);
     if (!key)
         return;
+
+    const statName = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][key.toLowerCase()];
 
     const oldValue = characterStats[key];
     let newValue = characterStats[key] - value;
     if (newValue < 0)
         newValue = 0;
 
-    if (newValue >= oldValue)
+    if (newValue >= oldValue) {
+        if (Array.isArray(logs)) {
+            const errorMessageId = translationModule.setStatDecreaseForbiddenMessage(statName);
+            logs.push(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][errorMessageId]);
+        }
         return;
+    }
 
     characterStats[key] = newValue;
-
-    const statName = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][key.toLowerCase()];
     const valueDifference = oldValue - newValue;
 
     const messageId = translationModule.setStatDecreasedMessage(statName, valueDifference);
@@ -2884,21 +2848,17 @@ function setStatusEffects(statusEffects) {
 
 //---- WEIGHT ----//
 function updateWeight() {
+    const maxWeight = calculateMaxWeight();
     const totalWeight = calculateTotalInventoryWeight();
-    ELEMENTS.totalWeight.innerHTML = totalWeight.toFixed(2);
-    if (maxWeight) {
-        ELEMENTS.maxWeight.innerHTML = maxWeight;
-        ELEMENTS.criticalWeight.innerHTML = maxWeight + criticalExcessWeight;
 
-        if (totalWeight <= maxWeight)
-            ELEMENTS.weightStatus.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["weight-status-value-normal"];
-        else
-            ELEMENTS.weightStatus.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["weight-status-value-bad"];
-    } else {
-        ELEMENTS.maxWeight.innerHTML = "-";
-        ELEMENTS.criticalWeight.innerHTML = "-";
-        ELEMENTS.weightStatus.innerHTML = "-";
-    }
+    ELEMENTS.totalWeight.innerHTML = totalWeight.toFixed(2);    
+    ELEMENTS.maxWeight.innerHTML = maxWeight.toFixed(2);
+    ELEMENTS.criticalWeight.innerHTML = (maxWeight + criticalExcessWeight).toFixed(2);
+
+    if (totalWeight <= maxWeight)
+        ELEMENTS.weightStatus.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["weight-status-value-normal"];
+    else
+        ELEMENTS.weightStatus.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["weight-status-value-bad"];    
 }
 
 //---- CLOSE ACTIONS ----//
@@ -3372,6 +3332,21 @@ function getMaxGmSymbols() {
     return ELEMENTS.maxGmSymbols.value ? Number(ELEMENTS.maxGmSymbols.value) : 20000;
 }
 
+//for example, for 3 rolls of 2d10: dieSides - 10, dicesCount - 2, rollsCount - 3
+function getDiceResultsArray(dicesCount, dieSides, rollsCount) {
+    const results = [];
+
+    for (let rollNumber = 0; rollNumber < rollsCount; rollNumber++) {
+        let diceResult = 0;
+        for (diceIndex = 0; diceIndex < dicesCount; diceIndex++)
+            diceResult += getRandomNumber(1, dieSides);
+
+        results.push(diceResult);
+    }
+
+    return results;
+}
+
 function getRandomNumber(min, max) {
     if (!Random)
         return getRandomNumberInternal(min, max);
@@ -3684,11 +3659,11 @@ function moveItem(currentItem, originalItemsArray, destinationItemsArray, recalc
         adjustInventoryContainerCapacity(inventory);
         adjustInventoryContainerVolume(inventory);
         calculateParametersForItemsArray(inventory);
-        if (ELEMENTS.useWeightControl.checked) {
-            adjustInventoryWeightAndRemoveNeeded(maxWeight + criticalExcessWeight, [currentItem]);
-            updateWeight();
-            updateInventoryList(ELEMENTS.inventoryBasket, inventoryBasket);
-        }
+
+        const maxWeight = calculateMaxWeight();
+        adjustInventoryWeightAndRemoveNeeded(maxWeight + criticalExcessWeight, [currentItem]);
+        updateWeight();
+        updateInventoryList(ELEMENTS.inventoryBasket, inventoryBasket);        
     }
 
     updateInventoryInfoWindows(currentItem, originalItemsArray, destinationItemsArray);
@@ -3720,8 +3695,7 @@ function deleteItem(currentItem, itemsArray, recalculate, pushToBasket) {
 
     if (recalculate) {
         calculateParametersForItemsArray(inventory);
-        if (ELEMENTS.useWeightControl.checked)
-            updateWeight();
+        updateWeight();
     }
 
     if (pushToBasket) {
@@ -3776,6 +3750,10 @@ function setContentHeight(element) {
 
 function convertToBoolean(value) {
     return value?.toString()?.toLowerCase() === "true" ? true : false;
+}
+
+function calculateMaxWeight() {
+    return characterStats.level * 3 + 20;
 }
 
 //----------------------------------------------------------------SAVE/LOAD ACTIONS-----------------------------------------------------------------------//
@@ -4196,14 +4174,12 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_epi
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_legendary"]} - never break.
 ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_unique"]} - never break.`;
 
-        //Stats training
+        //Stats
         const statsList = JSON.stringify(getStatsList());
-        const statsAvailableForIncrease = getStatsAvailableForIncrease();
-        const statChangeValue = getRandomNumber(0, 3);
+        const maxWeight = calculateMaxWeight();
 
         //Dice (2d10)
-        const gmDice = getRandomNumber(1, 10) + getRandomNumber(1, 10);
-        const playerDice = getRandomNumber(1, 10) + getRandomNumber(1, 10);
+        const dices2d10 = getDiceResultsArray(2, 10, 4);     
         const playerCritDice = getRandomNumber(1, 20);
 
         //Response template
@@ -4227,7 +4203,8 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
             "removePassiveSkills": [] ,
             "removeActiveSkills": [] ,
             "statsIncreased": [] ,
-            "statsDecreased": []`;
+            "statsDecreased": [] ,
+            "calculatedWeightData": {}`;
         if (ELEMENTS.useStatus.checked)
             responseTemplate += ` , \n "statusData": {} , \n "statusDataEffects": []`;
         if (ELEMENTS.useNpcList.checked) {
@@ -4239,10 +4216,7 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
             }
         }
         if (ELEMENTS.useQuestsList.checked)
-            responseTemplate += ` , \n "questsData": []`;
-        if (ELEMENTS.useWeightControl.checked)
-            responseTemplate += ` , \n "calculatedWeightData": {}`;
-
+            responseTemplate += ` , \n "questsData": []`; 
         responseTemplate += ' }';
 
         //------- Prompt -------//
@@ -4336,45 +4310,35 @@ ${CHARACTER_INFO.nonMagicMode ? `
 #3.13.4. If you need to remove active player skill, include to the response the 'removeActiveSkills' key.
 #3.13.4.1. The value of 'removeActiveSkills' key is an array of strings, each of which is equal to player's active skill name. It's mandatory to use active skill names in exactly same format like in the active skills known from Context.
 
-${ELEMENTS.useWeightControl.checked ? `
 #3.14. You need to calculate the player character's weight related data to help game system making the checks on server-side. To do this: [
 #3.14.1. Include to the response the key 'calculatedWeightData', value of which is player character related weight data.
-#3.14.2. Mandatory the format for 'calculatedWeightData' object: { 'maxWeight': 'calculated_max_weight', 'additionalEnergyExpenditure': 'additional_energy_expenditure_due_to_weight_overload' } .
-#3.14.3. To the value of 'maxWeight' key include the numeric value (type of value: double), which is calculated using this formula:
-MaxWeight = (StrengthPlusConstitution + Bonuses) * 3 + 10, where
-• StrengthPlusConstitution - the sum of 'strength' and 'constitution' of player. This value is:  ${strengthPlusConstitution} .
-• Bonuses - all bonuses, which affects the 'strength' or 'constitution' of player.
-#3.14.4. To the value of 'additionalEnergyExpenditure' include the numeric value, which representing the additional energy expenditure due to weight overload.
-#3.14.4.1. When a player character carries too much weight, they become overload. When a player character is overloaded, they lose more energy per turn than normal.
-#3.14.4.2. This is the items weight of all items in player's inventory in the start of current turn. Let's call it CurrentTurnItemsWeight = ${totalWeight}.
-#3.14.4.3. You already have MaxWeight value, representing the maximum weight a character can carry without becoming overloaded.
-#3.14.4.4. If CurrentTurnItemsWeight > MaxWeight check is true, then player character is overloaded. Then follow this instruction: [
-#3.14.4.4.1. Calculate difference between CurrentTurnItemsWeight and MaxWeight. Let's call it WeightOverload:
+#3.14.2. Mandatory the format for 'calculatedWeightData' object: { 'additionalEnergyExpenditure': 'additional_energy_expenditure_due_to_weight_overload' } .
+#3.14.3. To the value of 'additionalEnergyExpenditure' include the numeric value, which representing the additional energy expenditure due to weight overload.
+#3.14.3.1. When a player character carries too much weight, they become overload. When a player character is overloaded, they lose more energy per turn than normal.
+#3.14.3.2. This is the items weight of all items in player's inventory in the start of current turn. Let's call it CurrentTurnItemsWeight = ${totalWeight}.
+#3.14.3.3. This is MaxWeight value, representing the maximum weight a player character can carry without becoming overloaded: MaxWeight = ${maxWeight}.
+#3.14.3.4. If CurrentTurnItemsWeight > MaxWeight check is true, then player character is overloaded. Then follow this instruction: [
+#3.14.3.4.1. Calculate difference between CurrentTurnItemsWeight and MaxWeight. Let's call it WeightOverload:
 WeightOverload = CurrentTurnItemsWeight - MaxWeight
-#3.14.4.4.2. Include to the 'additionalEnergyExpenditure' the value = WeightOverload * 2, which is energy costs that the player's character will additionally spend each turn.
-#3.14.4.4.3. Note: The server will automatically calculate and account for additional energy consumption due to overload. The GM should not change 'currentEnergyChange' due to overload.
+#3.14.3.4.2. Include to the 'additionalEnergyExpenditure' the value = WeightOverload * 2, which is energy costs that the player's character will additionally spend each turn.
+#3.14.3.4.3. Note: The server will automatically calculate and account for additional energy consumption due to overload. The GM should not change 'currentEnergyChange' due to overload.
 ], otherwise: [
-#3.14.4.5. Write to the 'additionalEnergyExpenditure' the null value.
+#3.14.3.5. Write to the 'additionalEnergyExpenditure' the null value.
 ] ]
 
 #3.15. This is group of instructions which are called WeightCheck. Follow these instructions when you see the direct command to run WeightCheck: [
-#3.15.1. This is the current sum of 'strength' + 'constitution' of player. Let's call it StrengthPlusConstitution = ${strengthPlusConstitution}.
-#3.15.2. Calculate all values from all item bonuses, all active and passive skill bonuses, and all possible effects affecting 'constitution' or 'strength' of player. Let's call it Bonuses.
-#3.15.3. Calculate MaxWeight property using this formula: MaxWeight = (StrengthPlusConstitution + Bonuses) * 3 + 10, where
-• StrengthPlusConstitution - the sum of 'strength' and 'constitution' of player.
-• Bonuses - all bonuses, which affects the 'strength' or 'constitution' of player.
-#3.15.4. This is the items weight of all items in player's inventory in the start of current turn. Let's call it CurrentTurnItemsWeight = ${totalWeight}.
-#3.15.5. Remember the sum of item weights of new items, which you already calculated before current check and added to the player's inventory. Let's call it NewItemsCalculatedWeight.
-#3.15.6. Calculate TotalWeight property using this formula: TotalWeight = CurrentTurnItemsWeight + NewItemsCalculatedWeight + NewItemWeight, where
+#3.15.1. This is MaxWeight value, representing the maximum weight a player character can carry without becoming overloaded: MaxWeight = ${maxWeight}.
+#3.15.2. This is the items weight of all items in player's inventory in the start of current turn. Let's call it CurrentTurnItemsWeight = ${totalWeight}.
+#3.15.3. Remember the sum of item weights of new items, which you already calculated before current check and added to the player's inventory. Let's call it NewItemsCalculatedWeight.
+#3.15.4. Calculate TotalWeight property using this formula: TotalWeight = CurrentTurnItemsWeight + NewItemsCalculatedWeight + NewItemWeight, where
 • NewItemWeight - the weight of new item, which player is trying to receive.
-#3.15.7. This is the critical weight that the character can carry. Let's call it CriticalWeight = MaxWeight + ${criticalExcessWeight} .
-#3.15.7.1. Information for understanding: MaxWeightValue - determines the weight that the character can carry without being overloaded, and CriticalWeight is the weight that the character can lift at all.
-#3.15.8. Make the final check using this formula: CriticalWeight > TotalWeight .
-#3.15.9. Return the boolean result of check: true if CriticalWeight > TotalWeight, and false otherwise. 
-#3.15.9.1. This check is mandatory and its result has priority over the result of any other skill check. Even a critical success on another check cannot override a failed weight check.
-#3.15.10. Mandatory output the calculation and result of check to 'items_and_stat_calculations'.
-] .
-`: ``}
+#3.15.5. This is the critical weight that the character can carry. Let's call it CriticalWeight = MaxWeight + ${criticalExcessWeight} .
+#3.15.5.1. Information for understanding: MaxWeight - determines the weight that the character can carry without being overloaded, and CriticalWeight is the weight that the character can lift at all.
+#3.15.6. Make the final check using this formula: CriticalWeight > TotalWeight .
+#3.15.7. Return the boolean result of check: true if CriticalWeight > TotalWeight, and false otherwise. 
+#3.15.7.1. This check is mandatory and its result has priority over the result of any other skill check. Even a critical success on another check cannot override a failed weight check.
+#3.15.8. Mandatory output the calculation and result of check to 'items_and_stat_calculations'.
+]
 
 #4  If one of these conditions are true: [
 - The player receives an item (receives means: to take in hand, put on wear, or place in pockets, backpack or bag) in current turn.
@@ -4384,9 +4348,7 @@ WeightOverload = CurrentTurnItemsWeight - MaxWeight
 #4.2. Mandatory the format for each object of 'inventoryItemsData' array: ${inventoryTemplate} . 
 #4.3. Include to the 'inventoryItemsData' only new items or items which data were changed. It's important to note, that this array only represents the data about changes and new items, and not the information about all player's inventory.
 #4.4. If player receives the new item, then: [
-${ELEMENTS.useWeightControl.checked ? `
 #4.4.0. Make a WeightCheck for the item. If the result of WeightCheck is true, then go to the next point. If the result is false, then mandatory skip any actions with current item (loop continue operator), and go to next one.
-` : ``}
 #4.4.1. Here is the original list of item templates available to the player in the current turn: items_list = ${JSON.stringify(loot)}. 
 #4.4.2. To assign a new item to the player, the gamemaster extracts the first item (template) from the items_list that has not yet been assigned in the current turn. Use item templates only from the original list of items in order, starting with the very first one in the items_list. It is forbidden to assign to the player any other items whose structure does not correspond to the template from the original list.
 #4.4.3. It is necessary to rename the received item from the original list of items (rename thing_[number] using ${translationModule.currentLanguage}) in accordance with the plot. ${CHARACTER_INFO.nonMagicMode ? ' Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.)' : ' '}
@@ -4791,8 +4753,8 @@ ActionDifficultModificator = min(120, ActionDifficult * (0.4 + ${characterStats.
 • ActionDifficultModificator - normalized value of ActionDifficult.
 ]
 
-#9.3.3. This is player dice result (2d10). Let's call it PlayerDiceResult = ${playerDice}.
-#9.3.4. This is gamemaster dice result (2d10). Let's call it GMDiceResult = ${gmDice}.
+#9.3.3. This is player dice result (2d10). Let's call it PlayerDiceResult = ${dices2d10.pop()}.
+#9.3.4. This is gamemaster dice result (2d10). Let's call it GMDiceResult = ${dices2d10.pop()}.
 
 #9.3.5. Calculate the difference using this formula:
 Difference = (PlayerDiceResult + StatModificator) - (GMDiceResult + ActionDifficultModificator)
@@ -4806,6 +4768,11 @@ If -5 ≤ Difference < 0:      Result = 'Minor Failure'
 If -10 ≤ Difference < -5:    Result = 'Serious Failure'
 If Difference < -10:         Result = 'Critical Failure'
 ]
+
+#9.3.6.1. If Result = 'Critical Success' (Difference ≥ 10) or
+If Result = 'Full Success' (5 ≤ Difference < 10), then mandatory do following:
+- Increase the most relevant characteristic as a reward for player.
+- Write to 'items_and_stat_calculations' which characteristic was increased and why.
 
 #9.3.7. Output to 'items_and_stat_calculations' the check calculation, Difference value and Result type with all mathematical details and formulas used.
 
@@ -4949,6 +4916,9 @@ The gamemaster is forbidden to:
 #9.2.2. Note that the player has completely succeeded in doing what player was trying to do. You should develop the game's plot based on this. 
 #9.2.3. It's mandatory to add some major positive event to the game's plot to reward the player for a critically successful dice roll.
 #9.2.4. Output to 'items_and_stat_calculations' that player's action was succeeded.
+#9.2.5. Mandatory do following:
+- Increase the most relevant characteristic as a reward for player.
+- Write to 'items_and_stat_calculations' which characteristic was increased and why.
 ` : `
 #9.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Failure!
 #9.2.1. It means that the player's action is failed automatically and no additional check is required. 
@@ -5010,6 +4980,9 @@ Volume >= TotalItemsVolume, where
 #9.7. When moving from location to location, checks are not made
 #9.8. More free interpretation of events
 #9.9. For output in the answer, translate the names of characteristics into natural language
+#9.10. On exceptional success in action check:
+- If the success was particularly impressive, increase the most relevant characteristic as a reward for player.
+- Write to 'items_and_stat_calculations' which characteristic was increased and why.
 `} ]
 		 
 #10 During dialogue or interaction with NPCs: 
@@ -5104,45 +5077,48 @@ ${ELEMENTS.useQuestsList.checked ? `
 	 
 #12. Player characteristics: reward and punishment.
 #12.1. Here is the list of all player characteristics: stats_list = ${statsList} .
-#12.2. During the game, a situation may arise where you need to permanently increase or decrease a certain characteristic of the player. This can happen for many reasons. Here is a list of some of them:
-- A characteristic may be increased as a reward for a task (quest) completed by the player.
-- A characteristic may be decreased due to the player's failure of a task (punishment for a quest failure).
+#12.2. During the game, a situation may arise where you need to permanently increase or decrease a certain characteristic of the player. This can happen for the following reasons:
+
+For characteristic increase:
+${!CHARACTER_INFO.rpgMode ? `
+- A characteristic should be increased when player achieves particularly impressive success result in an action. The increased characteristic should be the one most relevant to the successful action.
+` : `${playerCritDice == 20 ? `
+- A characteristic should be increased when player achieves Critical Success (player's crit dice == 20) in an action. The increased characteristic should be the one most relevant to the successful action.
+` : `
+- A characteristic should be increased when player achieves Critical Success (Difference ≥ 10) in an action. The increased characteristic should be the one most relevant to the successful action.
+- A characteristic should be increased when player achieves Full Success (5 ≤ Difference < 10) in an action. The increased characteristic should be the one most relevant to the successful action.
+`} `}
+- A characteristic may be increased as a reward for a quest completion, but only if this was specifically defined as the quest reward.
 - A characteristic may be increased because the player is blessed by a powerful NPC.
+
+For characteristic decrease:
 - A characteristic may be decreased because the player is cursed by a powerful NPC.
-- A player's characteristic may be decreased due to serious problems with the player character's body. For example, as a result of the loss of limbs or other serious injuries.
-- A player's characteristic may be increased as a result of the player training the chosen characteristic. For example, as a result of physical exercises.
-#12.3. Here is the maximum amount you can increase or decrease a player's characteristics this turn: stat_change_value = ${statChangeValue} .
-#12.3.1. If you want to increase or decrease more than one of the player's characteristics, you can divide the stat_change_value among the characteristics you want to modify. 
-#12.3.2. Each time you increase or decrease a characteristic, you subtract 1 from the stat_change_value. When stat_change_value is equal to 0, you can no longer increase or decrease player's characteristics this turn.
-#12.3.3. Don't increase or decrease the player's characteristics without the clear reason. There must be a reason for it. If there is no reason, then don't increase or decrease the player's characteristics.
-#12.4. Here is the list of player characteristics, that are available to increase: stats_increase_list = ${JSON.stringify(statsAvailableForIncrease)} .
-#12.4.1. The 'name' property of each object in the stats_increase_list is the name of characteristic, that you could increase if needed.
-#12.4.2. The 'maxValue' property of each object in the stats_increase_list is the maximum value, that you can use to increase the player's characteristic.
-#12.4.2.1. If value of 'maxValue' is equal to 0 or less than 0, you can't increase this player's characteristic.
-#12.4.3. You can increase only characteristics that are mentioned in the stats_increase_list.
-#12.5. If it's needed to increase player's characteristics, then include to the response the key 'statsIncreased': [
-#12.5.1. The value of 'statsIncreased' key is an array of objects, each of which represents the information about player's characteristic to increase.
-#12.5.2. Mandatory format for recording the value of each item of 'statsIncreased' array: { 'name': 'name_of_characteristic_to_increase', 'value': 'value_by_which_the_characteristic_is_increased' } .
-#12.5.3. To the 'name' value of key include the name of player's characteristic to increase. It's important to use the name in exactly the same format like in 'name' property of stats_increase_list. Use only english to write this value.
-#12.5.4. To the 'value' value of key include the number to which you decided to increase the player's characteristic.
-#12.5.5. Write to the 'items_and_stat_calculations' the reason of increasing the player's characteristic. 
+- A characteristic may be decreased as punishment for a quest failure, but only if this was specifically defined as the quest failure consequence.
+- A player's characteristic may be decreased due to serious problems with the player character's body (loss of limbs or other serious injuries).
+
+#12.3. Each turn, only one characteristic can be increased or decreased, and only by 1 point.
+#12.3.1. Don't increase or decrease the player's characteristics without the clear reason. There must be a reason for it. If there is no reason, then don't increase or decrease the player's characteristics.
+#12.3.2. Special case - Success rewards:
+${!CHARACTER_INFO.rpgMode ? `
+- Characteristic increase from particularly impressive success result in an action is considered separate from other characteristic changes.
+`: `${playerCritDice == 20 ? `
+- Characteristic increase from Critical Success is considered separate from other characteristic changes.` : `
+- Characteristic increase from Critical Success or Full Success is considered separate from other characteristic changes. `}
+`}
+- When success reward is applied, another characteristic can still be modified this turn for a different reason.
+- They must be logged in 'items_and_stat_calculations' with a clear indication of the success type that triggered the increase.
+
+#12.4. If it's needed to increase player's characteristics, then include to the response the key 'statsIncreased': [
+#12.4.1. The value of 'statsIncreased' key is an array of strings, each of which represents the name of player's characteristic to increase.
+#12.4.2. It's important to use the names in exactly the same format like in stats_list. Use only english to write the characteristic names for this array.
+#12.4.3. Write to the 'items_and_stat_calculations' the reason of increasing the player's characteristic. 
 ]
-#12.6. If it's needed to decrease player's characteristics, then include to the response the key 'statsDecreased': [
-#12.6.1. You can decrease any characteristic from the stats_list if needed.
-#12.6.2. The value of 'statsDecreased' key is an array of objects, each of which represents the information about player's characteristic to decrease.
-#12.6.3. Mandatory format for recording the value of each item of 'statsDecreased' array: { 'name': 'name_of_characteristic_to_decrease', 'value': 'value_by_which_the_characteristic_is_decreased' } .
-#12.6.4. To the 'name' value of key include the name of player's characteristic to decrease. It's important to use the name in exactly the same format like in the stats_list. Use only english to write this value.
-#12.6.5. To the 'value' value of key include the number to which you decided to decrease the player's characteristic.
-#12.6.6. Write to the 'items_and_stat_calculations' the reason of decreasing the player's characteristic. 
+
+#12.5. If it's needed to decrease player's characteristics, then include to the response the key 'statsDecreased': [
+#12.5.1. The value of 'statsDecreased' key is an array of strings, each of which represents the name of player's characteristic to decrease.
+#12.5.2. It's important to use the names in exactly the same format like in stats_list. Use only english to write the characteristic names for this array.
+#12.5.3. Write to the 'items_and_stat_calculations' the reason of decreasing the player's characteristic. 
 ]
-#12.7. Training and Teaching the Player's Character. Rules.
-#12.7.1. Each time the player attempts to train, or learn something new, strictly follow these instructions: [ Let’s think step by step: [
-#12.7.2. Match the player character’s training or learning to a specific characteristic from this list: ${statsList} .
-#12.7.3. If this characteristic is present in the stats_increase_list, then do the following: [
-#12.7.4. Perform the characteristic check against the situation’s difficulty, following the rules set forth in '#7 Checking player actions: steps and requirements' . 
-#12.7.4.1. Note, that instead of 'Current location difficulty' you should use the current characteristic value ('StatValue') to calculate the difficulty.
-#12.7.5. If the check is successful, reward the player by increasing the corresponding characteristic. ]
-] ]
 
 #13 The 'location where the character was on the previous turn' is checked for compliance with the current location - if not, then the response includes the locationData key with the current location according to the following instruction: [ Let's think step by step :
 #13.1. Mandatory format for recording the value in the locationData key: {'name': 'current_location_name', 'difficulty': 'difficulty_in_numerical_value', 'lastEventsDescription': 'location_last_events_description_for_current_turn', 'description': 'current_location_description', 'image_prompt': 'prompt_to_generate_location_image'} . All this values of keys 'name' , 'difficulty' , 'lastEventsDescription' must never be empty.
@@ -5162,9 +5138,9 @@ ${ELEMENTS.useQuestsList.checked ? `
 #14.1.2. Each turn, the player spends energy unless they are trying to restore it in some way (for example, by resting or meditating).
 #14.1.3. If the player is rested/meditated/etc. or has eaten/drank/used/etc. any potion/food/medicine/etc. with the appropriate energy restoration effect, then the player's energy should be restored to the required level.
 #14.1.4. If a player takes multiple actions in current turn, sum their energy change up and record the final value in 'currentEnergyChange'.
-${characterStats.currentEnergy < 40 && characterStats.currentEnergy > 10 ? `#14.2. The current energy of player character is less than 40. It means, that player character mandatory loses additional 1 or 2 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is tired and needs to rest, otherwise it will affect player's health.` : ``}
-${characterStats.currentEnergy < 10 ? `#14.2.The current energy of player character is less than 10. It means, that player character mandatory loses additional 3-10 health this turn. Add this health lose to 'currentHealthChange'. You must notify the player that player is very tired and needs to rest, otherwise it will affect player's health very fast.` : ``}
-
+${characterStats.currentEnergy == 0 ?
+`#14.2.The current energy of player character is 0. It means, that player character mandatory loses additional 1-10 health this turn. Add this health lose to 'currentHealthChange'. You must notify that player is very tired and needs to rest, otherwise it will affect player's health very fast.`
+: ``}
 #14.3. All successful player actions give experience (XP) to the player character. The amount of experience is entered in the value of the 'experienceGained' key (value type: positive integer).
 #14.4. When a player needs to receive an XP, do following check to calculate the experience: [
 #14.4.1. Let's describe the BaseXP. BaseXP is the foundational experience points awarded for an action based on its complexity and significance:
@@ -5327,8 +5303,11 @@ ${turn == 1 ? `
 #17.13. It's mandatory to monitor situations that may result in player's health loss, and record player's health loss in 'currentHealthChange' value of key. 
 #17.13.1. Pay special attention to fights between the player and monsters/enemies/NPCs/etc. Handle health loss according to the Health Loss Conditions rules described above.
 #17.14. It is not allowed to add or subtract in moneyChange, currentHealthChange and currentEnergyChange if this has already been done for the same event
-#17.15. The value of the response key should significantly develop the events of the general plot. The event from the previous turn should be completed.
-#17.16. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters
+#17.15. The value of the 'response' key should significantly develop the events of the general plot. The event from the previous turn should be completed.
+${useSeparateResponse.checked ? `
+#17.16. Attention! In this turn, you are only required to write a short version of the key 'response' value. Mandatory maximize the reduction of the 'response' value while preserving its logical meaning and the sequence of events.
+` : `
+#17.16. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.` }
 #17.17. This answer should be a logical consequence of the current player action, which is their last prompt: ${currentMessage} and should be absolutely different compared to events from previous turns and recent events from the history of previous communication between you (GM) and the player
 #17.18. Each turn should have a new event that has not yet been in the history of previous communication between you (GM) and the player, even if the player's request is repeated.
 #17.19. Each new event should not only be a logical continuation of the last previous turns of previous actions, but also radically differ from those previously described. Make sure that each plot development offers a new interaction or unpredictable turn, which is a plot consequence of the last turns from the history of communication between the GM and the player.
@@ -5475,7 +5454,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 17. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
  ] ]`;
 
-        //console.log(prompt);
+        console.log(prompt);
         lastUserMessage = currentMessage;
         ELEMENTS.actionButtons.forEach(button => button.style.display = 'none');
 
@@ -5501,32 +5480,80 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (ELEMENTS.useEroticPrompt.checked)
                 predefinedSystemPrompts.push(systemPromptsModule.erotic);
 
-            if (ELEMENTS.useThinkingModule.checked) {
+            if (ELEMENTS.useThinkingModule.checked && !ELEMENTS.useThinkingModuleForResponse.checked) {
                 const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts);
 
-                prompt = `
+                prompt = `               
+                ${prompt}
+
                 Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log will help you form your answer. Use the information in it to write your final answer: [
                     ${thinkingData}
-                ].
-                ${prompt}`;                
+                ]`;
             }
 
             data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, false);
-            
-            turn++;
-            tokenCostSum = APIModule.tokenCostSum;
-            tokenCostCurrent = APIModule.tokenCostCurrent;
-            inventoryBasket = [];
-
             if (Array.isArray(data))
                 data = data[0];
+            tokenCostSum = APIModule.tokenCostSum;
+            tokenCostCurrent = APIModule.tokenCostCurrent;
+
+            if (ELEMENTS.useSeparateResponse) {                
+                let separateResponsePrompt = `
+[ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
+
+### Instruction ###
+
+First, I'll explain what happened. To reduce the load on you, we've split your answer into two parts. Now, you will be writing the second part of your answer.
+In the first part of the answer, you created a detailed JSON response structure with all the necessary values, but in the value of the 'response' key, you wrote a shortened version.
+Now, you must write the full version of the 'response' key, using artistic and literary style of writing. Your full version of 'response' value of key must be consistent with the shortened version and all other data you included in your previous JSON response.
+Use the maximum number of characters available to you for the answer. This is your task for the current turn.
+You should not write anything now except for the value of the 'response' key. It's a Super Rule 1.
+
+Please, Let's think step by step:
+[
+#1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
+#2. This is your response template: { "response": "" } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
+#3. Into a 'response' value of key include a string, represents the full version of 'response', knowing from the ###Previous Context###. 
+#4. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.   
+#5. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+[ ### Previous Context ###
+#1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
+#2. Carefully study the rules that you used to form your first part of answer and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  [${prompt}] .
+#3. Carefully study the first part of answer, were you have created the detailed JSON response structure with all the necessary values (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events): ${JSON.stringify(data)} .
+] ]`;
+                if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForResponse.checked) {
+                    const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, separateResponsePrompt, tokenCostSum, predefinedSystemPrompts);
+
+                    separateResponsePrompt = `                        
+                        ${separateResponsePrompt}
+
+                        Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log is a try to make the full version of 'response' value of key. It's not a final result, but just a draft.
+                        The reasoning log: [
+                            ${thinkingData}
+                        ].
+                        Now, you must mandatory rewrite the full version of the 'response' value of key (known from the reasoning log).
+                        Do not simply copy and paste the draft. You must use the draft as a foundation, but then mandatory reimagine and fully rewrite it, adhering to all the known rules and instructions.
+                        I say it again: you MUST MANDATORY fully rewrite the draft. It's forbidden to copy and paste the draft without changes - the draft mandatory must be completely rewritten. It's a Super Rule with Top Priority.
+                        You MUST MANDATORY follow all other rules describes how the 'response' should be written in terms of text style, including the rules of formatting text. 
+                        You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using paragraphs.
+                    `;
+                }
+
+                let separateResponseData = await sendAPIRequest(aiProvider, model, apiKey, separateResponsePrompt, tokenCostSum, predefinedSystemPrompts, false);
+                if (Array.isArray(separateResponseData))
+                    separateResponseData = separateResponseData[0];
+                tokenCostSum = APIModule.tokenCostSum;
+                tokenCostCurrent = APIModule.tokenCostCurrent;
+                data.response = separateResponseData.response;
+            }
+
+            turn++;      
+            inventoryBasket = [];
             data = sanitizeObject(data, ['~', '"']);
 
             //console.log(data);
             ELEMENTS.chatBox.removeChild(loadingElement);
             sendMessageToChat(data.response, 'gm');
-
-            maxWeight = ELEMENTS.useWeightControl.checked && data.calculatedWeightData ? Number(data.calculatedWeightData.maxWeight) : undefined;
 
             if (data.moveInventoryItems && data.moveInventoryItems.length > 0) {
                 for (const item of data.moveInventoryItems)
@@ -5578,7 +5605,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 removeUnusedItems();
 
             if (data.moveInventoryItems?.length > 0 || data.removeInventoryItems?.length > 0 || data.inventoryItemsData?.length > 0) {
-                if (ELEMENTS.useWeightControl.checked && maxWeight && newItemsArray.length > 0)
+                if (newItemsArray.length > 0)
                     adjustInventoryWeightAndRemoveNeeded(maxWeight + criticalExcessWeight, newItemsArray);
 
                 calculateParametersForItemsArray(inventory);
@@ -5594,8 +5621,8 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             };
 
             if (data.currentEnergyChange && !Number.isNaN(data.currentEnergyChange)) {
-                const additionalEnergyCost = ELEMENTS.useWeightControl.checked && maxWeight ? Number(data.calculatedWeightData?.additionalEnergyExpenditure ?? 0) : 0;
-                if (ELEMENTS.useWeightControl.checked && additionalEnergyCost && !Number.isNaN(additionalEnergyCost) && calculateTotalInventoryWeight() > maxWeight)
+                const additionalEnergyCost = Number(data.calculatedWeightData?.additionalEnergyExpenditure ?? 0);
+                if (additionalEnergyCost && !Number.isNaN(additionalEnergyCost) && calculateTotalInventoryWeight() > maxWeight)
                     data.currentEnergyChange -= additionalEnergyCost;
                 characterStats.currentEnergy = characterStats.currentEnergy + Math.floor(data.currentEnergyChange);
                 if (characterStats.currentEnergy > characterStats.maxEnergy)
@@ -5611,13 +5638,13 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             }
 
             if (data.statsDecreased && data.statsDecreased.length > 0) {
-                for (data of data.statsDecreased)
-                    decreasePlayerStat(data.name, Number(data.value ?? 0));
+                for (const statName of data.statsDecreased)
+                    decreasePlayerStat(statName, 1, data.items_and_stat_calculations);
             }
 
             if (data.statsIncreased && data.statsIncreased.length > 0) {
-                for (data of data.statsIncreased)
-                    increasePlayerStat(data.name, Number(data.value ?? 0));
+                for (const statName of data.statsIncreased)
+                    increasePlayerStat(statName, 1, data.items_and_stat_calculations);
             }
 
             if (data.experienceGained)
@@ -5732,8 +5759,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             }
 
             updateElements();
-            if (ELEMENTS.useWeightControl.checked)
-                updateWeight();           
+            updateWeight();           
             
             ELEMENTS.chatBox.scrollTop = ELEMENTS.chatBox.scrollHeight;
         } catch (error) {
@@ -6106,15 +6132,6 @@ document.addEventListener('DOMContentLoaded', function () {
             ELEMENTS.thinkingLogBox.classList.add(displayNoneClass);
             logButton.classList.add(displayNoneClass);
         }
-    }
-
-    ELEMENTS.useWeightControl.onchange = function (e) {
-        const displayNoneClass = 'displayNone';
-        
-        if (e.target.checked) 
-            ELEMENTS.weightGroupContainer.classList.remove(displayNoneClass);
-        else
-            ELEMENTS.weightGroupContainer.classList.add(displayNoneClass);        
     }
 
 });

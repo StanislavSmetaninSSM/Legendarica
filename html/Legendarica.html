@@ -10,7 +10,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
 <head>
     <meta charset="utf-8">
-    <title>Legendarica Absolute v1.4 - Neural Sandbox</title>
+    <title>Legendarica Absolute v1.5 - Neural Sandbox</title>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="../src/css/Legendarica.css">
 </head>
@@ -281,9 +281,12 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         </div>
 
                         <div id="settings-box" class="chat-box" style="display: none;">
+
+                            <span class="sectionLabel marginTop0px" id="system-settings-section-label">Системные настройки</span>
+
                             <div class="settingsContainer displayBlock">
-                                <input type="checkbox" id="useWeightControl" name="useWeightControl" checked />
-                                <label for="useWeightControl" id="use-weight-control-label">Использовать вес в игре</label>
+                                <input type="checkbox" id="useSeparateResponse" name="useSeparateResponse" checked />
+                                <label for="useSeparateResponse" id="use-separate-response-label">Разделить ответ на два запроса, чтобы писать более качественно (тратится много токенов)</label>
                             </div>
 
                             <div class="settingsContainer displayBlock">
@@ -295,6 +298,25 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                 <input type="checkbox" id="useEroticPrompt" name="useEroticPrompt" />
                                 <label for="useEroticPrompt" id="use-erotic-prompt-label">Разрешить контент 21+ в игре</label>
                             </div>
+
+                            <span class="sectionLabel" id="thinking-module-settings-section-label">Настройки модуля обдумывания</span>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useThinkingModule" name="useThinkingModule" />
+                                <label for="useThinkingModule" id="use-thinking-module-label">Добавить модуль обдумывания ответов (отключите для экономии токенов). Теоретически сделает АИ более умным.</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useThinkingModuleForResponse" name="useThinkingModuleForResponse" checked />
+                                <label for="useThinkingModuleForResponse" id="use-thinking-module-for-response-label">Пусть модуль обдумывания размышляет только о тексте основного ответа (сообщения чата)</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="number" id="thinkingModuleIterations" value="1" min="1" style="color: #2c2c2c;">
+                                <label for="thinkingModuleIterations" id="thinking-module-iterations-label">Количество попыток, которые модуль обдумывания ответов предпримет, чтобы подумать над ответом.</label>
+                            </div>
+
+                            <span class="sectionLabel" id="functionality-settings-section-label">Настройки дополнительного функционала</span>
 
                             <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useStatus" name="useStatus" checked />
@@ -327,15 +349,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                 <label for="useQuestsList" id="make-game-quest-oriented-label">Сделать сюжет более квестоориентированным (необходимо включить список квестов)</label>
                             </div>
 
-                            <div class="settingsContainer displayBlock">
-                                <input type="checkbox" id="useThinkingModule" name="useThinkingModule" />
-                                <label for="useThinkingModule" id="use-thinking-module-label">Добавить модуль обдумывания ответов (отключите для экономии токенов). Теоретически сделает АИ более умным.</label>
-                            </div>
-
-                            <div class="settingsContainer displayBlock">
-                                <input type="number" id="thinkingModuleIterations" value="1" min="1" style="color: #2c2c2c;">
-                                <label for="thinkingModuleIterations" id="thinking-module-iterations-label">Количество попыток, которые модуль обдумывания ответов предпримет, чтобы подумать над ответом.</label>
-                            </div>
+                            <span class="sectionLabel" id="model-settings-section-label">Настройки провайдера и модели нейросети</span>
 
                             <div class="aiProvidersList">
                                 <span id="ai-provider-label">Провайдер нейросети</span>
@@ -414,6 +428,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                 </label>
                             </div>
 
+                            <span class="sectionLabel" id="image-settings-section-label">Настройки генерации изображений</span>
+
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
                                 <span id="image-mode-settings-label">Генерация картинок (не влияет на количество запросов, так как используется бесплатный сервис)</span>
                                 <label class="switch">
@@ -426,6 +442,8 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                                 <span id="style-of-image-label">Стиль генерируемых картинок</span>
                                 <input type="text" id="style-of-image-input" placeholder="Например: medieval, fantasy, neuropunk" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; width: 95%; height: auto; color: #d4af37;">
                             </div>
+
+                            <span class="sectionLabel" id="other-settings-section-label">Остальные настройки</span>
 
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 9px; margin-bottom: 11px;">
                                 <span id="interface-language2">Язык игры</span>
