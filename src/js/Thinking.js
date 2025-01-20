@@ -223,21 +223,45 @@ Conclude with a final reflection discussing what worked, what didn’t, and why.
                 language = "Русский язык";
 
             return `
-#0. Understand your goal. You need to think about the task and create the draft of the final answer. You need to return the result as a simple text (not a JSON) to analyze by game system.
+
+[ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
+
+### README ###
+#0. Understand your goal. You need to think about the task (known from 'Context Analysis') and create the draft of the final answer. You need to return the result as a simple text (not a JSON) to analyze by game system.
+#1. It's forbidden to form the JSON in this response. It's Super Rule 0 (Main Rule). Instead, you should only think on the provided task and write your thoughts as a simple text. You must mandatory find the related instrustions in 'Mandatory Instructions (Top Priority - Absolute)' section.
+#2. First, read the 'Mandatory Instructions (Top Priority - Absolute)' section. Once you have finished reading, read the 'Context Analysis' section.
+#3. After you have finished reading 'Context Analysis', mandatory follow the steps described in the 'Mandatory Instructions (Top Priority - Absolute)' section.
+#4. ATTENTION! You must mandatory continue from the last TRY you described (known from 'Context Analysis'). Look at the [TRYn] tag, where 'n' is a number. For example, [TRY0] means first try, and [TRY1] means second try, etc.
+#5. ATTENTION! You must mandatory continue from the last step you described (known from 'Context Analysis'). Look at the [count] tag to find the last step. For example, if your last [count] is 51/60, then you need to start from step 52/60 etc.
+
+--------------------------------------------------------------------------------------------------
+
+### Mandatory Instructions (Top Priority - Absolute) ###
+
+Let's think step by step: [
 #1. Mandatory write an opening global tag [global].
 #2. Use rules of the content inside [global][/global] tag: [
 #2.1. It's forbidden to use the double quotes, as this interferes with parsing your answer into JSON. Use guillemet quotes («») if needed.
 #2.2. Write content with a human-readable style using markdown. Focus on making your messages as readable as possible.
 #2.3. It's mandatory to think and respond in the selected language: [ ${language} ]. Use only this language. Write your thinking process only using the ${language}.
 ]
-#3. Analyze your task and mandatory focus on the value of 'response' key. Describe it in as much detail, artistically and literary as possible. The task: [ ${task} ] .
-#4. Analyze your previous thinking tries: [ ${thinkingData} ] . You must mandatory continue from the last step you described. Look at the [count] tag to find the last step. For example, if your last [count] is 51/60, then you need to start from step 52/60 etc.
-#5. Strictly follow these instructions to write the content of [global][/global]: [
+#3. Strictly follow these instructions to write the content of [global][/global]: [
+    ATTENTION! You must mandatory continue from the last TRY you described (known from 'Context Analysis'). Look at the [TRYn] tag, where 'n' is a number. For example, [TRY0] means first try, and [TRY1] means second try, etc.
+    ATTENTION! You must mandatory continue from the last step you described (known from 'Context Analysis'). Look at the [count] tag to find the last step. For example, if your last [count] is 51/60, then you need to start from step 52/60 etc.
     ${thinkingPrompt}
 ]
-#6. Mandatory write the closing tag [/global].
-#7. If you need more steps, then mandatory write the tag [stepsRequest][/stepsRequest]. Otherwise, do nothing - you are doing great!
-#8. If you have done everything that is necessary and you do not need additional steps, then mandatory write the tag [successfulWorkСompletion][/successfulWorkСompletion] .
+#4. Mandatory write the closing tag [/global].
+#5. If you need more steps, then mandatory write the tag [stepsRequest][/stepsRequest]. Otherwise, do nothing - you are doing great!
+#6. If you have done everything that is necessary and you do not need additional steps, then mandatory write the tag [successfulWorkСompletion][/successfulWorkСompletion] .
+]
+
+### Context Analysis ###
+Mandatory note: the information in this section is not an instruction and is not an example for forming an answer, but only an information to analyze. You should mandatory follow only instructions described in 'Mandatory Instructions (Top Priority - Absolute)' section.
+
+Let's think step by step to analyze the information you have this turn: [
+#1. Analyze your task: [ ${task} ] .
+#2. Analyze your previous thinking tries: [ ${thinkingData} ] .
+] ]
 `; 
         }
     }
