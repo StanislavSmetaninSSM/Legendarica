@@ -330,33 +330,33 @@ input:checked + .slider {
     cursor: help;
 }
 
-    .tooltip .tooltiptext {
-        display: none;
-        background-color: #555;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px;
-        position: absolute;
-        z-index: 10;
-        bottom: 125%;
-        left: 50%;
-        opacity: 0;
-        transition: opacity 0.3s;
-        width: 500px;
-        white-space: pre-wrap;
+.tooltiptext {
+    max-width: 40%;
+    max-height: 70%;
+    position: absolute;
+    text-align: center;
+    border-radius: 6px;
+    padding: 20px;
+    z-index: 1000;
+    overflow: auto;
+    font-size: 1.2em !important;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: rgba(30, 30, 30, 0.9);
+    border: 1px solid #d4af37;
+    color: #d4af37;
+    scrollbar-color: #d4af37 #2c2c2c;
+}
+
+    .tooltiptext a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
     }
 
-.tooltipAuto .tooltiptext {
-    bottom: auto;
-    left: auto;
-    cursor: auto;
-}
-
-.tooltip:hover .tooltiptext {
-    display: block;
-    opacity: 1;
-}
+        .tooltiptext a:hover {
+            color: #FFD700;
+        }
 
 .select-container {
     display: flex;
@@ -414,7 +414,6 @@ input:checked + .slider {
     font-size: 2.1em;
     font-weight: bold;
     cursor: pointer;
-    font-family: 'MedievalSharp', cursive;
     text-shadow: 2px 2px 2px #000;
     margin-top: 14px;
     margin-bottom: 20px;
@@ -557,7 +556,6 @@ input:checked + .slider {
     border-radius: 10px;
     overflow-y: auto;
     box-sizing: border-box;
-    font-family: 'MedievalSharp', cursive;
     background: rgba(30, 30, 30, 0.7);
     color: #d4af37;
     width: 100%;
@@ -754,7 +752,6 @@ img.rounded-corners {
     overflow-y: auto;
     resize: none;
     box-sizing: border-box;
-    font-family: 'MedievalSharp', cursive;
 }
 
     #user-input:focus-visible {

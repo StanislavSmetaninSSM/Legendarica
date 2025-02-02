@@ -2873,6 +2873,113 @@ ELEMENTS.imageInfoClose.onclick = function () { ELEMENTS.imageInfo.style.display
 
 //--------------------------------------------------------------------UTILITY------------------------------------------------------------------//
 
+function initializeTooltipController(buttonId, tooltipId) {
+    let showTimeout = null;
+    let hideTimeout = null;
+    let isOverButton = false;
+    let isOverTooltip = false;
+
+    const button = document.getElementById(buttonId);
+    const tooltip = document.getElementById(tooltipId);
+
+    if (!button || !tooltip)
+        return;    
+    
+    function handleShowTooltip() {
+        if (hideTimeout) {
+            clearTimeout(hideTimeout);
+            hideTimeout = null;
+        }
+
+        showTimeout = setTimeout(() => {
+            tooltip.style.opacity = 0;
+            tooltip.style.display = 'block';
+
+            FloatingUIDOM.computePosition(button, tooltip, {
+                middleware: [
+                    FloatingUIDOM.autoPlacement(),
+                    FloatingUIDOM.offset(10),
+                    FloatingUIDOM.shift({ padding: 10 }),
+                ],
+            }).then(({ x, y }) => {
+                Object.assign(tooltip.style, {
+                    left: `${x}px`,
+                    top: `${y}px`,
+                    opacity: 1
+                });
+            });
+        }, 300);
+    }
+
+    function handleHideTooltip() {
+        if (isOverButton || isOverTooltip)
+            return;        
+
+        if (showTimeout) {
+            clearTimeout(showTimeout);
+            showTimeout = null;
+        }
+
+        hideTimeout = setTimeout(() => {
+            if (!isOverButton && !isOverTooltip) {
+                tooltip.style.opacity = 0;
+                setTimeout(() => {
+                    if (!isOverButton && !isOverTooltip)
+                        tooltip.style.display = 'none';
+                    else
+                        tooltip.style.opacity = 1;                    
+                }, 200);
+            }
+        }, 400);
+    }
+
+    const isTouchDevice = 'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        navigator.msMaxTouchPoints > 0;
+
+    if (isTouchDevice) {
+        button.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isOverButton = true;
+            handleShowTooltip();
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (!button.contains(e.target) && !tooltip.contains(e.target)) {
+                isOverButton = false;
+                isOverTooltip = false;
+                handleHideTooltip();
+            }
+        });
+
+        tooltip.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isOverTooltip = true;
+        });
+    } else {
+        button.addEventListener('mouseenter', () => {
+            isOverButton = true;
+            handleShowTooltip();
+        });
+
+        button.addEventListener('mouseleave', () => {
+            isOverButton = false;
+            handleHideTooltip();
+        });
+
+        tooltip.style.pointerEvents = 'auto';
+
+        tooltip.addEventListener('mouseenter', () => {
+            isOverTooltip = true;
+        });
+
+        tooltip.addEventListener('mouseleave', () => {
+            isOverTooltip = false;
+            handleHideTooltip();
+        });
+    }
+}
+
 function confirmAction(message) {
     message ??= translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["confirm_message_label"];
     if (confirm(message))
@@ -3857,6 +3964,7 @@ function loadGameInternal(savedData) {
     updateElements();
     updateStatsWithoutGm();
 
+    ELEMENTS.modalSetting.style.display = "none";
     ELEMENTS.modal.style.display = "none";
     ELEMENTS.postApocalypticModal.style.display = "none";
 
@@ -4066,7 +4174,10 @@ function formatTaggedLog(logText) {
     }
 
     result += buffer;
-    return result.replace(/\n+/g, '\n').trim();
+    result = result.replace(/\n+/g, '\n').trim();
+
+    const regex = new RegExp(`[~]`, 'g');
+    return result.replace(regex, "");
 }
 
 //----------------------------------------------------------------API------------------------------------------------------------------------------/
@@ -4078,12 +4189,11 @@ async function sendRequest(currentMessage) {
             ELEMENTS.userInput.value = '';
         } else {
             ++turn;
-        }
+        }       
 
         //General
         const myPrompt = ELEMENTS.myRules.value;
         let totalWeight = calculateTotalInventoryWeight() ?? 0;
-        const strengthPlusConstitution = characterStats.strength + characterStats.constitution;
 
         //NPC
         const npcTemplate = `{
@@ -5452,7 +5562,10 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 16. The economy and value of money in the game is built relative to known prices for items that exist in the current world according to inventory (known from Context).
 
 17. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
- ] ]`;
+] ]
+
+(REMEMBER TO USE PARAGRAPHS IN THE TEXT OF 'response' KEY VALUE!)
+ `;
 
         console.log(prompt);
         lastUserMessage = currentMessage;
@@ -6048,6 +6161,7 @@ setInterval(autoSave, 300000);
 
 checkGameSource();
 setGameInputsSynch();
+
 initializeDraggableObject(ELEMENTS.locationInfo);
 initializeDraggableObject(ELEMENTS.npcInfo);
 initializeDraggableObject(ELEMENTS.skillInfo);
@@ -6055,6 +6169,11 @@ initializeDraggableObject(ELEMENTS.inventoryInfo);
 initializeDraggableObject(ELEMENTS.inventoryContainerInfo);
 initializeDraggableObject(ELEMENTS.questInfo);
 initializeDraggableObject(ELEMENTS.imageInfo);
+
+initializeTooltipController('tooltip-max-weight-button', 'tooltip-max-weight');
+initializeTooltipController('tooltip-critical-weight-button', 'tooltip-critical-weight');
+initializeTooltipController('tooltip-inventory-basket-button', 'tooltip-inventory-basket');
+initializeTooltipController('tooltip-provider-ai-button', 'tooltip-provider-ai');
 
 document.addEventListener('DOMContentLoaded', function () {
     const collapseButtonMain = document.getElementById('collapseButtonMain');
