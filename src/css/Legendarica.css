@@ -334,7 +334,7 @@ input:checked + .slider {
     max-width: 40%;
     max-height: 70%;
     position: absolute;
-    text-align: center;
+    text-align: left;
     border-radius: 6px;
     padding: 20px;
     z-index: 1000;
