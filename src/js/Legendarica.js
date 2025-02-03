@@ -5019,6 +5019,59 @@ The gamemaster is forbidden to:
 • Interpret rules to minimize negative impacts.
 • Invent external factors neutralizing failure effects.
 • Delay mandatory consequence implementation.
+] 
+#9.5. Mandatory NPC responses in dialogues with player: [
+The NPC's response must mandatory reflect the exact result of the player's characteristic check:
+
+Critical Success:
+• NPC provides exceptional information beyond what was asked.
+• Offers unique opportunities or advantages.
+• Shows deep respect or admiration.
+• Shares secret knowledge or unexpected benefits.
+• May become a valuable long-term ally.
+• Could grant access to restricted areas or resources.
+
+Full Success:
+• NPC gives complete and accurate information.
+• Shows clear positive attitude.
+• Provides helpful additional details.
+• Willingly cooperates.
+• May offer standard assistance.
+
+Partial Success:
+• NPC provides basic requested information.
+• Shows neutral attitude.
+• Information comes with minor complications.
+• Might require small favor in return.
+• Could accidentally reveal information to others.
+
+Minor Failure:
+• NPC gives incomplete or partially incorrect information.
+• Shows slight suspicion or reluctance.
+• Requires extra convincing to continue talking.
+• May spread minor rumors.
+• Might demand payment or favor for basic information.
+
+Serious Failure:
+• NPC provides misleading or false information.
+• Shows clear hostility or distrust.
+• May alert others about player's questions.
+• Could refuse further interaction.
+• Might create obstacles for future interactions.
+• Information reaches antagonists.
+
+Critical Failure:
+• NPC reacts with maximum hostility.
+• Alerts authorities or enemies.
+• Spreads harmful rumors.
+• Becomes a long-term opponent.
+• Creates significant future obstacles.
+• May organize active opposition to player.
+
+Remember:
+• Each NPC response must reflect both immediate and long-term consequences.
+• NPC reactions persist until changed by new player actions.
+• Include at least the minimum number of effects specified for each result type.
 ] ]
 ` : (playerCritDice == 20 ? `
 #9.2. Output to 'items_and_stat_calculations' the current value of the dice the player rolled to attempt a critical success. This is the value: ${playerCritDice}. Result - Critical Success!
