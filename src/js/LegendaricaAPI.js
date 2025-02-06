@@ -540,8 +540,7 @@ const APIModule = (function getAPIModule() {
             const settings = {
                 model: model,
                 messages: messages,
-                stream: false,
-                safety_mode: "NONE"
+                stream: false
             };
 
             if (temperature)

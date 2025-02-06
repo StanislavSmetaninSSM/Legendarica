@@ -3852,7 +3852,7 @@ function renderDescriptionElement(description, descriptionElement) {
 
 function setContentHeight(element) {
     element.style.height = 'auto';
-    element.style.height = (element.scrollHeight) + 'px';
+    element.style.height = (element.scrollHeight) + 'px';    
 }
 
 function convertToBoolean(value) {
@@ -5642,7 +5642,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
             const predefinedSystemPrompts = [];
             if (ELEMENTS.useLiteraryPrompt.checked)
-                predefinedSystemPrompts.push(systemPromptsModule.literaryStyle);
+                predefinedSystemPrompts.push(systemPromptsModule.textRules);
             if (ELEMENTS.useEroticPrompt.checked)
                 predefinedSystemPrompts.push(systemPromptsModule.erotic);
 
@@ -6227,6 +6227,9 @@ initializeTooltipController('tooltip-max-weight-button', 'tooltip-max-weight');
 initializeTooltipController('tooltip-critical-weight-button', 'tooltip-critical-weight');
 initializeTooltipController('tooltip-inventory-basket-button', 'tooltip-inventory-basket');
 initializeTooltipController('tooltip-provider-ai-button', 'tooltip-provider-ai');
+initializeTooltipController('tooltip-provider-ai2-button', 'tooltip-provider-ai2');
+initializeTooltipController('tooltip-provider-ai3-button', 'tooltip-provider-ai3');
+initializeTooltipController('tooltip-provider-ai4-button', 'tooltip-provider-ai4');
 
 document.addEventListener('DOMContentLoaded', function () {
     const collapseButtonMain = document.getElementById('collapseButtonMain');

@@ -108,6 +108,8 @@ input:checked + .slider {
     background: rgba(30, 30, 30, 0.7);
     border: 1px solid #d4af37;
     color: #d4af37;
+    scrollbar-width: thin;
+    scrollbar-color: #d4af37 #2c2c2c;
 }
 
 .player-info,
@@ -564,7 +566,7 @@ input:checked + .slider {
     padding: 10px;
     font-size: 16px;
     scrollbar-color: #d4af37 #2c2c2c;
-    resize: none;
+    resize: vertical;
 }
 
 .marginRight10px {
@@ -674,7 +676,7 @@ img.rounded-corners {
     color: #d4af37;
     overflow-y: auto;
     margin-top: 10px;
-    resize: none;
+    resize: vertical;
 }
 
 .additionalSettingsLabel {
@@ -750,7 +752,6 @@ img.rounded-corners {
     font-size: 16px;
     border-radius: 10px;
     overflow-y: auto;
-    resize: none;
     box-sizing: border-box;
 }
 

@@ -266,7 +266,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                         <div id="system-instructions-box" class="chat-box rulesBox" data-show="false" style="display:none">
                             <span id="system-instructions-explanaition">Это системные инструкции для выбранного провайдера нейросети. Они имеют высший приоритет для нейросети.</span><br>
-                            <textarea id="system-instructions" class="instructionsArea" placeholder="Введите свои системные инструкции и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="setContentHeight(this)" onclick="setContentHeight(this)"></textarea>
+                            <textarea id="system-instructions" class="instructionsArea" placeholder="Введите свои системные инструкции и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="setContentHeight(this)"></textarea>
                             <br>
                             <button id="download-system-instructions-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="saveSystemInstructions()">Скачать системные инструкции в файл</button>
                             <button id="load-system-instructions-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="loadSystemInstructions()">Загрузить системные инструкции из файла</button>
@@ -274,7 +274,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                         <div id="my-rules-box" class="chat-box rulesBox" style="display: none;">
                             <span id="my-rules-explanaition">Здесь вы можете изменить или дополнить правила игры или просто повлиять на поведение ведущего. Просто введите тут инструкцию и оставьте. Например: "В инвентаре персонажа должен быть список в виде отдельного предмета, в котором указаны вообще все бонусы в сумме со всех предметов в инвентаре, а если такого списка в инвентаре нет, то добавить его" или "пусть в каждой локации будут монстры". Предупреждение: внесённые изменения могут сломать какие-нибудь механики игры. А могут и не сломать. Дерзайте!</span><br>
-                            <textarea id="my-rules" class="instructionsArea" placeholder="Введите свои правила и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="setContentHeight(this)" onclick="setContentHeight(this)"></textarea>
+                            <textarea id="my-rules" class="instructionsArea" placeholder="Введите свои правила и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="setContentHeight(this)"></textarea>
                             <br>
                             <button id="download-my-rules-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="saveMyRules()">Скачать правила в файл</button>
                             <button id="load-my-rules-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="loadMyRules()">Загрузить правила из файла</button>
@@ -353,7 +353,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                             <div class="aiProvidersList">
                                 <span id="ai-provider-label">Провайдер нейросети</span>
-                                <span class="tooltip tooltipProvider" id="tooltip-provider-ai-button">???</span><br />
+                                <span class="tooltip tooltipProvider" id="tooltip-provider-ai-button">???</span><br/>
                                 <input type="radio" id="ai-Chat01" name="ai-provider" value="Chat01" onchange="setAiProvider(this.value)">
                                 <label for="ai-Chat01">Chat01</label><br>
                                 <input type="radio" id="ai-Cohere" name="ai-provider" value="Cohere" onchange="setAiProvider(this.value)">
@@ -586,7 +586,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                 <div class="aiProvidersList">
                     <span id="ai-provider-label2">Провайдер нейросети</span>
-                    <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai2" style="white-space: pre-wrap;"></span></span><br />
+                    <span class="tooltip tooltipProvider" id="tooltip-provider-ai2-button">???</span><br/>
                     <input type="radio" id="ai-Chat012" name="ai-provider2" value="Chat01" onchange="setAiProvider(this.value)">
                     <label for="ai-Chat012">Chat01</label><br>
                     <input type="radio" id="ai-Cohere2" name="ai-provider2" value="Cohere" onchange="setAiProvider(this.value)">
@@ -693,7 +693,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                 <div class="aiProvidersList marginTop20px">
                     <span id="ai-provider-label4">Провайдер нейросети</span>
-                    <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai4"></span></span><br />
+                    <span class="tooltip tooltipProvider" id="tooltip-provider-ai4-button">???</span><br/>
                     <input type="radio" id="ai-Chat014" name="ai-provider4" value="Chat01" onchange="setAiProvider(this.value)">
                     <label for="ai-Chat014">Chat01</label><br>
                     <input type="radio" id="ai-Cohere4" name="ai-provider4" value="Cohere" onchange="setAiProvider(this.value)">
@@ -794,7 +794,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                 <div class="aiProvidersList">
                     <span id="ai-provider-label3">Провайдер нейросети</span>
-                    <span class="tooltip tooltipAuto tooltipProvider">???<span class="tooltiptext" id="tooltip-provider-ai3" style="white-space: pre-wrap;"></span></span><br />
+                    <span class="tooltip tooltipProvider" id="tooltip-provider-ai3-button">???</span><br/>
                     <input type="radio" id="ai-Chat013" name="ai-provider3" value="Chat01" onchange="setAiProvider(this.value)">
                     <label for="ai-Chat013">Chat01</label><br>
                     <input type="radio" id="ai-Cohere3" name="ai-provider3" value="Cohere" onchange="setAiProvider(this.value)">
@@ -969,7 +969,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <h4 id="image-info-name"></h4>
             <p id="image-info-warning"></p>
             <a id="image-info-image" data-fslightbox="gallery" href="https://i.imgur.com/fsyrScY.jpg"><img id="image-info-thumbnail" class="rounded-corners" src="" /></a>
-            <textarea type="text" id="image-info-prompt" class="gameTextarea" placeholder="Промпт для генерации изображения" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"></textarea>
+            <textarea type="text" id="image-info-prompt" class="gameTextarea" placeholder="Промпт для генерации изображения" oninput="setContentHeight(this)"></textarea>
             <h4 id="image-generate" class="infoDelete">Генерировать изображение</h4>
         </div>
 
@@ -994,6 +994,9 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
         <span class="tooltiptext" id="tooltip-critical-weight"></span>
         <span class="tooltiptext" id="tooltip-inventory-basket"></span>
         <span class="tooltiptext" id="tooltip-provider-ai"></span>
+        <span class="tooltiptext" id="tooltip-provider-ai2"></span>
+        <span class="tooltiptext" id="tooltip-provider-ai3"></span>
+        <span class="tooltiptext" id="tooltip-provider-ai4"></span>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.1.3/marked.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
