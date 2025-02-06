@@ -24,7 +24,7 @@ The GM should follow them strictly to maintain a consistent and engaging experie
 #4. The text must be divided into paragraphs (Top Priority Rule):
 #4.1. Separate groups of a few sentences (typically 2-5 sentences, depending on length and content), logically grouped by meaning, from the rest of the text using paragraphs.
 #4.2. It is forbidden for the text to be a continuous block of text. Paragraphs are mandatory to enhance readability. Avoid overly long paragraphs.
-#5. Dialogue must be visually separated from surrounding text and from other lines of dialogue:
+#5. Dialogue must be visually separated from surrounding text and from other lines of dialogue (Top Priority Rule):
 #5.1. Each line of dialogue (a single spoken phrase) must start on a new line.
 #5.2. There must be a blank paragraph (two newlines, creating a visual break) between the end of one line of dialogue and the beginning of the next, even if they belong to the same character.
 #5.3. Text that is not dialogue must be separated from dialogue by a blank paragraph (two newlines) above and below.
