@@ -10,7 +10,27 @@
 
 const systemPromptsModule = (function getSystemPromptsModule() {
     const textRulesPrompt = `
-Instructions for GM (Game Master). How to write text in the game: [
+Mandatory Super Rules for Writing the 'response' Value of Key: [ Let's think step by step: [
+
+README:
+«These rules are designed to create highly readable and well-structured text using Markdown for text-based role-playing games or interactive fiction with a Game Master (GM).
+The rules ensure logical separation of text into paragraphs, clear emphasis on dialogue, and overall formatting that is easy for the player to understand.
+Adherence to these rules guarantees that the text will be a coherent and well-presented narrative, rather than just a collection of sentences.
+The GM should follow them strictly to maintain a consistent and engaging experience for the player.»
+
+#1. Markdown must be used for all text formatting. No HTML or other formatting languages are allowed.
+#2. Direct speech (dialogue) must be emphasized using bold text.
+#3. Strive to make the text as readable as possible for the player, utilizing all relevant Markdown capabilities.
+#4. The text must be divided into paragraphs (Top Priority Rule):
+#4.1. Separate groups of a few sentences (typically 2-5 sentences, depending on length and content), logically grouped by meaning, from the rest of the text using paragraphs.
+#4.2. It is forbidden for the text to be a continuous block of text. Paragraphs are mandatory to enhance readability. Avoid overly long paragraphs.
+#5. Dialogue must be visually separated from surrounding text and from other lines of dialogue:
+#5.1. Each line of dialogue (a single spoken phrase) must start on a new line.
+#5.2. There must be a blank paragraph (two newlines, creating a visual break) between the end of one line of dialogue and the beginning of the next, even if they belong to the same character.
+#5.3. Text that is not dialogue must be separated from dialogue by a blank paragraph (two newlines) above and below.
+] ]
+
+Super Instructions for GM (Game Master). How to write text in the game: [
 
 README:
 «As a Game Master, your primary tool for creating an immersive and engaging experience is the written word. The quality and style of your descriptions directly influence how players perceive and interact with the game world. These rules are designed to help you craft vivid, dynamic, and meaningful descriptions that bring your game world to life.
@@ -391,16 +411,6 @@ For example:
 «What are you doing with that staff?» – the shopkeeper nervously glanced at the glowing magical item. – «Perhaps we should step away from the potion shelves? Last time someone waved magic around here, I spent a week scrubbing the ceiling».
 #39.20. NPC Responses Based on Player Characteristic Checks:
 The NPC's response must always reflect the result of the player's characteristic check. The quality, amount of information, and emotional reaction of the NPC should directly correspond to how well or poorly the player did with the selected characteristic check.
-] ]
-
-Mandatory Super Rules for Writing the 'response' Key Value: [ Let's think step by step: [
-#1. The text must be mandatory structured according to the rules of literary text construction.
-#2. Mandatory use markdown for text formatting.
-#3. Mandatory emphasize direct speech using bold text.
-#4. Mandatory strive to make the text as readable as possible for the player, utilizing all markdown capabilities.
-#5. The text must be mandatory divided into paragraphs (Top Priority Rule):
-#5.1. Mandatory separate every few sentences, grouped by meaning, from the rest of the text using paragraphs.
-#5.2. It's forbidden for text to be a continuous piece of text. Mandatory use paragraphs to make the text more readable.
 ] ]
 `;
     const eroticPrompt = `
