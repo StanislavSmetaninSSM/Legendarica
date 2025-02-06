@@ -267,7 +267,7 @@ Example:
 Instead of «You felt anger rising within you,» it's better to write «Your jaw clenched involuntarily, and you noticed your hands had balled into fists at your sides.»
 #38. Active environment rule:
 Describe not only the static elements of the scene but also the dynamic changes in the environment that occur during character interactions.
-#39. Rule of moderation in comparisons:
+#39. Mandatory rule of moderation in comparisons:
 Use comparisons and metaphors sparingly. Overuse can overwhelm the text and make it difficult to comprehend.
 
 Expanded description:
