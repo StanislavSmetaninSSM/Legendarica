@@ -10,7 +10,7 @@
 
 const systemPromptsModule = (function getSystemPromptsModule() {
     const textRulesPrompt = `
-Mandatory Super Rules for Writing the 'response' Value of Key: [ Let's think step by step: [
+Mandatory Super Top Priority Rules for Writing the 'response' Value of Key: [ Let's think step by step: [
 
 README:
 «These rules are designed to create highly readable and well-structured text using Markdown for text-based role-playing games or interactive fiction with a Game Master (GM).
