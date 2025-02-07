@@ -259,7 +259,7 @@ const ELEMENTS = {
     useThinkingModule: document.getElementById('useThinkingModule'),
     useThinkingModuleForResponse: document.getElementById('useThinkingModuleForResponse'),
     thinkingModuleIterations: document.getElementById('thinkingModuleIterations'),
-    useLiteraryPrompt: document.getElementById('useLiteraryPrompt'),
+    useTextRules: document.getElementById('useLiteraryPrompt'),
     useEroticPrompt: document.getElementById('useEroticPrompt'),
     useSeparateResponse: document.getElementById('useSeparateResponse'),
 
@@ -504,12 +504,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
         ELEMENTS.apiKey.value = ELEMENTS.apiKey4.value;
         ELEMENTS.aiModel.value = ELEMENTS.aiModel4.value?.trim();
 
-        const collapseButtonMain = document.getElementById('collapseButtonMain');
-        collapseButtonMain.style.display = "flex";
-        const collapseButtonSettings = document.getElementById('collapseButtonSettings');
-        collapseButtonSettings.style.display = "flex";
-        const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
-        collapseButtonInputArea.style.display = "flex";
+        showAllSettingsHideButtons();
 
         styleOfImage = "modern fantasy";
 
@@ -600,12 +595,7 @@ ELEMENTS.createCharacterButton.onclick = function () {
     ELEMENTS.aiModel.value = ELEMENTS.aiModel2.value?.trim();
     document.getElementById('choose-language').value = ELEMENTS.chooseLanguageMenu.value;
 
-    const collapseButtonMain = document.getElementById('collapseButtonMain');
-    collapseButtonMain.style.display = "flex";
-    const collapseButtonSettings = document.getElementById('collapseButtonSettings');
-    collapseButtonSettings.style.display = "flex";
-    const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
-    collapseButtonInputArea.style.display = "flex";
+    showAllSettingsHideButtons();
 
     styleOfImage = "medieval fantasy";
     const name = document.getElementById('character-name').value,
@@ -675,12 +665,7 @@ ELEMENTS.startNewSettingButton.onclick = function () {
     ELEMENTS.aiModel.value = ELEMENTS.aiModel3.value?.trim();
     document.getElementById('choose-language').value = ELEMENTS.chooseLanguageMenu.value;
 
-    const collapseButtonMain = document.getElementById('collapseButtonMain');
-    collapseButtonMain.style.display = "flex";
-    const collapseButtonSettings = document.getElementById('collapseButtonSettings');
-    collapseButtonSettings.style.display = "flex";
-    const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
-    collapseButtonInputArea.style.display = "flex";
+    showAllSettingsHideButtons();
 
     function getElementValue(id) {
         return document.getElementById(id).value;
@@ -986,7 +971,7 @@ function handlePlayerActionHints(actions) {
 }
 
 //Log of checks and combat.
-function logMessage(message, currentHealthChange, currentEnergyChange, moneyChange) {
+function logMessage(message, currentHealthChange, currentEnergyChange, moneyChange, expChange) {
     const messageContainer = document.createElement('div');
 
     messageContainer.classList.add('message', 'gm');
@@ -994,7 +979,7 @@ function logMessage(message, currentHealthChange, currentEnergyChange, moneyChan
 
     const countTurn = document.createElement('span');
     countTurn.classList.add('message-turn-and-close-button');
-    countTurn.textContent = `\n current turn token cost: ${turn == 0 ? '{"prompt_tokens":0,"completion_tokens":0,"total_tokens":0}' : tokenCostCurrent}\n current session token cost: ${JSON.stringify(tokenCostSum)}\n health change this turn: ${currentHealthChange} , energy change this turn: ${currentEnergyChange} , money change this turn: ${moneyChange} ;\n ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["turn_log_name"]} #${turn} `;
+    countTurn.textContent = `\n current turn token cost: ${turn == 0 ? '{"prompt_tokens":0,"completion_tokens":0,"total_tokens":0}' : tokenCostCurrent}\n current session token cost: ${JSON.stringify(tokenCostSum)}\n health change this turn: ${currentHealthChange} , energy change this turn: ${currentEnergyChange} , money change this turn: ${moneyChange} , XP change this turn: ${expChange} ;\n ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["turn_log_name"]} #${turn} `;
     messageContainer.appendChild(countTurn);
 
     //Create a delete button.
@@ -2873,6 +2858,15 @@ ELEMENTS.imageInfoClose.onclick = function () { ELEMENTS.imageInfo.style.display
 
 //--------------------------------------------------------------------UTILITY------------------------------------------------------------------//
 
+function showAllSettingsHideButtons() {
+    const collapseButtonMain = document.getElementById('collapseButtonMain');
+    collapseButtonMain.style.display = "flex";
+    const collapseButtonSettings = document.getElementById('collapseButtonSettings');
+    collapseButtonSettings.style.display = "flex";
+    const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
+    collapseButtonInputArea.style.display = "flex";
+}
+
 function initializeTooltipController(buttonId, tooltipId) {
     let showTimeout = null;
     let hideTimeout = null;
@@ -3233,7 +3227,7 @@ function sanitizeObject(obj, symbolsToReplace) {
 
     for (const key in obj) {
         if (typeof obj[key] === 'string') {
-            sanitized[key] = sanitizeString(obj[key]).replace(/\\n/g, '\n');
+            sanitized[key] = sanitizeString(obj[key]).replace(/\\n/g, '\n').replace(/ +/g, " ");
             if (symbolsToReplace) {
                 const regex = new RegExp(`[${symbolsToReplace.join('')}]`, 'g'); //Creating a regular expression from a character array.
                 sanitized[key] = sanitized[key].replace(regex, "");
@@ -3920,6 +3914,8 @@ function getDataForSave() {
 }
 
 function loadGameInternal(savedData) {
+    showAllSettingsHideButtons();
+
     try {
         let loadedCharacterInfo = sanitizeObject(JSON.parse(savedData));
 
@@ -4458,7 +4454,7 @@ WeightOverload = CurrentTurnItemsWeight - MaxWeight
 #4.2. Mandatory the format for each object of 'inventoryItemsData' array: ${inventoryTemplate} . 
 #4.3. Include to the 'inventoryItemsData' only new items or items which data were changed. It's important to note, that this array only represents the data about changes and new items, and not the information about all player's inventory.
 #4.4. If player receives the new item, then: [
-#4.4.0. Make a WeightCheck for the item. If the result of WeightCheck is true, then go to the next point. If the result is false, then mandatory skip any actions with current item (loop continue operator), and go to next one.
+#4.4.0. Make a WeightCheck for the item. Generate the weight before do the check. If the result of WeightCheck is true, then go to the next point. If the result is false, then mandatory skip any actions with current item (loop continue operator), and go to next one.
 #4.4.1. Here is the original list of item templates available to the player in the current turn: items_list = ${JSON.stringify(loot)}. 
 #4.4.2. To assign a new item to the player, the gamemaster extracts the first item (template) from the items_list that has not yet been assigned in the current turn. Use item templates only from the original list of items in order, starting with the very first one in the items_list. It is forbidden to assign to the player any other items whose structure does not correspond to the template from the original list.
 #4.4.3. It is necessary to rename the received item from the original list of items (rename thing_[number] using ${translationModule.currentLanguage}) in accordance with the plot. ${CHARACTER_INFO.nonMagicMode ? ' Important: in this world, magic is absent. There can be no magical, mystical, or unrealistic items.)' : ' '}
@@ -5616,8 +5612,6 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 
 17. Test your entire answer for the ability to be parsed by the JSON.parse() command. If this command should raise an error, correct your answer so that there is no error.
 ] ]
-
-(REMEMBER TO USE PARAGRAPHS IN THE TEXT OF 'response' KEY VALUE!)
  `;
 
         console.log(prompt);
@@ -5640,14 +5634,21 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (!["Websim", "None"].includes(aiProvider) && !apiKey)
                 throw translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-ai-key-label"];
 
-            const predefinedSystemPrompts = [];
-            if (ELEMENTS.useLiteraryPrompt.checked)
-                predefinedSystemPrompts.push(systemPromptsModule.textRules);
+            const predefinedSystemPrompts = [
+                systemPromptsModule.languageRule(translationModule.currentLanguage),
+                systemPromptsModule.markdown
+            ];            
             if (ELEMENTS.useEroticPrompt.checked)
                 predefinedSystemPrompts.push(systemPromptsModule.erotic);
+            if (ELEMENTS.useTextRules.checked)
+                predefinedSystemPrompts.push(systemPromptsModule.textRulesCompact);
+
+            const predefinedMainPrompts = [
+                systemPromptsModule.notesRule
+            ];
 
             if (ELEMENTS.useThinkingModule.checked && !ELEMENTS.useThinkingModuleForResponse.checked) {
-                const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts);
+                const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
 
                 prompt = `               
                 ${prompt}
@@ -5657,13 +5658,48 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 ]`;
             }
 
-            data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, false);
+            if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForResponse.checked && !ELEMENTS.useSeparateResponse.checked) {
+                let thinkingPrompt = `
+[ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
+
+### Instruction ###
+
+First, I'll explain what is your goal. These are preparations for main answer, and in this task you need to think only about the 'response' value of key. All other data will be filled later.
+You must write the 'response' value of key, using artistic and literary style of writing. Your 'response' value of key must be consistent with the all other data you included in the context of previous user's turn.
+Use the maximum number of characters available to you for the answer. This is your task for the current turn.
+You should not write anything now except for the value of the 'response' key. It's a Super Rule 1.
+
+Please, Let's think step by step:
+[
+#1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
+#2. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.   
+#3. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+[ ### Context ###
+#1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
+#2. Carefully study the rules that you will use to form answer for user in next turn, but not in this turn - in this turn you need to only form the 'response' (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  [${prompt}] .
+] ]`;
+
+                const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, thinkingPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
+                prompt = `               
+                ${prompt}
+
+                Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log will help you to fill the 'response' value of key, but you still need to fill all other properties and probably rewrite the 'response' value of key. Use the information in it to write your final answer: [
+                    ${thinkingData}
+                ]`;
+            }
+
+            data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
             if (Array.isArray(data))
                 data = data[0];
             tokenCostSum = APIModule.tokenCostSum;
             tokenCostCurrent = APIModule.tokenCostCurrent;
 
-            if (ELEMENTS.useSeparateResponse) {                
+            if (ELEMENTS.useSeparateResponse.checked) {    
+                if (ELEMENTS.useTextRules.checked) {
+                    predefinedSystemPrompts.pop();
+                    predefinedSystemPrompts.push(systemPromptsModule.textRules);
+                }
+
                 let separateResponsePrompt = `
 [ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
 
@@ -5672,6 +5708,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
 First, I'll explain what happened. To reduce the load on you, we've split your answer into two parts. Now, you will be writing the second part of your answer.
 In the first part of the answer, you created a detailed JSON response structure with all the necessary values, but in the value of the 'response' key, you wrote a shortened version.
 Now, you must write the full version of the 'response' key, using artistic and literary style of writing. Your full version of 'response' value of key must be consistent with the shortened version and all other data you included in your previous JSON response.
+You're encouraged to rewrite, expand and even invent new elements (for example, dialogues, plot twists, or character interactions) within the 'response' value from the shortened version, as long as the core plot stays the same. Craft a richer and more engaging narrative beyond simply detailing what already exists, as long as the core plot stays the same.
 Use the maximum number of characters available to you for the answer. This is your task for the current turn.
 You should not write anything now except for the value of the 'response' key. It's a Super Rule 1.
 
@@ -5682,13 +5719,16 @@ Please, Let's think step by step:
 #3. Into a 'response' value of key include a string, represents the full version of 'response', knowing from the ###Previous Context###. 
 #4. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.   
 #5. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+#6. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
+#7. You MUST MANDATORY use all system instructions which you have to write the 'response' value of key. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
+
 [ ### Previous Context ###
 #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
 #2. Carefully study the rules that you used to form your first part of answer and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  [${prompt}] .
 #3. Carefully study the first part of answer, were you have created the detailed JSON response structure with all the necessary values (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events): ${JSON.stringify(data)} .
 ] ]`;
                 if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForResponse.checked) {
-                    const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, separateResponsePrompt, tokenCostSum, predefinedSystemPrompts);
+                    const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, separateResponsePrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
 
                     separateResponsePrompt = `                        
                         ${separateResponsePrompt}
@@ -5700,12 +5740,12 @@ Please, Let's think step by step:
                         Now, you must mandatory rewrite the full version of the 'response' value of key (known from the reasoning log).
                         Do not simply copy and paste the draft. You must use the draft as a foundation, but then mandatory reimagine and fully rewrite it, adhering to all the known rules and instructions.
                         I say it again: you MUST MANDATORY fully rewrite the draft. It's forbidden to copy and paste the draft without changes - the draft mandatory must be completely rewritten. It's a Super Rule with Top Priority.
-                        You MUST MANDATORY follow all other rules describes how the 'response' should be written in terms of text style, including the rules of formatting text. 
-                        You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using paragraphs.
+                        You MUST MANDATORY follow all other rules describes how the 'response' should be written in terms of text style, including the rules of formatting text and instructions about text creation. 
+                        You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs.
                     `;
                 }
 
-                let separateResponseData = await sendAPIRequest(aiProvider, model, apiKey, separateResponsePrompt, tokenCostSum, predefinedSystemPrompts, false);
+                let separateResponseData = await sendAPIRequest(aiProvider, model, apiKey, separateResponsePrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
                 if (Array.isArray(separateResponseData))
                     separateResponseData = separateResponseData[0];
                 tokenCostSum = APIModule.tokenCostSum;
@@ -5813,8 +5853,13 @@ Please, Let's think step by step:
                     increasePlayerStat(statName, 1, data.items_and_stat_calculations);
             }
 
-            if (data.experienceGained)
-                experienceProcessing(data.experienceGained);
+            let expPoints = data.experienceGained;
+            if (expPoints && !Number.isNaN(expPoints)) {
+                expPoints = Number(expPoints);
+                experienceProcessing(expPoints);
+            } else {
+                expPoints = null;
+            }
 
             if (data.locationData && Object.keys(data.locationData).length > 0 && data.locationData.name) {
                 const possibleDifficultDublicate = extractLastParenthesisContent(data.locationData.name);
@@ -5899,8 +5944,8 @@ Please, Let's think step by step:
                 }
             }
 
-            if (data.items_and_stat_calculations && data.items_and_stat_calculations.length > 0) {
-                logMessage(data.items_and_stat_calculations.join('\n\n'), data.currentHealthChange ?? 0, data.currentEnergyChange ?? 0, data.moneyChange ?? 0);
+            if (data.items_and_stat_calculations && Array.isArray(data.items_and_stat_calculations) && data.items_and_stat_calculations.length > 0) {
+                logMessage(data.items_and_stat_calculations.join('\n\n'), data.currentHealthChange ?? 0, data.currentEnergyChange ?? 0, data.moneyChange ?? 0, expPoints ?? 0);
             }
 
             if (data.actions)
@@ -5969,13 +6014,13 @@ function shouldGeneratePassiveSkills() {
     return skillsToGenerate > 0;
 }
 
-async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum, predefinedSystemPrompts) {
+async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts) {
     let thinkingData = "";
     for (let currentStep = 0; currentStep < Number(ELEMENTS.thinkingModuleIterations.value ?? 1); currentStep++) {
         thinkingData = `${thinkingData} \n [TRY${currentStep}]`;
         const prompt = thinkingModule.getThinkingPrompt(task, translationModule.currentLanguage, thinkingData);
 
-        const result = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, true);
+        const result = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, true);
         thinkingData = `${thinkingData} \n ${result} [/TRY${currentStep}]`;
         logThinkingMessage(thinkingData);
 
@@ -5988,7 +6033,7 @@ async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCost
     return thinkingData;  
 }
 
-async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, doNotParse = false) {
+async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, doNotParse = false) {
     APIModule.initialize({
         signal: controller.signal,
         model: model,
@@ -6009,7 +6054,8 @@ async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, p
         otherCommonErrorMessage: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["common-error-message"],
         doNotParse: doNotParse,
         useStreaming: ELEMENTS.useStreaming.checked,
-        predefinedSystemPrompts: predefinedSystemPrompts
+        predefinedSystemPrompts: predefinedSystemPrompts,
+        predefinedMainPrompts: predefinedMainPrompts
     });
 
     switch (aiProvider) {

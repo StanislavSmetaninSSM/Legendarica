@@ -43,6 +43,7 @@ const APIModule = (function getAPIModule() {
 
     //prompts
     let predefinedSystemPrompts = [];
+    let predefinedMainPrompts = [];
 
     //----- API Functions -----//
 
@@ -73,6 +74,14 @@ const APIModule = (function getAPIModule() {
         } catch {
             throw messageParseErrorMessage + sanitizedString;
         }
+    }
+
+    function createPrompt(mainPrompt) {
+        let instructions = mainPrompt;
+        if (predefinedMainPrompts.length > 0)
+            instructions = mainPrompt + '\n' + predefinedMainPrompts.join('\n');
+
+        return instructions;
     }
 
     async function getStreamingMessageParts(response) {
@@ -167,6 +176,10 @@ const APIModule = (function getAPIModule() {
             predefinedSystemPrompts = parameters.predefinedSystemPrompts ?? [];
             if (predefinedSystemPrompts.length > 0)
                 systemInstructions = predefinedSystemPrompts.join('\n') + '\n' + systemInstructions;
+
+            predefinedMainPrompts = parameters.predefinedMainPrompts ?? [];
+            if (predefinedMainPrompts.length > 0)
+                prompt = createPrompt(prompt);
 
             signal = parameters.signal;
         },
