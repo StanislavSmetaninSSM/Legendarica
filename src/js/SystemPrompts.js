@@ -869,10 +869,18 @@ I hope these rules will help you better understand your role and create an unfor
             return `
             DO NOT FORGET: [
                 1. IMPORTANT: REMEMBER TO USE PARAGRAPHS IN THE TEXT OF 'response' VALUE OF KEY!
-                2. When you finish the 'response' value creation, check its text again and MANDATORY add the markdown paragraphs to all this text. To do this:
-                2.1. Insert two newline characters (\\n\\n) between paragraphs to create an empty line. This is how Markdown recognizes paragraphs. For example: «This is the first paragraph.\\n\\nThis is the second paragraph.»
-            ]
-            `
+                2. When you finish the 'response' value creation, check its text again and MANDATORY add the Markdown paragraphs to all this text. To do this:
+                2.1. Insert two newline characters (\\n\\n) between paragraphs to create an empty line. This is how Markdown recognizes paragraphs.
+                The GM must mandatory output these characters *literally*, including the backslashes, so that they are interpreted as escaped newline characters in Markdown. For example:
+
+                GOOD EXAMPLE:
+                «This is the first paragraph.\\n\\nThis is the second paragraph.»
+
+                BAD EXAMPLE (DO NOT DO THIS):
+                «This is the first paragraph.
+
+                This is the second paragraph.»
+            ]`
         }
     }
 })();
