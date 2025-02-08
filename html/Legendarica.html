@@ -12,6 +12,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
     <meta charset="utf-8">
     <title>Legendarica Absolute v1.6 - Neural Sandbox</title>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
     <link rel="stylesheet" href="../src/css/Legendarica.css">
 </head>
 
@@ -973,6 +974,15 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <h4 id="image-generate" class="infoDelete">Генерировать изображение</h4>
         </div>
 
+        <div id="data-editor-info" class="infoWindow">
+            <span id="data-editor-info-close" class="infoClose">×</span>
+            <span id="data-editor-info-adjust" class="adjustButton" onclick="togglePanelWidth(this.closest('.infoWindow'), [42, 56, 70])"><i class="uil uil-align-center-h"></i></span>
+            <span id="data-editor-info-move" class="moveButton"><i class="uil uil-puzzle-piece"></i></span>
+            <h2 id="data-editor-info-title">Редактирование данных</h2>
+            <div id="data-editor-info-content"></div>
+            <h4 id="data-editor-info-apply-button" class="infoApply">Применить</h4>
+        </div>
+
         <div id="inventoryItemContextMenuContainer" style="display: none; position: absolute;">
             <h4 id="inventory-item-context-menu-name"></h4>
             <ul id="inventory-item-context-menu"></ul>
@@ -1013,6 +1023,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/random-js/1.0.8/random.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.9"></script>
         <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.13"></script>
+        <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
         <script src="../src/js/Translations.js"></script>
         <script src="../src/js/Legendarica.js"></script>
         <script src="../src/js/LegendaricaAPI.js"></script>

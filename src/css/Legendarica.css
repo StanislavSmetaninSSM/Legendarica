@@ -189,7 +189,8 @@ input:checked + .slider {
     word-break: break-all;
 }
 
-.message .message-turn-and-close-button {
+.message .message-turn-and-close-button,
+.message .message-edit-button {
     font-size: 20px;
     position: relative;
     top: 5px;
@@ -199,12 +200,18 @@ input:checked + .slider {
     text-align: right;
 }
 
+.message .message-edit-button {
+    text-align: left;
+    left: 5px;
+}
+
 #log-box .message .message-turn-and-close-button,
 #thinking-log-box .message .message-turn-and-close-button {
     display: block !important;
 }
 
-.message:hover .message-turn-and-close-button {
+.message:hover .message-turn-and-close-button,
+.message:hover .message-edit-button {
     display: block;
 }
 
@@ -517,9 +524,14 @@ input:checked + .slider {
 
 .infoDelete,
 .infoOpen,
-.infoRestore {
+.infoRestore,
+.infoApply {
     cursor: pointer;
     margin-top: 20px;
+}
+
+.infoApply {
+    font-size: 18px;
 }
 
 .infoWindow {
@@ -723,6 +735,47 @@ img.rounded-corners {
     margin-top: 0px !important;
 }
 
+.EasyMDEContainer {
+    background-color: rgba(30, 30, 30, 0.7);
+    border: 1px solid #d4af37;
+    color: #d4af37;
+    border-radius: 5px;
+}
+
+.CodeMirror {
+    background: rgba(30, 30, 30, 0.7);
+    color: #d4af37;
+}
+
+.CodeMirror-selectedtext {
+    color: black !important;
+}
+
+.CodeMirror-cursor {
+    border-left: 1px solid #d4af37 !important;
+}
+
+.editor-toolbar {
+    background: rgba(30, 30, 30, 0.7);
+    color: #d4af37;
+}
+
+    .editor-toolbar button:hover {
+        background: rgba(30, 30, 30, 0.7) !important;
+        color: white !important;
+        border: 0px !important;
+    }
+
+.editor-preview {
+    background: rgba(30, 30, 30) !important;
+    padding: 15px !important;
+}
+
+.editor-statusbar {
+    background: rgba(30, 30, 30, 0.7);
+    color: #d4af37;
+}
+
 #info-panel {
     background-size: cover;
     background-repeat: no-repeat;
@@ -753,6 +806,7 @@ img.rounded-corners {
     border-radius: 10px;
     overflow-y: auto;
     box-sizing: border-box;
+    resize: none;
 }
 
     #user-input:focus-visible {
@@ -1032,4 +1086,15 @@ img.rounded-corners {
     flex: 1;
     margin-top: 10px;
     margin-left: 20px;
+}
+
+#data-editor-info {
+    width: 42%;
+}
+
+#data-editor-info-content {
+    width: 100%;
+    margin-bottom: 30px;
+    overflow: auto;
+    font-size: 18px;
 }

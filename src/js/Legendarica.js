@@ -248,6 +248,15 @@ const ELEMENTS = {
     imageInfoImage: document.getElementById('image-info-image'),
     imageInfoThumbnail: document.getElementById('image-info-thumbnail'),
     imageInfoPrompt: document.getElementById('image-info-prompt'),
+    //data editor
+    dataEditorInfo: document.getElementById('data-editor-info'),
+    dataEditorInfoClose: document.getElementById('data-editor-info-close'),
+    dataEditorInfoAdjust: document.getElementById('data-editor-info-adjust'),
+    dataEditorInfoMove: document.getElementById('data-editor-info-move'),
+    dataEditorInfoTitle: document.getElementById('data-editor-info-title'),
+    dataEditorInfoContent: document.getElementById('data-editor-info-content'),
+    dataEditorInfoApplyButton: document.getElementById('data-editor-info-apply-button'),    
+
     //Disable extra features buttons
     useStatus: document.getElementById('useStatus'),
     clearStatus: document.getElementById('clear-status-label'),
@@ -835,6 +844,24 @@ function sendMessageToChat(message, messageType) {
         speak(message); // Start text-to-speech function
     }
 
+    addMessageControllers(message, messageType, messageContainer);
+    
+    //Add element to chat.
+    ELEMENTS.chatBox.appendChild(messageContainer);
+    ELEMENTS.chatBox.scrollTop = ELEMENTS.chatBox.scrollHeight;
+}
+
+function addMessageControllers(message, messageType, messageContainer) {  
+    if (messageType !== 'system') {
+        const editButton = document.createElement('span');
+        editButton.innerHTML = `<i class="uil uil-edit"></i>`;
+        editButton.classList.add('message-edit-button');
+        editButton.onclick = () => {
+            editChatMessage(message, messageType, messageContainer);
+        };
+        messageContainer.insertBefore(editButton, messageContainer.firstChild);
+    }
+
     //Creating a turn counter.
     const countTurn = document.createElement('span');
     countTurn.classList.add('message-turn-and-close-button');
@@ -842,7 +869,7 @@ function sendMessageToChat(message, messageType) {
         ? ` ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["name_turn"]} #${turn} `
         : messageType === 'gm' ? ` ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["name_answer_turn"]} #${turn} ` : '';
     messageContainer.appendChild(countTurn);
-
+    
     //Creating a delete button.
     const messageCloseButton = document.createElement('span');
     messageCloseButton.classList.add('message-turn-and-close-button');
@@ -850,11 +877,26 @@ function sendMessageToChat(message, messageType) {
     messageCloseButton.addEventListener('click', () => {
         ELEMENTS.chatBox.removeChild(messageContainer);
     });
-    messageContainer.appendChild(messageCloseButton);
+    messageContainer.appendChild(messageCloseButton);   
+}
 
-    //Add element to chat.
-    ELEMENTS.chatBox.appendChild(messageContainer);
-    ELEMENTS.chatBox.scrollTop = ELEMENTS.chatBox.scrollHeight;
+function editChatMessage(message, messageType, messageContainer) {    
+    const propertyName = 'Сообщение';
+    const elementType = messageType == 'gm'
+        ? 'Гейм Мастера'
+        : 'пользователя';
+
+    openDataEditor(
+        propertyName,
+        message,
+        elementType,
+        (newMessage) => {
+            messageContainer.innerHTML = markdown(newMessage);
+            addMessageControllers(newMessage, messageType, messageContainer);
+
+            ELEMENTS.chatBox.scrollTop = ELEMENTS.chatBox.scrollHeight;
+        }
+    );
 }
 
 //Collect starting inventory.
@@ -2845,6 +2887,37 @@ function updateWeight() {
     else
         ELEMENTS.weightStatus.innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["weight-status-value-bad"];    
 }
+
+//---- DATA EDITOR ----//
+function openDataEditor(propertyName, currentValue, elementType, onChangeCallback, additionalData = null) {
+    ELEMENTS.dataEditorInfoTitle.textContent = `Редактирование: ${propertyName} (${elementType})`;
+
+    ELEMENTS.dataEditorInfoContent.innerHTML = '';
+
+    const textarea = document.createElement('textarea');
+    ELEMENTS.dataEditorInfoContent.appendChild(textarea);
+
+    const easyMDE = new EasyMDE({
+        element: textarea,
+        initialValue: currentValue,
+        autofocus: true,
+        spellChecker: false
+    });
+
+
+    ELEMENTS.dataEditorInfoApplyButton.onclick = () => {
+        const newValue = easyMDE.value();
+        onChangeCallback(newValue, additionalData);
+        ELEMENTS.dataEditorInfo.style.display = 'none';
+    };       
+
+    ELEMENTS.dataEditorInfoClose.onclick = () => {
+        ELEMENTS.dataEditorInfo.style.display = 'none'
+    };
+
+    ELEMENTS.dataEditorInfo.style.display = 'block';
+}
+
 
 //---- CLOSE ACTIONS ----//
 //close info window actions
@@ -6268,6 +6341,7 @@ initializeDraggableObject(ELEMENTS.inventoryInfo);
 initializeDraggableObject(ELEMENTS.inventoryContainerInfo);
 initializeDraggableObject(ELEMENTS.questInfo);
 initializeDraggableObject(ELEMENTS.imageInfo);
+initializeDraggableObject(ELEMENTS.dataEditorInfo);
 
 initializeTooltipController('tooltip-max-weight-button', 'tooltip-max-weight');
 initializeTooltipController('tooltip-critical-weight-button', 'tooltip-critical-weight');
