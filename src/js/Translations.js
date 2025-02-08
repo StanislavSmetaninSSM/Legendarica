@@ -7532,7 +7532,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["human"]; // 'survival_kit'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statPersuasion}+1, ${statLuck}+1, ${itemName}`;
+                    return `**${raceName}**: ${statPersuasion} +1, ${statLuck} +1, ${itemName}`;
                 },
                 superhuman: function () {
                     const raceName = translations[language]["superhuman"] || "Superhuman";
@@ -7542,7 +7542,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["superhuman"]; // 'psionic_headband'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statInt}+2, ${statWis}+1, ${statCon}-1, ${itemName}`;
+                    return `**${raceName}**: ${statInt} +2, ${statWis} +1, ${statCon} -1, ${itemName}`;
                 },
                 infected: function () {
                     const raceName = translations[language]["infected"] || "Infected";
@@ -7552,7 +7552,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["infected"]; // 'adrenaline_syringe'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statStr}+2, ${statCon}+1, ${statInt}-1, ${itemName}`;
+                    return `**${raceName}**: ${statStr} +2, ${statCon} +1, ${statInt} -1, ${itemName}`;
                 },
                 ratman: function () {
                     const raceName = translations[language]["ratman"] || "Ratman";
@@ -7562,7 +7562,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["ratman"]; // 'grappling_hook'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statDex}+2, ${statPer}+1, ${statAtt}-1, ${itemName}`;
+                    return `**${raceName}**: ${statDex} +2, ${statPer} +1, ${statAtt} -1, ${itemName}`;
                 },
                 ghoul: function () {
                     const raceName = translations[language]["ghoul"] || "Ghoul";
@@ -7573,7 +7573,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["ghoul"]; // 'bone_blade'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statCon}+3, ${statSpeed}+1, ${statInt}-1, ${statAtt}-1, ${itemName}`;
+                    return `**${raceName}**: ${statCon} +3, ${statSpeed} +1, ${statInt} -1, ${statAtt} -1, ${itemName}`;
                 },
                 mutant: function () {
                     const raceName = translations[language]["mutant"] || "Mutant";
@@ -7584,7 +7584,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["mutant"]; // 'mutant_serum'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statStr}+1, ${statSpeed}+1, ${statPer}+1, ${statCon}-1, ${itemName}`;
+                    return `**${raceName}**: ${statStr} +1, ${statSpeed} +1, ${statPer} +1, ${statCon} -1, ${itemName}`;
                 },
                 supermutant: function () {
                     const raceName = translations[language]["supermutant"] || "Supermutant";
@@ -7596,7 +7596,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["supermutant"]; // 'crude_bonehammer'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statStr}+3, ${statCon}+2, ${statInt}-1, ${statWis}-1, ${statPer}-1, ${itemName}`;
+                    return `**${raceName}**: ${statStr} +3, ${statCon} +2, ${statInt} -1, ${statWis} -1, ${statPer} -1, ${itemName}`;
                 },
                 cyborg: function () {
                     const raceName = translations[language]["cyborg"] || "Cyborg";
@@ -7606,7 +7606,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["cyborg"]; // 'hacking_device'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statDex}+1, ${statPer}+2, ${statPers}-1, ${itemName}`;
+                    return `**${raceName}**: ${statDex} +1, ${statPer} +2, ${statPers} -1, ${itemName}`;
                 },
                 android: function () {
                     const raceName = translations[language]["android"] || "Android";
@@ -7616,7 +7616,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["android"]; // 'skin_repair_paste'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statInt}+1, ${statAtt}+2, ${statCon}-1, ${itemName}`;
+                    return `**${raceName}**: ${statInt} +1, ${statAtt} +2, ${statCon} -1, ${itemName}`;
                 },
                 robot: function () {
                     const raceName = translations[language]["robot"] || "Robot";
@@ -7626,7 +7626,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["robot"]; // 'EMP_Generator'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statStr}+1, ${statInt}+2, ${statPers}-1, ${itemName}`;
+                    return `**${raceName}**: ${statStr} +1, ${statInt} +2, ${statPers} -1, ${itemName}`;
                 },
                 gray: function () {
                     const raceName = translations[language]["gray"] || "Gray";
@@ -7635,7 +7635,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["gray"]; // 'communication_implant'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statInt}+3, ${statDex}-1, ${itemName}`;
+                    return `**${raceName}**: ${statInt} +3, ${statDex} -1, ${itemName}`;
                 },
                 alien: function () {
                     const raceName = translations[language]["alien"] || "Alien";
@@ -7645,7 +7645,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["alien"]; // 'cloaking_device'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statPer}+2, ${statLuck}+1, ${statTrade}-1, ${itemName}`;
+                    return `**${raceName}**: ${statPer} +2, ${statLuck} +1, ${statTrade} -1, ${itemName}`;
                 },
                 hybrid: function () {
                     const raceName = translations[language]["hybrid"] || "Hybrid";
@@ -7657,7 +7657,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["hybrid"]; // 'symbiotic_implant'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statAtt}+1, ${statPers}+1, ${statCon}-1, ${statStr}-1, ${statSpeed}+2, ${itemName}`;
+                    return `**${raceName}**: ${statAtt} +1, ${statPers} +1, ${statCon} -1, ${statStr} -1, ${statSpeed} +2, ${itemName}`;
                 },
                 ancient: function () {
                     const raceName = translations[language]["ancient"] || "Ancient";
@@ -7667,7 +7667,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                     const itemKey = raceInventory["ancient"]; // 'ancient_artifact'
                     const itemName = translations[language][itemKey] || itemKey;
 
-                    return `${raceName}: ${statWis}+2, ${statInt}+1, ${statStr}-1, ${itemName}`;
+                    return `**${raceName}**: ${statWis} +2, ${statInt} +1, ${statStr} -1, ${itemName}`;
                 }
             }
 
@@ -7676,13 +7676,13 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
         
         setPostApocalypseRacesTooltip: function (raceInventory) {            
             const id = "post-apocalypse-races";
-            this.setTranslation("english-language", id, `Race affects the starting location, generation of racial abilities, storyline, and starting bonuses to skills and items:\n${getDescriptions("english-language")}`);
-            this.setTranslation("russian-language", id, `Раса влияет на стартовую локацию, генерацию расового умения, сюжет и стартовые бонусы к навыкам и предметам:\n${getDescriptions("russian-language")}`);
-            this.setTranslation("spanish-language", id, `La raza afecta la ubicación inicial, la generación de habilidades raciales, la trama y las bonificaciones iniciales a las habilidades y objetos:\n${getDescriptions("spanish-language")}`);
-            this.setTranslation("portuguese-language", id, `A raça afeta a localização inicial, a geração de habilidades raciais, a história e os bônus iniciais para habilidades e itens:\n${getDescriptions("portuguese-language")}`);
-            this.setTranslation("hindi-language", id, `जाति प्रारंभिक स्थान, जातीय क्षमताओं की उत्पत्ति, कहानी और कौशल और वस्तुओं पर प्रारंभिक बोनस को प्रभावित करती है:\n${getDescriptions("hindi-language")}`);
-            this.setTranslation("german-language", id, `Die Rasse beeinflusst den Startort, die Generierung von Rassenfähigkeiten, die Handlung und die Startboni für Fähigkeiten und Gegenstände:\n${getDescriptions("german-language")}`);
-            this.setTranslation("french-language", id, `La race affecte l'emplacement de départ, la génération des capacités raciales, l'histoire et les bonus de départ aux compétences et objets:\n${getDescriptions("french-language")}`);
+            this.setTranslation("english-language", id, `Race affects the starting location, generation of racial abilities, storyline, and starting bonuses to skills and items:\n\n${getDescriptions("english-language")}`);
+            this.setTranslation("russian-language", id, `Раса влияет на стартовую локацию, генерацию расового умения, сюжет и стартовые бонусы к навыкам и предметам:\n\n${getDescriptions("russian-language")}`);
+            this.setTranslation("spanish-language", id, `La raza afecta la ubicación inicial, la generación de habilidades raciales, la trama y las bonificaciones iniciales a las habilidades y objetos:\n\n${getDescriptions("spanish-language")}`);
+            this.setTranslation("portuguese-language", id, `A raça afeta a localização inicial, a geração de habilidades raciais, a história e os bônus iniciais para habilidades e itens:\n\n${getDescriptions("portuguese-language")}`);
+            this.setTranslation("hindi-language", id, `जाति प्रारंभिक स्थान, जातीय क्षमताओं की उत्पत्ति, कहानी और कौशल और वस्तुओं पर प्रारंभिक बोनस को प्रभावित करती है:\n\n${getDescriptions("hindi-language")}`);
+            this.setTranslation("german-language", id, `Die Rasse beeinflusst den Startort, die Generierung von Rassenfähigkeiten, die Handlung und die Startboni für Fähigkeiten und Gegenstände:\n\n${getDescriptions("german-language")}`);
+            this.setTranslation("french-language", id, `La race affecte l'emplacement de départ, la génération des capacités raciales, l'histoire et les bonus de départ aux compétences et objets:\n\n${getDescriptions("french-language")}`);
 
             return id;
 
@@ -7692,7 +7692,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                 for (const race in raceDescriptions) {
                     descriptions.push(raceDescriptions[race]());
                 }
-                return "\n" + descriptions.join("\n\n");
+                return "\n\n" + descriptions.join("\n\n");
             }
         },
 
@@ -7706,7 +7706,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 scout: function () {
@@ -7717,7 +7717,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 bounty_hunter: function () {
@@ -7728,7 +7728,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 survivor: function () {
@@ -7739,7 +7739,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 raider: function () {
@@ -7750,7 +7750,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 bandit: function () {
@@ -7761,7 +7761,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 wanderer: function () {
@@ -7772,7 +7772,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 veteran: function () {
@@ -7783,7 +7783,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 mercenary: function () {
@@ -7794,7 +7794,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 stalker: function () {
@@ -7805,7 +7805,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 citizen: function () {
@@ -7816,7 +7816,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 vault_dweller: function () {
@@ -7827,7 +7827,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 savage: function () {
@@ -7838,7 +7838,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 soldier: function () {
@@ -7849,7 +7849,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 engineer: function () {
@@ -7860,7 +7860,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 medic: function () {
@@ -7871,7 +7871,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 sniper: function () {
@@ -7882,7 +7882,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 virologist: function () {
@@ -7893,7 +7893,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 biotechnician: function () {
@@ -7904,7 +7904,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 reborn: function () {
@@ -7915,7 +7915,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 xenomant: function () {
@@ -7926,7 +7926,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 psionic: function () {
@@ -7937,7 +7937,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 telekinetic: function () {
@@ -7948,7 +7948,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 telepath: function () {
@@ -7959,7 +7959,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 pyromancer: function () {
@@ -7970,7 +7970,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 cryomancer: function () {
@@ -7981,7 +7981,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 mechanized_soldier: function () {
@@ -7992,7 +7992,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 mechanical_guardian: function () {
@@ -8003,7 +8003,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 cybernetic_assassin: function () {
@@ -8014,7 +8014,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 cybernetic_spy: function () {
@@ -8025,7 +8025,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 precursor_agent: function () {
@@ -8036,7 +8036,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 precursor_scientist: function () {
@@ -8047,7 +8047,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 precursor_soldier: function () {
@@ -8058,7 +8058,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 alien_scout: function () {
@@ -8069,7 +8069,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 space_architect: function () {
@@ -8080,7 +8080,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 galactic_explorer: function () {
@@ -8091,7 +8091,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 },
 
                 alien_soldier: function () {
@@ -8102,7 +8102,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                         return translations[language][itemKey] || itemKey;
                     }).join(", ");
 
-                    return `${className}: ${statName}${statBonus}, ${inventoryItems}`;
+                    return `**${className}**: ${statName} ${statBonus}, ${inventoryItems}`;
                 }
             };
 
@@ -8111,13 +8111,13 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
 
         setPostApocalypseClassesTooltip: function (classes) {
             const id = "post-apocalypse-classes";
-            this.setTranslation("english-language", id, `Class affects the generation of passive abilities upon leveling up, bonuses to starting attributes, and starting items: \n${getDescriptions("english-language")}`);
-            this.setTranslation("russian-language", id, `Класс влияет на генерацию пассивных умений при повышении уровня, бонусы к стартовым характеристикам и на стартовые предметы: \n${getDescriptions("russian-language")}`);
-            this.setTranslation("spanish-language", id, `La clase afecta la generación de habilidades pasivas al subir de nivel, bonificaciones a los atributos iniciales y objetos iniciales: \n${getDescriptions("spanish-language")}`);
-            this.setTranslation("portuguese-language", id, `A classe afeta a geração de habilidades passivas ao subir de nível, bônus para atributos iniciais e itens iniciais: \n${getDescriptions("portuguese-language")}`);
-            this.setTranslation("hindi-language", id, `क्लास स्तर बढ़ाने पर निष्क्रिय क्षमताओं की उत्पत्ति, प्रारंभिक विशेषताओं में बोनस और प्रारंभिक वस्तुओं को प्रभावित करता है: \n${getDescriptions("hindi-language")}`);
-            this.setTranslation("german-language", id, `Die Klasse beeinflusst die Generierung passiver Fähigkeiten beim Aufsteigen, Boni auf Startattribute und Startgegenstände: \n${getDescriptions("german-language")}`);
-            this.setTranslation("french-language", id, `La classe affecte la génération des capacités passives lors de la montée en niveau, les bonus aux attributs de départ et les objets de départ : \n${getDescriptions("french-language")}`);
+            this.setTranslation("english-language", id, `Class affects the generation of passive abilities upon leveling up, bonuses to starting attributes, and starting items: \n\n${getDescriptions("english-language")}`);
+            this.setTranslation("russian-language", id, `Класс влияет на генерацию пассивных умений при повышении уровня, бонусы к стартовым характеристикам и на стартовые предметы: \n\n${getDescriptions("russian-language")}`);
+            this.setTranslation("spanish-language", id, `La clase afecta la generación de habilidades pasivas al subir de nivel, bonificaciones a los atributos iniciales y objetos iniciales: \n\n${getDescriptions("spanish-language")}`);
+            this.setTranslation("portuguese-language", id, `A classe afeta a geração de habilidades passivas ao subir de nível, bônus para atributos iniciais e itens iniciais: \n\n${getDescriptions("portuguese-language")}`);
+            this.setTranslation("hindi-language", id, `क्लास स्तर बढ़ाने पर निष्क्रिय क्षमताओं की उत्पत्ति, प्रारंभिक विशेषताओं में बोनस और प्रारंभिक वस्तुओं को प्रभावित करता है: \n\n${getDescriptions("hindi-language")}`);
+            this.setTranslation("german-language", id, `Die Klasse beeinflusst die Generierung passiver Fähigkeiten beim Aufsteigen, Boni auf Startattribute und Startgegenstände: \n\n${getDescriptions("german-language")}`);
+            this.setTranslation("french-language", id, `La classe affecte la génération des capacités passives lors de la montée en niveau, les bonus aux attributs de départ et les objets de départ : \n\n${getDescriptions("french-language")}`);
 
             return id;
 
@@ -8128,7 +8128,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
                 for (const className in classDescriptions) {
                     descriptions.push(classDescriptions[className]());
                 }
-                return "\n" + descriptions.join("\n\n");
+                return "\n\n" + descriptions.join("\n\n");
             }
         },
 

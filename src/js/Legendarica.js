@@ -370,7 +370,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
 
     function processRaces() {
         const raceTooltipId = translationModule.setPostApocalypseRacesTooltip(races.inventory);
-        document.getElementById('post-apocalypse-races').innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][raceTooltipId];
+        document.getElementById('post-apocalypse-races').innerHTML = markdown(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][raceTooltipId]);
 
         const raceOptionsHtml = Object.entries(races.inventory)
             .map(([race]) => `<option value="${race}" data-translate-key="${race}">${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][race]}</option>`)
@@ -388,7 +388,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
 
             if (choosedRace) {
                 const descriptions = translationModule.getRaceDescriptions(ELEMENTS.chooseLanguageMenu.value, races.inventory);
-                raceMessage.innerHTML = `<br/>${descriptions[choosedRace]()}. <br/>${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId]}.`;
+                raceMessage.innerHTML = markdown(`\n\n${descriptions[choosedRace]()}. \n\n${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId]}.`);
             } else {
                 raceMessage.innerHTML = '';
             }
@@ -397,7 +397,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
 
     function processClasses() {
         const classTooltipId = translationModule.setPostApocalypseClassesTooltip(classes);
-        document.getElementById('post-apocalypse-classes').innerHTML = translationModule.translations[ELEMENTS.chooseLanguageMenu.value][classTooltipId];
+        document.getElementById('post-apocalypse-classes').innerHTML = markdown(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][classTooltipId]);
 
         const classOptionsHtml = Object.entries(classes)
             .map(([classId]) => `<option value="${classId}" data-translate-key="${classId}">${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][classId]}</option>`)
@@ -414,7 +414,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
 
             if (choosedClass) {
                 const descriptions = translationModule.getClassDescriptions(ELEMENTS.chooseLanguageMenu.value, classes);
-                classMessage.innerHTML = `<br/>${descriptions[choosedClass]()}. <br/>${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId]}`;
+                classMessage.innerHTML = markdown(`\n\n${descriptions[choosedClass]()}. \n\n${translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId]}`);
             } else {
                 classMessage.innerHTML = '';
             }
@@ -6276,6 +6276,15 @@ initializeTooltipController('tooltip-provider-ai-button', 'tooltip-provider-ai')
 initializeTooltipController('tooltip-provider-ai2-button', 'tooltip-provider-ai2');
 initializeTooltipController('tooltip-provider-ai3-button', 'tooltip-provider-ai3');
 initializeTooltipController('tooltip-provider-ai4-button', 'tooltip-provider-ai4');
+initializeTooltipController('tooltip-race-button', 'tooltip-race');
+initializeTooltipController('tooltip-class-button', 'tooltip-class');
+initializeTooltipController('tooltip-rpg-button', 'tooltip-rpg');
+initializeTooltipController('post-apocalypse-races-button', 'post-apocalypse-races');
+initializeTooltipController('post-apocalypse-classes-button', 'post-apocalypse-classes');
+initializeTooltipController('tooltip-post-apocalypse-rpg-button', 'tooltip-post-apocalypse-rpg');
+initializeTooltipController('post-apocalypse-tooltip-noMagic-button', 'post-apocalypse-tooltip-noMagic');
+initializeTooltipController('tooltip-noMagic-button', 'tooltip-noMagic');
+initializeTooltipController('tooltip-rpg2-button', 'tooltip-rpg2');
 
 document.addEventListener('DOMContentLoaded', function () {
     const collapseButtonMain = document.getElementById('collapseButtonMain');
