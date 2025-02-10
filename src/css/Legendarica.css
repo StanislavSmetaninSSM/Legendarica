@@ -651,7 +651,8 @@ img.rounded-corners {
         width: 0 !important;
     }
 
-.action-buttons.collapsed {
+.action-buttons.collapsed,
+#user-input-editor.collapsed {
     max-height: 0px;
     opacity: 0;
 }
@@ -740,11 +741,21 @@ img.rounded-corners {
     border: 1px solid #d4af37;
     color: #d4af37;
     border-radius: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: #d4af37 #2c2c2c;
 }
 
 .CodeMirror {
     background: rgba(30, 30, 30, 0.7);
     color: #d4af37;
+}
+
+.CodeMirror-fullscreen {
+    background: rgba(30, 30, 30) !important;
+    color: #d4af37 !important;
+    z-index: 20000 !important;
+    border-right: none !important;
+    border-left: none !important;
 }
 
 .CodeMirror-selectedtext {
@@ -760,11 +771,25 @@ img.rounded-corners {
     color: #d4af37;
 }
 
-    .editor-toolbar button:hover {
+    .editor-toolbar button:hover,
+    .editor-toolbar button.active {
         background: rgba(30, 30, 30, 0.7) !important;
         color: white !important;
         border: 0px !important;
     }
+
+    .editor-toolbar.fullscreen {
+        background: rgba(30, 30, 30) !important;
+        color: #d4af37 !important;
+        border: 0px !important;
+    }
+
+        .editor-toolbar.fullscreen button:hover,
+        .editor-toolbar.fullscreen button.active {
+            background: rgba(30, 30, 30) !important;
+            color: white !important;
+            border: 0px !important;
+        }
 
 .editor-preview {
     background: rgba(30, 30, 30) !important;
@@ -1097,4 +1122,9 @@ img.rounded-corners {
     margin-bottom: 30px;
     overflow: auto;
     font-size: 18px;
+}
+
+#user-input-editor .EasyMDEContainer {
+    max-height: 300px;
+    overflow: auto;
 }

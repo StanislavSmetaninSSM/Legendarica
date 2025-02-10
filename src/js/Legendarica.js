@@ -785,9 +785,6 @@ ELEMENTS.startNewSettingButton.onclick = function () {
     }
 };
 
-//Send text to chat on button click.
-ELEMENTS.sendButton.addEventListener('click', () => sendRequest(ELEMENTS.userInput.value.trim()));
-
 //Abort sending message.
 ELEMENTS.cancelButton.addEventListener('click', () => {
     if (!confirmAction())
@@ -795,12 +792,6 @@ ELEMENTS.cancelButton.addEventListener('click', () => {
 
     controller.abort();
     controller = new AbortController();
-});
-
-//Send text to chat on Enter key press.
-ELEMENTS.userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey)
-        sendRequest(ELEMENTS.userInput.value.trim())
 });
 
 //Clear half of chat.
@@ -2904,7 +2895,6 @@ function openDataEditor(propertyName, currentValue, elementType, onChangeCallbac
         spellChecker: false
     });
 
-
     ELEMENTS.dataEditorInfoApplyButton.onclick = () => {
         const newValue = easyMDE.value();
         onChangeCallback(newValue, additionalData);
@@ -3044,6 +3034,108 @@ function initializeTooltipController(buttonId, tooltipId) {
             isOverTooltip = false;
             handleHideTooltip();
         });
+    }
+}
+
+function initializeGamePanelsController() {
+    const collapseButtonMain = document.getElementById('collapseButtonMain');
+    const collapseButtonSettings = document.getElementById('collapseButtonSettings');
+    const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
+    const playerInfo = document.querySelector('.player-info');
+    const settingsPanel = document.getElementById('settings-info');
+    const actionButtons = document.querySelector('.action-buttons');
+    const collapsed = 'collapsed';
+    
+    let isMainCollapsed = false;
+    let isSettingsCollapsed = false;
+    let isInputAreaCollapsed = false;
+
+    settingsPanel.classList.add('settings-panel', collapsed);
+
+    collapseButtonMain.addEventListener('click', function () {
+        if (collapseButtonMain.style.display == 'none')
+            return;
+
+        isMainCollapsed = !isMainCollapsed;
+        collapseButtonMain.classList.toggle(collapsed);
+        playerInfo.classList.toggle(collapsed);
+        const chatArea = document.querySelector(".chat-area");
+        chatArea.style.flex = isMainCollapsed
+            ? "auto"
+            : getChatAreaFlex(playerInfo.style.width);
+    });
+
+    collapseButtonSettings.addEventListener('click', function () {
+        if (collapseButtonSettings.style.display == 'none')
+            return;
+
+        isSettingsCollapsed = !isSettingsCollapsed;
+        collapseButtonSettings.classList.toggle(collapsed);
+        settingsPanel.classList.toggle(collapsed);
+    });
+
+    collapseButtonInputArea.addEventListener('click', function () {
+        if (collapseButtonInputArea.style.display == 'none')
+            return;
+
+        isInputAreaCollapsed = !isInputAreaCollapsed;
+        collapseButtonInputArea.classList.toggle(collapsed);
+        actionButtons.classList.toggle(collapsed);
+        if (actionButtons.classList.contains(collapsed))
+            setTimeout(() => actionButtons.style.display = 'none', 250);
+        else
+            actionButtons.style.display = 'flex';        
+    });
+}
+
+function initializeNpcInfoTabs() {
+    const npcInfoTabs = document.querySelectorAll("#npc-info-tabs .tab");
+    npcInfoTabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            const currentActiveTab = document.querySelector("#npc-info-tabs .tab.active");
+            currentActiveTab.classList.remove("active");
+
+            const currentContentId = currentActiveTab.dataset.target;
+            document.getElementById(currentContentId).style.display = "none";
+            document.getElementById(currentContentId + "-label").style.display = "none";
+
+            tab.classList.add("active");
+
+            const targetContentId = tab.dataset.target;
+            document.getElementById(targetContentId).style.display = "block";
+            document.getElementById(targetContentId + "-label").style.display = "block";
+        });
+    });
+}
+
+function initializeUserInputEditor() {
+    const easyMDE = new EasyMDE({
+        element: ELEMENTS.userInput,
+        placeholder: "Говори свое действие, отважный искатель приключений...",
+        autofocus: true,
+        spellChecker: false,
+        minHeight: "40px",
+    });
+    const codeMirror = easyMDE.codemirror;
+
+    ELEMENTS.sendButton.addEventListener('click', () => {
+        sendRequest(easyMDE.value().trim());
+    });
+
+    codeMirror.on("keydown", function (cm, event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            sendRequest(easyMDE.value().trim());
+            event.preventDefault();
+            clearUserInputValue();
+        }
+    });
+    
+    window.getUserInputValue = () => {
+        return easyMDE.value().trim();
+    }
+
+    window.clearUserInputValue = () => {
+        codeMirror.setValue('');
     }
 }
 
@@ -4255,7 +4347,7 @@ async function sendRequest(currentMessage) {
     if (currentMessage) {
         if (turn !== 0) {
             sendMessageToChat(currentMessage, 'user');
-            ELEMENTS.userInput.value = '';
+            clearUserInputValue();
         } else {
             ++turn;
         }       
@@ -5782,6 +5874,7 @@ First, I'll explain what happened. To reduce the load on you, we've split your a
 In the first part of the answer, you created a detailed JSON response structure with all the necessary values, but in the value of the 'response' key, you wrote a shortened version.
 Now, you must write the full version of the 'response' key, using artistic and literary style of writing. Your full version of 'response' value of key must be consistent with the shortened version and all other data you included in your previous JSON response.
 You're encouraged to rewrite, expand and even invent new elements (for example, dialogues, plot twists, or character interactions) within the 'response' value from the shortened version, as long as the core plot stays the same. Craft a richer and more engaging narrative beyond simply detailing what already exists, as long as the core plot stays the same.
+Feel free to completely rewrite the text of shorten version of the 'response' value of key. For example, if the text violates the text writing rules (e.g., if the text uses rhetorical questions, which is BAD), mandatory rewrite it. However, the core plot should stays the same.
 Use the maximum number of characters available to you for the answer. This is your task for the current turn.
 You should not write anything now except for the value of the 'response' key. It's a Super Rule 1.
 
@@ -6331,100 +6424,17 @@ fsLightbox.props.type = "image";
 setTimeout(removeFloatingImage, 20000);
 setInterval(autoSave, 300000);
 
-checkGameSource();
-setGameInputsSynch();
-
-initializeDraggableObject(ELEMENTS.locationInfo);
-initializeDraggableObject(ELEMENTS.npcInfo);
-initializeDraggableObject(ELEMENTS.skillInfo);
-initializeDraggableObject(ELEMENTS.inventoryInfo);
-initializeDraggableObject(ELEMENTS.inventoryContainerInfo);
-initializeDraggableObject(ELEMENTS.questInfo);
-initializeDraggableObject(ELEMENTS.imageInfo);
-initializeDraggableObject(ELEMENTS.dataEditorInfo);
-
-initializeTooltipController('tooltip-max-weight-button', 'tooltip-max-weight');
-initializeTooltipController('tooltip-critical-weight-button', 'tooltip-critical-weight');
-initializeTooltipController('tooltip-inventory-basket-button', 'tooltip-inventory-basket');
-initializeTooltipController('tooltip-provider-ai-button', 'tooltip-provider-ai');
-initializeTooltipController('tooltip-provider-ai2-button', 'tooltip-provider-ai2');
-initializeTooltipController('tooltip-provider-ai3-button', 'tooltip-provider-ai3');
-initializeTooltipController('tooltip-provider-ai4-button', 'tooltip-provider-ai4');
-initializeTooltipController('tooltip-race-button', 'tooltip-race');
-initializeTooltipController('tooltip-class-button', 'tooltip-class');
-initializeTooltipController('tooltip-rpg-button', 'tooltip-rpg');
-initializeTooltipController('post-apocalypse-races-button', 'post-apocalypse-races');
-initializeTooltipController('post-apocalypse-classes-button', 'post-apocalypse-classes');
-initializeTooltipController('tooltip-post-apocalypse-rpg-button', 'tooltip-post-apocalypse-rpg');
-initializeTooltipController('post-apocalypse-tooltip-noMagic-button', 'post-apocalypse-tooltip-noMagic');
-initializeTooltipController('tooltip-noMagic-button', 'tooltip-noMagic');
-initializeTooltipController('tooltip-rpg2-button', 'tooltip-rpg2');
-
 document.addEventListener('DOMContentLoaded', function () {
-    const collapseButtonMain = document.getElementById('collapseButtonMain');
-    const collapseButtonSettings = document.getElementById('collapseButtonSettings');
-    const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
-    const playerInfo = document.querySelector('.player-info');
-    const settingsPanel = document.getElementById('settings-info');
-    const actionButtons = document.querySelector('.action-buttons');
-    settingsPanel.classList.add('settings-panel', 'collapsed');
-
-    let isMainCollapsed = false;
-    let isSettingsCollapsed = false;
-    let isInputAreaCollapsed = false;
-
-    collapseButtonMain.addEventListener('click', function () {
-        if (collapseButtonMain.style.display == 'none') return;
-
-        isMainCollapsed = !isMainCollapsed;
-        collapseButtonMain.classList.toggle('collapsed');
-        playerInfo.classList.toggle('collapsed');
-        const chatArea = document.querySelector(".chat-area");
-        chatArea.style.flex = isMainCollapsed ? "auto" : getChatAreaFlex(playerInfo.style.width);
-    });
-
-    collapseButtonSettings.addEventListener('click', function () {
-        if (collapseButtonSettings.style.display == 'none') return;
-
-        isSettingsCollapsed = !isSettingsCollapsed;
-        collapseButtonSettings.classList.toggle('collapsed');
-        settingsPanel.classList.toggle('collapsed');
-    });
-
-    collapseButtonInputArea.addEventListener('click', function () {
-        if (collapseButtonInputArea.style.display == 'none') return;
-
-        isInputAreaCollapsed = !isInputAreaCollapsed;
-        collapseButtonInputArea.classList.toggle('collapsed');
-        actionButtons.classList.toggle('collapsed');
-    });
-
+    //inventory item context menu handler
     document.addEventListener('click', (event) => {
         if (ELEMENTS.inventoryItemContextMenuContainer.style.display !== 'block')
             return;
 
         if (event.target !== ELEMENTS.inventoryItemContextMenu)
             hideInventoryItemContextMenu();
-    });
+    });       
 
-    const npcInfoTabs = document.querySelectorAll("#npc-info-tabs .tab");
-    npcInfoTabs.forEach(tab => {
-        tab.addEventListener("click", () => {
-            const currentActiveTab = document.querySelector("#npc-info-tabs .tab.active");
-            currentActiveTab.classList.remove("active");
-
-            const currentContentId = currentActiveTab.dataset.target;
-            document.getElementById(currentContentId).style.display = "none";
-            document.getElementById(currentContentId + "-label").style.display = "none";
-
-            tab.classList.add("active");
-
-            const targetContentId = tab.dataset.target;
-            document.getElementById(targetContentId).style.display = "block";
-            document.getElementById(targetContentId + "-label").style.display = "block";
-        });
-    });
-
+    //show/hide thinking module log
     ELEMENTS.useThinkingModule.onchange = function (e) {
         const displayNoneClass = 'displayNone';
         const logButton = document.getElementById('log-thinking-button-label');
@@ -6436,6 +6446,38 @@ document.addEventListener('DOMContentLoaded', function () {
             ELEMENTS.thinkingLogBox.classList.add(displayNoneClass);
             logButton.classList.add(displayNoneClass);
         }
-    }
+    }   
 
+    checkGameSource();
+    setGameInputsSynch();
+
+    initializeGamePanelsController();
+    initializeNpcInfoTabs();
+    initializeUserInputEditor();
+
+    initializeDraggableObject(ELEMENTS.locationInfo);
+    initializeDraggableObject(ELEMENTS.npcInfo);
+    initializeDraggableObject(ELEMENTS.skillInfo);
+    initializeDraggableObject(ELEMENTS.inventoryInfo);
+    initializeDraggableObject(ELEMENTS.inventoryContainerInfo);
+    initializeDraggableObject(ELEMENTS.questInfo);
+    initializeDraggableObject(ELEMENTS.imageInfo);
+    initializeDraggableObject(ELEMENTS.dataEditorInfo);
+
+    initializeTooltipController('tooltip-max-weight-button', 'tooltip-max-weight');
+    initializeTooltipController('tooltip-critical-weight-button', 'tooltip-critical-weight');
+    initializeTooltipController('tooltip-inventory-basket-button', 'tooltip-inventory-basket');
+    initializeTooltipController('tooltip-provider-ai-button', 'tooltip-provider-ai');
+    initializeTooltipController('tooltip-provider-ai2-button', 'tooltip-provider-ai2');
+    initializeTooltipController('tooltip-provider-ai3-button', 'tooltip-provider-ai3');
+    initializeTooltipController('tooltip-provider-ai4-button', 'tooltip-provider-ai4');
+    initializeTooltipController('tooltip-race-button', 'tooltip-race');
+    initializeTooltipController('tooltip-class-button', 'tooltip-class');
+    initializeTooltipController('tooltip-rpg-button', 'tooltip-rpg');
+    initializeTooltipController('post-apocalypse-races-button', 'post-apocalypse-races');
+    initializeTooltipController('post-apocalypse-classes-button', 'post-apocalypse-classes');
+    initializeTooltipController('tooltip-post-apocalypse-rpg-button', 'tooltip-post-apocalypse-rpg');
+    initializeTooltipController('post-apocalypse-tooltip-noMagic-button', 'post-apocalypse-tooltip-noMagic');
+    initializeTooltipController('tooltip-noMagic-button', 'tooltip-noMagic');
+    initializeTooltipController('tooltip-rpg2-button', 'tooltip-rpg2');
 });

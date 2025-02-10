@@ -24,7 +24,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
             <div class="chat-area">
                 <div id="chat-box" class="chat-box" style="border-radius: 10px;"></div>
                 <div class="input-area">
-                    <textarea type="text" id="user-input" placeholder="Говори свое действие, отважный искатель приключений..." oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                    <!--<textarea type="text" id="user-input" placeholder="Говори свое действие, отважный искатель приключений..." oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>-->
+                    <div id="user-input-editor">
+                        <textarea type="text" id="user-input" style="display: none"></textarea>
+                    </div>
+
                     <div style="display: flex; gap: 10px; border-radius: 10px;">
                         <button id="send-button" style="width: 100%; border-radius: 10px;">Отправить</button>
                     </div>
@@ -36,7 +40,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                         <button class="action-button" id="action-4" style="border-radius: 10px;"></button>
                     </div>
 
-                    <div style="margin-top: 10px;">
+                    <div style="margin-top: 5px;">
                         <button id="cancel-button" style="background-color: #800000; color: white; width: 100%; position: relative; border-radius: 10px;">Отменить</button>
                         <button id="resend-button" style="background-color: #800000; color: white; width: 100%; position: relative; border-radius: 10px; margin-top: 10px;">Отправить сообщение повторно</button>
                     </div>
