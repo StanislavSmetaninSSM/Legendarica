@@ -2894,13 +2894,19 @@ function openDataEditor(propertyName, currentValue, elementType, onChangeCallbac
         autofocus: true,
         spellChecker: false
     });
+    const codeMirror = easyMDE.codemirror;
 
     ELEMENTS.dataEditorInfoApplyButton.onclick = () => {
         const newValue = easyMDE.value();
         onChangeCallback(newValue, additionalData);
         ELEMENTS.dataEditorInfo.style.display = 'none';
-    };       
-
+    };     
+    
+    codeMirror.on("keydown", function (cm, event) {
+        if (event.key === 'Enter' && !event.shiftKey)
+            ELEMENTS.dataEditorInfoApplyButton.onclick();        
+    });
+   
     ELEMENTS.dataEditorInfoClose.onclick = () => {
         ELEMENTS.dataEditorInfo.style.display = 'none'
     };
