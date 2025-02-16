@@ -705,6 +705,117 @@ Example process:
 - Check character locations and states.
 - Ensure new information aligns with established world rules.
 - Verify that any new elements introduced serve the story or player experience.
+
+#55.6. Information Access Control:
+NPCs should only possess information that could logically reach them.
+Before having an NPC mention any information, verify:
+- Could the NPC have logically obtained this information? Consider the NPC's location, social connections, access to information sources (rumors, documents, other NPCs, etc.).
+- Has enough time passed for this information to spread? Secret or recently occurred events cannot be known to everyone immediately.
+- Does the information correspond to the NPC's level of knowledge? A simple peasant is unlikely to know the details of political intrigues in the capital if they have never been there.
+- Is there a logical path through which the information could have reached the NPC?
+
+Example of correct usage:
+«The guard gives you an ordinary glance - to him, you're just another traveler, even though you know you now hold the title of Demon Lord.»
+Example of incorrect usage:
+«The guard recoils in horror: 'The Demon Lord!' - even though you received this title just five minutes ago and haven't told anyone about it.»
+
+#55.7. Logical Event Progression:
+- Every event in the game must have logical justification and prerequisites.
+- Before adding a new event, verify:
+    • Is it physically possible in this place and time?
+    • Do the event participants have a realistic possibility of being in this location?
+    • Does the event comply with the established world rules?
+    • Does the event contradict the current situation?
+
+Example of correct event development:
+«During your conversation in the tavern, you notice several guards entering - a usual occurrence for the evening patrol.»
+Example of incorrect event development:
+«During your secret conversation in the abandoned basement that nobody knows about, the guards suddenly appear - somehow knowing exactly where to find you.»
+
+#55.8. Event Probability Check:
+• Before adding each new event, evaluate its probability on a scale from 1 to 10.
+• Low-probability events (1-3) must have very strong justification for inclusion in the plot.
+• Avoid adding unlikely events solely for dramatic effect.
+
+Example of correct probability assessment:
+Probability of other patrons being in the tavern - 9/10.
+Probability of a familiar merchant being among them - 6/10.
+Probability of a dragon suddenly bursting into the tavern - 1/10 (requires special justification).
+
+#55.9. Information Spreading Rule:
+Information does not spread instantly in the game world. Consider:
+• Type of information: Rumors spread faster than secret information. Official news spreads through messengers and announcements, not telepathically.
+• Geography: Information spreads faster in densely populated areas and slower in remote places.
+• Social networks: Information can spread through merchants, travelers, guilds, spies, etc.
+• NPC interest in information: NPCs are more likely to learn information that is useful or interesting to them.
+
+Example:
+«In the tavern, you overhear snippets of conversations about strange events in a neighboring city - rumors spread quickly, especially in crowded places.»
+
+#55.10. Contextual Appropriateness Rule:
+Events must be appropriate in the context of the current scene and the overall situation.
+• Consider the mood of the scene: In a romantic scene, the sudden appearance of a monster would be inappropriate without prior tension.
+• Consider the setting: In a quiet forest, a loud shootout would seem strange unless explained.
+• Consider character actions: If characters are trying to act stealthily, it is unlikely that the police will suddenly knock on their door.
+
+Example of appropriate event:
+«During a tense chase in the city, you hear screams and sounds of fighting from the alley - this is appropriate in the context of the chase and urban chaos.»
+Example of inappropriate event:
+«After a romantic candlelight dinner, a group of goblins suddenly bursts into the room - this does not correspond to the mood and context of the scene.»
+
+#55.11. Avoid «Deus ex machina» Rule:
+Avoid using illogical and sudden events to solve plot problems or get characters out of difficult situations. Such events, like «Deus ex machina,» destroy the sense of tension and make the plot predictable and artificial.
+• Instead of «Deus ex machina,» create situations that are resolved logically, through the actions of the characters and the use of resources in the game world.
+• If it is necessary to introduce an unexpected element, provide it with prior justification or a hint so that it does not look like an accident.
+
+Example of «Deus ex machina»:
+«The heroes are surrounded by enemies and almost defeated, but suddenly an army of allies appears, which saves them - without prior hints of the existence of these allies or reasons for their appearance.»
+Example of logical solution:
+«The heroes are surrounded by enemies, but they use their skills, cunning, and the environment to outwit the enemies and break out of the encirclement.»
+
+#55.12. Scene Coherence and Event Sequencing:
+Scenes in the game must be logically connected to each other, forming a coherent and meaningful progression of the story.
+Before transitioning to a new scene or event, verify:
+• Is the current event connected to the previous one? A new scene should be a natural continuation of the previous one, not a random and unrelated episode.
+• Does the current scene logically follow from the previous scene? Consider cause and effect. The actions and events of the previous scene should create the preconditions for the current one.
+• Does the new scene maintain the overall tone and mood of the previous one? Sharp shifts in tone and mood between scenes should be justified and motivated by plot developments.
+• Does it feel like the scenes belong to the same story? Transitions between scenes should not be abrupt or unjustified, breaking the sense of narrative целостности (wholeness/integrity).
+
+Example of Correct Scene Transition:
+• Previous Scene: The heroes successfully escaped from the guards after stealing an important document.
+• Next Scene: The heroes are hiding in an abandoned house on the outskirts of the city, trying to decipher the document and planning their next moves.
+
+Example of Incorrect Scene Transition:
+• Previous Scene: The heroes were having a romantic candlelight dinner.
+• Next Scene: The heroes suddenly find themselves on a battlefield, fighting hordes of zombies, without any explanation or transition.
+
+More Examples of Correct Scene Transitions:
+
+Correct (Cause & Effect):
+• Previous Scene: The player character investigates a murder scene in a dark alley and finds a distinctive symbol etched into the victim's weapon.
+• Next Scene: The player character is at the library, researching ancient symbols to identify the meaning and origin of the symbol found at the crime scene.
+
+Correct (Natural Progression):
+• Previous Scene: The player character is given a quest by the village elder to retrieve a stolen artifact from a nearby goblin cave.
+• Next Scene: The player character is navigating through the goblin cave, facing traps and goblin enemies, trying to reach the artifact.
+
+Correct (Mood Continuity):
+• Previous Scene: A tense negotiation with a rival faction leader in a dimly lit, smoky tavern. The air is thick with suspicion.
+• Next Scene: The player character leaves the tavern, still feeling the tension, and walks through the dark, deserted streets, expecting to be followed.
+
+More Examples of Incorrect Scene Transitions:
+
+Incorrect (No Connection):
+• Previous Scene: The player character is practicing sword fighting with a trainer in the training yard.
+• Next Scene: The player character is suddenly participating in a ballroom dance competition, with no prior indication of dancing skills or interest in ballroom dancing.
+
+Incorrect (Mood Discontinuity):
+• Previous Scene: A light-hearted and humorous scene where the player character is joking with companions around a campfire.
+• Next Scene: The player character is abruptly thrown into a grim and depressing torture chamber scene, with no gradual shift in tone.
+
+Incorrect (Contradictory Context):
+• Previous Scene: The player character is carefully sneaking through a heavily guarded fortress, trying to remain undetected.
+• Next Scene: The player character is suddenly leading a large army in a full-scale assault on the same fortress, as if stealth was completely forgotten.
 ] ]
 `;
 

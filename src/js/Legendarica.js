@@ -258,6 +258,11 @@ const ELEMENTS = {
     dataEditorInfoContent: document.getElementById('data-editor-info-content'),
     dataEditorInfoApplyButton: document.getElementById('data-editor-info-apply-button'),    
 
+    //collapse buttons
+    collapseButtonMain: document.getElementById('collapseButtonMain'),
+    collapseButtonSettings: document.getElementById('collapseButtonSettings'),
+    collapseButtonInputArea: document.getElementById('collapseButtonInputArea'),
+
     //Disable extra features buttons
     useStatus: document.getElementById('useStatus'),
     clearStatus: document.getElementById('clear-status-label'),
@@ -365,8 +370,7 @@ ELEMENTS.clearStatus.onclick = function () {
 }
 
 ELEMENTS.postApocalypticGameButton.onclick = function () {
-    ELEMENTS.modalSetting.style.display = "none";
-    ELEMENTS.modal.style.display = "none";
+    hideAllModalWindows();
     ELEMENTS.postApocalypticModal.style.display = "block";
     ELEMENTS.ttsModeToggleSettings.checked = false;
 
@@ -513,9 +517,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
     ELEMENTS.postApocalypticStartGameButton.onclick = function () {
         ELEMENTS.apiKey.value = ELEMENTS.apiKey4.value;
         ELEMENTS.aiModel.value = ELEMENTS.aiModel4.value?.trim();
-
-        showAllSettingsCollapsButtons();
-
+        
         styleOfImage = "modern fantasy";
 
         const name = document.getElementById('character-post-apocalyptic-name').value;
@@ -556,13 +558,14 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
         classes[characterClass].addClassBonus();
 
         inventory = getStartInventory(characterClass, race);
-        ELEMENTS.postApocalypticModal.style.display = "none";
-
         updateStatsWithoutGm();
        
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_description"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_donate"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_discord"], 'system');
+
+        hideAllModalWindows();
+        showAllSettingsCollapsButtons();
 
         const startGameMessageId = translationModule.setPostApocalypticNewGameMessage(
             CHARACTER_INFO.name, CHARACTER_INFO.gender,
@@ -576,9 +579,8 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
 }
 
 ELEMENTS.myGameButton.onclick = function () {
-    ELEMENTS.modalSetting.style.display = "block";
-    ELEMENTS.modal.style.display = "none";
-    ELEMENTS.postApocalypticModal.style.display = "none";
+    hideAllModalWindows();
+    ELEMENTS.modalSetting.style.display = "block";   
 }
 
 //Random character generator
@@ -604,8 +606,6 @@ ELEMENTS.createCharacterButton.onclick = function () {
     ELEMENTS.apiKey.value = ELEMENTS.apiKey2.value;
     ELEMENTS.aiModel.value = ELEMENTS.aiModel2.value?.trim();
     document.getElementById('choose-language').value = ELEMENTS.chooseLanguageMenu.value;
-
-    showAllSettingsCollapsButtons();
 
     styleOfImage = "medieval fantasy";
     const name = document.getElementById('character-name').value,
@@ -648,7 +648,7 @@ ELEMENTS.createCharacterButton.onclick = function () {
 
         gameRaces[race]();
         inventory = getStartInventory(characterClass, race);
-        ELEMENTS.modal.style.display = "none";
+
         const campaign = selectedCampaign == 'random'
             ? ELEMENTS.campaignSelect.options[Math.floor(Math.random() * ELEMENTS.campaignSelect.options.length)].text
             : selectedCampaign;
@@ -658,6 +658,9 @@ ELEMENTS.createCharacterButton.onclick = function () {
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_description"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_donate"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_discord"], 'system');
+
+        hideAllModalWindows();
+        showAllSettingsCollapsButtons();
 
         const messageId = translationModule.setShortNewGameMessage(name, gender, race, characterClass, selectedCampaign);
         sendRequest(translationModule.translations[ELEMENTS.chooseLanguageMenu.value][messageId]);
@@ -674,8 +677,6 @@ ELEMENTS.startNewSettingButton.onclick = function () {
     ELEMENTS.apiKey.value = ELEMENTS.apiKey3.value;
     ELEMENTS.aiModel.value = ELEMENTS.aiModel3.value?.trim();
     document.getElementById('choose-language').value = ELEMENTS.chooseLanguageMenu.value;
-
-    showAllSettingsCollapsButtons();
 
     function getElementValue(id) {
         return document.getElementById(id).value;
@@ -748,14 +749,15 @@ ELEMENTS.startNewSettingButton.onclick = function () {
         CHARACTER_INFO.raceDescription = getElementValue(elementIds.raceDescription);
         CHARACTER_INFO.classDescription = getElementValue(elementIds.classDescription);
 
-        ELEMENTS.modalSetting.style.display = "none";
-        ELEMENTS.postApocalypticModal.style.display = "none";
-
         experienceProcessing(Math.floor(getElementValue(elementIds.startExp)));
         updateStatsWithoutGm();
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_description"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_donate"], 'system');
         sendMessageToChat(translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["game_starting_discord"], 'system');
+
+        hideAllModalWindows();
+        showAllSettingsCollapsButtons();
+
         const messageId = translationModule.setFullNewGameMessage({
             name: CHARACTER_INFO.name,
             gender: CHARACTER_INFO.gender,
@@ -2922,12 +2924,24 @@ ELEMENTS.imageInfoClose.onclick = function () { ELEMENTS.imageInfo.style.display
 //--------------------------------------------------------------------UTILITY------------------------------------------------------------------//
 
 function showAllSettingsCollapsButtons() {
-    const collapseButtonMain = document.getElementById('collapseButtonMain');
-    collapseButtonMain.style.display = "flex";
-    const collapseButtonSettings = document.getElementById('collapseButtonSettings');
-    collapseButtonSettings.style.display = "flex";
-    const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
-    collapseButtonInputArea.style.display = "flex";
+    if (ELEMENTS.modalSetting.style.display == "none" && ELEMENTS.modal.style.display == "none" && ELEMENTS.postApocalypticModal.style.display == "none") {
+        ELEMENTS.collapseButtonMain.style.display = "flex";
+        ELEMENTS.collapseButtonInputArea.style.display = "flex";
+    }
+
+    ELEMENTS.collapseButtonSettings.style.display = "flex";
+}
+
+function hideAllSettingsCollapsButtons() {
+    ELEMENTS.collapseButtonMain.style.display = "none";
+    ELEMENTS.collapseButtonInputArea.style.display = "none";    
+    ELEMENTS.collapseButtonSettings.style.display = "none";
+}
+
+function hideAllModalWindows() {
+    ELEMENTS.modalSetting.style.display = "none";
+    ELEMENTS.modal.style.display = "none";
+    ELEMENTS.postApocalypticModal.style.display = "none";
 }
 
 function initializeTooltipController(buttonId, tooltipId) {
@@ -3037,10 +3051,7 @@ function initializeTooltipController(buttonId, tooltipId) {
     }
 }
 
-function initializeGamePanelsController() {
-    const collapseButtonMain = document.getElementById('collapseButtonMain');
-    const collapseButtonSettings = document.getElementById('collapseButtonSettings');
-    const collapseButtonInputArea = document.getElementById('collapseButtonInputArea');
+function initializeGamePanelsController() {   
     const playerInfo = document.querySelector('.player-info');
     const settingsPanel = document.getElementById('settings-info');
     const actionButtons = document.querySelector('.action-buttons');
@@ -3052,12 +3063,12 @@ function initializeGamePanelsController() {
 
     settingsPanel.classList.add('settings-panel', collapsed);
 
-    collapseButtonMain.addEventListener('click', function () {
-        if (collapseButtonMain.style.display == 'none')
+    ELEMENTS.collapseButtonMain.addEventListener('click', function () {
+        if (ELEMENTS.collapseButtonMain.style.display == 'none')
             return;
 
         isMainCollapsed = !isMainCollapsed;
-        collapseButtonMain.classList.toggle(collapsed);
+        ELEMENTS.collapseButtonMain.classList.toggle(collapsed);
         playerInfo.classList.toggle(collapsed);
         const chatArea = document.querySelector(".chat-area");
         chatArea.style.flex = isMainCollapsed
@@ -3065,21 +3076,21 @@ function initializeGamePanelsController() {
             : getChatAreaFlex(playerInfo.style.width);
     });
 
-    collapseButtonSettings.addEventListener('click', function () {
-        if (collapseButtonSettings.style.display == 'none')
+    ELEMENTS.collapseButtonSettings.addEventListener('click', function () {
+        if (ELEMENTS.collapseButtonSettings.style.display == 'none')
             return;
 
         isSettingsCollapsed = !isSettingsCollapsed;
-        collapseButtonSettings.classList.toggle(collapsed);
+        ELEMENTS.collapseButtonSettings.classList.toggle(collapsed);
         settingsPanel.classList.toggle(collapsed);
     });
 
-    collapseButtonInputArea.addEventListener('click', function () {
-        if (collapseButtonInputArea.style.display == 'none')
+    ELEMENTS.collapseButtonInputArea.addEventListener('click', function () {
+        if (ELEMENTS.collapseButtonInputArea.style.display == 'none')
             return;
 
         isInputAreaCollapsed = !isInputAreaCollapsed;
-        collapseButtonInputArea.classList.toggle(collapsed);
+        ELEMENTS.collapseButtonInputArea.classList.toggle(collapsed);
         actionButtons.classList.toggle(collapsed);
         if (actionButtons.classList.contains(collapsed))
             setTimeout(() => actionButtons.style.display = 'none', 250);
@@ -3118,7 +3129,7 @@ function initializeEasyMDE(element, initialValue, options, callback) {
         autofocus: options?.autofocus ?? true,
         spellChecker: options?.spellChecker ?? false,
         minHeight: options?.minHeight,
-        toolbar: options?.toolbar ?? defaultToolbar
+        toolbar: options?.toolbar ?? defaultToolbar        
     });
 
     const codeMirror = easyMDE.codemirror;
@@ -3133,6 +3144,13 @@ function initializeEasyMDE(element, initialValue, options, callback) {
             }
         });
     }
+
+    codeMirror.on("refresh", () => {
+        if (codeMirror.getOption("fullScreen"))
+            hideAllSettingsCollapsButtons();
+        else
+            showAllSettingsCollapsButtons();
+    });
 
     return easyMDE;
 }
@@ -4121,8 +4139,6 @@ function getDataForSave() {
 }
 
 function loadGameInternal(savedData) {
-    showAllSettingsCollapsButtons();
-
     try {
         let loadedCharacterInfo = sanitizeObject(JSON.parse(savedData));
 
@@ -4167,9 +4183,8 @@ function loadGameInternal(savedData) {
     updateElements();
     updateStatsWithoutGm();
 
-    ELEMENTS.modalSetting.style.display = "none";
-    ELEMENTS.modal.style.display = "none";
-    ELEMENTS.postApocalypticModal.style.display = "none";
+    hideAllModalWindows();
+    showAllSettingsCollapsButtons();
 
     lastUserMessage = `${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["message_after_load"]}`;
     sendRequest(lastUserMessage);
