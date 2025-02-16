@@ -69,6 +69,7 @@ const ELEMENTS = {
 
     //chat
     chatBox: document.getElementById('chat-box'), // chat window
+    userInputContainer: document.getElementById('user-input-editor'),
     userInput: document.getElementById('user-input'), // Action input line
     sendButton: document.getElementById('send-button'), // Send message button
     cancelButton: document.getElementById('cancel-button'),
@@ -2882,31 +2883,20 @@ function updateWeight() {
 //---- DATA EDITOR ----//
 function openDataEditor(propertyName, currentValue, elementType, onChangeCallback, additionalData = null) {
     ELEMENTS.dataEditorInfoTitle.textContent = `Редактирование: ${propertyName} (${elementType})`;
-
     ELEMENTS.dataEditorInfoContent.innerHTML = '';
 
     const textarea = document.createElement('textarea');
-    ELEMENTS.dataEditorInfoContent.appendChild(textarea);
+    ELEMENTS.dataEditorInfoContent.appendChild(textarea);    
+    const easyMDE = initializeEasyMDE(textarea, currentValue, null, callback);
 
-    const easyMDE = new EasyMDE({
-        element: textarea,
-        initialValue: currentValue,
-        autofocus: true,
-        spellChecker: false
-    });
-    const codeMirror = easyMDE.codemirror;
-
-    ELEMENTS.dataEditorInfoApplyButton.onclick = () => {
+    function callback(easyMDE, event) {
         const newValue = easyMDE.value();
         onChangeCallback(newValue, additionalData);
         ELEMENTS.dataEditorInfo.style.display = 'none';
-    };     
-    
-    codeMirror.on("keydown", function (cm, event) {
-        if (event.key === 'Enter' && !event.shiftKey)
-            ELEMENTS.dataEditorInfoApplyButton.onclick();        
-    });
-   
+    }
+
+    ELEMENTS.dataEditorInfoApplyButton.onclick = () => callback(easyMDE);  
+     
     ELEMENTS.dataEditorInfoClose.onclick = () => {
         ELEMENTS.dataEditorInfo.style.display = 'none'
     };
@@ -2914,6 +2904,17 @@ function openDataEditor(propertyName, currentValue, elementType, onChangeCallbac
     ELEMENTS.dataEditorInfo.style.display = 'block';
 }
 
+function simulateEscapeKeyPress() {
+    const escapeEvent = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        code: 'Escape',
+        keyCode: 27,
+        which: 27,
+        bubbles: true,
+        cancelable: true
+    });
+    document.dispatchEvent(escapeEvent);
+}
 
 //---- CLOSE ACTIONS ----//
 //close info window actions
@@ -3114,35 +3115,78 @@ function initializeNpcInfoTabs() {
     });
 }
 
-function initializeUserInputEditor() {
+function initializeEasyMDE(element, initialValue, options, callback) {
+    const defaultToolbar = ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "code", "table", "|", "undo", "redo", "|", "fullscreen", "side-by-side", "|", "guide"];
+
     const easyMDE = new EasyMDE({
-        element: ELEMENTS.userInput,
-        placeholder: "Говори свое действие, отважный искатель приключений...",
-        autofocus: true,
-        spellChecker: false,
-        minHeight: "40px",
+        element: element,
+        initialValue: initialValue,
+        placeholder: options?.placeholder ?? "",
+        autofocus: options?.autofocus ?? true,
+        spellChecker: options?.spellChecker ?? false,
+        minHeight: options?.minHeight,
+        toolbar: options?.toolbar ?? defaultToolbar
     });
+
     const codeMirror = easyMDE.codemirror;
-
-    ELEMENTS.sendButton.addEventListener('click', () => {
-        sendRequest(easyMDE.value().trim());
-    });
-
     codeMirror.on("keydown", function (cm, event) {
         if (event.key === 'Enter' && !event.shiftKey) {
-            sendRequest(easyMDE.value().trim());
-            event.preventDefault();
-            clearUserInputValue();
+            if (typeof callback === 'function')
+                callback(easyMDE, event);
+            if (codeMirror.getOption("fullScreen"))
+                simulateEscapeKeyPress();
         }
     });
+
+    return easyMDE;
+}
+
+function destroyEasyMDE(containerElement) {
+    if (!containerElement)
+        return;    
+
+    let easyMDEContainer = containerElement.querySelector(".EasyMDEContainer");
+    if (easyMDEContainer)
+        easyMDEContainer.remove();    
+}
+
+function initializeUserInputEditor() {    
+    destroyEasyMDE(ELEMENTS.userInputContainer);
+
+    const options = {
+        placeholder: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["user-input"],
+        minHeight: "40px"
+    };
+   
+    const easyMDE = initializeEasyMDE(ELEMENTS.userInput, "", options, enterButtonCallback);      
+    const codeMirror = easyMDE.codemirror;
+
+    ELEMENTS.sendButton.onclick = () => {
+        const value = getValue(easyMDE);
+        sendRequest(value);
+    };
     
     window.getUserInputValue = () => {
-        return easyMDE.value().trim();
+        return getValue(easyMDE);
     }
 
     window.clearUserInputValue = () => {
         codeMirror.setValue('');
     }
+
+    function getValue(easyMDE) {
+        return easyMDE.value().trim();
+    }
+
+    function enterButtonCallback(easyMDE, event) {
+        const value = getValue(easyMDE);
+        sendRequest(value);
+        event.preventDefault();
+    }
+}
+
+function initializeGameInstructionEditors() {
+
 }
 
 function confirmAction(message) {
@@ -5881,6 +5925,7 @@ In the first part of the answer, you created a detailed JSON response structure 
 Now, you must write the full version of the 'response' key, using artistic and literary style of writing. Your full version of 'response' value of key must be consistent with the shortened version and all other data you included in your previous JSON response.
 You're encouraged to rewrite, expand and even invent new elements (for example, dialogues, plot twists, or character interactions) within the 'response' value from the shortened version, as long as the core plot stays the same. Craft a richer and more engaging narrative beyond simply detailing what already exists, as long as the core plot stays the same.
 Feel free to completely rewrite the text of shorten version of the 'response' value of key. For example, if the text violates the text writing rules (e.g., if the text uses rhetorical questions, which is BAD), mandatory rewrite it. However, the core plot should stays the same.
+The key rule is non-interference in the player's actions. You are not allowed to decide what the player will do and say. Follow this rule and rewrite all text which violates it.
 Use the maximum number of characters available to you for the answer. This is your task for the current turn.
 You should not write anything now except for the value of the 'response' key. It's a Super Rule 1.
 
@@ -6455,6 +6500,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }   
 
     checkGameSource();
+    translationModule.setTranslationFunctions([initializeUserInputEditor]);
+
     setGameInputsSynch();
 
     initializeGamePanelsController();

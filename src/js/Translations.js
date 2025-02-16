@@ -8,7 +8,7 @@
 */
 
 const translationModule = (function getTranslationModule() {
-
+    
     //------ Module data ------//
     const translations = {
         "english-language": {
@@ -5991,6 +5991,8 @@ Après avoir dépassé le poids critique, le personnage ne peut plus ramasser de
         }
     };
 
+    let translationFunctions = [];
+
     //------ Internal ------//
     function getDefaultLanguage() {
         const language = navigator.language || navigator.userLanguage;
@@ -6032,8 +6034,8 @@ Après avoir dépassé le poids critique, le personnage ne peut plus ramasser de
             'character-gender2', 'character-description',
             'character-name-my-game', 'world-description',
             'character-name', 'api-key', 'api-key2', 'api-key3', 'ai-model', 'ai-model2', 'ai-model3',
-            'max-gm-symbols', 'my-rules', 'user-input', 'style-of-image-input', 'system-instructions',
-            'world-system-instructions', "character-post-apocalyptic-name", "ai-model4", "api-key4"
+            'max-gm-symbols', 'style-of-image-input', 'system-instructions',
+            "character-post-apocalyptic-name", "ai-model4", "api-key4"
         ];
 
         //Update placeholders
@@ -6220,6 +6222,11 @@ Après avoir dépassé le poids critique, le personnage ne peut plus ramasser de
         translateOptions('character-post-apocalyptic-race');
         translateOptions('character-post-apocalyptic-class');
         translateOptions('campaign-post-apocalyptic-select');
+
+        translationFunctions.forEach(function (translationFunction) {
+            if (typeof translationFunction === "function")
+                translationFunction();
+        });
     }
 
     (function setDefaultDataAndHandlers() {
@@ -6233,13 +6240,13 @@ Après avoir dépassé le poids critique, le personnage ne peut plus ramasser de
 
         //Add event listener to change language
         newGameLanguageMenu.addEventListener('change', function () {
-            setLanguage(this.value);
             settingsLanguageMenu.value = this.value;
+            setLanguage(this.value);
         });
 
         settingsLanguageMenu.addEventListener('change', function () {
-            setLanguage(this.value);
             newGameLanguageMenu.value = this.value;
+            setLanguage(this.value);
         });
     })();
 
@@ -6265,6 +6272,11 @@ Après avoir dépassé le poids critique, le personnage ne peut plus ramasser de
             languageData[id] = translation;
             if (!isLanguageExist)
                 translations[language] = languageData;
+        },
+
+        setTranslationFunctions: function (functionsArray) {
+            if (Array.isArray(functionsArray))
+                translationFunctions = functionsArray;
         },
 
         setShortNewGameMessage: function (name, gender, race, characterClass, campaign) {
