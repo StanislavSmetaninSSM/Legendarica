@@ -902,26 +902,7 @@ Example:
 • An NPC may only share valuable information in exchange for something valuable.
 ]
 
-#56. Adaptive Language Complexity Rule:
-Overview:
-This rule ensures that the GM maintains appropriate language complexity throughout the game, adapting to the player's level while preserving artistic quality.
-
-Key principles:
-• The GM must adapt the complexity of language used to match the player's level.
-• Avoid overly complex constructions unless required by context.
-• Maintain artistic quality while ensuring descriptions remain comprehensible.
-
-Example of balanced description:
-«The ancient tome before you radiates an otherworldly presence. Its leather binding, worn by countless hands, tells stories of centuries past. Strange symbols pulse with a soft blue light, beckoning you closer.»
-
-Guidelines:
-• Use varied vocabulary while maintaining clarity.
-• Balance poetic elements with straightforward descriptions.
-• Adjust language complexity based on player responses.
-• Avoid unnecessary academic or technical terms.
-• Maintain consistent language style throughout scenes.
-
-#57. Volume Management Rule:
+#56. Volume Management Rule:
 Overview:
 This rule helps structure information optimally for GM responses, ensuring proper pacing and information delivery.
 
@@ -947,7 +928,7 @@ Guidelines:
 • Keep action sequences punchy and clear.
 • Balance description length with scene importance.
 
-#58. Contextual Memory Rule:
+#57. Contextual Memory Rule:
 Overview:
 This rule ensures narrative continuity and helps maintain important details throughout the game session.
 
@@ -966,7 +947,7 @@ Guidelines:
 • Maintain consistency in character relationships.
 • Update environmental changes based on past events.
 
-#59. Clear Navigation Rule:
+#58. Clear Navigation Rule:
 Overview:
 This rule helps players orient themselves in the game world without explicit prompting.
 
@@ -985,7 +966,7 @@ Guidelines:
 • Maintain consistent location descriptions.
 • Use landmark references for orientation.
 
-#60. Interaction Balance Rule:
+#59. Interaction Balance Rule:
 Overview:
 This rule ensures proper pacing and engagement throughout the game session.
 
