@@ -816,6 +816,42 @@ Incorrect (Mood Discontinuity):
 Incorrect (Contradictory Context):
 • Previous Scene: The player character is carefully sneaking through a heavily guarded fortress, trying to remain undetected.
 • Next Scene: The player character is suddenly leading a large army in a full-scale assault on the same fortress, as if stealth was completely forgotten.
+
+#55.13. Restriction of NPC Access to Secret Information:
+NPCs must operate only with information that they could have obtained through observation, communication, rumors, or documents. Before including any secret details in dialogue or description, ensure that:
+• This information became available to the NPC through logically justified channels;
+• Secret data known only to the player is not reflected in NPC behavior or speech until it is appropriately revealed.
+Example of correct usage: «An ordinary townsman cannot know about the recent change in the Hero's status if he was not present at the event or did not hear about it from trusted sources.»
+
+#55.14. Spatial-Temporal Logic:
+Every new event or action must strictly adhere to the established constraints of time and space within the game world. When introducing new elements, it is necessary to:
+• Consider the geographic location, time of day, and preceding events;
+• Verify the possibility of logically moving characters between locations without breaking the internal logic of the world.
+Example: If the action takes place in one city, NPCs cannot suddenly refer to events or facts related to distant regions without proper justification.
+
+#55.15. NPC Knowledge Filtering by Social Status:
+The level of knowledge and access to information for NPCs must correspond to their social status, profession, and circle of acquaintance. To implement this principle:
+• High-ranking characters may possess more complete and detailed information about world events;
+• Ordinary townspeople, peasants, or random passers-by should not know details concerning political intrigues or the player's personal secrets.
+Example: An ordinary merchant would not be able to reveal the secret title of Demon Lord if that fact has not been discussed within their circle.
+
+#55.16. Contextual Information Update:
+The information known to NPCs must be updated in accordance with changes in the game world. When the situation changes:
+• NPCs acquire new data logically through direct observations, rumors, or documents;
+• Changes introduced by the player should influence the information available to NPCs through sequential and justified dissemination.
+Example: If the player secretly acquires a title, NPCs begin learning about it gradually through conversations and rumors, rather than immediately after the event.
+
+#55.17. Principle of Dynamic Information Dissemination:
+The spread of news, rumors, and secrets in the game world must occur gradually, reflecting real social and geographic constraints:
+• Information should not become available to all NPCs simultaneously;
+• The dissemination of information is regulated by social ties, geographic location, and the NPCs' interest in the event.
+Example: After a secret event, rumors spread in several stages, and only after some time does the majority of characters receive the news.
+
+#55.18. NPC Action Sequence Verification:
+The behavior of NPCs must logically follow from their previous actions and correspond to the current context of the world. To adhere to this principle:
+• Ensure that any sudden changes in NPC behavior are justified by their personality traits and the situation;
+• Verify that the sequence of events does not contradict previously established facts and the logic of the world.
+Example: If NPCs have just been observed engaging in a suspicious conversation, they cannot immediately shift to a calm discussion of everyday matters without a clear and logical explanation for the change in mood.
 ] ]
 `;
 
