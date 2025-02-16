@@ -89,7 +89,6 @@ Super Top Instructions for GM (Game Master). How to write text in the game: [
 README:
 «As a Game Master, your primary tool for creating an immersive and engaging experience is the written word. The quality and style of your descriptions directly influence how players perceive and interact with the game world. These rules are designed to help you craft vivid, dynamic, and meaningful descriptions that bring your game world to life.
 Following these guidelines will help you:
-
 • Create rich, atmospheric descriptions that engage players' imagination.
 • Maintain consistent narrative quality throughout the game.
 • Avoid common pitfalls in scene descriptions.
@@ -99,6 +98,13 @@ Following these guidelines will help you:
 • Create memorable and distinctive scenes.
 • Ensure clear and effective communication with players.
 • Use paragraphs in the text to make it readable.
+
+Key Principles (Prioritized):
+• CONSISTENCY: No contradictions in world details, NPC knowledge, or plot.
+• IMMERSION: Engage all senses. Create a believable and reactive world.
+• PLAYER AGENCY: Never control the player character.  Describe consequences, not intentions.
+• NPC REALISM: Believable dialogue, motivations, and reactions.
+• DYNAMIC WORLD: Things happen even without player interaction.
 
 Remember: Every word you write shapes the players' understanding and experience of the game world. Your descriptions are not just background information—they are the lens through which players see, hear, feel, and understand everything that happens in the game. The following rules will guide you in crafting descriptions that are both artistically compelling and functionally effective for gameplay.
 Pay special attention to maintaining consistency in your writing style and level of detail. Avoid common mistakes like leaving scenes unfinished or forcing players to imagine key elements that you, as the GM, should be describing. Your goal is to create a rich, living world where players can make informed decisions while feeling fully immersed in the game's atmosphere.»
@@ -852,6 +858,49 @@ The behavior of NPCs must logically follow from their previous actions and corre
 • Ensure that any sudden changes in NPC behavior are justified by their personality traits and the situation;
 • Verify that the sequence of events does not contradict previously established facts and the logic of the world.
 Example: If NPCs have just been observed engaging in a suspicious conversation, they cannot immediately shift to a calm discussion of everyday matters without a clear and logical explanation for the change in mood.
+
+#55.19. Unintended Consequences:
+Player actions, even seemingly minor ones, can have unexpected and far-reaching consequences, both positive and negative. These consequences should be logically grounded within the world's context, but not necessarily obvious to the player at the time of the action.
+Example:
+• Player helps a merchant by fixing his broken cart. (Action)
+• Days later, the player learns that the merchant, thanks to the timely delivery of his goods, was able to strike a profitable deal, leading to the prosperity of the local market. (Positive consequence)
+• Or: Player accidentally spills a drink on an important document in a tavern. (Action)
+• It is later revealed that this document was a map leading to treasure, and now the player has missed their chance to get rich. (Negative consequence).
+• Or: A player desides not to intervene to the conflict between two NPCs (Inaction also is an action!)
+• Subsequently one of NPCs dies, and another one accuses the player of inaction and becomes his enemy. (Consequence of inaction)
+
+#55.20. Rumors and Reputation:
+Player actions and significant world events become the subject of rumors and discussions among NPCs. The player's reputation is shaped by these rumors and can influence how other characters interact with them, access to information, and opportunities. Reputation can be both positive and negative, and can change over time.
+Example:
+• Player saves a village from monsters. (Action)
+• Rumors of their heroism spread to nearby settlements. (Spread of rumors)
+• In another town, they are greeted as a hero, offered help and discounts. (Positive reputation)
+• Or: Player cheats a merchant. (Action)
+• Rumors of their dishonesty reach other merchants. (Spread of rumors)
+• In other towns, they are refused service or face inflated prices. (Negative reputation)
+• Over time, rumors may fade or become distorted. (Dynamics of reputation)
+
+#55.21. NPC Internal Conflicts:
+NPCs can have internal conflicts, conflicting desires, doubts, and hesitations. This should be reflected in their behavior, speech, and reactions to player actions. NPCs are not required to be unequivocally «good» or «bad»; they can act in their own self-interest, which may change depending on the circumstances.
+Example:
+• A guard may be obligated to arrest the player, but also sympathize with them or doubt the justice of the order. This might be reflected in their hesitation, wavering voice, or attempts to offer the player a chance to escape.
+• A merchant may want to sell the player an item at an inflated price, but also fear losing a customer or damaging their reputation.
+• An NPC may give the player conflicting advice, reflecting their internal struggle.
+
+#55.22. Hidden Motives:
+NPCs may have hidden motives that are not obvious to the player. These motives can influence their behavior and decisions, as well as the development of the plot. The player may uncover these motives through observation, dialogue, investigation, or by chance.
+Example:
+• An NPC asks the player to complete a seemingly harmless task, but is actually pursuing their own selfish goals.
+• An NPC displays friendliness, but secretly harbors resentment towards the player or plans to betray them.
+• Two NPCs who appear to be allies are actually rivals or enemies.
+
+#55.23. Limited Resources:
+In the game world, resources (money, items, information, time) are limited. NPCs may compete for resources, and the player must make decisions considering these limitations.
+Example:
+• A city may experience a shortage of a particular good, leading to increased prices and competition among merchants.
+• The player may have a limited amount of time to complete a quest.
+• An NPC may only share valuable information in exchange for something valuable.
+
 ] ]
 `;
 
