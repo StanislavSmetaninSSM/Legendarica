@@ -543,7 +543,7 @@ input:checked + .slider {
     border: 1px solid #d4af37;
     padding: 20px;
     border-radius: 5px;
-    z-index: 1000;
+    z-index: 100;
     width: 14%;
     font-size: 15px;
     display: none;
@@ -839,8 +839,7 @@ img.rounded-corners {
     }
 
 #send-button,
-.action-button,
-.modal button {
+.action-button {
     padding: 10px 20px;
     font-size: 16px;
     background: #d4af37;
@@ -851,8 +850,7 @@ img.rounded-corners {
 }
 
     #send-button:hover,
-    .action-button:hover,
-    .modal button:hover {
+    .action-button:hover {
         background: #c19b2e;
     }
 

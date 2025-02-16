@@ -269,7 +269,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <button id="clear-log" style="width: 100%; position: relative; border-radius: 20px; background: #800000; color: #fff;margin-top: 25px;">Очистить лог. Почти не влияет на память гейммастера, так как он помнит только последние 5 сообщений лога</button>
                         </div>
 
-                        <div id="system-instructions-box" class="chat-box rulesBox" data-show="false" style="display:none">
+                        <div id="system-instructions-box" class="chat-box rulesBox" style="display:none">
                             <span id="system-instructions-explanaition">Это системные инструкции для выбранного провайдера нейросети. Они имеют высший приоритет для нейросети.</span><br>
                             <textarea id="system-instructions" class="instructionsArea" placeholder="Введите свои системные инструкции и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="setContentHeight(this)"></textarea>
                             <br>
@@ -626,14 +626,14 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                 <span id="additional-settings-label2" class="additionalSettingsLabel minorText">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
 
                 <div class="gameModes">
-                    <button style="width: auto" id="create-character">Начать игру</button>
-                    <button style="width: auto" id="random-character">Случайный персонаж</button>
-                    <button style="width: auto" id="load-character">Загрузить автосейв</button>
-                    <button style="width: auto" id="load-savefile" onclick="clickLoadGame()">Загрузить файл</button>
-                    <button style="width: auto" id="my-game">Свой сеттинг</button>
+                    <button style="width: auto" id="create-character" class="action-button">Начать игру</button>
+                    <button style="width: auto" id="random-character" class="action-button">Случайный персонаж</button>
+                    <button style="width: auto" id="load-character" class="action-button">Загрузить автосейв</button>
+                    <button style="width: auto" id="load-savefile" class="action-button" onclick="clickLoadGame()">Загрузить файл</button>
+                    <button style="width: auto" id="my-game" class="action-button">Свой сеттинг</button>
                 </div>
                 <div class="gameModes">
-                    <button style="width: auto" id="post-apocalyptic-game">Быстрая игра - Постапокалипсис</button>
+                    <button style="width: auto" id="post-apocalyptic-game" class="action-button">Быстрая игра - Постапокалипсис</button>
                 </div>
             </div>
         </div>
@@ -733,11 +733,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                 <span id="additional-settings-label4" class="additionalSettingsLabel minorText">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
 
                 <div class="gameModes">
-                    <button style="width: auto" id="create-character-post-apocalyptic">Начать игру</button>
-                    <button style="width: auto" id="random-character-post-apocalyptic">Случайный персонаж</button>
-                    <button style="width: auto" id="load-character-post-apocalyptic">Загрузить автосейв</button>
-                    <button style="width: auto" id="load-savefile-post-apocalyptic" onclick="clickLoadGame()">Загрузить файл</button>
-                    <button style="width: auto" id="my-game-post-apocalyptic">Свой сеттинг</button>
+                    <button style="width: auto" id="create-character-post-apocalyptic" class="action-button">Начать игру</button>
+                    <button style="width: auto" id="random-character-post-apocalyptic" class="action-button">Случайный персонаж</button>
+                    <button style="width: auto" id="load-character-post-apocalyptic" class="action-button">Загрузить автосейв</button>
+                    <button style="width: auto" id="load-savefile-post-apocalyptic" class="action-button" onclick="clickLoadGame()">Загрузить файл</button>
+                    <button style="width: auto" id="my-game-post-apocalyptic" class="action-button">Свой сеттинг</button>
                 </div>
             </div>
         </div>
@@ -745,8 +745,6 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
         <div id="setting-creation-modal" class="modal">
             <div class="modal-content" style="margin: auto;">
                 <h3 id="my-world-label">Выдумайте свой мир или опишите один из известных существующих</h3>
-                <textarea type="text" id="world-description" placeholder="Введите описание мира и инструкции гейммастеру" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
-                <textarea type="text" id="world-system-instructions" placeholder="Введите системные инструкции для нейросети (не обязательно)" style="display:none; background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
                 <textarea type="text" id="character-name-my-game" placeholder="Имя персонажа" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
                 <textarea type="text" id="character-description" placeholder="Описание персонажа (не обязательно)" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
                 <textarea type="text" id="character-gender2" placeholder="Пол персонажа" style=" background-color: rgba(30,30,30,0.7); border: 1px solid #d4af37; color: #d4af37; width: 99%; overflow-y: auto;  font-family: 'MedievalSharp', cursive;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
@@ -834,9 +832,9 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                 <span id="additional-settings-label3" class="additionalSettingsLabel minorText">Вы можете посмотреть дополнительные настройки в выпадающей панели справа. Нажмите на кнопку в нижнем правом углу экрана, чтобы увидеть панель настроек.</span>
 
                 <div style="display: flex; justify-content: center; align-items: center; gap: 5px;">
-                    <button style="width: auto" id="create-setting" style="flex: 1">Начать игру</button>
-                    <button style="width: auto" id="load-created-setting" style="flex: 2" onclick="clickLoadSetting()">Загрузить сеттинг из файла</button>
-                    <button style="width: auto" id="save-created-setting" style="flex: 2" onclick="clickSaveSetting()">Сохранить сеттинг в файл</button>
+                    <button style="width: auto" id="create-setting" class="action-button" style="flex: 1">Начать игру</button>
+                    <button style="width: auto" id="load-created-setting" class="action-button" style="flex: 2" onclick="clickLoadSetting()">Загрузить сеттинг из файла</button>
+                    <button style="width: auto" id="save-created-setting" class="action-button" style="flex: 2" onclick="clickSaveSetting()">Сохранить сеттинг в файл</button>
                 </div>
             </div>
         </div>

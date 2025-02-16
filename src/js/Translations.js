@@ -8,7 +8,7 @@
 */
 
 const translationModule = (function getTranslationModule() {
-    
+
     //------ Module data ------//
     const translations = {
         "english-language": {
@@ -36,7 +36,6 @@ const translationModule = (function getTranslationModule() {
             "character-gender2": "Character gender",
             "character-description": "Character description (optional)",
             "character-name-my-game": "Character name",
-            "world-description": "Enter world description and instructions for the game master",
             "character-name": "Enter character name",
             "api-key": "For security reasons, make sure you use an API key with a low spending limit",
             "api-key2": "For security reasons, make sure you use an API key with a low spending limit",
@@ -52,7 +51,6 @@ const translationModule = (function getTranslationModule() {
             "user-input": "Speak your action, brave adventurer...",
             "style-of-image-input": "For example: medieval, fantasy, neuropunk",
             "system-instructions": "Enter your system instructions and leave them here. Starting from the next turn, they will be in effect as long as they remain here.",
-            "world-system-instructions": "Enter system instructions for the neural network (optional)",
 
             // labels
             "style-of-image-label": "Style of generated images",
@@ -322,7 +320,7 @@ Enjoy the game!`,
             "clear-status-label": "Clear status",
             "active-skills-button-label": "Active skills",
             "passive-skills-button-label": "Passive skills",
-            "status-effects-label": "Effects:",           
+            "status-effects-label": "Effects:",
             "throw-item": "Throw away",
             "inventory-delete": "Throw away this item",
             "skill_effect_label": "Effect",
@@ -893,7 +891,6 @@ After exceeding the critical weight, the character can no longer pick up new ite
             "character-gender2": "Пол персонажа",
             "character-description": "Описание персонажа (не обязательно)",
             "character-name-my-game": "Имя персонажа",
-            "world-description": "Введите описание мира и инструкции гейммастеру",
             "character-name": "Введите имя персонажа",
             "api-key": "В целях безопасности убедитесь, что используете АПИ ключ с низким лимитом по расходу",
             "api-key2": "В целях безопасности убедитесь, что используете АПИ ключ с низким лимитом по расходу",
@@ -906,7 +903,6 @@ After exceeding the critical weight, the character can no longer pick up new ite
             "user-input": "Говори свое действие, отважный искатель приключений...",
             "style-of-image-input": "Например: medieval, fantasy, neuropunk",
             "system-instructions": "Введите свои системные инструкции и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь.",
-            "world-system-instructions": "Введите системные инструкции для нейросети (не обязательно)",
 
             // labels
             "style-of-image-label": "Стиль генерируемых картинок",
@@ -1743,7 +1739,6 @@ After exceeding the critical weight, the character can no longer pick up new ite
             "character-gender2": "Género del personaje",
             "character-description": "Descripción del personaje (opcional)",
             "character-name-my-game": "Nombre del personaje",
-            "world-description": "Introduce la descripción del mundo e instrucciones para el maestro del juego",
             "character-name": "Introduce el nombre del personaje",
             "api-key": "Por razones de seguridad, asegúrate de usar una clave API con un límite de gasto bajo",
             "api-key2": "Por razones de seguridad, asegúrate de usar una clave API con un límite de gasto bajo",
@@ -1756,7 +1751,6 @@ After exceeding the critical weight, the character can no longer pick up new ite
             "user-input": "Di tu acción, valiente aventurero...",
             "style-of-image-input": "Por ejemplo: medieval, fantasía, neuropunk",
             "system-instructions": "Introduce tus instrucciones del sistema y déjalas aquí. A partir del siguiente turno, estarán en efecto mientras permanezcan aquí.",
-            "world-system-instructions": "Introduce instrucciones del sistema para la red neuronal (opcional)",
 
             // labels
             "style-of-image-label": "Estilo de las imágenes generadas",
@@ -2026,7 +2020,7 @@ Por favor, considera apoyarme (Lottarend, el autor del juego). Los enlaces para 
             "clear-status-label": "Borrar estado",
             "active-skills-button-label": "Habilidades activas",
             "passive-skills-button-label": "Habilidades pasivas",
-            "status-effects-label": "Efectos:",           
+            "status-effects-label": "Efectos:",
             "throw-item": "Tira la",
             "inventory-delete": "Tira este objeto",
             "skill_effect_label": "Efecto",
@@ -2597,7 +2591,6 @@ Después de exceder el peso crítico, el personaje ya no puede recoger más obje
             "character-gender2": "Gênero do personagem",
             "character-description": "Descrição do personagem (opcional)",
             "character-name-my-game": "Nome do personagem",
-            "world-description": "Digite a descrição do mundo e instruções para o mestre",
             "character-name": "Digite o nome do personagem",
             "api-key": "Por segurança, certifique-se de usar uma chave API com limite baixo de gasto",
             "api-key2": "Por segurança, certifique-se de usar uma chave API com limite baixo de gasto",
@@ -2610,7 +2603,6 @@ Después de exceder el peso crítico, el personaje ya no puede recoger más obje
             "user-input": "Fale sua ação, corajoso aventureiro...",
             "style-of-image-input": "Por exemplo: medieval, fantasia, neuropunk",
             "system-instructions": "Insira suas instruções do sistema e deixe-as aqui. A partir da próxima rodada, elas entrarão em vigor enquanto permanecerem aqui.",
-            "world-system-instructions": "Insira instruções de sistema para a rede neural (opcional)",
 
             // labels
             "style-of-image-label": "Estilo das imagens geradas",
@@ -3450,7 +3442,6 @@ Após exceder o peso crítico, o personagem não pode mais pegar novos itens.`,
             "character-gender2": "चरित्र का लिंग",
             "character-description": "चरित्र का विवरण (वैकल्पिक)",
             "character-name-my-game": "चरित्र का नाम",
-            "world-description": "दुनिया का विवरण और गेममास्टर के लिए निर्देश दर्ज करें",
             "character-name": "चरित्र का नाम दर्ज करें",
             "api-key": "सुरक्षा के लिए सुनिश्चित करें कि आप कम खर्च सीमा वाली API कुंजी का उपयोग कर रहे हैं",
             "api-key2": "सुरक्षा के लिए सुनिश्चित करें कि आप कम खर्च सीमा वाली API कुंजी का उपयोग कर रहे हैं",
@@ -3463,7 +3454,6 @@ Após exceder o peso crítico, o personagem não pode mais pegar novos itens.`,
             "user-input": "अपनी कार्रवाई बताएं, बहादुर साहसिक...",
             "style-of-image-input": "उदाहरण के लिए: मध्यकालीन, फैंटेसी, न्यूरोपंक",
             "system-instructions": "अपने सिस्टम निर्देशों को यहां दर्ज करें और उन्हें यहीं छोड़ दें। अगले मोड़ से, वे तब तक प्रभावी रहेंगे जब तक वे यहां रहेंगे।",
-            "world-system-instructions": "न्यूरल नेटवर्क के लिए सिस्टम निर्देश दर्ज करें (वैकल्पिक)",
 
             //labels
             "style-of-image-label": "उत्पन्न चित्रों की शैली",
@@ -3731,7 +3721,7 @@ Após exceder o peso crítico, o personagem não pode mais pegar novos itens.`,
             "clear-status-label": "स्थिति साफ़ करें",
             "active-skills-button-label": "सक्रिय कौशल",
             "passive-skills-button-label": "निष्क्रिय कौशल",
-            "status-effects-label": "प्रभाव:",           
+            "status-effects-label": "प्रभाव:",
             "throw-item": "फेंक देना",
             "inventory-delete": "यह वस्तु फेंक दो",
             "skill_effect_label": "प्रभाव",
@@ -4303,7 +4293,6 @@ Após exceder o peso crítico, o personagem não pode mais pegar novos itens.`,
             "character-gender2": "Charaktergeschlecht",
             "character-description": "Charakterbeschreibung (optional)",
             "character-name-my-game": "Charaktername",
-            "world-description": "Geben Sie eine Weltbeschreibung und Anweisungen für den Spielleiter ein",
             "character-name": "Geben Sie den Namen des Charakters ein",
             "api-key": "Stellen Sie aus Sicherheitsgründen sicher, dass Sie einen API-Schlüssel mit niedrigem Verbrauchslimit verwenden",
             "api-key2": "Stellen Sie aus Sicherheitsgründen sicher, dass Sie einen API-Schlüssel mit niedrigem Verbrauchslimit verwenden",
@@ -4316,7 +4305,6 @@ Após exceder o peso crítico, o personagem não pode mais pegar novos itens.`,
             "user-input": "Sprich deine Aktion, mutiger Abenteurer...",
             "style-of-image-input": "Zum Beispiel: mittelalterlich, fantasy, neuropunk",
             "system-instructions": "Geben Sie Ihre Systemanweisungen hier ein und lassen Sie sie hier. Ab dem nächsten Zug werden sie wirksam sein, solange sie hier bleiben.",
-            "world-system-instructions": "Systemanweisungen für das neuronale Netzwerk eingeben (optional)",
 
             // labels
             "style-of-image-label": "Stil der generierten Bilder",
@@ -4586,7 +4574,7 @@ Viel Spaß beim Spielen!`,
             "clear-status-label": "Status löschen",
             "active-skills-button-label": "Aktive Fähigkeiten",
             "passive-skills-button-label": "Passive Fähigkeiten",
-            "status-effects-label": "Effekte:",          
+            "status-effects-label": "Effekte:",
             "throw-item": "Wegwerfen",
             "inventory-delete": "Wirf diesen Gegenstand weg",
             "skill_effect_label": "Wirkung",
@@ -5158,7 +5146,6 @@ Nach Überschreiten des kritischen Gewichts kann der Charakter keine neuen Gegen
             "character-gender2": "Sexe du personnage",
             "character-description": "Description du personnage (facultatif)",
             "character-name-my-game": "Nom du personnage",
-            "world-description": "Entrez la description du monde et les instructions pour le maître du jeu",
             "character-name": "Entrez le nom du personnage",
             "api-key": "Pour des raisons de sécurité, assurez-vous d'utiliser une clé API avec une limite de dépenses basse",
             "api-key2": "Pour des raisons de sécurité, assurez-vous d'utiliser une clé API avec une limite de dépenses basse",
@@ -5171,7 +5158,6 @@ Nach Überschreiten des kritischen Gewichts kann der Charakter keine neuen Gegen
             "user-input": "Parlez de votre action, brave aventurier...",
             "style-of-image-input": "Par exemple : médiéval, fantaisie, neuropunk",
             "system-instructions": "Entrez vos instructions système ici et laissez-les. À partir du prochain tour, elles seront en vigueur tant qu'elles resteront ici.",
-            "world-system-instructions": "Saisir les instructions système pour le réseau neuronal (facultatif)",
 
             //labels
             "style-of-image-label": "Style des images générées",
@@ -5442,7 +5428,7 @@ Bon jeu !`,
             "clear-status-label": "État clair",
             "active-skills-button-label": "Compétences actives",
             "passive-skills-button-label": "Compétences passives",
-            "status-effects-label": "Effets:",          
+            "status-effects-label": "Effets:",
             "throw-item": "Jeter",
             "inventory-delete": "Jette cet objet",
             "skill_effect_label": "Effet",
@@ -6032,10 +6018,9 @@ Après avoir dépassé le poids critique, le personnage ne peut plus ramasser de
             'character-class-description', 'character-class2',
             'character-race-description', 'character-race2',
             'character-gender2', 'character-description',
-            'character-name-my-game', 'world-description',
-            'character-name', 'api-key', 'api-key2', 'api-key3', 'ai-model', 'ai-model2', 'ai-model3',
-            'max-gm-symbols', 'style-of-image-input', 'system-instructions',
-            "character-post-apocalyptic-name", "ai-model4", "api-key4"
+            'character-name-my-game', 'character-name', 'api-key', 'api-key2', 'api-key3', 'ai-model', 'ai-model2', 'ai-model3',
+            'max-gm-symbols', 'style-of-image-input', 
+            'character-post-apocalyptic-name', 'ai-model4', 'api-key4'
         ];
 
         //Update placeholders
@@ -6178,7 +6163,6 @@ Après avoir dépassé le poids critique, le personnage ne peut plus ramasser de
             "use-separate-response-label", "use-thinking-module-for-response-label",
             "other-settings-section-label", "image-settings-section-label", "model-settings-section-label",
             "functionality-settings-section-label", "thinking-module-settings-section-label", "system-settings-section-label",
-
         ];
 
         //Update labels
@@ -7685,8 +7669,8 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
 
             return raceDescriptions;
         },
-        
-        setPostApocalypseRacesTooltip: function (raceInventory) {            
+
+        setPostApocalypseRacesTooltip: function (raceInventory) {
             const id = "post-apocalypse-races";
             this.setTranslation("english-language", id, `Race affects the starting location, generation of racial abilities, storyline, and starting bonuses to skills and items:\n\n${getDescriptions("english-language")}`);
             this.setTranslation("russian-language", id, `Раса влияет на стартовую локацию, генерацию расового умения, сюжет и стартовые бонусы к навыкам и предметам:\n\n${getDescriptions("russian-language")}`);
@@ -8119,7 +8103,7 @@ Il existe des modèles gratuits et payants. Les modèles gratuits ont une limite
             };
 
             return classDescriptions;
-        },      
+        },
 
         setPostApocalypseClassesTooltip: function (classes) {
             const id = "post-apocalypse-classes";

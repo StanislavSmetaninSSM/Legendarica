@@ -54,8 +54,8 @@ const ELEMENTS = {
     ttsModeToggle2: document.getElementById('tts-mode2'),
     ttsModeToggleSettings: document.getElementById('tts-mode-settings'),
     imageToggleSettings: document.getElementById('image-mode-settings'),
-    worldDescription: document.getElementById('world-description'),
-    worldSystemInstructions: document.getElementById('world-system-instructions'),
+    systemInstructionsEasyMDE: null,
+    myRulesEasyMDE: null,
 
     //post apocalyptic
     postApocalypticRace: document.getElementById('character-post-apocalyptic-race'),
@@ -514,7 +514,7 @@ ELEMENTS.postApocalypticGameButton.onclick = function () {
         ELEMENTS.apiKey.value = ELEMENTS.apiKey4.value;
         ELEMENTS.aiModel.value = ELEMENTS.aiModel4.value?.trim();
 
-        showAllSettingsHideButtons();
+        showAllSettingsCollapsButtons();
 
         styleOfImage = "modern fantasy";
 
@@ -605,7 +605,7 @@ ELEMENTS.createCharacterButton.onclick = function () {
     ELEMENTS.aiModel.value = ELEMENTS.aiModel2.value?.trim();
     document.getElementById('choose-language').value = ELEMENTS.chooseLanguageMenu.value;
 
-    showAllSettingsHideButtons();
+    showAllSettingsCollapsButtons();
 
     styleOfImage = "medieval fantasy";
     const name = document.getElementById('character-name').value,
@@ -675,7 +675,7 @@ ELEMENTS.startNewSettingButton.onclick = function () {
     ELEMENTS.aiModel.value = ELEMENTS.aiModel3.value?.trim();
     document.getElementById('choose-language').value = ELEMENTS.chooseLanguageMenu.value;
 
-    showAllSettingsHideButtons();
+    showAllSettingsCollapsButtons();
 
     function getElementValue(id) {
         return document.getElementById(id).value;
@@ -688,7 +688,6 @@ ELEMENTS.startNewSettingButton.onclick = function () {
     const elementIds = {
         name: 'character-name-my-game',
         characterDescription: 'character-description',
-        worldDescription: 'world-description',
         gender: 'character-gender2',
         race: 'character-race2',
         raceDescription: 'character-race-description',
@@ -743,17 +742,11 @@ ELEMENTS.startNewSettingButton.onclick = function () {
     };
 
     ELEMENTS.ttsModeToggleSettings.checked = CHARACTER_INFO.ttsMode;
-    ELEMENTS.myRules.value = getElementValue(elementIds.worldDescription);
 
     if (CHARACTER_INFO.name && CHARACTER_INFO.gender && CHARACTER_INFO.race && CHARACTER_INFO.classOfCharacter && Object.values(characterStats).every(stat => stat !== '')) {
-        if (getElementValue(elementIds.characterDescription))
-            CHARACTER_INFO.characterDescription = getElementValue(elementIds.characterDescription);
-
-        if (getElementValue(elementIds.raceDescription))
-            CHARACTER_INFO.raceDescription = getElementValue(elementIds.raceDescription);
-
-        if (getElementValue(elementIds.classDescription))
-            CHARACTER_INFO.classDescription = getElementValue(elementIds.classDescription);
+        CHARACTER_INFO.characterDescription = getElementValue(elementIds.characterDescription);
+        CHARACTER_INFO.raceDescription = getElementValue(elementIds.raceDescription);
+        CHARACTER_INFO.classDescription = getElementValue(elementIds.classDescription);
 
         ELEMENTS.modalSetting.style.display = "none";
         ELEMENTS.postApocalypticModal.style.display = "none";
@@ -2928,7 +2921,7 @@ ELEMENTS.imageInfoClose.onclick = function () { ELEMENTS.imageInfo.style.display
 
 //--------------------------------------------------------------------UTILITY------------------------------------------------------------------//
 
-function showAllSettingsHideButtons() {
+function showAllSettingsCollapsButtons() {
     const collapseButtonMain = document.getElementById('collapseButtonMain');
     collapseButtonMain.style.display = "flex";
     const collapseButtonSettings = document.getElementById('collapseButtonSettings');
@@ -3129,14 +3122,17 @@ function initializeEasyMDE(element, initialValue, options, callback) {
     });
 
     const codeMirror = easyMDE.codemirror;
-    codeMirror.on("keydown", function (cm, event) {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            if (typeof callback === 'function')
-                callback(easyMDE, event);
-            if (codeMirror.getOption("fullScreen"))
-                simulateEscapeKeyPress();
-        }
-    });
+
+    if (callback) {
+        codeMirror.on("keydown", function (cm, event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                if (typeof callback === 'function')
+                    callback(easyMDE, event);
+                if (codeMirror.getOption("fullScreen"))
+                    simulateEscapeKeyPress();
+            }
+        });
+    }
 
     return easyMDE;
 }
@@ -3186,7 +3182,19 @@ function initializeUserInputEditor() {
 }
 
 function initializeGameInstructionEditors() {
+    destroyEasyMDE(ELEMENTS.myRulesBox);
+    destroyEasyMDE(ELEMENTS.systemInstructionsBox);
 
+    const optionsRules = {
+        placeholder: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["my-rules"]
+    };
+ 
+    const optionsSystemInstructions = {
+        placeholder: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["system-instructions"]
+    };
+
+    ELEMENTS.systemInstructionsEasyMDE = initializeEasyMDE(ELEMENTS.systemInstructions, "", optionsSystemInstructions);
+    ELEMENTS.myRulesEasyMDE = initializeEasyMDE(ELEMENTS.myRules, "", optionsRules);
 }
 
 function confirmAction(message) {
@@ -3493,22 +3501,6 @@ function setGameInputsSynch() {
     ELEMENTS.aiModel2.addEventListener("input", onInputModelFunction);
     ELEMENTS.aiModel3.addEventListener("input", onInputModelFunction);
     ELEMENTS.aiModel4.addEventListener("input", onInputModelFunction);
-
-    const onInputPromptFunction = function (e) {
-        const value = e.target.value;
-        ELEMENTS.worldDescription.value = value;
-        ELEMENTS.myRules.value = value;
-    }
-    ELEMENTS.worldDescription.addEventListener("input", onInputPromptFunction);
-    ELEMENTS.myRules.addEventListener("input", onInputPromptFunction);
-
-    const onInputSystemInstructionsFunction = function (e) {
-        const value = e.target.value;
-        ELEMENTS.worldSystemInstructions.value = value;
-        ELEMENTS.systemInstructions.value = value;
-    }
-    ELEMENTS.worldSystemInstructions.addEventListener("input", onInputSystemInstructionsFunction);
-    ELEMENTS.systemInstructions.addEventListener("input", onInputSystemInstructionsFunction);
 
     const onChangeTTSFunction = function (e) {
         const checked = e.target.checked;
@@ -4122,14 +4114,14 @@ ELEMENTS.loadCharacterButton.onclick = function () {
 };
 
 function getDataForSave() {
-    const myRules = ELEMENTS.myRules.value ? ELEMENTS.myRules.value : '';
-    const systemInstructions = ELEMENTS.systemInstructions.value ? ELEMENTS.systemInstructions.value : '';
+    const myRules = ELEMENTS.myRulesEasyMDE.value();
+    const systemInstructions = ELEMENTS.systemInstructionsEasyMDE.value();
 
     return JSON.stringify({ CHARACTER_INFO, characterStats, inventory, visitedLocations, myRules, systemInstructions, encounteredNPCs, statusData, statusDataEffects, passiveSkills, activeSkills, npcJournals, npcMemoryDiaries, quests, turn }, null, "\t");
 }
 
 function loadGameInternal(savedData) {
-    showAllSettingsHideButtons();
+    showAllSettingsCollapsButtons();
 
     try {
         let loadedCharacterInfo = sanitizeObject(JSON.parse(savedData));
@@ -4163,8 +4155,8 @@ function loadGameInternal(savedData) {
         npcMemoryDiaries = loadedCharacterInfo.npcMemoryDiaries;
         quests = loadedCharacterInfo.quests;
         turn = loadedCharacterInfo.turn;
-        ELEMENTS.myRules.value = loadedCharacterInfo.myRules ? loadedCharacterInfo.myRules : '';
-        ELEMENTS.systemInstructions.value = loadedCharacterInfo.systemInstructions ? loadedCharacterInfo.systemInstructions : '';
+        ELEMENTS.myRulesEasyMDE.value(loadedCharacterInfo.myRules ? loadedCharacterInfo.myRules : '');
+        ELEMENTS.systemInstructionsEasyMDE.value(loadedCharacterInfo.systemInstructions ? loadedCharacterInfo.systemInstructions : '');
         ELEMENTS.ttsModeToggleSettings.checked = loadedCharacterInfo.CHARACTER_INFO.ttsMode;
 
         console.log("Game loaded successfully");
@@ -4185,7 +4177,7 @@ function loadGameInternal(savedData) {
 
 //save your own rules
 function saveMyRules() {
-    const myRules = ELEMENTS.myRules.value ? ELEMENTS.myRules.value : '';
+    const myRules = ELEMENTS.myRulesEasyMDE.value();
 
     const fileName = prompt("Enter the file name:", "my_rules");
     if (!fileName)
@@ -4204,8 +4196,7 @@ function loadMyRules() {
         let reader = new FileReader();
         reader.readAsText(file);
         reader.onload = function (e) {
-            ELEMENTS.myRules.value = sanitizeString(e.target.result);
-            ELEMENTS.worldDescription.value = ELEMENTS.myRules.value;
+            ELEMENTS.myRulesEasyMDE.value(sanitizeString(e.target.result));
         }
     }
     input.click();
@@ -4216,7 +4207,7 @@ function saveSystemInstructions() {
     if (!fileName)
         return;
 
-    let blob = new Blob([ELEMENTS.systemInstructions.value], { type: "text/plain" });
+    let blob = new Blob([ELEMENTS.systemInstructionsEasyMDE.value()], { type: "text/plain" });
     saveAs(blob, fileName + ".txt");
 }
 
@@ -4228,8 +4219,7 @@ function loadSystemInstructions() {
         let reader = new FileReader();
         reader.readAsText(file);
         reader.onload = function (e) {
-            ELEMENTS.systemInstructions.value = sanitizeString(e.target.result);
-            ELEMENTS.worldSystemInstructions.value = ELEMENTS.systemInstructions.value;
+            ELEMENTS.systemInstructionsEasyMDE.value(sanitizeString(e.target.result));
         }
     }
     input.click();
@@ -4241,9 +4231,7 @@ function clickSaveSetting() {
         return;
 
     let data = {};
-    const fields = [
-        { id: "world-description", key: "worldDescription" },
-        { id: "world-system-instructions", key: "systemInstructions" },
+    const fields = [       
         { id: "character-name-my-game", key: "name" },
         { id: "character-description", key: "description" },
         { id: "character-gender2", key: "gender" },
@@ -4274,6 +4262,9 @@ function clickSaveSetting() {
         data[field.key] = document.getElementById(field.id).value;
     });
 
+    data.systemInstructions = ELEMENTS.systemInstructionsEasyMDE.value();
+    data.worldDescription = ELEMENTS.myRulesEasyMDE.value();
+
     const checkboxes = [
         { id: "non-magic-mode", key: "nonMagicMode" },
         { id: "rpg-mode2", key: "rpgMode" },
@@ -4301,9 +4292,7 @@ function clickLoadSetting() {
         reader.onload = function (e) {
             try {
                 let loadedSettings = sanitizeObject(JSON.parse(e.target.result));
-                const fields = [
-                    { id: "world-description", key: "worldDescription" },
-                    { id: "world-system-instructions", key: "systemInstructions" },
+                const fields = [                   
                     { id: "character-name-my-game", key: "name" },
                     { id: "character-description", key: "description" },
                     { id: "character-gender2", key: "gender" },
@@ -4334,6 +4323,9 @@ function clickLoadSetting() {
                     document.getElementById(field.id).value = loadedSettings[field.key] || '';
                 });
 
+                ELEMENTS.systemInstructionsEasyMDE.value(loadedSettings.systemInstructions || '');
+                ELEMENTS.myRulesEasyMDE.value(loadedSettings.worldDescription || '');
+                               
                 const checkboxes = [
                     { id: "non-magic-mode", key: "nonMagicMode" },
                     { id: "rpg-mode2", key: "rpgMode" },
@@ -4343,9 +4335,6 @@ function clickLoadSetting() {
                 checkboxes.forEach(box => {
                     document.getElementById(box.id).checked = Boolean(loadedSettings[box.key]);
                 });
-
-                ELEMENTS.myRules.value = ELEMENTS.worldDescription.value;
-                ELEMENTS.systemInstructions.value = ELEMENTS.worldSystemInstructions.value;
 
                 console.log("Setting loaded successfully");
             } catch (error) {
@@ -4403,7 +4392,7 @@ async function sendRequest(currentMessage) {
         }       
 
         //General
-        const myPrompt = ELEMENTS.myRules.value;
+        const myPrompt = ELEMENTS.myRulesEasyMDE.value();
         let totalWeight = calculateTotalInventoryWeight() ?? 0;
 
         //NPC
@@ -6256,7 +6245,7 @@ async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, p
         model: model,
         apiKey: apiKey,
         prompt: prompt,
-        systemInstructions: ELEMENTS.systemInstructions.value,
+        systemInstructions: ELEMENTS.systemInstructionsEasyMDE.value(),
         frequencyPenalty: ELEMENTS.frequencyPenalty.value,
         presencePenalty: ELEMENTS.presencePenalty.value,
         repetitionPenalty: ELEMENTS.repetitionPenalty.value,
@@ -6318,7 +6307,6 @@ function setAiProvider(providerName, setAlways) {
     ELEMENTS.topKContainer.style.display = "flex";
     ELEMENTS.maxTokensContainer.style.display = "flex";
     ELEMENTS.useStreamingContainer.style.display = "flex";
-    ELEMENTS.systemInstructionsBox.dataset.show = "true";
     setDefaultProviderParams(!!setAlways);
 
     if (providerName == "Google AI Studio") {
@@ -6326,7 +6314,6 @@ function setAiProvider(providerName, setAlways) {
             ELEMENTS.repetitionPenalty,
             ELEMENTS.maxTokens
         );
-        //frequencyPenalty и presencePenalty отсутствуют в текущих моделях гугла, но присутствуют в апи. Обнуляем эти значения, чтобы не было ошибки
         inputsToClear.push(
             ELEMENTS.frequencyPenalty,
             ELEMENTS.presencePenalty,
@@ -6379,7 +6366,6 @@ function setAiProvider(providerName, setAlways) {
             ELEMENTS.maxTokens,
             ELEMENTS.useStreaming,
         );
-        ELEMENTS.systemInstructionsBox.dataset.show = "false";
     } else if (providerName == "OpenRouter") {
         inputsToHide.push(
             ELEMENTS.maxTokens,
@@ -6405,20 +6391,10 @@ function setAiProvider(providerName, setAlways) {
             ELEMENTS.maxTokens,
             ELEMENTS.useStreaming,
         );
-        ELEMENTS.systemInstructionsBox.dataset.show = "false";
     }
 
     clearTextInputsAndHideParents(inputsToHide, "div");
     clearTextInputs(inputsToClear);
-
-    const systemInstructionsSetting = document.getElementById('world-system-instructions');
-    if (ELEMENTS.systemInstructionsBox.dataset.show == "true") {
-        ELEMENTS.systemInstructionsBox.style.display = ELEMENTS.myRulesBox.style.display;
-        systemInstructionsSetting.style.display = "block";
-    } else {
-        ELEMENTS.systemInstructionsBox.style.display = "none";
-        systemInstructionsSetting.style.display = "none";
-    }
 }
 
 function setDefaultProviderParams(setAlways) {
@@ -6500,13 +6476,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }   
 
     checkGameSource();
-    translationModule.setTranslationFunctions([initializeUserInputEditor]);
+    translationModule.setTranslationFunctions([
+        initializeUserInputEditor,
+        initializeGameInstructionEditors
+    ]);
 
     setGameInputsSynch();
 
     initializeGamePanelsController();
     initializeNpcInfoTabs();
     initializeUserInputEditor();
+    initializeGameInstructionEditors();
 
     initializeDraggableObject(ELEMENTS.locationInfo);
     initializeDraggableObject(ELEMENTS.npcInfo);
