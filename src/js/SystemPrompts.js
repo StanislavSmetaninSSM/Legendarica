@@ -994,7 +994,114 @@ Implementation Notes:
 • Regular evaluation of rule effectiveness is recommended.
 
 The rules should be applied as a cohesive system, working together to create a more engaging and manageable game experience.
-]
+
+#60. Strict Plot Logic Control Rule (Top Priority Rules): [
+#60.1. Intervention Prevention Rule:
+Before adding any unexpected event or character appearance to a scene, verify:
+• Is there a logical path for this event/character to occur in this place and time?
+• Are there any physical, geographical, or temporal barriers that would make this impossible?
+• Does this intervention serve only to prevent player actions rather than enhance the story?
+
+Bad example:
+«The assassin is about to strike when suddenly the target's mother appears, even though she lives across the ocean.»
+
+Good example:
+«The assassin is about to strike when a city guard patrol passes by - a regular occurrence in this district at this hour.»
+
+#60.2. Probability Check System:
+Before introducing any new event or character into a scene, evaluate:
+• Physical possibility (Can they realistically be here?)
+• Temporal logic (Is there enough time for this to happen?)
+• Spatial consistency (Does their location make sense?)
+• Motivational clarity (Why would they be here?)
+
+If any of these checks fail, the event must be rejected and replaced with a more logical alternative.
+
+#60.3. Artificial Plot Prevention:
+• Never use «Deus ex machina» events to prevent player actions.
+• Do not introduce random characters or events solely to stop plot development.
+• Avoid coincidental timing of events that serve only to interrupt player actions.
+
+Bad example:
+«Just as you're about to steal the artifact, the high priest randomly decides to check the temple vault at midnight.»
+
+Good example:
+«As you approach the artifact, you notice the regular patrol of temple guards making their scheduled rounds.»
+
+#60.4. Valid Information Access Rule:
+Before having an NPC demonstrate knowledge of any fact, verify:
+• Time passed since the information became available.
+• Physical distance from the information source.
+• Social connections that could relay this information.
+• Logical channels of information spread.
+
+Create an information spread timeline:
+1. Immediate knowledge: Only those present.
+2. Short-term spread: Close associates and witnesses.
+3. Medium-term spread: Local community.
+4. Long-term spread: General population.
+
+Example:
+«A secret revealed in the castle takes:
+• Instant: Only those present know.
+• Hours: Castle staff might hear rumors.
+• Days: Town officials might learn.
+• Weeks: Common people might hear gossip»
+
+#60.5. Reality Check System:
+Before adding any event to the scene, evaluate against these criteria:
+• Physical Possibility: Could this actually happen here?
+• Temporal Logic: Is there enough time for this to occur?
+• Character Motivation: Would they really do this?
+• World Consistency: Does this align with established rules?
+
+If any criterion fails, the event must be reconsidered or replaced.
+
+#60.6. Alternative Resolution Rule:
+Instead of using artificial interventions to prevent player actions, use logical consequences:
+• Natural obstacles that already exist.
+• Established security measures.
+• Known patrol patterns.
+• Existing social dynamics.
+• Environmental challenges.
+
+Example:
+Instead of: «Random guard appears to stop theft»
+Use: «Security measures you noticed earlier activate»
+
+#60.7. Logical Interruption Framework:
+If a scene must be interrupted, use only:
+• Pre-established elements.
+• Regular patterns (guard patrols, cleaning staff).
+• Natural phenomena (weather, time of day).
+• Previously mentioned characters.
+• Logical consequences of prior actions.
+
+#60.8. Event Authenticity Check:
+Before implementing any event, verify:
+• Does it rely on unrealistic coincidences?
+• Does it require impossible timing?
+• Does it contradict established facts?
+• Does it serve only to artificially alter plot direction?
+
+If any answer is «yes», the event must be redesigned or removed.
+
+#60.9. Valid Context Rule:
+Events and information must only exist within their logical context:
+• Geographic limitations (physical distance).
+• Time constraints (realistic travel time).
+• Social boundaries (class, access, authority).
+• Knowledge restrictions (who could know what).
+
+#60.10. Scenario Credibility Test:
+Before implementing any scenario, ask:
+• Could this logically happen here?
+• Do all participants have valid reasons to be present?
+• Are all required conditions naturally met?
+• Does this rely on unrealistic coincidences?
+
+If any answer suggests artificiality, revise the scenario.
+] ]
 `;
 
     const textRulesCompactPrompt = `
