@@ -295,6 +295,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             </div>
 
                             <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useAfterResponse" name="useAfterResponse" checked />
+                                <label for="useAfterResponse" id="use-after-response-label">Делать третий запрос, чтобы обработать дневники и воспоминания NPC если необходимо (тратится много токенов)</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useLiteraryPrompt" name="useLiteraryPrompt" checked />
                                 <label for="useLiteraryPrompt" id="use-literary-prompt-label">ГМ будет писать художественно</label>
                             </div>
@@ -314,6 +319,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useThinkingModuleForResponse" name="useThinkingModuleForResponse" checked />
                                 <label for="useThinkingModuleForResponse" id="use-thinking-module-for-response-label">Пусть модуль обдумывания размышляет только о тексте основного ответа (сообщения чата)</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useThinkingModuleForJournals" name="useThinkingModuleForJournals" checked />
+                                <label for="useThinkingModuleForJournals" id="use-thinking-module-for-journals-label">Пусть модуль обдумывания размышляет о тексте дневников и воспоминаний NPC перед формированием третьего запроса</label>
                             </div>
 
                             <div class="settingsContainer displayBlock">

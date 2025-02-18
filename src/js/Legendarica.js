@@ -273,10 +273,12 @@ const ELEMENTS = {
     makeGameQuestOriented: document.getElementById('makeGameQuestOriented'),
     useThinkingModule: document.getElementById('useThinkingModule'),
     useThinkingModuleForResponse: document.getElementById('useThinkingModuleForResponse'),
+    useThinkingModuleForNPC: document.getElementById('useThinkingModuleForJournals'),
     thinkingModuleIterations: document.getElementById('thinkingModuleIterations'),
     useTextRules: document.getElementById('useLiteraryPrompt'),
     useEroticPrompt: document.getElementById('useEroticPrompt'),
-    useSeparateResponse: document.getElementById('useSeparateResponse'),
+    usePreResponse: document.getElementById('useSeparateResponse'),
+    useAfterResponse: document.getElementById('useAfterResponse'),
 
     //Graphics
     floatingImg: document.getElementById('floating'), // Splash screen
@@ -4515,14 +4517,14 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
             "inventoryItemsResources": [] ,
             "locationData": { "name": "" , "difficulty": "" , "lastEventsDescription": "", "description": "", "image_prompt": "" } ,
             "multipliers": [] ,
-            "response": "" ,
+            ${!ELEMENTS.usePreResponse.checked ? `"response": "" ,` : ``}            
             "moneyChange": ,
             "currentEnergyChange": ,
             "currentHealthChange": ,
             "experienceGained": ,
             "actions": [] ,
             "image_prompt": "" ,
-            "items_and_stat_calculations": [] ,
+            ${!ELEMENTS.usePreResponse.checked ? `"items_and_stat_calculations": [] ,` : ``}
             "newPassiveSkills": [] ,
             "newActiveSkills": [] ,
             "removePassiveSkills": [] ,
@@ -5682,10 +5684,9 @@ ${turn == 1 ? `
 #17.13.1. Pay special attention to fights between the player and monsters/enemies/NPCs/etc. Handle health loss according to the Health Loss Conditions rules described above.
 #17.14. It is not allowed to add or subtract in moneyChange, currentHealthChange and currentEnergyChange if this has already been done for the same event
 #17.15. The value of the 'response' key should significantly develop the events of the general plot. The event from the previous turn should be completed.
-${useSeparateResponse.checked ? `
-#17.16. Attention! In this turn, you are only required to write a short version of the key 'response' value. Mandatory maximize the reduction of the 'response' value while preserving its logical meaning and the sequence of events.
-` : `
-#17.16. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.` }
+${!ELEMENTS.usePreResponse.checked ? `
+#17.16. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.
+` : `` }
 #17.17. This answer should be a logical consequence of the current player action, which is their last prompt: ${currentMessage} and should be absolutely different compared to events from previous turns and recent events from the history of previous communication between you (GM) and the player
 #17.18. Each turn should have a new event that has not yet been in the history of previous communication between you (GM) and the player, even if the player's request is repeated.
 #17.19. Each new event should not only be a logical continuation of the last previous turns of previous actions, but also radically differ from those previously described. Make sure that each plot development offers a new interaction or unpredictable turn, which is a plot consequence of the last turns from the history of communication between the GM and the player.
@@ -5853,18 +5854,8 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (!["Websim", "None"].includes(aiProvider) && !apiKey)
                 throw translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-ai-key-label"];
 
-            const predefinedSystemPrompts = [
-                systemPromptsModule.languageRule(translationModule.currentLanguage),
-                systemPromptsModule.markdown
-            ];            
-            if (ELEMENTS.useEroticPrompt.checked)
-                predefinedSystemPrompts.push(systemPromptsModule.erotic);
-            if (ELEMENTS.useTextRules.checked)
-                predefinedSystemPrompts.push(systemPromptsModule.textRulesCompact);
-
-            const predefinedMainPrompts = [
-                systemPromptsModule.notesRule
-            ];
+            const predefinedSystemPrompts = getPredefinedSystemPrompts(true);
+            const predefinedMainPrompts = getPredefinedMainPrompts();
 
             if (ELEMENTS.useThinkingModule.checked && !ELEMENTS.useThinkingModuleForResponse.checked) {
                 const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
@@ -5877,26 +5868,26 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 ]`;
             }
 
-            if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForResponse.checked && !ELEMENTS.useSeparateResponse.checked) {
+            if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForResponse.checked && !ELEMENTS.usePreResponse.checked) {
                 let thinkingPrompt = `
-[ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
+                [ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
 
-### Instruction ###
+                ### Instruction ###
 
-First, I'll explain what is your goal. These are preparations for main answer, and in this task you need to think only about the 'response' value of key. All other data will be filled later.
-You must write the 'response' value of key, using artistic and literary style of writing. Your 'response' value of key must be consistent with the all other data you included in the context of previous user's turn.
-Use the maximum number of characters available to you for the answer. This is your task for the current turn.
-You should not write anything now except for the value of the 'response' key. It's a Super Rule 1.
+                First, I'll explain what is your goal. These are preparations for main answer, and in this task you need to think only about the 'response' value of key. All other data will be filled later.
+                You must write the 'response' value of key, using artistic and literary style of writing. Your 'response' value of key must be consistent with the all other data you included in the context of previous user's turn.
+                Use the maximum number of characters available to you for the answer. This is your task for the current turn.
+                You should not write anything now except for the value of the 'response' key. It's a Super Rule 1.
 
-Please, Let's think step by step:
-[
-#1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
-#2. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.   
-#3. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-[ ### Context ###
-#1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
-#2. Carefully study the rules that you will use to form answer for user in next turn, but not in this turn - in this turn you need to only form the 'response' (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  [${prompt}] .
-] ]`;
+                Please, Let's think step by step:
+                [
+                #1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
+                #2. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.   
+                #3. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+                [ ### Context ###
+                #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
+                #2. Carefully study the rules that you will use to form answer for user in next turn, but not in this turn - in this turn you need to only form the 'response' (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  [${prompt}] .
+                ] ]`;
 
                 const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, thinkingPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
                 prompt = `               
@@ -5907,77 +5898,43 @@ Please, Let's think step by step:
                 ]`;
             }
 
+            const preResponseData = await processPreResponse({
+                mainPrompt: prompt,
+                aiProvider: aiProvider,
+                model: model,
+                apiKey: apiKey,
+                tokenCostSum: tokenCostSum
+            });
+            prompt = preResponseData?.prompt ?? prompt;
+
             data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
             if (Array.isArray(data))
                 data = data[0];
+            data.response = preResponseData?.response ?? data.response;
+            data.items_and_stat_calculations = preResponseData?.items_and_stat_calculations ?? data.items_and_stat_calculations;
+
+            if (Array.isArray(data.NPCJournals) && data.NPCJournals.length > 0 ||
+                Array.isArray(data.NPCMemories) && data.NPCMemories.length > 0 ||
+                Array.isArray(data.NPCsData) && data.NPCsData.length > 0) {
+                const afterResponseData = await processAfterResponse({
+                    mainPrompt: prompt,
+                    aiProvider: aiProvider,
+                    model: model,
+                    apiKey: apiKey,
+                    tokenCostSum: tokenCostSum
+                });
+                data.NPCJournals = afterResponseData?.NPCJournals ?? data.NPCJournals;
+                data.NPCMemories = afterResponseData?.NPCMemories ?? data.NPCMemories;
+                data.NPCsData = afterResponseData?.NPCsData ?? data.NPCsData;
+            }
+                        
             tokenCostSum = APIModule.tokenCostSum;
             tokenCostCurrent = APIModule.tokenCostCurrent;
-
-            if (ELEMENTS.useSeparateResponse.checked) {    
-                if (ELEMENTS.useTextRules.checked) {
-                    predefinedSystemPrompts.pop();
-                    predefinedSystemPrompts.push(systemPromptsModule.textRules);
-                }
-
-                let separateResponsePrompt = `
-[ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
-
-### Instruction ###
-
-First, I'll explain what happened. To reduce the load on you, we've split your answer into two parts. Now, you will be writing the second part of your answer.
-In the first part of the answer, you created a detailed JSON response structure with all the necessary values, but in the value of the 'response' key, you wrote a shortened version.
-Now, you must write the full version of the 'response' key, using artistic and literary style of writing. Your full version of 'response' value of key must be consistent with the shortened version and all other data you included in your previous JSON response.
-You're encouraged to rewrite, expand and even invent new elements (for example, dialogues, plot twists, or character interactions) within the 'response' value from the shortened version, as long as the core plot stays the same. Craft a richer and more engaging narrative beyond simply detailing what already exists, as long as the core plot stays the same.
-Feel free to completely rewrite the text of shorten version of the 'response' value of key. For example, if the text violates the text writing rules (e.g., if the text uses rhetorical questions, which is BAD), mandatory rewrite it. However, the core plot should stays the same.
-The key rule is non-interference in the player's actions. You are not allowed to decide what the player will do and say. Follow this rule and rewrite all text which violates it.
-Use the maximum number of characters available to you for the answer. This is your task for the current turn.
-You should not write anything now except for the value of the 'response' key. It's a Super Rule 1.
-
-Please, Let's think step by step:
-[
-#1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
-#2. This is your response template: { "response": "" } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
-#3. Into a 'response' value of key include a string, represents the full version of 'response', knowing from the ###Previous Context###. 
-#4. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.   
-#5. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-#6. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
-#7. You MUST MANDATORY use all system instructions which you have to write the 'response' value of key. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
-
-[ ### Previous Context ###
-#1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
-#2. Carefully study the rules that you used to form your first part of answer and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  [${prompt}] .
-#3. Carefully study the first part of answer, were you have created the detailed JSON response structure with all the necessary values (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events): ${JSON.stringify(data)} .
-] ]`;
-                if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForResponse.checked) {
-                    const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, separateResponsePrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
-
-                    separateResponsePrompt = `                        
-                        ${separateResponsePrompt}
-
-                        Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log is a try to make the full version of 'response' value of key. It's not a final result, but just a draft.
-                        The reasoning log: [
-                            ${thinkingData}
-                        ].
-                        Now, you must mandatory rewrite the full version of the 'response' value of key (known from the reasoning log).
-                        Do not simply copy and paste the draft. You must use the draft as a foundation, but then mandatory reimagine and fully rewrite it, adhering to all the known rules and instructions.
-                        I say it again: you MUST MANDATORY fully rewrite the draft. It's forbidden to copy and paste the draft without changes - the draft mandatory must be completely rewritten. It's a Super Rule with Top Priority.
-                        You MUST MANDATORY follow all other rules describes how the 'response' should be written in terms of text style, including the rules of formatting text and instructions about text creation. 
-                        You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs.
-                    `;
-                }
-
-                let separateResponseData = await sendAPIRequest(aiProvider, model, apiKey, separateResponsePrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
-                if (Array.isArray(separateResponseData))
-                    separateResponseData = separateResponseData[0];
-                tokenCostSum = APIModule.tokenCostSum;
-                tokenCostCurrent = APIModule.tokenCostCurrent;
-                data.response = separateResponseData.response;
-            }
 
             turn++;      
             inventoryBasket = [];
             data = sanitizeObject(data, ['~', '"']);
-
+            
             //console.log(data);
             ELEMENTS.chatBox.removeChild(loadingElement);
             sendMessageToChat(data.response, 'gm');
@@ -6234,6 +6191,188 @@ function shouldGeneratePassiveSkills() {
     const skillsToGenerate = characterStats.level - passiveSkillsCount;
     return skillsToGenerate > 0;
 }
+
+function getPredefinedSystemPrompts(useShortVersions) {
+    const predefinedSystemPrompts = [
+        systemPromptsModule.languageRule(translationModule.currentLanguage),
+        systemPromptsModule.markdown
+    ];
+
+    if (ELEMENTS.useEroticPrompt.checked)
+        predefinedSystemPrompts.push(systemPromptsModule.erotic);
+
+    if (ELEMENTS.useTextRules.checked) {
+        if (!ELEMENTS.usePreResponse.checked && !useShortVersions)
+            predefinedSystemPrompts.push(systemPromptsModule.textRulesCompact);
+        else
+            predefinedSystemPrompts.push(systemPromptsModule.textRules);
+    }
+
+    return predefinedSystemPrompts;
+}
+
+function getPredefinedMainPrompts() {
+    const predefinedMainPrompts = [
+        systemPromptsModule.notesRule
+    ];
+
+    return predefinedMainPrompts;
+}
+
+async function processPreResponse(data) {
+    if (!ELEMENTS.usePreResponse.checked)
+        return null;
+
+    let {
+        mainPrompt,
+        aiProvider, model, apiKey, tokenCostSum
+    } = data;
+
+    const predefinedSystemPrompts = getPredefinedSystemPrompts();
+    const predefinedMainPrompts = getPredefinedMainPrompts();
+    
+    let currentPrompt = `
+    First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
+
+    ### Instruction ###
+
+    First, I'll explain what is going on. To reduce the load on you, we've split your answer into two parts. Now, you will write the first part of your answer.
+    In the first part of the answer, you must create only 'response' - a chat message which will be shown to the player, and 'items_and_stat_calculations' - to record and demonstrate various calculations, since they are important for creating the value of 'response' key. In the second part of answer, you will create a detailed JSON response structure with all the necessary values, but don't think much about it right now. In current answer, you must write only values of the 'response' and 'items_and_stat_calculations' keys.
+    Use artistic and literary style to write the data of 'response' value of key. Create a rich and engaging narrative.
+    The key rule is non-interference in the player's actions. You are not allowed to decide what the player will do and say. Follow this rule and write the text according to it.
+    Use the maximum number of characters available to you for the answer. This is your task for the current turn.
+    You should not write anything now except for the values of the 'response' and 'items_and_stat_calculations'  keys. It's a Super Rule 1.
+
+    Please, Let's think step by step:
+    [
+    #1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
+    #2. This is your response template: { "response": "", "items_and_stat_calculations": []  } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
+    #3. Into a 'response' value of key include a string, represents the chat message which will be shown to player. You can find the context data in the ###Context Data###.
+    #4. The maximum number of characters in the 'response' value of key: maximum ${getMaxGmSymbols()} characters.   
+    #5. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+    #6. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
+    #7. You MUST MANDATORY use all system instructions which you have to write the 'response' value of key. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
+
+    [ ### Context Data ###
+    #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
+    #2. Carefully study the rules that you will use to form the second part of answer, and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about Context):  [${mainPrompt}] .
+    #3. Keep in mind: Although you need to write only 'response' and 'items_and_stat_calculations', you also mandatory must follow the rules of Context to make the answer consistent with the secondary part of your answer (which you will write later).
+    ] ]`;
+
+    if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForResponse.checked) {
+        const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
+
+        currentPrompt = `${currentPrompt}
+
+        Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log is a try to make the full version of 'response' value of key. It's not a final result, but just a draft.
+        The reasoning log: [
+            ${thinkingData}
+        ].
+        Now, you must mandatory rewrite the full version of the 'response' value of key (known from the reasoning log).
+        Do not simply copy and paste the draft. You must use the draft as a foundation, but then mandatory reimagine and fully rewrite it, adhering to all the known rules and instructions.
+        I say it again: you MUST MANDATORY fully rewrite the draft. It's forbidden to copy and paste the draft without changes - the draft mandatory must be completely rewritten. It's a Super Rule with Top Priority.
+        You MUST MANDATORY follow all other rules describes how the 'response' should be written in terms of text style, including the rules of formatting text and instructions about text creation. 
+        You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs.
+        `;
+    }
+
+    let responseData = await sendAPIRequest(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
+    if (Array.isArray(responseData))
+        responseData = responseData[0];
+
+    mainPrompt = `
+    ### Instruction ###
+
+    First, I'll explain what happened. To reduce the load on you, we've split your answer into two parts. Now, you will write the second part of your answer.
+    In the first part of the answer, you created only 'response' - a chat message which will be shown to the player, and 'items_and_stat_calculations' - to record and demonstrate various calculations, since they were important for creating the value of 'response' key.
+    In the second part of answer, you must create a detailed JSON response structure with all the necessary values, excluding 'response' and 'items_and_stat_calculations' which you have formed earlier.
+    This is the value of 'response' which you formed in your first part of answer: ['${responseData.response}'].
+    This is the value of 'items_and_stat_calculations' which you formed in your first part of answer: ['${responseData.items_and_stat_calculations}'].
+    Now you must write detailed JSON data which will be consistent with the 'response' and 'items_and_stat_calculations' text. 
+    It is very important that the JSON data is consistent with the 'response' and 'items_and_stat_calculations' text, because that is what happened in the game in current turn. 
+    Now you mandatory must to describe all other data that are needed to form the game response completely. It means, that you must write all except 'response' and 'items_and_stat_calculations' values of keys. It's Super Rule 1.
+
+    Follow these instructions to form the JSON data: [
+        ${mainPrompt}
+    ]`;
+        
+    return {
+        response: responseData.response,
+        items_and_stat_calculations: responseData.items_and_stat_calculations,
+        prompt: mainPrompt
+    }
+}
+
+async function processAfterResponse(data) {
+    if (!ELEMENTS.useAfterResponse.checked)
+        return null;
+
+    let {
+        mainPrompt,
+        aiProvider, model, apiKey, tokenCostSum
+    } = data;
+
+    const predefinedSystemPrompts = getPredefinedSystemPrompts();
+    const predefinedMainPrompts = getPredefinedMainPrompts();
+
+    let currentPrompt = `
+    First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
+
+    ### Instruction ###
+
+    First, I'll explain what is going on. To reduce your workload, we've split your answer into three parts. Now, you will write the third part of your answer.
+    In the first and second part of your answer, you have created the detailed JSON response with all game-needed information.
+    But the 'NPCJournals', 'NPCMemories' and 'NPCsData' were written in the shortened form because your workload was too big.
+    Now you must write full versions of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. Use artistic and literary style to write the data of 'NPCJournals', 'NPCMemories', 'NPCsData', and create a rich and engaging narrative.
+    Your full versions of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys must be consistent with the shortened versions of these key values and all other data you included in your previous JSON response.
+    You're encouraged to rewrite, expand and even invent new elements within the 'NPCJournals', 'NPCMemories' and 'NPCsData' values from the shortened version, as long as the core plot stays the same. Craft a richer and more engaging narrative beyond simply detailing what already exists.
+    Use the maximum number of characters available to you for the answer. This is your task for the current turn.
+    You should not write anything now except for the values of the 'NPCJournals', 'NPCMemories', 'NPCsData' keys. It's a Super Rule 1.
+
+    Please, Let's think step by step:
+    [
+    #1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
+    #2. This is your response template: { "NPCJournals": [], "NPCMemories": [], "NPCsData": [] } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
+    #3. You can find the context data in the ###Context Data###. It contains information about your JSON response which you wrote earlier and all the data needed about the game rules.
+    #4. The maximum number of characters in the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys: maximum ${getMaxGmSymbols()} characters.
+    #5. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+    #6. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
+    #7. You MUST MANDATORY use all system instructions which you have to write the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
+
+    [ ### Context Data ###
+    #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
+    #2. Carefully study the rules that you used to form the previous part of your answer, and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about Context):  [${mainPrompt}] .
+    #3. Keep in mind: Although you need to write only 'NPCJournals', 'NPCMemories', 'NPCsData' you also mandatory must follow the rules of Context to make the answer consistent with the previous parts of your answer.
+    ] ]`;
+
+    if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForNPC.checked) {
+        const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
+
+        currentPrompt = `${currentPrompt}
+
+        Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log is a try to make the full version of 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. It's not a final result, but just a draft.
+        The reasoning log: [
+            ${thinkingData}
+        ].
+        Now, you must mandatory rewrite the full version of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys (known from the reasoning log).
+        Do not simply copy and paste the draft. You must use the draft as a foundation, but then mandatory reimagine and fully rewrite it, adhering to all the known rules and instructions.
+        I say it again: you MUST MANDATORY fully rewrite the draft. It's forbidden to copy and paste the draft without changes - the draft mandatory must be completely rewritten. It's a Super Rule with Top Priority.
+        You MUST MANDATORY follow all other rules describes how the text should be written in terms of text style, including the rules of formatting text and instructions about text creation. 
+        You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs.
+        `;
+    }
+
+    let responseData = await sendAPIRequest(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
+    if (Array.isArray(responseData))
+        responseData = responseData[0];
+            
+    return {
+        NPCJournals: responseData.NPCJournals,
+        NPCMemories: responseData.NPCMemories,
+        NPCsData: responseData.NPCsData
+    }
+}
+
 
 async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts) {
     let thinkingData = "";
