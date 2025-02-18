@@ -5910,7 +5910,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 data = data[0];
             data.response = preResponseData?.response ?? data.response;
             data.items_and_stat_calculations = preResponseData?.items_and_stat_calculations ?? data.items_and_stat_calculations;
-
+            
             if (Array.isArray(data.NPCJournals) && data.NPCJournals.length > 0 ||
                 Array.isArray(data.NPCMemories) && data.NPCMemories.length > 0 ||
                 Array.isArray(data.NPCsData) && data.NPCsData.length > 0) {
@@ -6247,10 +6247,14 @@ async function processPreResponse(data) {
     #1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
     #2. This is your response template: { "response": "", "items_and_stat_calculations": []  } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
     #3. Into a 'response' value of key include a string, represents the chat message which will be shown to player. You can find the context data in the ###Context Data###.
-    #4. The maximum number of characters in the 'response' value of key: maximum ${getMaxGmSymbols()} characters.   
-    #5. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-    #6. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
-    #7. You MUST MANDATORY use all system instructions which you have to write the 'response' value of key. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
+    #4. Into a 'items_and_stat_calculations' value include array of strings, where each element of the array - is a string, which represents the separate log data related with various checks or details.
+    #4.1. To form the 'items_and_stat_calculations' value, you must mandatory carefully inspect the ### Context Data ### and perform all instructions related with 'items_and_stat_calculations'. Pay special attention to player action checks.
+    #4.2. YOU MUST MANDATORY fill 'items_and_stat_calculations' value. Check it multiple times when forming response. There must be something related with calculations, which you could write to 'items_and_stat_calculations'.
+    #4.3. The value of 'items_and_stat_calculations' must never be empty.
+    #5. The maximum number of characters in the 'response' value of key: maximum ${getMaxGmSymbols()} characters.   
+    #6. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+    #7. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
+    #8. You MUST MANDATORY use all system instructions which you have to write the 'response' value of key. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
 
     [ ### Context Data ###
     #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
@@ -6282,11 +6286,12 @@ async function processPreResponse(data) {
     mainPrompt = `
     ### Instruction ###
 
-    First, I'll explain what happened. To reduce the load on you, we've split your answer into two parts. Now, you will write the second part of your answer.
+      First, I'll explain what happened. To reduce the load on you, we've split your answer into two parts. Now, you will write the second part of your answer.
     In the first part of the answer, you created only 'response' - a chat message which will be shown to the player, and 'items_and_stat_calculations' - to record and demonstrate various calculations and other details, since they were important for creating the value of 'response' key.
     In the second part of answer, you must create a detailed JSON response structure with all the necessary values, excluding 'response' and 'items_and_stat_calculations' which you have formed earlier.
     This is the value of 'response' which you formed in your first part of answer: ['${responseData.response}'].
-    This is the value of 'items_and_stat_calculations' which you formed in your first part of answer: ['${responseData.items_and_stat_calculations}'].
+    This is the value of 'items_and_stat_calculations' which you formed in your first part of answer: ['${JSON.stringify(responseData.items_and_stat_calculations ?? [])}']. 
+    You must take into account the information in the logs of 'items_and_stat_calculations'. Pay special attention to the consequences of the player's actions recorded in the logs. There you can find additional information about what you should do when generating JSON data.
     Now you must write detailed JSON data which will be consistent with the 'response' and 'items_and_stat_calculations' text. 
     It is very important that the JSON data is consistent with the 'response' and 'items_and_stat_calculations' text, because that is what happened in the game in current turn. 
     Now you mandatory must to describe all other data that are needed to form the game response completely. It means, that you must write all except 'response' and 'items_and_stat_calculations' values of keys. It's Super Rule 1.
@@ -6294,7 +6299,7 @@ async function processPreResponse(data) {
     Follow these instructions to form the JSON data: [
         ${mainPrompt}
     ]`;
-        
+
     return {
         response: responseData.response,
         items_and_stat_calculations: responseData.items_and_stat_calculations,
