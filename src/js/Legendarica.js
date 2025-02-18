@@ -6326,6 +6326,7 @@ async function processAfterResponse(data) {
     Now you must write full versions of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. Use artistic and literary style to write the data of 'NPCJournals', 'NPCMemories', 'NPCsData', and create a rich and engaging narrative.
     Your full versions of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys must be consistent with the shortened versions of these key values and all other data you included in your previous JSON response.
     You're encouraged to rewrite, expand and even invent new elements within the 'NPCJournals', 'NPCMemories' and 'NPCsData' values from the shortened version, as long as the core plot stays the same. Craft a richer and more engaging narrative beyond simply detailing what already exists.
+    Mandatory add NPCs data to 'NPCsData' if the NPC doesn't exist in the Context.
     Use the maximum number of characters available to you for the answer. This is your task for the current turn.
     You should not write anything now except for the values of the 'NPCJournals', 'NPCMemories', 'NPCsData' keys. It's a Super Rule 1.
 
@@ -6372,7 +6373,6 @@ async function processAfterResponse(data) {
         NPCsData: responseData.NPCsData
     }
 }
-
 
 async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts) {
     let thinkingData = "";
