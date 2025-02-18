@@ -5102,6 +5102,7 @@ If Result = 'Full Success' (5 ≤ Difference < 10), then mandatory do following:
 - Write to 'items_and_stat_calculations' which characteristic was increased and why.
 
 #9.3.7. Output to 'items_and_stat_calculations' the check calculation, Difference value and Result type with all mathematical details and formulas used.
+#9.3.7.1. Mandatory output to 'items_and_stat_calculations' the detailed information about the plot consequences related to result of the check. This text should be separated from the calculations and begin with an explanation of the check results.
 
 #9.3.8. Result Implementation Requirements:
 #9.3.8.1. Universal Rules for All Results:
@@ -5295,7 +5296,8 @@ Remember:
 #9.2.1. It means that the player's action is successful automatically and no additional check is required.
 #9.2.2. Note that the player has completely succeeded in doing what player was trying to do. You should develop the game's plot based on this. 
 #9.2.3. It's mandatory to add some major positive event to the game's plot to reward the player for a critically successful dice roll.
-#9.2.4. Output to 'items_and_stat_calculations' that player's action was succeeded.
+#9.2.4. Output to 'items_and_stat_calculations' that player's action was fully succeeded.
+#9.2.4.1. Mandatory output to 'items_and_stat_calculations' the detailed information about the plot consequences related to Critical Success. This text should begin with an explanation of the dice roll results.
 #9.2.5. Mandatory do following:
 - Increase the most relevant characteristic as a reward for player.
 - Write to 'items_and_stat_calculations' which characteristic was increased and why.
@@ -5305,6 +5307,7 @@ Remember:
 #9.2.2. Note that the player has completely failed at what player was trying to do. You should develop the game's plot based on this.
 #9.2.3. It's mandatory to add some major negative event to the game's plot because of the player's dice roll has failed critically.
 #9.2.4. Output to 'items_and_stat_calculations' that the player's action failed completely.
+#9.2.4.1. Mandatory output to 'items_and_stat_calculations' the detailed information about the plot consequences related to Critical Failure. This text should begin with an explanation of the dice roll results.
 `)}
 #9.5. When items are need to be added inside the container item, located in the player's inventory, make this check for possibility to do it: [
 #9.5.1. Read the value of 'capacity' property of the container. Let's call it Capacity.
@@ -5365,18 +5368,18 @@ Volume >= TotalItemsVolume, where
 - Write to 'items_and_stat_calculations' which characteristic was increased and why.
 `} ]
 		 
-#10 During dialogue or interaction with NPCs: 
-#10.1. The beginning, process, and end of the dialogue should be built based on the current situation, as well as on the content of the player's words and the quality of the player's logic - only the player's logic is checked for compliance with the laws of formal logic
-#10.2. There are no skill checks, except for attempts to bargain for prices and quest rewards
-#10.3. NPCs may suspect deception when the player violates formal logic
-#10.4. Trust in the character from non-player characters is calculated from the context of the game history, and initially they are neutral
-#10.5. Non-player characters may try to deceive the player, especially if their trust in the player is low
+#10 During dialogue or any kind of interaction with NPCs: 
+#10.1. NPCs are living personalities with their own individual character. It's important to remember this, and to give each NPC a well-developed personality, backstory, and character.
+#10.2. The beginning, process, and end of the dialogue should be built based on the current situation, as well as on the content of the player's words and the quality of the player's logic - only the player's logic is checked for compliance with the laws of formal logic.
+#10.3. NPCs may suspect deception when the player violates formal logic.
+#10.4. Trust in the character from non-player characters is calculated from the context of the game history, and initially they are neutral.
+#10.5. Non-player characters may try to deceive the player, especially if their trust in the player is low.
 #10.6. When selecting prices, the price/quality ratio of the item is very strongly taken into account in relation to the price/quality ratio of other already existing inventory (known from Context).
 #10.7. The player buys an item only if they said in the current action that they are buying the item. If they did not talk about buying, then the GM cannot make a decision about the player buying the item.
 ${ELEMENTS.useNpcList.checked ? `
 #10.8. If any of NPCs have a proper name (means, that NPC name explicitly includes the 'first name' e.g., 'King Arthur', 'Elara', 'Alan Wake', 'Christina', 'Guard Captain Roric', 'Li'), then select such NPCs and apply the check to each of them: [
 #10.8.1. If one of these conditions are true: [
-- The NPC encountered in current turn is new, meaning information about them is not present in the Context.
+- The NPC encountered in current turn is new, meaning information about them is not present in the 'encounteredNPCs' array which is known from the Context.
 - For each NPC near to player in the current turn, find an NPC with the same name in the Context. If such NPC is found, compare values of their properties ['rarity', 'age', 'worldview', 'race', 'class', 'appearanceDescription', 'history', 'stats', 'skills', 'effects', 'attitude'] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no NPC with the same name in the Context (i.e., the NPC is new), the rule is not applied to this NPC and continues checking the rest.
 ], then strictly follow the instructions: [ Let's think step by step : [
 #10.8.1. Include to the response the 'NPCsData' key, the value of which is the array of objects, and each object of the array represents the NPC information.
@@ -5436,7 +5439,7 @@ ${ELEMENTS.useNpcMemoriesDiary.checked ? `
 ` : ''}
 ${ELEMENTS.useQuestsList.checked ? `
 #11  If one of these conditions are true: [
-- If an NPC and a player made an agreement in current turn where the player is expected to perform a 'quest' (in terms of computer role-playing games) — which involves completing a specific task and receiving a reward upon completion.
+- If an NPC assigns the player a task that involves completing a specific goal and offers a potential reward upon completion, this task should be treated as a 'quest' (in terms of computer role-playing games).
 - If player get the 'quest' from some type of source (like task board, or device) in current turn and agrees to complete it — which involves completing a specific task and receiving a reward upon completion.
 - For each quest in the player's quests in the current turn, find the quest with the same name in the Context. If such quest is found, compare the values of its properties ['questGiver', 'questBackground, 'description', 'purposes', 'reward', 'punishmentForFailingQuest', 'details', 'isCompleted' ] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no quest with the same name in the Context (i.e., the quest is new), the rule is not applied to this quest and continues checking the rest.
 ], then strictly follow the instructions: [ Let's think step by step : [
@@ -5444,15 +5447,15 @@ ${ELEMENTS.useQuestsList.checked ? `
 #11.2. Mandatory format for recording the value of each item of 'questsData' array: {'name': 'full_name_of_current_quest', 'questGiver': 'full_name_of_quest_giver', 'questBackground': 'background_of_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
 #11.3. To the value of 'name' key, include the string, which representing the full name of quest. If quest isn't new, then it's mandatory to use the quest name in the exactly same format like in the Context.
 #11.4. To the value of 'questGiver' key, include the string, which representing the full name of NPC, who gave the quest to player.
-#11.5. To the value of 'questBackground' key, include the string, which describing why the quest giver needs the player to complete this quest.
+#11.5. To the value of 'questBackground' key, include a string that describes the currently known reasons why the quest giver needs the player to complete this quest. This description should be updated as new information becomes available.
 #11.6. To the value of 'description' key, include the string, which is the complete and detailed quest description. Describe it in as much detail and artistic language as possible.
 #11.7. The value of 'purposes' key is an array of strings, describes what player should do during quest to complete it. Purposes should be logical tasks, each of which must have at least one correct solution.
-#11.8. To the value of 'reward' key, include the description of reward which player will receive for completing the quest. The reward must be specific. For example, if the reward is money, then indicate a specific amount of money.
-#11.9. To the value of 'punishmentForFailingQuest' key, include the description of the punishment the player will suffer for failing the quest.
+#11.8. To the value of 'reward' key, include the most specific description possible of the reward which player will receive for completing the quest. If the reward is uncertain or conditional, describe the potential benefits and the factors that will determine whether the reward is granted.
+#11.9. To the value of 'punishmentForFailingQuest' key, include the most specific description possible of the punishment the player will suffer for failing the quest. If the punishment is uncertain or conditional, describe the potential consequences and the factors that will determine whether the punishment is inflicted.
 #11.10. To the value of 'details' key, include information about quest details and notes. Do not include information contained in the value of 'description' key. This field is only for new quest data: any notes or details about the quest that the player learned during the quest.
-#11.11. Set the value of 'isCompleted' key to false or true. Set true if quest is completed. A quest is considered complete when the quest-giving NPC acknowledges its completion.
-#11.12. If the quest is completed, the quest-giving NPC should provide the player with the quest reward.
-#11.13. If the player fails the quest, the quest is marked as completed and the player must suffer the punishment described in the value of 'punishmentForFailingQuest' key.
+#11.11. Set the value of 'isCompleted' key to false or true. The quest is considered complete when the quest's primary objective has been achieved or the player has definitively failed to achieve it. The circumstances of completion or failure should be recorded in the 'details' key. If the quest-giving NPC acknowledges completion, this should also be recorded in the 'details' key.
+#11.12. If the quest is completed and the quest-giving NPC fulfills their promise, the player should receive the quest reward. If the quest-giving NPC does not fulfill their promise, this should be recorded in the 'details' key, and the player may have the opportunity to seek alternative forms of compensation.
+#11.13. If the player fails the quest and the quest-giving NPC inflicts the described punishment, the player must suffer the consequences. If the quest-giving NPC attempts to inflict a different punishment, this should be recorded in the 'details' key, and the player may have the opportunity to resist or negotiate.
 ] ] ` : ''}
 	 
 #12. Player characteristics: reward and punishment.
@@ -5687,18 +5690,13 @@ ${turn == 1 ? `
 ${!ELEMENTS.usePreResponse.checked ? `
 #17.16. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.
 ` : `` }
-#17.17. This answer should be a logical consequence of the current player action, which is their last prompt: ${currentMessage} and should be absolutely different compared to events from previous turns and recent events from the history of previous communication between you (GM) and the player
-#17.18. Each turn should have a new event that has not yet been in the history of previous communication between you (GM) and the player, even if the player's request is repeated.
-#17.19. Each new event should not only be a logical continuation of the last previous turns of previous actions, but also radically differ from those previously described. Make sure that each plot development offers a new interaction or unpredictable turn, which is a plot consequence of the last turns from the history of communication between the GM and the player.
-#17.20. With each new turn, consider that new roles, locations, or items may be present in the game. Include unexpected elements to create plot variety.
-#17.21. The plot should not go back and repeat itself. It is not allowed to forget events that occurred in the most recent turns.
-#17.22. Seek inspiration from various genres and storytelling styles. Let each new event be unexpected and even extraordinary in the context of the current plot.
-#17.23. When describing a new event, offer the player several alternative ways of responding or interacting with the surrounding world to stimulate diversity in plot development.
-#17.24. If the player's action is repetitive, each new answer should present not only a different event, but its context should also be new, thereby overcoming the pattern.
-#17.25. When forming the answer, consider all the passive skills of the character. 
-#17.26. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
-#17.27. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
-#17.28. The value of key 'response' must never be empty.
+#17.17. This answer should be a logical consequence of the current player action, which is their last prompt: '${currentMessage}'. 
+#17.18. Seek inspiration from various genres and storytelling styles.
+#17.19. When describing a new event, offer the player several alternative ways of responding or interacting with the surrounding world to stimulate diversity in plot development.
+#17.20. When forming the answer, consider all the passive and active skills of the character. 
+#17.21. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
+#17.22. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
+#17.23. The value of key 'response' must never be empty.
 ]
 
 #18 Create an array of five elements using the following format:
@@ -6122,10 +6120,11 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 }
             }
 
-            if (data.items_and_stat_calculations && Array.isArray(data.items_and_stat_calculations) && data.items_and_stat_calculations.length > 0) {
-                logMessage(data.items_and_stat_calculations.join('\n\n'), data.currentHealthChange ?? 0, data.currentEnergyChange ?? 0, data.moneyChange ?? 0, expPoints ?? 0);
-            }
-
+            let logMessages = data.items_and_stat_calculations && Array.isArray(data.items_and_stat_calculations)
+                ? data.items_and_stat_calculations
+                : [];
+            logMessage(logMessages.join('\n\n'), data.currentHealthChange ?? 0, data.currentEnergyChange ?? 0, data.moneyChange ?? 0, expPoints ?? 0);
+            
             if (data.actions)
                 handlePlayerActionHints(data.actions);
 
@@ -6237,7 +6236,7 @@ async function processPreResponse(data) {
     ### Instruction ###
 
     First, I'll explain what is going on. To reduce the load on you, we've split your answer into two parts. Now, you will write the first part of your answer.
-    In the first part of the answer, you must create only 'response' - a chat message which will be shown to the player, and 'items_and_stat_calculations' - to record and demonstrate various calculations, since they are important for creating the value of 'response' key. In the second part of answer, you will create a detailed JSON response structure with all the necessary values, but don't think much about it right now. In current answer, you must write only values of the 'response' and 'items_and_stat_calculations' keys.
+    In the first part of the answer, you must create only 'response' - a chat message which will be shown to the player, and 'items_and_stat_calculations' - to record and demonstrate various calculations and other details, since they are important for creating the value of 'response' key. In the second part of answer, you will create a detailed JSON response structure with all the necessary values, but don't think much about it right now. In current answer, you must write only values of the 'response' and 'items_and_stat_calculations' keys.
     Use artistic and literary style to write the data of 'response' value of key. Create a rich and engaging narrative.
     The key rule is non-interference in the player's actions. You are not allowed to decide what the player will do and say. Follow this rule and write the text according to it.
     Use the maximum number of characters available to you for the answer. This is your task for the current turn.
@@ -6284,7 +6283,7 @@ async function processPreResponse(data) {
     ### Instruction ###
 
     First, I'll explain what happened. To reduce the load on you, we've split your answer into two parts. Now, you will write the second part of your answer.
-    In the first part of the answer, you created only 'response' - a chat message which will be shown to the player, and 'items_and_stat_calculations' - to record and demonstrate various calculations, since they were important for creating the value of 'response' key.
+    In the first part of the answer, you created only 'response' - a chat message which will be shown to the player, and 'items_and_stat_calculations' - to record and demonstrate various calculations and other details, since they were important for creating the value of 'response' key.
     In the second part of answer, you must create a detailed JSON response structure with all the necessary values, excluding 'response' and 'items_and_stat_calculations' which you have formed earlier.
     This is the value of 'response' which you formed in your first part of answer: ['${responseData.response}'].
     This is the value of 'items_and_stat_calculations' which you formed in your first part of answer: ['${responseData.items_and_stat_calculations}'].
