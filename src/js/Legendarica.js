@@ -5514,7 +5514,7 @@ If the source of the quest is not an NPC, but circumstances or received informat
 #11.19. Before proceeding, ask yourself: Does the current situation warrant the creation or update of a 'skeleton quest'?
 ] ]
 ${turn == 0 ? `
-#11.20. Since this is the start of new game, be sure to generate a starting quest for the player based on the player's history and plot description.` : ``}
+#11.20. Since this is the start of new game, you must mandatory generate a starting quest for the player, based on the player's history and plot description.` : ``}
 ` : ''}
 	 
 #12. Player characteristics: reward and punishment.
