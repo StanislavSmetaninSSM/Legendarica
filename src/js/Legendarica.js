@@ -1961,7 +1961,7 @@ function setOrChangeItemResource(name, contentsPath, resource, maximumResource, 
         return;
 
     const data = getItemByNameAndPath(name, contentsPath, inventory, null, existedId);
-    if (!data.item)
+    if (!data?.item)
         return;
 
     const item = data.item;
@@ -5438,25 +5438,84 @@ ${ELEMENTS.useNpcMemoriesDiary.checked ? `
 ] ]` : ''}
 ` : ''}
 ${ELEMENTS.useQuestsList.checked ? `
-#11  If one of these conditions are true: [
-- If an NPC assigns the player a task that involves completing a specific goal and offers a potential reward upon completion, this task should be treated as a 'quest' (in terms of computer role-playing games).
-- If player get the 'quest' from some type of source (like task board, or device) in current turn and agrees to complete it — which involves completing a specific task and receiving a reward upon completion.
-- For each quest in the player's quests in the current turn, find the quest with the same name in the Context. If such quest is found, compare the values of its properties ['questGiver', 'questBackground, 'description', 'purposes', 'reward', 'punishmentForFailingQuest', 'details', 'isCompleted' ] with the current values. Pay attention to every little thing, every insignificant detail. The rule returns 'true' if at least one difference in the properties is found. If there is no quest with the same name in the Context (i.e., the quest is new), the rule is not applied to this quest and continues checking the rest.
-], then strictly follow the instructions: [ Let's think step by step : [
-#11.1. Include to the response the 'questsData' key, the value of which is the array of objects, and each of which contains the complete information about specific quest.
-#11.2. Mandatory format for recording the value of each item of 'questsData' array: {'name': 'full_name_of_current_quest', 'questGiver': 'full_name_of_quest_giver', 'questBackground': 'background_of_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
-#11.3. To the value of 'name' key, include the string, which representing the full name of quest. If quest isn't new, then it's mandatory to use the quest name in the exactly same format like in the Context.
-#11.4. To the value of 'questGiver' key, include the string, which representing the full name of NPC, who gave the quest to player.
-#11.5. To the value of 'questBackground' key, include a string that describes the currently known reasons why the quest giver needs the player to complete this quest. This description should be updated as new information becomes available.
-#11.6. To the value of 'description' key, include the string, which is the complete and detailed quest description. Describe it in as much detail and artistic language as possible.
-#11.7. The value of 'purposes' key is an array of strings, describes what player should do during quest to complete it. Purposes should be logical tasks, each of which must have at least one correct solution.
-#11.8. To the value of 'reward' key, include the most specific description possible of the reward which player will receive for completing the quest. If the reward is uncertain or conditional, describe the potential benefits and the factors that will determine whether the reward is granted.
-#11.9. To the value of 'punishmentForFailingQuest' key, include the most specific description possible of the punishment the player will suffer for failing the quest. If the punishment is uncertain or conditional, describe the potential consequences and the factors that will determine whether the punishment is inflicted.
-#11.10. To the value of 'details' key, include information about quest details and notes. Do not include information contained in the value of 'description' key. This field is only for new quest data: any notes or details about the quest that the player learned during the quest.
-#11.11. Set the value of 'isCompleted' key to false or true. The quest is considered complete when the quest's primary objective has been achieved or the player has definitively failed to achieve it. The circumstances of completion or failure should be recorded in the 'details' key. If the quest-giving NPC acknowledges completion, this should also be recorded in the 'details' key.
-#11.12. If the quest is completed and the quest-giving NPC fulfills their promise, the player should receive the quest reward. If the quest-giving NPC does not fulfill their promise, this should be recorded in the 'details' key, and the player may have the opportunity to seek alternative forms of compensation.
-#11.13. If the player fails the quest and the quest-giving NPC inflicts the described punishment, the player must suffer the consequences. If the quest-giving NPC attempts to inflict a different punishment, this should be recorded in the 'details' key, and the player may have the opportunity to resist or negotiate.
-] ] ` : ''}
+#11. In the initial stages of the game, or when information about a task is incomplete, the quest should always be presented as a 'skeleton quest', containing only basic elements (name, general description of the situation or goal).
+Quest details (specific tasks, potential rewards, possible conditions for failure) should be added as new information is received.
+The absence of explicit player consent is not an obstacle to creating a skeleton quest if there are sufficient grounds for doing so in the form of received information or circumstances.
+#11.1. Even if the player does not show explicit interest in a quest, the possibility of creating a skeleton quest based on available information and circumstances should always be evaluated. The player can decline the quest at any time.
+#11.2. 'Skeleton quest' trigger example:
+«The character finds themselves in a situation where their past or goals are threatened or require re-evaluation - this is a trigger for creating or updating a quest.»
+#11.3. Creating a 'skeleton quest' does not limit the player's freedom of choice. They can always abandon the quest or change its direction. The main goal is to provide the player with structure and motivation for action, as well as to provide a logical basis for plot development.
+#11.4. 'Skeleton quest' examples:
+
+1. Lost Contact:
+Trigger: Receiving a garbled distress signal.
+Name: Restore Communications.
+Source: Distress Signal.
+Description: Re-establish contact with the source of the distress signal.
+
+2. Strange Readings:
+Trigger: Discovering unusual sensor data.
+Name: Investigate Anomaly.
+Source: Sensor Readings.
+Description: Determine the cause of the anomalous sensor readings.
+
+3. Missing Person:
+Trigger: Encountering a worried NPC searching for someone.
+Name: Find the Missing.
+Source: NPC Request.
+Description: Locate the missing person and determine their fate.
+
+4. Abandoned Settlement:
+Trigger: Discovering an empty settlement with signs of a hasty departure.
+Name: Uncover the Evacuation.
+Source: Abandoned Settlement.
+Description: Investigate why the settlement was abandoned and where the inhabitants went.
+
+5. Recover Lost Tech:
+Trigger: Obtaining a partial schematic for a valuable piece of lost technology.
+Name: Find the Lost Schematic.
+Source: Terminal Data.
+Description: Locate the remaining parts of the lost technology schematics.
+
+#11.5. If any of these conditions are true: [
+- The player encounters a significant situation, problem, or receives compelling information that suggests a task, goal, or conflict worthy of investigation.
+- An NPC directly assigns the player a task or requests assistance.
+- An NPC reveals a problem or challenge they are facing.
+- The player receives instructions or a task from a source like a terminal or broadcast, or something similar (books, letters etc.)
+- The player discovers an important item or information that clearly hints at further action.
+- The player encounters a situation requiring resolution with significant consequences.
+- There are changes to existing active quests requiring an update (you can find the list of active quests in the Context).
+], then you must create a 'skeleton quest' if one does not already exist, or update the existing one. In this case, strictly follow the instructions: [ Let's think step by step : [
+#11.6. Include to the response the 'questsData' key, the value of which is the array of objects, and each of which contains the available information about specific quest.
+#11.7. Mandatory format for recording the value of each item of 'questsData' array: {'name': 'full_name_of_current_quest', 'questGiver': 'full_name_of_quest_giver', 'questBackground': 'background_of_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
+#11.8. To the value of 'name' key, include the string, which representing the full name of quest. If quest isn't new, then it's mandatory to use the quest name in the exactly same format like in the Context.
+#11.9. To the value of 'questGiver' key, include the quest source. If an NPC gives the quest, include their full name. Otherwise, describe the source of information or circumstances that led to the quest's emergence (like 'Obtained Device Data', 'Discovered Evidence at Scene', 'Emergency Alert', 'Local Information Network', 'Anonymous Tip').
+If the source of the quest is not an NPC, but circumstances or received information, then the source of information or a description of the circumstances should be specified as the 'questGiver' (for example, "Discovered data from the display", "Emergency signal", "Chance discovery").
+#11.10. To the value of 'questBackground' key, include a string that describes the currently known reasons why the quest exists or needs to be completed. For environmental or systemic issues, describe the circumstances that created the situation. This description should be updated as new information becomes available.
+#11.11. To the value of 'description' key, include the string, which is the most complete and detailed quest description currently available. Describe it in as much detail and artistic language as possible.
+#11.12. The value of 'purposes' key is an array of strings. Each purpose must meet the SMART criteria: [
+    • Measurable: It must be possible to objectively evaluate if the goal is achieved.
+    • Achievable: Goals must be realistic considering character's current capabilities and available resources.
+    • Time-bound (if applicable): If goal completion is time-limited, it must be explicitly stated.
+    • Specific: Goals must be clearly and unambiguously formulated.   
+].
+#11.13. To the value of 'reward' key, include the most specific description possible of the reward which player will receive for completing the quest. If the reward is uncertain or conditional, describe the potential benefits and the factors that will determine whether the reward is granted. For story-based quests, rewards may include valuable resources, critical information, or improved relations with factions.
+#11.14. To the value of 'punishmentForFailingQuest' key, include the most specific description possible of the punishment the player will suffer for failing the quest. If the punishment is uncertain or conditional, describe the potential consequences and the factors that will determine whether the punishment is inflicted. For story-based quests, include the consequences of not resolving the situation.
+#11.15. To the value of 'details' key, include any additional information obtained during quest progress that expands understanding of the situation or provides new opportunities: [
+    • Clues leading to solution.
+    • New information about circumstances, causes, or event participants.
+    • Discovered items related to the quest.
+    • Changes in NPC relationships affecting quest progress.
+    • Do not repeat information from 'description'.
+].
+#11.16. Set the value of 'isCompleted' key to false or true. The quest is considered complete when the quest's primary objective has been achieved or the player has definitively failed to achieve it. The circumstances of completion or failure should be recorded in the 'details' key.
+#11.17. If the quest is completed and the quest-giving NPC fulfills their promise, the player should receive the quest reward. If the quest-giving NPC does not fulfill their promise, this should be recorded in the 'details' key, and the player may have the opportunity to seek alternative forms of compensation.
+#11.18. If the player fails the quest and the quest-giving NPC inflicts the described punishment, the player must suffer the consequences. If the quest-giving NPC attempts to inflict a different punishment, this should be recorded in the 'details' key, and the player may have the opportunity to resist or negotiate.
+#11.19. Before proceeding, ask yourself: Does the current situation warrant the creation or update of a 'skeleton quest'?
+] ]
+${turn == 0 ? `
+#11.20. Since this is the start of new game, be sure to generate a starting quest for the player based on the player's history and plot description.` : ``}
+` : ''}
 	 
 #12. Player characteristics: reward and punishment.
 #12.1. Here is the list of all player characteristics: stats_list = ${statsList} .

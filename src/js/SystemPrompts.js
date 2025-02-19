@@ -907,7 +907,7 @@ Overview:
 This rule helps structure information optimally for GM responses, ensuring proper pacing and information delivery.
 
 Key principles:
-• Break long descriptions into logical, digestible parts.
+• Break long descriptions by paragraphs.
 • Ensure clear structure in each message.
 • Use concise but rich descriptions for dynamic scenes.
 
