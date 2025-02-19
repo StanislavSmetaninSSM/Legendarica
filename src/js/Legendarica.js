@@ -5513,7 +5513,7 @@ If the source of the quest is not an NPC, but circumstances or received informat
 #11.18. If the player fails the quest and the quest-giving NPC inflicts the described punishment, the player must suffer the consequences. If the quest-giving NPC attempts to inflict a different punishment, this should be recorded in the 'details' key, and the player may have the opportunity to resist or negotiate.
 #11.19. Before proceeding, ask yourself: Does the current situation warrant the creation or update of a 'skeleton quest'?
 ] ]
-${turn == 0 ? `
+${turn == 1 ? `
 #11.20. Since this is the start of new game, you must mandatory generate a starting quest for the player, based on the player's history and plot description.` : ``}
 ` : ''}
 	 
