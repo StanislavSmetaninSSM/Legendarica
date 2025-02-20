@@ -5751,11 +5751,14 @@ ${!ELEMENTS.usePreResponse.checked ? `
 ` : `` }
 #17.17. This answer should be a logical consequence of the current player action, which is their last prompt: '${currentMessage}'. 
 #17.18. Seek inspiration from various genres and storytelling styles.
-#17.19. When describing a new event, offer the player several alternative ways of responding or interacting with the surrounding world to stimulate diversity in plot development.
-#17.20. When forming the answer, consider all the passive and active skills of the character. 
-#17.21. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
-#17.22. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
-#17.23. The value of key 'response' must never be empty.
+#17.19. The plot should not go back and repeat itself. Even if the action of player the same as before, it's forbidden to you to copy and paste your previous answer.
+#17.20. If the player's actions are monotonous, this should not confuse you. Do not copy your previous answers. If nothing has changed, your answer may be the same in meaning, but should be different in content.
+#17.21. It is not allowed to forget events that occurred in the most recent turns.
+#17.22. When describing a new event, offer the player several alternative ways of responding or interacting with the surrounding world to stimulate diversity in plot development.
+#17.23. When forming the answer, consider all the passive and active skills of the character. 
+#17.24. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
+#17.25. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
+#17.26. The value of key 'response' must never be empty.
 ]
 
 #18 Create an array of five elements using the following format:
@@ -6253,7 +6256,8 @@ function shouldGeneratePassiveSkills() {
 function getPredefinedSystemPrompts(useShortVersions) {
     const predefinedSystemPrompts = [
         systemPromptsModule.languageRule(translationModule.currentLanguage),
-        systemPromptsModule.markdown
+        systemPromptsModule.markdown,
+        systemPromptsModule.agreementPrompt
     ];
 
     if (ELEMENTS.useEroticPrompt.checked)
