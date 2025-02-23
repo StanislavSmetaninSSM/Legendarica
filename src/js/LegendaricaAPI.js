@@ -79,7 +79,7 @@ const APIModule = (function getAPIModule() {
     function createPrompt(mainPrompt) {
         let instructions = mainPrompt;
         if (predefinedMainPrompts.length > 0)
-            instructions = mainPrompt + '\n' + predefinedMainPrompts.join('\n');
+            instructions = predefinedMainPrompts.join('\n') + '\n' + mainPrompt;
 
         return instructions;
     }

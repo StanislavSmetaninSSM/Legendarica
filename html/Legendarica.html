@@ -271,7 +271,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                         <div id="system-instructions-box" class="chat-box rulesBox" style="display:none">
                             <span id="system-instructions-explanaition">Это системные инструкции для выбранного провайдера нейросети. Они имеют высший приоритет для нейросети.</span><br>
-                            <textarea id="system-instructions" class="instructionsArea" placeholder="Введите свои системные инструкции и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="setContentHeight(this)"></textarea>
+                            <textarea id="system-instructions" class="instructionsArea" display="none"></textarea>
                             <br>
                             <button id="download-system-instructions-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="saveSystemInstructions()">Скачать системные инструкции в файл</button>
                             <button id="load-system-instructions-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="loadSystemInstructions()">Загрузить системные инструкции из файла</button>
@@ -279,7 +279,7 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
 
                         <div id="my-rules-box" class="chat-box rulesBox" style="display: none;">
                             <span id="my-rules-explanaition">Здесь вы можете изменить или дополнить правила игры или просто повлиять на поведение ведущего. Просто введите тут инструкцию и оставьте. Например: "В инвентаре персонажа должен быть список в виде отдельного предмета, в котором указаны вообще все бонусы в сумме со всех предметов в инвентаре, а если такого списка в инвентаре нет, то добавить его" или "пусть в каждой локации будут монстры". Предупреждение: внесённые изменения могут сломать какие-нибудь механики игры. А могут и не сломать. Дерзайте!</span><br>
-                            <textarea id="my-rules" class="instructionsArea" placeholder="Введите свои правила и оставьте здесь. Со следующего хода они начнут действовать до тех пор, пока находятся здесь." oninput="setContentHeight(this)"></textarea>
+                            <textarea id="my-rules" class="instructionsArea" display="none"></textarea>
                             <br>
                             <button id="download-my-rules-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="saveMyRules()">Скачать правила в файл</button>
                             <button id="load-my-rules-button-label" class="tab-button" style="background-color: #800000; color: #fff; border: none; padding: 5px 10px; margin-right: 1px; cursor: pointer; " onclick="loadMyRules()">Загрузить правила из файла</button>
@@ -297,6 +297,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useAfterResponse" name="useAfterResponse" checked />
                                 <label for="useAfterResponse" id="use-after-response-label">Делать третий запрос, чтобы обработать дневники и воспоминания NPC если необходимо (тратится много токенов)</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useAfterResponseItems" name="useAfterResponseItems" checked />
+                                <label for="useAfterResponseItems" id="use-after-response-items-label">Делать четвертый запрос, чтобы обработать предметы если необходимо (тратится много токенов)</label>
                             </div>
 
                             <div class="settingsContainer displayBlock">
@@ -324,6 +329,11 @@ License : https://github.com/StanislavSmetaninSSM/Legendarica/blob/main/LICENSE 
                             <div class="settingsContainer displayBlock">
                                 <input type="checkbox" id="useThinkingModuleForJournals" name="useThinkingModuleForJournals" checked />
                                 <label for="useThinkingModuleForJournals" id="use-thinking-module-for-journals-label">Пусть модуль обдумывания размышляет о тексте дневников и воспоминаний NPC перед формированием третьего запроса</label>
+                            </div>
+
+                            <div class="settingsContainer displayBlock">
+                                <input type="checkbox" id="useThinkingModuleForItems" name="useThinkingModuleForItems" checked />
+                                <label for="useThinkingModuleForItems" id="use-thinking-module-for-items-label">Пусть модуль обдумывания размышляет о предметах перед формированием четвертого запроса</label>
                             </div>
 
                             <div class="settingsContainer displayBlock">

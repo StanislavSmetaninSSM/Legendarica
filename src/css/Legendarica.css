@@ -681,6 +681,10 @@ img.rounded-corners {
     padding-top: 10px;
 }
 
+.rulesBox .EasyMDEContainer {
+    margin-top: 20px;
+}
+
 .instructionsArea {
     background-color: rgba(30,30,30,0.7);
     border: 1px solid #d4af37;

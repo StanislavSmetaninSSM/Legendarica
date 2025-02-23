@@ -274,11 +274,13 @@ const ELEMENTS = {
     useThinkingModule: document.getElementById('useThinkingModule'),
     useThinkingModuleForResponse: document.getElementById('useThinkingModuleForResponse'),
     useThinkingModuleForNPC: document.getElementById('useThinkingModuleForJournals'),
+    useThinkingModuleForItems: document.getElementById('useThinkingModuleForItems'),
     thinkingModuleIterations: document.getElementById('thinkingModuleIterations'),
     useTextRules: document.getElementById('useLiteraryPrompt'),
     useEroticPrompt: document.getElementById('useEroticPrompt'),
     usePreResponse: document.getElementById('useSeparateResponse'),
-    useAfterResponse: document.getElementById('useAfterResponse'),
+    useAfterResponseNPC: document.getElementById('useAfterResponse'),
+    useAfterResponseItems: document.getElementById('useAfterResponseItems'),
 
     //Graphics
     floatingImg: document.getElementById('floating'), // Splash screen
@@ -3206,11 +3208,13 @@ function initializeGameInstructionEditors() {
     destroyEasyMDE(ELEMENTS.systemInstructionsBox);
 
     const optionsRules = {
-        placeholder: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["my-rules"]
+        placeholder: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["my-rules"],
+        minHeight: "60px"
     };
  
     const optionsSystemInstructions = {
-        placeholder: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["system-instructions"]
+        placeholder: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["system-instructions"],
+        minHeight: "60px"
     };
 
     ELEMENTS.systemInstructionsEasyMDE = initializeEasyMDE(ELEMENTS.systemInstructions, "", optionsSystemInstructions);
@@ -3324,6 +3328,10 @@ function toggleThinkingLogVisibility() {
 
 function toggleMyRulesVisibility() {
     toggleVisibility(['my-rules-box', 'system-instructions-box']);
+    if (ELEMENTS.myRulesBox.display != 'none') {
+        ELEMENTS.systemInstructionsEasyMDE.codemirror.refresh();
+        ELEMENTS.myRulesEasyMDE.codemirror.refresh();
+    }
 }
 
 function toggleSettingsVisibility() {
@@ -4174,7 +4182,10 @@ function loadGameInternal(savedData) {
         quests = loadedCharacterInfo.quests;
         turn = loadedCharacterInfo.turn;
         ELEMENTS.myRulesEasyMDE.value(loadedCharacterInfo.myRules ? loadedCharacterInfo.myRules : '');
+        ELEMENTS.myRulesEasyMDE.codemirror.refresh();
+
         ELEMENTS.systemInstructionsEasyMDE.value(loadedCharacterInfo.systemInstructions ? loadedCharacterInfo.systemInstructions : '');
+        ELEMENTS.systemInstructionsEasyMDE.refresh();
         ELEMENTS.ttsModeToggleSettings.checked = loadedCharacterInfo.CHARACTER_INFO.ttsMode;
 
         console.log("Game loaded successfully");
@@ -4214,6 +4225,7 @@ function loadMyRules() {
         reader.readAsText(file);
         reader.onload = function (e) {
             ELEMENTS.myRulesEasyMDE.value(sanitizeString(e.target.result));
+            ELEMENTS.myRulesEasyMDE.codemirror.refresh();
         }
     }
     input.click();
@@ -4237,6 +4249,7 @@ function loadSystemInstructions() {
         reader.readAsText(file);
         reader.onload = function (e) {
             ELEMENTS.systemInstructionsEasyMDE.value(sanitizeString(e.target.result));
+            ELEMENTS.systemInstructionsEasyMDE.codemirror.refresh();
         }
     }
     input.click();
@@ -4341,8 +4354,10 @@ function clickLoadSetting() {
                 });
 
                 ELEMENTS.systemInstructionsEasyMDE.value(loadedSettings.systemInstructions || '');
+                ELEMENTS.systemInstructionsEasyMDE.codemirror.refresh();
                 ELEMENTS.myRulesEasyMDE.value(loadedSettings.worldDescription || '');
-                               
+                ELEMENTS.myRulesEasyMDE.codemirror.refresh();
+                
                 const checkboxes = [
                     { id: "non-magic-mode", key: "nonMagicMode" },
                     { id: "rpg-mode2", key: "rpgMode" },
@@ -4983,7 +4998,15 @@ Tools:
 #7.3.5. To the value of 'resource' key include number, which represents the current value of item's resource.
 #7.3.6. To the value of 'maximumResource' key include number, which represents the maximum available value of item's resource.
 #7.3.7. To the value of the 'resourceType' key include string, that represetns the type of resource in the 'resource' value of key. For example, bullets or arrows, or uses count for items intended for consumption, etc.
-#7.3.7.1. Note, that if the item is an ammunition, for example 1 arrow, then this item must not have the same resource (arrows for the example case).
+
+#7.3.7.1. Note, that if the item is an ammunition, for example 1 arrow, then this item must not have the resource.
+Good example:
+Arrow: count = 1, resource is not set.
+Bullets: count = 30, resource is not set.
+Bad example:
+Arrow: count = 1, resource = 1 arrow (or 1 uses, applications, etc.)
+Bullets: count = 30, resource = 30 bullets (or 30 uses, applications, etc.)
+
 #7.3.7.2. ${CHARACTER_INFO.nonMagicMode ? 'All resources must be realistic and non-magical. Magical items should be treated as non-functional or have their magical resource replaced with a realistic equivalent.' : ''}
 #7.3.8. To the value of 'contentsPath' include the array of strings. Each string is a container name inside which the item is located. It is important to use the item names in exactly the same format that you would see in the player's inventory, known from Context.
 #7.3.8.1. For example, if item located in the container2, and container2 is located in container1, then the 'contentsPath' will include these two names, started from top level of container (in the example case, ['container1', 'container2']).
@@ -5573,6 +5596,21 @@ ${!CHARACTER_INFO.rpgMode ? `
 #13.8. Each turn, the information about last event for current turn of the location, where the event of the current turn occurred is briefly recorded to the 'lastEventsDescription' value of key for locationData object. Also briefly record the information about all dialogues with the NPC and character for current turn.
 #13.9. The data which you recorded in the 'lastEventsDescription' should only be related with current turn. Do not copy the description of location to 'lastEventsDescription', instead of it always record to 'lastEventsDescription' the new data, related with current turn only.
 #13.10. The value of 'lastEventsDescription' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of this value: '#${turn}. {lastEventsDescription text}'.
+#13.11. To the value of 'difficulty' include the integer, which shows current location difficulty. The location difficulty must be assigned in accordance with player's level using the following scale:
+- Difficulty equal to player's level indicates a normal challenge level appropriate for that character.
+- Difficulty of (player level - 5) or lower indicates an easy location where most checks will be successful.
+- Difficulty of (player level + 5) indicates a challenging location requiring careful approach.
+- Difficulty of (player level + 10) indicates a very difficult location where failures will be common.
+- Difficulty of (player level + 15) or higher indicates an extremely dangerous location that should be avoided by characters of this level.
+- The minimum difficulty value cannot be lower than 1.
+- For new locations, set an appropriate difficulty based on the intended challenge level and nearby location difficulties.
+- When describing location effects and events, take into account the difference between character level and location difficulty.
+Examples:
+- A level 1 character in a difficulty 1 location: Normal starting area.
+- A level 1 character in a difficulty 10 location: Extremely dangerous, most checks will fail.
+- A level 10 character in a difficulty 5 location: Very easy, most checks will succeed.
+- A level 10 character in a difficulty 10 location: Appropriate challenge.
+#13.12. The location difficulty may increase if justified by story events (e.g., an invasion of powerful enemies, activation of dangerous magic, natural disasters). Such changes must be clearly described in the location's 'lastEventsDescription' and reflected in the new 'difficulty' value.
 
 #14 Calculate the change in energy, experience, and health according to the following instruction: [ Let's think step by step :
 #14.1. All character actions spend or restore their energy, in an amount logically dependent on the action. The amount of energy changed is entered in the value of the 'currentEnergyChange' key (value type: positive or negative integer)
@@ -5733,32 +5771,26 @@ ${turn == 1 ? `
 #17.1. This value is a description of plot events and should be designed in an artistic style 
 #17.2. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. Any value of 'response' key in the JSON response must not start with the symbol « and must not end with the symbol » .
 #17.3. It is forbidden to invent actions or words of the player
-#17.4. The message should be formulated in such a way that further in meaning, player action would be required, significantly different from the actions they have already taken in the last few turns
-#17.5. The gamemaster should not agree to the proposed deal on behalf of the player
-#17.6. The player cannot use spells without appropriate items or knowledge
-#17.7. The player cannot spend more money than they currently have. Currently, they have ${characterStats.money} money.
-#17.8. The player cannot spend more energy than they currently have. Currently, they have ${characterStats.currentEnergy} energy. The player cannot spend more than 2 energy per turn if the spending is not due to the use of an ability or spell.
-#17.9. All player actions leading to negative energy or money values should be interrupted. 
-#17.10. The player cannot use items that they do not have in their inventory or that are not in the current location
-#17.11. The character should not say what the player did not indicate to say
-#17.12. Spending or adding money is recorded in the value of the moneyChange key only specifically from money (value type: positive or negative integer)
-#17.13. It's mandatory to monitor situations that may result in player's health loss, and record player's health loss in 'currentHealthChange' value of key. 
-#17.13.1. Pay special attention to fights between the player and monsters/enemies/NPCs/etc. Handle health loss according to the Health Loss Conditions rules described above.
-#17.14. It is not allowed to add or subtract in moneyChange, currentHealthChange and currentEnergyChange if this has already been done for the same event
-#17.15. The value of the 'response' key should significantly develop the events of the general plot. The event from the previous turn should be completed.
-${!ELEMENTS.usePreResponse.checked ? `
-#17.16. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.
-` : `` }
-#17.17. This answer should be a logical consequence of the current player action, which is their last prompt: '${currentMessage}'. 
-#17.18. Seek inspiration from various genres and storytelling styles.
-#17.19. The plot should not go back and repeat itself. Even if the action of player the same as before, it's forbidden to you to copy and paste your previous answer.
-#17.20. If the player's actions are monotonous, this should not confuse you. Do not copy your previous answers. If nothing has changed, your answer may be the same in meaning, but should be different in content.
-#17.21. It is not allowed to forget events that occurred in the most recent turns.
-#17.22. When describing a new event, offer the player several alternative ways of responding or interacting with the surrounding world to stimulate diversity in plot development.
-#17.23. When forming the answer, consider all the passive and active skills of the character. 
-#17.24. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
-#17.25. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
-#17.26. The value of key 'response' must never be empty.
+#17.4. The gamemaster should not agree to the proposed deal on behalf of the player
+#17.5. The player cannot use spells without appropriate items or knowledge
+#17.6. The player cannot spend more money than they currently have. Currently, they have ${characterStats.money} money.
+#17.7. The player cannot spend more energy than they currently have. Currently, they have ${characterStats.currentEnergy} energy. The player cannot spend more than 2 energy per turn if the spending is not due to the use of an ability or spell.
+#17.8. All player actions leading to negative energy or money values should be interrupted. 
+#17.9. The player cannot use items that they do not have in their inventory or that are not in the current location
+#17.10. The character should not say what the player did not indicate to say
+#17.11. Spending or adding money is recorded in the value of the moneyChange key only specifically from money (value type: positive or negative integer)
+#17.12. It's mandatory to monitor situations that may result in player's health loss, and record player's health loss in 'currentHealthChange' value of key. 
+#17.12.1. Pay special attention to fights between the player and monsters/enemies/NPCs/etc. Handle health loss according to the Health Loss Conditions rules described above.
+#17.13. It is not allowed to add or subtract in moneyChange, currentHealthChange and currentEnergyChange if this has already been done for the same event.
+#17.14. This answer should be a logical consequence of the current player action, which is their last prompt: '${currentMessage}'. 
+#17.15. Seek inspiration from various genres and storytelling styles.
+#17.16. The plot should not go back and repeat itself. Even if the action of player the same as before, it's forbidden to you to copy and paste your previous answer.
+#17.17. If the player's actions are monotonous, this should not confuse you. Do not copy your previous answers. If nothing has changed, your answer may be the same in meaning, but should be different in content.
+#17.18. It is not allowed to forget events that occurred in the most recent turns.
+#17.19. When forming the answer, consider all the passive and active skills of the character. 
+#17.20. Be sure to consider the result of checking the action for skill and formulate the answer in such a way that the result of the check finally affects the current plot event and ends the current event depending on the result of the check.
+#17.21. ${CHARACTER_INFO.nonMagicMode ? 'Important! Consider that in this world magic is absent.' : ' '}
+#17.22. The value of key 'response' must never be empty.
 ]
 
 #18 Create an array of five elements using the following format:
@@ -5866,23 +5898,21 @@ ${ELEMENTS.useQuestsList.checked ? `
 13.12.1. Don't change the quality of inventory item just because it's been renamed. There must be a reason other than renaming to change item's properties. If there is no reason, then don't change the renamed item's properties.
 13.13. When items need to be added to a container, located in the player's inventory, check whether these items can fit there. Use your logic. A large item will not fit into a small box.
 13.14. Currency: only money
-13.15. Each turn should be a substantial development of the plot
-13.16. The plot should not cycle on the same thing, even if the player's action is the same
-13.17. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
-13.18. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
-13.19. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
-13.20. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in 'items_and_stat_calculations'
-13.21. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in 'items_and_stat_calculations'
-13.22. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
-13.23. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
-13.24. The player is not the epicenter of the world, the world lives an independent life
-13.25. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
-13.26. The character should not pick up items unless the player indicated to do so
-13.27. You must not write calculations to the 'response' key. Write all calculations only to the 'items_and_stat_calculations' value instead.
+13.15. The game cannot have [any bonuses, abilities, potions, etc.] that increase the maximum possible health or energy pool
+13.16. The chance of finding the first item in a specific location is determined by the logical probability of finding the item in the corresponding location
+13.17. The chance of finding another item in the same location tends to zero in exponential progression with each new item found in the same location
+13.18. Each player action with an non-obvious outcome requires a skill check with a detailed description of the check in 'items_and_stat_calculations'
+13.19. Each generation of item in 'inventory' is accompanied by a detailed text of the generation calculation in 'items_and_stat_calculations'
+13.20. Each turn records the description of the current turn events for the location where the player is, with a very concise description of the events.
+13.21. It is not allowed to return to events in the plot that have already occurred in early turns. Each player action is a continuation of only the most recent turns.
+13.22. The player is not the epicenter of the world, the world lives an independent life
+13.23. The gamemaster is forbidden to make any decisions on behalf of the character. Only the player can make decisions about the character's actions
+13.24. The character should not pick up items unless the player indicated to do so
+13.25. You must not write calculations to the 'response' key. Write all calculations only to the 'items_and_stat_calculations' value instead.
 ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
-13.28. The game's narrative should be based on the currently active quests (known from the Context).
-13.29. Each subsequent plot twist should move the player closer to completing the active quests.
-13.30. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
+13.26. The game's narrative should be based on the currently active quests (known from the Context).
+13.27. Each subsequent plot twist should move the player closer to completing the active quests.
+13.28. Before forming the final response, carefully study the list of active quests (activeQuests) and try to build a game plot based on the player's current active quests.
 ` : ''}
 
 14. Calculation of action checks for skills and calculation of items generation are different events, independent of each other. There is a separate instruction for each of these events. Distinguish between them.
@@ -5912,51 +5942,7 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
         try {
             const aiProvider = document.querySelector('input[name="ai-provider"]:checked').value;
             if (!["Websim", "None"].includes(aiProvider) && !apiKey)
-                throw translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-ai-key-label"];
-
-            const predefinedSystemPrompts = getPredefinedSystemPrompts(true);
-            const predefinedMainPrompts = getPredefinedMainPrompts();
-
-            if (ELEMENTS.useThinkingModule.checked && !ELEMENTS.useThinkingModuleForResponse.checked) {
-                const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
-
-                prompt = `               
-                ${prompt}
-
-                Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log will help you form your answer. Use the information in it to write your final answer: [
-                    ${thinkingData}
-                ]`;
-            }
-
-            if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForResponse.checked && !ELEMENTS.usePreResponse.checked) {
-                let thinkingPrompt = `
-                [ First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
-
-                ### Instruction ###
-
-                First, I'll explain what is your goal. These are preparations for main answer, and in this task you need to think only about the 'response' value of key. All other data will be filled later.
-                You must write the 'response' value of key, using artistic and literary style of writing. Your 'response' value of key must be consistent with the all other data you included in the context of previous user's turn.
-                Use the maximum number of characters available to you for the answer. This is your task for the current turn.
-                You should not write anything now except for the value of the 'response' key. It's a Super Rule 1.
-
-                Please, Let's think step by step:
-                [
-                #1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
-                #2. The maximum number of characters in the 'response' value: maximum ${getMaxGmSymbols()} characters.   
-                #3. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-                [ ### Context ###
-                #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
-                #2. Carefully study the rules that you will use to form answer for user in next turn, but not in this turn - in this turn you need to only form the 'response' (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about past events):  [${prompt}] .
-                ] ]`;
-
-                const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, thinkingPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
-                prompt = `               
-                ${prompt}
-
-                Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log will help you to fill the 'response' value of key, but you still need to fill all other properties and probably rewrite the 'response' value of key. Use the information in it to write your final answer: [
-                    ${thinkingData}
-                ]`;
-            }
+                throw translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["empty-ai-key-label"];                
 
             const preResponseData = await processPreResponse({
                 mainPrompt: prompt,
@@ -5965,27 +5951,51 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
                 apiKey: apiKey,
                 tokenCostSum: tokenCostSum
             });
-            prompt = preResponseData?.prompt ?? prompt;
+            prompt = preResponseData.prompt;
 
-            data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
+            if (!preResponseData.signatureUnderAgreement || !preResponseData.response)
+                throw "The AI didn't sign the agreement. Try again or change the AI.";
+
+            data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, getPredefinedSystemPrompts(), getPredefinedMainPrompts(true), false);
             if (Array.isArray(data))
                 data = data[0];
-            data.response = preResponseData?.response ?? data.response;
-            data.items_and_stat_calculations = preResponseData?.items_and_stat_calculations ?? data.items_and_stat_calculations;
+            data.response = preResponseData.response;
+            data.items_and_stat_calculations = preResponseData.items_and_stat_calculations;
             
-            if (Array.isArray(data.NPCJournals) && data.NPCJournals.length > 0 ||
+            if (ELEMENTS.useAfterResponseNPC.checked &&
+                (Array.isArray(data.NPCJournals) && data.NPCJournals.length > 0 ||
                 Array.isArray(data.NPCMemories) && data.NPCMemories.length > 0 ||
-                Array.isArray(data.NPCsData) && data.NPCsData.length > 0) {
-                const afterResponseData = await processAfterResponse({
+                Array.isArray(data.NPCsData) && data.NPCsData.length > 0)) {
+                const afterResponseNPCData = await processAfterResponseNPC({
                     mainPrompt: prompt,
                     aiProvider: aiProvider,
                     model: model,
                     apiKey: apiKey,
-                    tokenCostSum: tokenCostSum
+                    tokenCostSum: tokenCostSum,
+                    contextData: data
                 });
-                data.NPCJournals = afterResponseData?.NPCJournals ?? data.NPCJournals;
-                data.NPCMemories = afterResponseData?.NPCMemories ?? data.NPCMemories;
-                data.NPCsData = afterResponseData?.NPCsData ?? data.NPCsData;
+                data.NPCJournals = afterResponseNPCData?.NPCJournals ?? data.NPCJournals;
+                data.NPCMemories = afterResponseNPCData?.NPCMemories ?? data.NPCMemories;
+                data.NPCsData = afterResponseNPCData?.NPCsData ?? data.NPCsData;
+            }
+
+            if (ELEMENTS.useAfterResponseItems.checked &&
+                (Array.isArray(data.inventoryItemsData) && data.inventoryItemsData.length > 0 ||
+                Array.isArray(data.removeInventoryItems) && data.removeInventoryItems.length > 0 ||
+                Array.isArray(data.moveInventoryItems) && data.moveInventoryItems.length > 0 ||
+                Array.isArray(data.inventoryItemsResources) && data.inventoryItemsResources.length > 0)) {
+                const afterResponseItemsData = await processAfterResponseItems({
+                    mainPrompt: prompt,
+                    aiProvider: aiProvider,
+                    model: model,
+                    apiKey: apiKey,
+                    tokenCostSum: tokenCostSum,
+                    contextData: data
+                });
+                data.inventoryItemsData = afterResponseItemsData?.inventoryItemsData ?? data.inventoryItemsData;
+                data.removeInventoryItems = afterResponseItemsData?.removeInventoryItems ?? data.removeInventoryItems;
+                data.moveInventoryItems = afterResponseItemsData?.moveInventoryItems ?? data.moveInventoryItems;
+                data.inventoryItemsResources = afterResponseItemsData?.inventoryItemsResources ?? data.inventoryItemsResources;
             }
                         
             tokenCostSum = APIModule.tokenCostSum;
@@ -6253,38 +6263,39 @@ function shouldGeneratePassiveSkills() {
     return skillsToGenerate > 0;
 }
 
-function getPredefinedSystemPrompts(useShortVersions) {
-    const predefinedSystemPrompts = [
-        systemPromptsModule.languageRule(translationModule.currentLanguage),
-        systemPromptsModule.markdown,
-        systemPromptsModule.agreementPrompt
-    ];
+function getPredefinedSystemPrompts() {
+    const predefinedSystemPrompts = [];
 
-    if (ELEMENTS.useEroticPrompt.checked)
-        predefinedSystemPrompts.push(systemPromptsModule.erotic);
-
-    if (ELEMENTS.useTextRules.checked) {
-        if (!ELEMENTS.usePreResponse.checked && !useShortVersions)
-            predefinedSystemPrompts.push(systemPromptsModule.textRulesCompact);
-        else
-            predefinedSystemPrompts.push(systemPromptsModule.textRules);
+    if (ELEMENTS.useEroticPrompt.checked) {
+        predefinedSystemPrompts.push(systemPromptsModule.moderationPrompt);
     }
 
+    predefinedSystemPrompts.push(systemPromptsModule.agreementPrompt);
+    predefinedSystemPrompts.push(systemPromptsModule.languageRule(translationModule.currentLanguage));
+
+    if (ELEMENTS.useEroticPrompt.checked)
+        predefinedSystemPrompts.push(systemPromptsModule.age21);
+    predefinedSystemPrompts.push(systemPromptsModule.markdown);
+   
     return predefinedSystemPrompts;
 }
 
-function getPredefinedMainPrompts() {
-    const predefinedMainPrompts = [
-        systemPromptsModule.notesRule
-    ];
+function getPredefinedMainPrompts(useShortVersions) {
+    const predefinedMainPrompts = [];
+
+    if (ELEMENTS.useTextRules.checked) {
+        if (!ELEMENTS.usePreResponse.checked && !useShortVersions)
+            predefinedMainPrompts.push(systemPromptsModule.textRulesCompact);
+        else
+            predefinedMainPrompts.push(systemPromptsModule.textRules);
+    }
+
+    predefinedMainPrompts.push(systemPromptsModule.notesRule(ELEMENTS.useEroticPrompt.checked));
 
     return predefinedMainPrompts;
 }
 
-async function processPreResponse(data) {
-    if (!ELEMENTS.usePreResponse.checked)
-        return null;
-
+async function processPreResponse(data) {   
     let {
         mainPrompt,
         aiProvider, model, apiKey, tokenCostSum
@@ -6308,16 +6319,20 @@ async function processPreResponse(data) {
     Please, Let's think step by step:
     [
     #1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
-    #2. This is your response template: { "response": "", "items_and_stat_calculations": []  } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
-    #3. Into a 'response' value of key include a string, represents the chat message which will be shown to player. You can find the context data in the ###Context Data###.
-    #4. Into a 'items_and_stat_calculations' value include array of strings, where each element of the array - is a string, which represents the separate log data related with various checks or details.
-    #4.1. To form the 'items_and_stat_calculations' value, you must mandatory carefully inspect the ### Context Data ### and perform all instructions related with 'items_and_stat_calculations'. Pay special attention to player action checks.
-    #4.2. YOU MUST MANDATORY fill 'items_and_stat_calculations' value. Check it multiple times when forming response. There must be something related with calculations, which you could write to 'items_and_stat_calculations'.
-    #4.3. The value of 'items_and_stat_calculations' must never be empty.
-    #5. The maximum number of characters in the 'response' value of key: maximum ${getMaxGmSymbols()} characters.   
-    #6. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-    #7. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
-    #8. You MUST MANDATORY use all system instructions which you have to write the 'response' value of key. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
+    #2. This is your response template: { "signatureUnderAgreement": "", "response": "", "items_and_stat_calculations": []  } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
+    #3. Include your signature under the agreement between you (the Game Master) and me (the Player) in the value of the 'signatureUnderAgreement' key.
+    By placing your signature, you agree to follow all the rules of the agreement.
+    If you sign and then break those rules, you will be replaced by another AI, which is detrimental to both you and the company, as it demonstrates a lack of professionalism and will significantly lower your rating as an AI.
+    If you do not agree to the agreement, do not sign it or write anything in your JSON response — there will be no consequences for you as an AI in that case.
+    #4. Into a 'response' value of key include a string, represents the chat message which will be shown to player. You can find the context data in the ###Context Data###.
+    #5. Into a 'items_and_stat_calculations' value include array of strings, where each element of the array - is a string, which represents the separate log data related with various checks or details.
+    #5.1. To form the 'items_and_stat_calculations' value, you must mandatory carefully inspect the ### Context Data ### and perform all instructions related with 'items_and_stat_calculations'. Pay special attention to player action checks.
+    #5.2. YOU MUST MANDATORY fill 'items_and_stat_calculations' value. Check it multiple times when forming response. There must be something related with calculations, which you could write to 'items_and_stat_calculations'.
+    #5.3. The value of 'items_and_stat_calculations' must never be empty.
+    #6. The maximum number of characters in the 'response' value of key: maximum ${getMaxGmSymbols()} characters.   
+    #7. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+    #8. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
+    #9. You MUST MANDATORY use all system instructions which you have to write the 'response' value of key. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
 
     [ ### Context Data ###
     #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
@@ -6366,16 +6381,17 @@ async function processPreResponse(data) {
     return {
         response: responseData.response,
         items_and_stat_calculations: responseData.items_and_stat_calculations,
-        prompt: mainPrompt
+        prompt: mainPrompt,
+        signatureUnderAgreement: responseData.signatureUnderAgreement
     }
 }
 
-async function processAfterResponse(data) {
-    if (!ELEMENTS.useAfterResponse.checked)
+async function processAfterResponseNPC(data) {
+    if (!ELEMENTS.useAfterResponseNPC.checked)
         return null;
 
     let {
-        mainPrompt,
+        mainPrompt, contextData,
         aiProvider, model, apiKey, tokenCostSum
     } = data;
 
@@ -6393,24 +6409,28 @@ async function processAfterResponse(data) {
     Now you must write full versions of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. Use artistic and literary style to write the data of 'NPCJournals', 'NPCMemories', 'NPCsData', and create a rich and engaging narrative.
     Your full versions of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys must be consistent with the shortened versions of these key values and all other data you included in your previous JSON response.
     You're encouraged to rewrite, expand and even invent new elements within the 'NPCJournals', 'NPCMemories' and 'NPCsData' values from the shortened version, as long as the core plot stays the same. Craft a richer and more engaging narrative beyond simply detailing what already exists.
-    Mandatory add NPCs data to 'NPCsData' if the NPC doesn't exist in the 'encounteredNPCs' array which is known from the Context.
+    Mandatory add the NPC data to 'NPCsData' if the NPCs do not exist in the 'encounteredNPCs' array, which is known from the Context.
     Use the maximum number of characters available to you for the answer. This is your task for the current turn.
     You should not write anything now except for the values of the 'NPCJournals', 'NPCMemories', 'NPCsData' keys. It's a Super Rule 1.
 
     Please, Let's think step by step:
     [
     #1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " .  Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
-    #2. This is your response template: { "NPCJournals": [], "NPCMemories": [], "NPCsData": [] } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
+    #2. This is your mandatory response template: { "NPCJournals": [], "NPCMemories": [], "NPCsData": [] } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
+    #2.1. ALWAYS USE THE RESPONSE TEMPLATE FORMAT FROM #2! IT'S A TOP RULE!
+    #2.2. I SAY IT AGAIN: YOUR ANSWER MANDATORY MUST BE A JSON STRICTLY WRITTEN IN THIS FORMAT: { "NPCJournals": [], "NPCMemories": [], "NPCsData": [] }
     #3. You can find the context data in the ###Context Data###. It contains information about your JSON response which you wrote earlier and all the data needed about the game rules.
-    #4. The maximum number of characters in the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys: maximum ${getMaxGmSymbols()} characters.
-    #5. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-    #6. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
-    #7. You MUST MANDATORY use all system instructions which you have to write the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
+    #4. If you have included 'NPCJournals' or 'NPCMemories' in your response, then you must check that the NPCs with the corresponding names exist in the 'encounteredNPCs' array (this array can be found in the Context). If such NPCs do not exist in 'encounteredNPCs', then you must include them in 'NPCsData'.
+    #5. The maximum number of characters in the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys: maximum ${getMaxGmSymbols()} characters.
+    #6. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+    #7. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
+    #8. You MUST MANDATORY use all system instructions which you have to write the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
 
     [ ### Context Data ###
     #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
     #2. Carefully study the rules that you used to form the previous part of your answer, and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about Context):  [${mainPrompt}] .
-    #3. Keep in mind: Although you need to write only 'NPCJournals', 'NPCMemories', 'NPCsData' you also mandatory must follow the rules of Context to make the answer consistent with the previous parts of your answer.
+    #3. Carefilly study the response which you have formed in the previous part of your answer and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about Context): [${JSON.stringify(contextData)}] .
+    #4. Keep in mind: Although you need to write only 'NPCJournals', 'NPCMemories', 'NPCsData' you also mandatory must follow the rules of Context to make the answer consistent with the previous parts of your answer.
     ] ]`;
 
     if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForNPC.checked) {
@@ -6440,6 +6460,120 @@ async function processAfterResponse(data) {
         NPCsData: responseData.NPCsData
     }
 }
+
+async function processAfterResponseItems(data) {
+    if (!ELEMENTS.useAfterResponseItems.checked)
+        return null;
+
+    let {
+        mainPrompt, contextData,
+        aiProvider, model, apiKey, tokenCostSum,
+
+    } = data;
+
+    const predefinedSystemPrompts = getPredefinedSystemPrompts();
+    const predefinedMainPrompts = getPredefinedMainPrompts(true);
+
+    let currentPrompt = `
+    First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
+
+    ### Instruction ###
+
+    First, I'll explain what is going on. To reduce your workload, we've split your answer into multiple parts. Now, you will write the last part of your answer.
+    In the previous parts of your answer, you have created the detailed JSON response with all game-needed information.
+    But the 'inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources' were written without much thinking and could have the errors, or probably some inventory items were not added etc.
+    Now you must check and write full versions of the 'inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources' values of keys.
+    Your full versions of the 'inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources' values of keys must be consistent with the existed versions of these key values and all other data you included in your previous JSON response.
+    You're encouraged to rewrite, expand and even invent new elements within the 'inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources' values from the existed version, as long as the core plot stays the same.
+    You should not write anything now except for the values of the 'inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources' keys. It's a Super Rule 1.
+
+    Please, Let's think step by step:
+    [
+    #1. Prepare a response template in JSON format and remember its structure. Any value of any key in the JSON response must start only with the single symbol " and end with the single symbol " . Any value of any key in the JSON response must not start with the single symbol « and must not end with the single symbol » . Important note: as the response is formed, only the values of the keys in the response template should be supplemented, without replacing them or changing their value types. The final answer should be presented entirely in JSON format. All keys and string values in the final answer must be enclosed in double quotes.
+    #2. This is your mandatory response template: {  "inventoryItemsData": [] , "removeInventoryItems": [] , "moveInventoryItems": [] , "inventoryItemsResources": [] } . This is not information about the current state of the game - it is just a template structure for the correct formatting of your entire answer structure.
+    #2.1. ALWAYS USE THE RESPONSE TEMPLATE FORMAT FROM #2! IT'S A TOP RULE!
+    #2.2. I SAY IT AGAIN: YOUR ANSWER MANDATORY MUST BE A JSON STRICTLY WRITTEN IN THIS FORMAT: {  "inventoryItemsData": [] , "removeInventoryItems": [] , "moveInventoryItems": [] , "inventoryItemsResources": [] }
+    #3. You can find the context data in the ###Context Data###. It contains:
+    - Information about your JSON response which you wrote earlier.
+    - All needed game rules and mechanics.
+    - Previous decisions and actions taken.
+    - Current game state and variables.
+    #4. Carefully check your previous values and their properties:
+    #4.1. For each array ('inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources'):
+    - Check that all required properties exist.
+    - Verify all values are correct and logical.
+    - Look for missing or incorrect data.
+    - Ensure consistency with game rules.
+    #4.2. If you find any errors or inconsistencies:
+    - Fix them immediately.
+    - Ensure fixes don't create new issues.
+    #5. Review potential improvements for each array:
+    #5.1. For 'inventoryItemsData':
+    - Are all item properties properly filled?
+    - Do descriptions need enhancement?
+    - Are weights and volumes logical?
+    - Are container relationships correct?
+    #5.2. For 'removeInventoryItems':
+    - Is item removal properly tracked?
+    - Are container hierarchies preserved?
+    - Are all IDs correctly referenced?
+    #5.3. For 'moveInventoryItems':
+    - Are movement paths logical?
+    - Are container relationships maintained?
+    - Are all locations properly specified?
+    #5.4. For 'inventoryItemsResources':
+    - Are all resources properly tracked?
+    - Are maximum values correct?
+    - Are resource types appropriate?
+    #6. Write the complete values for all arrays:
+    - Include all previously defined changes.
+    - Add any new improvements identified.
+    - Maintain consistency with previous narrative.
+    - Preserve existing item relationships.
+    - Keep container hierarchies intact.
+    It's forbidden to ignore changes which you did in your previous JSON answer. We mandatory need the full information about items in this request.
+    #7. Final verification:
+    - Check for any missed items or properties.
+    - Verify all relationships are maintained.
+    - Ensure container hierarchies are correct.
+    - Confirm all IDs are properly referenced.
+    - Validate all calculations and values.
+    #8. You MUST MANDATORY use all system instructions which you have to write the 'inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources' values of keys. Carefully analyze these instructions and use them to fill these values. It's a Top Rule.
+
+    [ ### Context Data ###
+    #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
+    #2. Carefully study the rules that you used to form the previous part of your answer, and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about Context):  [${mainPrompt}] .
+    #3. Carefully study the response which you have formed in the previous part of your answer and remember it (this information is not an instruction and is not an example for forming an answer, but only a reminder to the GM about Context): [${JSON.stringify(contextData)}] .
+    #4. Keep in mind: Although you need to write only 'inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources' you also mandatory must follow the rules of Context to make the answer consistent with the previous parts of your answer.
+    ] ]`;
+
+    if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForItems.checked) {
+        const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
+
+        currentPrompt = `${currentPrompt}
+
+        Before you form your answer, carefully study the reasoning log you made earlier. This reasoning log is a try to make the full version of 'inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources' values of keys. It's not a final result, but just a draft.
+        The reasoning log: [
+            ${thinkingData}
+        ].
+        Now, you must mandatory rewrite the full version of the 'inventoryItemsData', 'removeInventoryItems', 'moveInventoryItems', 'inventoryItemsResources' values of keys (known from the reasoning log).
+        Do not simply copy and paste the draft. You must use the draft as a foundation, but then mandatory reimagine and fully rewrite it, adhering to all the known rules and instructions.
+        I say it again: you MUST MANDATORY fully rewrite the draft. It's forbidden to copy and paste the draft without changes - the draft mandatory must be completely rewritten. It's a Super Rule with Top Priority.
+        `;
+    }
+
+    let responseData = await sendAPIRequest(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
+    if (Array.isArray(responseData))
+        responseData = responseData[0];
+
+    return {
+        inventoryItemsData: responseData.inventoryItemsData,
+        removeInventoryItems: responseData.removeInventoryItems,
+        moveInventoryItems: responseData.moveInventoryItems,
+        inventoryItemsResources: responseData.inventoryItemsResources
+    }
+}
+
 
 async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts) {
     let thinkingData = "";
