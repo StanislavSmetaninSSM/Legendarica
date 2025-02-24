@@ -43,7 +43,8 @@ const APIModule = (function getAPIModule() {
 
     //prompts
     let predefinedSystemPrompts = [];
-    let predefinedMainPrompts = [];
+    let beforeMainPrompts = [];
+    let afterMainPrompts = [];
 
     //----- API Functions -----//
 
@@ -78,9 +79,11 @@ const APIModule = (function getAPIModule() {
 
     function createPrompt(mainPrompt) {
         let instructions = mainPrompt;
-        if (predefinedMainPrompts.length > 0)
-            instructions = predefinedMainPrompts.join('\n') + '\n' + mainPrompt;
-
+        if (beforeMainPrompts.length > 0)
+            instructions = beforeMainPrompts.join('\n') + '\n' + instructions;
+        if (afterMainPrompts.length > 0)
+            instructions = instructions + '\n' + afterMainPrompts.join('\n');
+            
         return instructions;
     }
 
@@ -177,9 +180,9 @@ const APIModule = (function getAPIModule() {
             if (predefinedSystemPrompts.length > 0)
                 systemInstructions = predefinedSystemPrompts.join('\n') + '\n' + systemInstructions;
 
-            predefinedMainPrompts = parameters.predefinedMainPrompts ?? [];
-            if (predefinedMainPrompts.length > 0)
-                prompt = createPrompt(prompt);
+            beforeMainPrompts = parameters.beforeMainPrompts ?? [];
+            afterMainPrompts = parameters.afterMainPrompts ?? [];
+            prompt = createPrompt(prompt);
 
             signal = parameters.signal;
         },

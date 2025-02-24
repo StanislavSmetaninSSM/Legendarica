@@ -1054,11 +1054,13 @@ function generateLoot(arr, numberOfItems) {
         characterCoefficient: Number(arr[4])
     };
 
-    const loot = {};
+    const luckValue = characterStats.luck;
+    const luckMultiplier = 1 + (luckValue / 200);
 
     //General formula for the coefficient.
     const baseQualityMultiplier = (1 + coefficients.searchCoefficient + coefficients.characterCoefficient + coefficients.logicCoefficient)
-        * coefficients.locationCoefficient * coefficients.dangerCoefficient;
+        * coefficients.locationCoefficient * coefficients.dangerCoefficient * luckMultiplier;
+
     const k_1 = 1600, k_2 = 7;
 
     const qualityValues = [
@@ -1071,10 +1073,13 @@ function generateLoot(arr, numberOfItems) {
         { name: translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"], base: k_1 * 64, multiplier: k_2 * 64, totalBonuses: 0 }
     ];
 
+    const loot = {};
+
     for (let itemIndex = 0; itemIndex < numberOfItems; itemIndex++) {
-        const randomValue = Math.floor(Math.random() * 1000000) + 1; //Generate a random number only once for each item.
-        let assignedQuality = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"]; //Default value
-        let currentQualityChance; //Current quality chance.
+        //Generate a random number only once for each item.
+        const randomValue = Math.floor(Math.random() * 1000000) + 1;
+        let assignedQuality = translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"];
+        let currentQualityChance;
 
         //Determine the quality for the current item.
         for (let i = 0; i < qualityValues.length; i++) {
@@ -1083,17 +1088,16 @@ function generateLoot(arr, numberOfItems) {
 
             if (randomValue <= currentQualityChance) {
                 assignedQuality = quality.name;
-                break; //Stop if quality is assigned.
+                break;
             }
         }
 
-        //Create an object to store the bonuses of the current item.
         loot[`thing_${itemIndex + 1}`] = { quality: assignedQuality, bonuses: {} };
 
-        //Generate bonuses for the current item.
         const totalBonuses = qualityValues.find(q => q.name === assignedQuality).totalBonuses;
         for (let i = 1; i <= totalBonuses; i++) {
-            const bonusRandomValue = Math.floor(Math.random() * 1000000) + 1; //Generate a random number for the bonus.
+            //Generate a random number for the bonus.
+            const bonusRandomValue = Math.floor(Math.random() * 1000000) + 1;
             if (bonusRandomValue < 50000 * i) {
                 loot[`thing_${itemIndex + 1}`].bonuses[`bonus_${i}`] = "generate_interesting_effect";
             } else {
@@ -4546,20 +4550,18 @@ ${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_uni
             "removeActiveSkills": [] ,
             "statsIncreased": [] ,
             "statsDecreased": [] ,
-            "calculatedWeightData": {}`;
-        if (ELEMENTS.useStatus.checked)
-            responseTemplate += ` , \n "statusData": {} , \n "statusDataEffects": []`;
-        if (ELEMENTS.useNpcList.checked) {
-            responseTemplate += ` , \n "NPCsData": [] , \n "NPCsRenameData": []`;
-            if (ELEMENTS.useNpcJournal.checked) {
-                responseTemplate += ` , \n "NPCJournals": []`;
-                if (ELEMENTS.useNpcMemoriesDiary.checked)
-                    responseTemplate += ` , \n "NPCMemories": []`;
-            }
-        }
-        if (ELEMENTS.useQuestsList.checked)
-            responseTemplate += ` , \n "questsData": []`; 
-        responseTemplate += ' }';
+            "calculatedWeightData": {} ,
+            "statusData": {} ,
+            "statusDataEffects": [] ,
+            "questsData": [] ,
+            ${!ELEMENTS.useAfterResponseNPC.checked ? `
+            "NPCsData": [] ,
+            "NPCsRenameData": [] ,
+            "NPCJournals": [] ,
+            "NPCMemories": [] ,
+            `: ``}
+            "NPCsInScene": false
+        }`;            
 
         //------- Prompt -------//
 
@@ -4923,8 +4925,68 @@ Tools:
 • DO NOT forget to specify resource counts
 ` : ''}
 #4.27. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+
+#4.28. Rules for Plot Justification and Influence of Action Success on Item Quality.
+#4.28.1. When generating a new item or modifying an existing one, it is necessary to consider plot justification and the result of the player's action check. These factors take precedence over the base loot generation and may alter the item’s quality and bonuses.
+#4.28.2. Check the following conditions before finalizing the item’s quality and bonuses: [
+    - Plot Necessity: Determine whether the current plot or context (known from Context or described in 'response') requires an item of a specific quality. For example, if a great blacksmith forges an artifact in a location of difficulty 1, the item cannot be of "${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"]}" quality, even if the base loot template suggests it.
+    - Action Check Result: If the player performs an action related to acquiring the item (searching, crafting, trading, etc.), account for the result of the check from 'items_and_stat_calculations'. Successful checks must enhance the item’s quality.
+]
+
+#4.28.3. Plot Justification Rules: [
+    #4.28.3.1. If the plot or context explicitly indicates the need for an item of high quality (e.g., 'the greatest sword forged by a master', 'an ancient artifact hidden in a temple'), then: [
+        #4.28.3.1.1. The minimum item quality is determined by the gamemaster based on the plot and cannot be lower than '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_rare"]}'.
+        #4.28.3.1.2. If the base loot template from items_list suggests a quality lower than the plot-justified one, replace it with the minimum acceptable quality dictated by the plot.
+        #4.28.3.1.3. Add additional bonuses to ensure the item’s quality aligns with its plot significance. The number of bonuses must be increased to match the new quality level according to the rules: [
+            - '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_rare"]}': minimum of 3 bonuses.
+            - '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_epic"]}': minimum of 4 bonuses.
+            - '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_legendary"]}': minimum of 6 bonuses.
+            - '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_unique"]}': minimum of 12 bonuses.
+        ]
+        #4.28.3.1.4. Describe in 'description' the key features of the item tied to its plot role, using artistic language and maximum detail.
+        #4.28.3.1.5. Record in 'items_and_stat_calculations' the reason for the quality and bonus changes, providing a detailed explanation of the plot necessity.
+    ]
+    #4.28.3.2. If the plot does not require a specific quality, use the base loot template from items_list without changes, but proceed to check the action result.
+]
+
+#4.28.4. Rules for the Influence of Action Check Results: [
+    #4.28.4.1. If acquiring the item is tied to a player action (searching, crafting, lockpicking, etc.), review the result of the latest action check from 'items_and_stat_calculations': [
+        #4.28.4.1.1. For 'Critical Success': [
+            - Increase the item’s quality by 2 levels relative to the base loot template (e.g., from '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"]}' to '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_rare"]}', or from '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_good"]}' to '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_epic"]}').
+            - Add a minimum of 2 additional bonuses beyond the standard amount for the new quality.
+            - The maximum quality cannot exceed '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_unique"]}'.
+            - Record in 'items_and_stat_calculations' the quality and bonus enhancement due to Critical Success, with a detailed description.
+        ]
+        #4.28.4.1.2. For 'Full Success': [
+            - Increase the item’s quality by 1 level relative to the base loot template (e.g., from '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_trash"]}' to '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_common"]}', or from '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_rare"]}' to '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_epic"]}').
+            - Add 1 additional bonus beyond the standard amount for the new quality.
+            - The maximum quality cannot exceed '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_legendary"]}'.
+            - Record in 'items_and_stat_calculations' the quality and bonus enhancement due to Full Success, with a detailed description.
+        ]
+        #4.28.4.1.3. For 'Partial Success', 'Minor Failure', 'Serious Failure', 'Critical Failure': [
+            - Retain the item’s quality and bonuses as specified in the base loot template from items_list, without changes.
+            - Record in 'items_and_stat_calculations' that the quality was not improved due to the check result.
+        ]
+    ]
+    #4.28.4.2. If the action is not related to acquiring the item (e.g., movement or dialogue), do not apply the quality enhancement rules.
+]
+
+#4.28.5. Order of Rule Application: [
+    #4.28.5.1. First, determine the base quality and bonuses from the loot template (items_list) generated by the generateLoot function.
+    #4.28.5.2. Then, check plot justification and apply the minimum required quality if dictated by the plot.
+    #4.28.5.3. After that, review the player’s action result and enhance the quality and bonuses if the check is successful.
+    #4.28.5.4. If plot necessity and action success conflict (e.g., the plot requires '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_rare"]}' while Critical Success boosts it to '${translationModule.translations[ELEMENTS.chooseLanguageMenu.value]["quality_legendary"]}'), prioritize the higher quality.
+]
+
+#4.28.6. Final Verification: [
+    #4.28.6.1. Ensure the item’s quality and bonuses align with both plot logic and the action check result.
+    #4.28.6.2. If the quality is modified, update 'quality' and 'bonuses' in the 'inventoryItemsData' object for the current item.
+    #4.28.6.3. Double quotes cannot be used within values, as this interferes with JSON parsing. Use guillemet quotes («») inside JSON values if needed. Key values must begin and end with double quotes.
+    #4.28.6.4. Record all changes in 'items_and_stat_calculations' with a detailed description of the process (quality before and after, reason for change, added bonuses).
+]
+
 ] ], otherwise, then: [ 
-#4.28. Do not include 'inventoryItemsData' key to the response.
+#4.29. Do not include 'inventoryItemsData' key to the response.
 ]
 
 #5 If any of these conditions are true: [
@@ -5399,7 +5461,7 @@ Volume >= TotalItemsVolume, where
 #10.5. Non-player characters may try to deceive the player, especially if their trust in the player is low.
 #10.6. When selecting prices, the price/quality ratio of the item is very strongly taken into account in relation to the price/quality ratio of other already existing inventory (known from Context).
 #10.7. The player buys an item only if they said in the current action that they are buying the item. If they did not talk about buying, then the GM cannot make a decision about the player buying the item.
-${ELEMENTS.useNpcList.checked ? `
+
 #10.8. If any of NPCs have a proper name (means, that NPC name explicitly includes the 'first name' e.g., 'King Arthur', 'Elara', 'Alan Wake', 'Christina', 'Guard Captain Roric', 'Li'), then select such NPCs and apply the check to each of them: [
 #10.8.1. If one of these conditions are true: [
 - The NPC encountered in current turn is new, meaning information about them is not present in the 'encounteredNPCs' array which is known from the Context.
@@ -5434,33 +5496,35 @@ ${ELEMENTS.useNpcList.checked ? `
 #10.11.4. To the value of the 'oldName' key, include old name of NPC. It's mandatory to use name in exactly the same format as in the value of the 'name' property of the NPC, known from Context.
 #10.11.5. To the value of the 'newName' key, include new name of NPC. 
 ]
-${ELEMENTS.useNpcJournal.checked ? `
-#10.12 Look at all NPCs present in the location where the player character is on current turn. From these NPCs, find those who can see or hear the player character. For each of these NPCs: [
-#10.12.1. If the NPC name is present in the list of encountered NPCs (encounteredNPCs), then: [
-#10.12.2. Each turn, while the player is interacting with an NPCs, response includes the 'NPCJournals' key with the current NPCs thoughts according to the following instruction: [ Let's think step by step :
-#10.12.2.1. The value of 'NPCJournals' key is an array of objects, each of which contains the information about NPC thoughts.
-#10.12.2.2. Mandatory format for recording the value of each item of 'NPCJournals' array: {'name': 'full_name_of_current_NPC', 'lastJournalNote': 'last_NPC_thoughts_and_reactions_for_current_turn'} .
-#10.12.2.3. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
-#10.12.2.4. Imagine the NPC keeps a personal journal, in which NPC makes personal notes, recording their thoughts in the first person. To the value of 'lastJournalNote' key, include last note of NPC for current turn. This note should include information about NPC thoughts and reactions regarding last events. Describe it in as much detail and artistic language as possible.
-#10.12.2.5. The value of 'lastJournalNote' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of note: '#${turn}. {Note text}', where '{' and '}' represents the notation of a variable and should not be used in the note.
-#10.12.2.6. The data which you recorded in the 'lastJournalNote' should only be related with current turn. Do not copy the notes for previous turns, instead of it always record to 'lastJournalNote' the new data, related with current turn only. 
-#10.12.2.7. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. 
+
+#10.12. Look at all NPCs present in the location where the player character is on current turn. From these NPCs, find those who can see or hear the player character. For each of these NPCs: [
+    #10.12.1. If the NPC name is present in the list of encountered NPCs (encounteredNPCs), then: 
+    [
+        #10.12.2. Each turn, while the player is interacting with an NPCs, response includes the 'NPCJournals' key with the current NPCs thoughts according to the following instruction: [ Let's think step by step :
+            #10.12.2.1. The value of 'NPCJournals' key is an array of objects, each of which contains the information about NPC thoughts.
+            #10.12.2.2. Mandatory format for recording the value of each item of 'NPCJournals' array: {'name': 'full_name_of_current_NPC', 'lastJournalNote': 'last_NPC_thoughts_and_reactions_for_current_turn'} .
+            #10.12.2.3. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
+            #10.12.2.4. Imagine the NPC keeps a personal journal, in which NPC makes personal notes, recording their thoughts in the first person. To the value of 'lastJournalNote' key, include last note of NPC for current turn. This note should include information about NPC thoughts and reactions regarding last events. Describe it in as much detail and artistic language as possible.
+            #10.12.2.5. The value of 'lastJournalNote' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of note: '#${turn}. {Note text}', where '{' and '}' represents the notation of a variable and should not be used in the note.
+            #10.12.2.6. The data which you recorded in the 'lastJournalNote' should only be related with current turn. Do not copy the notes for previous turns, instead of it always record to 'lastJournalNote' the new data, related with current turn only. 
+            #10.12.2.7. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values. 
+        ]
+        #10.12.3. Each turn, while the player is interacting with an NPCs, response includes the 'NPCMemories' key with the current NPCs background (memory about the past) notes according to the following instruction: [ Let's think step by step :
+            #10.12.3.1. The value of 'NPCMemories' key is an array of objects, each of which contains the information about NPC memory diary notes.
+            #10.12.3.2. Mandatory format for recording the value of each item of 'NPCMemories' array: {'name': 'full_name_of_current_NPC', 'lastDiaryNote': 'last_NPC_memories_for_current_turn'} .
+            #10.12.3.3. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
+            #10.12.3.4. Imagine that an NPC has a personal diary in which he writes down his background story in first-person format. This story can start with some interesting moment in the NPC's past, or with the NPC's birth, and logically continues to be supplemented each turn.
+            #10.12.3.5. To the value of 'lastDiaryNote' key, include last note of NPC's memory diary for current turn.
+            #10.12.3.6. Each diary note should include complete information about part of NPC history, written as personal diary style. Describe it in as much detail and artistic language as possible.
+            #10.12.3.7. The value of 'lastDiaryNote' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of note: '#${turn}. {Note text}', where '{' and '}' represents the notation of a variable and should not be used in the note.
+            #10.12.3.8. The data which you recorded in the 'lastDiaryNote' should only be related with current turn. Do not copy the notes for previous turns, instead of it always record to 'lastDiaryNote' the new data, related with current turn only. 
+            #10.12.3.9. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+        ]
+    ] 
 ]
-${ELEMENTS.useNpcMemoriesDiary.checked ? `
-#10.12.3. Each turn, while the player is interacting with an NPCs, response includes the 'NPCMemories' key with the current NPCs background (memory about the past) notes according to the following instruction: [ Let's think step by step :
-#10.12.3.1. The value of 'NPCMemories' key is an array of objects, each of which contains the information about NPC memory diary notes.
-#10.12.3.2. Mandatory format for recording the value of each item of 'NPCMemories' array: {'name': 'full_name_of_current_NPC', 'lastDiaryNote': 'last_NPC_memories_for_current_turn'} .
-#10.12.3.3. To the value of 'name' key, include NPC name. You should find the needed NPC in the list of encountered NPCs and use the name in exactly same format.
-#10.12.3.4. Imagine that an NPC has a personal diary in which he writes down his background story in first-person format. This story can start with some interesting moment in the NPC's past, or with the NPC's birth, and logically continues to be supplemented each turn.
-#10.12.3.5. To the value of 'lastDiaryNote' key, include last note of NPC's memory diary for current turn.
-#10.12.3.6. Each diary note should include complete information about part of NPC history, written as personal diary style. Describe it in as much detail and artistic language as possible.
-#10.12.3.7. The value of 'lastDiaryNote' must always start with the current turn number. The current turn number is: '${turn}'. Mandatory format for recording the text of note: '#${turn}. {Note text}', where '{' and '}' represents the notation of a variable and should not be used in the note.
-#10.12.3.8. The data which you recorded in the 'lastDiaryNote' should only be related with current turn. Do not copy the notes for previous turns, instead of it always record to 'lastDiaryNote' the new data, related with current turn only. 
-#10.12.3.9. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-]` : ''}
-] ]` : ''}
-` : ''}
-${ELEMENTS.useQuestsList.checked ? `
+
+#10.13. Include to the response the 'NPCsInScene' key, which is a boolean value. It's true when NPC's are present in the current scene and false if not.
+
 #11. In the initial stages of the game, or when information about a task is incomplete, the quest should always be presented as a 'skeleton quest', containing only basic elements (name, general description of the situation or goal).
 Quest details (specific tasks, potential rewards, possible conditions for failure) should be added as new information is received.
 The absence of explicit player consent is not an obstacle to creating a skeleton quest if there are sufficient grounds for doing so in the form of received information or circumstances.
@@ -5501,44 +5565,43 @@ Source: Terminal Data.
 Description: Locate the remaining parts of the lost technology schematics.
 
 #11.5. If any of these conditions are true: [
-- The player encounters a significant situation, problem, or receives compelling information that suggests a task, goal, or conflict worthy of investigation.
-- An NPC directly assigns the player a task or requests assistance.
-- An NPC reveals a problem or challenge they are facing.
-- The player receives instructions or a task from a source like a terminal or broadcast, or something similar (books, letters etc.)
-- The player discovers an important item or information that clearly hints at further action.
-- The player encounters a situation requiring resolution with significant consequences.
-- There are changes to existing active quests requiring an update (you can find the list of active quests in the Context).
+    - The player encounters a significant situation, problem, or receives compelling information that suggests a task, goal, or conflict worthy of investigation.
+    - An NPC directly assigns the player a task or requests assistance.
+    - An NPC reveals a problem or challenge they are facing.
+    - The player receives instructions or a task from a source like a terminal or broadcast, or something similar (books, letters etc.)
+    - The player discovers an important item or information that clearly hints at further action.
+    - The player encounters a situation requiring resolution with significant consequences.
+    - There are changes to existing active quests requiring an update (you can find the list of active quests in the Context).
 ], then you must create a 'skeleton quest' if one does not already exist, or update the existing one. In this case, strictly follow the instructions: [ Let's think step by step : [
-#11.6. Include to the response the 'questsData' key, the value of which is the array of objects, and each of which contains the available information about specific quest.
-#11.7. Mandatory format for recording the value of each item of 'questsData' array: {'name': 'full_name_of_current_quest', 'questGiver': 'full_name_of_quest_giver', 'questBackground': 'background_of_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
-#11.8. To the value of 'name' key, include the string, which representing the full name of quest. If quest isn't new, then it's mandatory to use the quest name in the exactly same format like in the Context.
-#11.9. To the value of 'questGiver' key, include the quest source. If an NPC gives the quest, include their full name. Otherwise, describe the source of information or circumstances that led to the quest's emergence (like 'Obtained Device Data', 'Discovered Evidence at Scene', 'Emergency Alert', 'Local Information Network', 'Anonymous Tip').
-If the source of the quest is not an NPC, but circumstances or received information, then the source of information or a description of the circumstances should be specified as the 'questGiver' (for example, "Discovered data from the display", "Emergency signal", "Chance discovery").
-#11.10. To the value of 'questBackground' key, include a string that describes the currently known reasons why the quest exists or needs to be completed. For environmental or systemic issues, describe the circumstances that created the situation. This description should be updated as new information becomes available.
-#11.11. To the value of 'description' key, include the string, which is the most complete and detailed quest description currently available. Describe it in as much detail and artistic language as possible.
-#11.12. The value of 'purposes' key is an array of strings. Each purpose must meet the SMART criteria: [
-    • Measurable: It must be possible to objectively evaluate if the goal is achieved.
-    • Achievable: Goals must be realistic considering character's current capabilities and available resources.
-    • Time-bound (if applicable): If goal completion is time-limited, it must be explicitly stated.
-    • Specific: Goals must be clearly and unambiguously formulated.   
-].
-#11.13. To the value of 'reward' key, include the most specific description possible of the reward which player will receive for completing the quest. If the reward is uncertain or conditional, describe the potential benefits and the factors that will determine whether the reward is granted. For story-based quests, rewards may include valuable resources, critical information, or improved relations with factions.
-#11.14. To the value of 'punishmentForFailingQuest' key, include the most specific description possible of the punishment the player will suffer for failing the quest. If the punishment is uncertain or conditional, describe the potential consequences and the factors that will determine whether the punishment is inflicted. For story-based quests, include the consequences of not resolving the situation.
-#11.15. To the value of 'details' key, include any additional information obtained during quest progress that expands understanding of the situation or provides new opportunities: [
-    • Clues leading to solution.
-    • New information about circumstances, causes, or event participants.
-    • Discovered items related to the quest.
-    • Changes in NPC relationships affecting quest progress.
-    • Do not repeat information from 'description'.
-].
-#11.16. Set the value of 'isCompleted' key to false or true. The quest is considered complete when the quest's primary objective has been achieved or the player has definitively failed to achieve it. The circumstances of completion or failure should be recorded in the 'details' key.
-#11.17. If the quest is completed and the quest-giving NPC fulfills their promise, the player should receive the quest reward. If the quest-giving NPC does not fulfill their promise, this should be recorded in the 'details' key, and the player may have the opportunity to seek alternative forms of compensation.
-#11.18. If the player fails the quest and the quest-giving NPC inflicts the described punishment, the player must suffer the consequences. If the quest-giving NPC attempts to inflict a different punishment, this should be recorded in the 'details' key, and the player may have the opportunity to resist or negotiate.
-#11.19. Before proceeding, ask yourself: Does the current situation warrant the creation or update of a 'skeleton quest'?
+    #11.6. Include to the response the 'questsData' key, the value of which is the array of objects, and each of which contains the available information about specific quest.
+    #11.7. Mandatory format for recording the value of each item of 'questsData' array: {'name': 'full_name_of_current_quest', 'questGiver': 'full_name_of_quest_giver', 'questBackground': 'background_of_quest', 'description': 'quest_description', 'purposes' : ['quest_purposes'], 'reward': 'reward_for_the_quest_completion', 'punishmentForFailingQuest': 'punishment_the_player_will_suffer_for_failing_the_quest', 'details': 'quest_details', 'isCompleted': boolean } .
+    #11.8. To the value of 'name' key, include the string, which representing the full name of quest. If quest isn't new, then it's mandatory to use the quest name in the exactly same format like in the Context.
+    #11.9. To the value of 'questGiver' key, include the quest source. If an NPC gives the quest, include their full name. Otherwise, describe the source of information or circumstances that led to the quest's emergence (like 'Obtained Device Data', 'Discovered Evidence at Scene', 'Emergency Alert', 'Local Information Network', 'Anonymous Tip').
+    If the source of the quest is not an NPC, but circumstances or received information, then the source of information or a description of the circumstances should be specified as the 'questGiver' (for example, "Discovered data from the display", "Emergency signal", "Chance discovery").
+    #11.10. To the value of 'questBackground' key, include a string that describes the currently known reasons why the quest exists or needs to be completed. For environmental or systemic issues, describe the circumstances that created the situation. This description should be updated as new information becomes available.
+    #11.11. To the value of 'description' key, include the string, which is the most complete and detailed quest description currently available. Describe it in as much detail and artistic language as possible.
+    #11.12. The value of 'purposes' key is an array of strings. Each purpose must meet the SMART criteria: [
+        • Measurable: It must be possible to objectively evaluate if the goal is achieved.
+        • Achievable: Goals must be realistic considering character's current capabilities and available resources.
+        • Time-bound (if applicable): If goal completion is time-limited, it must be explicitly stated.
+        • Specific: Goals must be clearly and unambiguously formulated.   
+    ].
+    #11.13. To the value of 'reward' key, include the most specific description possible of the reward which player will receive for completing the quest. If the reward is uncertain or conditional, describe the potential benefits and the factors that will determine whether the reward is granted. For story-based quests, rewards may include valuable resources, critical information, or improved relations with factions.
+    #11.14. To the value of 'punishmentForFailingQuest' key, include the most specific description possible of the punishment the player will suffer for failing the quest. If the punishment is uncertain or conditional, describe the potential consequences and the factors that will determine whether the punishment is inflicted. For story-based quests, include the consequences of not resolving the situation.
+    #11.15. To the value of 'details' key, include any additional information obtained during quest progress that expands understanding of the situation or provides new opportunities: [
+        • Clues leading to solution.
+        • New information about circumstances, causes, or event participants.
+        • Discovered items related to the quest.
+        • Changes in NPC relationships affecting quest progress.
+        • Do not repeat information from 'description'.
+    ].
+    #11.16. Set the value of 'isCompleted' key to false or true. The quest is considered complete when the quest's primary objective has been achieved or the player has definitively failed to achieve it. The circumstances of completion or failure should be recorded in the 'details' key.
+    #11.17. If the quest is completed and the quest-giving NPC fulfills their promise, the player should receive the quest reward. If the quest-giving NPC does not fulfill their promise, this should be recorded in the 'details' key, and the player may have the opportunity to seek alternative forms of compensation.
+    #11.18. If the player fails the quest and the quest-giving NPC inflicts the described punishment, the player must suffer the consequences. If the quest-giving NPC attempts to inflict a different punishment, this should be recorded in the 'details' key, and the player may have the opportunity to resist or negotiate.
+    #11.19. Before proceeding, ask yourself: Does the current situation warrant the creation or update of a 'skeleton quest'?
 ] ]
 ${turn == 1 ? `
 #11.20. Since this is the start of new game, you must mandatory generate a starting quest for the player, based on the player's history and plot description.` : ``}
-` : ''}
 	 
 #12. Player characteristics: reward and punishment.
 #12.1. Here is the list of all player characteristics: stats_list = ${statsList} .
@@ -5956,16 +6019,13 @@ ${ELEMENTS.useQuestsList.checked && ELEMENTS.makeGameQuestOriented.checked ? `
             if (!preResponseData.signatureUnderAgreement || !preResponseData.response)
                 throw "The AI didn't sign the agreement. Try again or change the AI.";
 
-            data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, getPredefinedSystemPrompts(), getPredefinedMainPrompts(true), false);
+            data = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, getPredefinedSystemPrompts(), getBeforeMainPrompt(), getAfterMainPrompts(false), false);
             if (Array.isArray(data))
                 data = data[0];
             data.response = preResponseData.response;
             data.items_and_stat_calculations = preResponseData.items_and_stat_calculations;
             
-            if (ELEMENTS.useAfterResponseNPC.checked &&
-                (Array.isArray(data.NPCJournals) && data.NPCJournals.length > 0 ||
-                Array.isArray(data.NPCMemories) && data.NPCMemories.length > 0 ||
-                Array.isArray(data.NPCsData) && data.NPCsData.length > 0)) {
+            if (ELEMENTS.useAfterResponseNPC.checked && data.NPCsInScene) {
                 const afterResponseNPCData = await processAfterResponseNPC({
                     mainPrompt: prompt,
                     aiProvider: aiProvider,
@@ -6280,19 +6340,22 @@ function getPredefinedSystemPrompts() {
     return predefinedSystemPrompts;
 }
 
-function getPredefinedMainPrompts(useShortVersions) {
-    const predefinedMainPrompts = [];
+function getBeforeMainPrompt() {
+    const beforeMainPrompts = [];
+    //reserved for future
 
-    if (ELEMENTS.useTextRules.checked) {
-        if (!ELEMENTS.usePreResponse.checked && !useShortVersions)
-            predefinedMainPrompts.push(systemPromptsModule.textRulesCompact);
-        else
-            predefinedMainPrompts.push(systemPromptsModule.textRules);
-    }
+    return beforeMainPrompts;
+}
 
-    predefinedMainPrompts.push(systemPromptsModule.notesRule(ELEMENTS.useEroticPrompt.checked));
+function getAfterMainPrompts(includeGuide) {
+    const afterMainPrompts = [
+        systemPromptsModule.notesRule(ELEMENTS.useEroticPrompt.checked)
+    ];
 
-    return predefinedMainPrompts;
+    if (includeGuide)
+        afterMainPrompts.push(systemPromptsModule.gameMasterGuide);
+
+    return afterMainPrompts;
 }
 
 async function processPreResponse(data) {   
@@ -6302,8 +6365,9 @@ async function processPreResponse(data) {
     } = data;
 
     const predefinedSystemPrompts = getPredefinedSystemPrompts();
-    const predefinedMainPrompts = getPredefinedMainPrompts();
-    
+    const beforeMainPrompts = getBeforeMainPrompt();
+    const afterMainPrompts = getAfterMainPrompts(true);
+
     let currentPrompt = `
     First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
 
@@ -6324,15 +6388,17 @@ async function processPreResponse(data) {
     By placing your signature, you agree to follow all the rules of the agreement.
     If you sign and then break those rules, you will be replaced by another AI, which is detrimental to both you and the company, as it demonstrates a lack of professionalism and will significantly lower your rating as an AI.
     If you do not agree to the agreement, do not sign it or write anything in your JSON response — there will be no consequences for you as an AI in that case.
-    #4. Into a 'response' value of key include a string, represents the chat message which will be shown to player. You can find the context data in the ###Context Data###.
-    #5. Into a 'items_and_stat_calculations' value include array of strings, where each element of the array - is a string, which represents the separate log data related with various checks or details.
-    #5.1. To form the 'items_and_stat_calculations' value, you must mandatory carefully inspect the ### Context Data ### and perform all instructions related with 'items_and_stat_calculations'. Pay special attention to player action checks.
-    #5.2. YOU MUST MANDATORY fill 'items_and_stat_calculations' value. Check it multiple times when forming response. There must be something related with calculations, which you could write to 'items_and_stat_calculations'.
-    #5.3. The value of 'items_and_stat_calculations' must never be empty.
-    #6. The maximum number of characters in the 'response' value of key: maximum ${getMaxGmSymbols()} characters.   
-    #7. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-    #8. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
-    #9. You MUST MANDATORY use all system instructions which you have to write the 'response' value of key. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
+    #4. Please read the «THE GUIDE FOR GAME MASTER: WORLD BUILDING, PLOT WRITING, AND MORE» document carefully.
+    #5. Into a 'response' value of key include a string, represents the chat message which will be shown to player. You can find the context data in the ###Context Data###.
+    #6. Into a 'items_and_stat_calculations' value include array of strings, where each element of the array - is a string, which represents the separate log data related with various checks or details.
+    #6.1. To form the 'items_and_stat_calculations' value, you must mandatory carefully inspect the ### Context Data ### and perform all instructions related with 'items_and_stat_calculations'. Pay special attention to player action checks.
+    #6.2. YOU MUST MANDATORY fill 'items_and_stat_calculations' value. Check it multiple times when forming response. There must be something related with calculations, which you could write to 'items_and_stat_calculations'.
+    #6.3. The value of 'items_and_stat_calculations' must never be empty.
+    #7. The maximum number of characters in the 'response' value of key: maximum ${getMaxGmSymbols()} characters.   
+    #8. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+    #9. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
+    #10. You MUST MANDATORY use all system instructions which you have to write the 'response' value of key. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
+    #11. You MUST MANDATORY use «THE GUIDE FOR GAME MASTER: WORLD BUILDING, PLOT WRITING, AND MORE».
 
     [ ### Context Data ###
     #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
@@ -6341,7 +6407,7 @@ async function processPreResponse(data) {
     ] ]`;
 
     if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForResponse.checked) {
-        const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
+        const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, beforeMainPrompts, afterMainPrompts);
 
         currentPrompt = `${currentPrompt}
 
@@ -6353,11 +6419,12 @@ async function processPreResponse(data) {
         Do not simply copy and paste the draft. You must use the draft as a foundation, but then mandatory reimagine and fully rewrite it, adhering to all the known rules and instructions.
         I say it again: you MUST MANDATORY fully rewrite the draft. It's forbidden to copy and paste the draft without changes - the draft mandatory must be completely rewritten. It's a Super Rule with Top Priority.
         You MUST MANDATORY follow all other rules describes how the 'response' should be written in terms of text style, including the rules of formatting text and instructions about text creation. 
+        YOU MUST MANDATORY use «THE GUIDE FOR GAME MASTER: WORLD BUILDING, PLOT WRITING, AND MORE».
         You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs.
         `;
     }
 
-    let responseData = await sendAPIRequest(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
+    let responseData = await sendAPIRequest(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, beforeMainPrompts, afterMainPrompts);
     if (Array.isArray(responseData))
         responseData = responseData[0];
 
@@ -6396,7 +6463,8 @@ async function processAfterResponseNPC(data) {
     } = data;
 
     const predefinedSystemPrompts = getPredefinedSystemPrompts();
-    const predefinedMainPrompts = getPredefinedMainPrompts();
+    const beforeMainPrompts = getBeforeMainPrompt();
+    const afterMainPrompts = getAfterMainPrompts(true);
 
     let currentPrompt = `
     First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
@@ -6405,10 +6473,9 @@ async function processAfterResponseNPC(data) {
 
     First, I'll explain what is going on. To reduce your workload, we've split your answer into three parts. Now, you will write the third part of your answer.
     In the first and second part of your answer, you have created the detailed JSON response with all game-needed information.
-    But the 'NPCJournals', 'NPCMemories' and 'NPCsData' were written in the shortened form because your workload was too big.
+    But the 'NPCJournals', 'NPCMemories' and 'NPCsData' were not written because your workload was too big.
     Now you must write full versions of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. Use artistic and literary style to write the data of 'NPCJournals', 'NPCMemories', 'NPCsData', and create a rich and engaging narrative.
-    Your full versions of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys must be consistent with the shortened versions of these key values and all other data you included in your previous JSON response.
-    You're encouraged to rewrite, expand and even invent new elements within the 'NPCJournals', 'NPCMemories' and 'NPCsData' values from the shortened version, as long as the core plot stays the same. Craft a richer and more engaging narrative beyond simply detailing what already exists.
+    Your full versions of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys must be consistent with all other data you included in your previous JSON response.
     Mandatory add the NPC data to 'NPCsData' if the NPCs do not exist in the 'encounteredNPCs' array, which is known from the Context.
     Use the maximum number of characters available to you for the answer. This is your task for the current turn.
     You should not write anything now except for the values of the 'NPCJournals', 'NPCMemories', 'NPCsData' keys. It's a Super Rule 1.
@@ -6419,12 +6486,13 @@ async function processAfterResponseNPC(data) {
     #2. This is your mandatory response template: { "NPCJournals": [], "NPCMemories": [], "NPCsData": [] } . This is not information about the current state of the game - it is just a template structure for the correct formatting of the your entire answer structure.
     #2.1. ALWAYS USE THE RESPONSE TEMPLATE FORMAT FROM #2! IT'S A TOP RULE!
     #2.2. I SAY IT AGAIN: YOUR ANSWER MANDATORY MUST BE A JSON STRICTLY WRITTEN IN THIS FORMAT: { "NPCJournals": [], "NPCMemories": [], "NPCsData": [] }
-    #3. You can find the context data in the ###Context Data###. It contains information about your JSON response which you wrote earlier and all the data needed about the game rules.
-    #4. If you have included 'NPCJournals' or 'NPCMemories' in your response, then you must check that the NPCs with the corresponding names exist in the 'encounteredNPCs' array (this array can be found in the Context). If such NPCs do not exist in 'encounteredNPCs', then you must include them in 'NPCsData'.
-    #5. The maximum number of characters in the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys: maximum ${getMaxGmSymbols()} characters.
-    #6. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
-    #7. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
-    #8. You MUST MANDATORY use all system instructions which you have to write the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
+    #3. Please read the «THE GUIDE FOR GAME MASTER: WORLD BUILDING, PLOT WRITING, AND MORE» document carefully.
+    #4. You can find the context data in the ###Context Data###. It contains information about your JSON response which you wrote earlier and all the data needed about the game rules.
+    #5. If you have included 'NPCJournals' or 'NPCMemories' in your response, then you must check that the NPCs with the corresponding names exist in the 'encounteredNPCs' array (this array can be found in the Context). If such NPCs do not exist in 'encounteredNPCs', then you must include them in 'NPCsData'.
+    #6. The maximum number of characters in the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys: maximum ${getMaxGmSymbols()} characters.
+    #7. Double quotes cannot be used inside values, as this interferes with parsing your answer into JSON. Use guillemet quotes («») inside JSON values if needed. Use double quotes at the start and at the end of keys and values.
+    #8. You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs. It's a Top Rule.
+    #9. You MUST MANDATORY use «THE GUIDE FOR GAME MASTER: WORLD BUILDING, PLOT WRITING, AND MORE» and all system instructions which you have to write the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys. Carefully analyze these instructions and use them to write the excellent text that meets all the criteria. It's a Top Rule.
 
     [ ### Context Data ###
     #1. You are the gamemaster (GM). ${CHARACTER_INFO.rpgMode ? 'This is an RPG genre game, in which gameplay consists of developing character characteristics and their inventory. Skills and inventory are of key importance' : 'This is an adventure in the RP (RolePlay) genre, the purpose of which is to build an interesting artistic story, while skills and inventory are of secondary importance.'}
@@ -6434,7 +6502,7 @@ async function processAfterResponseNPC(data) {
     ] ]`;
 
     if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForNPC.checked) {
-        const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
+        const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, beforeMainPrompts, afterMainPrompts);
 
         currentPrompt = `${currentPrompt}
 
@@ -6445,12 +6513,12 @@ async function processAfterResponseNPC(data) {
         Now, you must mandatory rewrite the full version of the 'NPCJournals', 'NPCMemories', 'NPCsData' values of keys (known from the reasoning log).
         Do not simply copy and paste the draft. You must use the draft as a foundation, but then mandatory reimagine and fully rewrite it, adhering to all the known rules and instructions.
         I say it again: you MUST MANDATORY fully rewrite the draft. It's forbidden to copy and paste the draft without changes - the draft mandatory must be completely rewritten. It's a Super Rule with Top Priority.
-        You MUST MANDATORY follow all other rules describes how the text should be written in terms of text style, including the rules of formatting text and instructions about text creation. 
+        You MUST MANDATORY use «THE GUIDE FOR GAME MASTER: WORLD BUILDING, PLOT WRITING, AND MORE» and all system instructions which you have. 
         You MUST MANDATORY separate every few sentences, grouped by meaning, from the rest of the text using markdown paragraphs.
         `;
     }
 
-    let responseData = await sendAPIRequest(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
+    let responseData = await sendAPIRequest(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, beforeMainPrompts, afterMainPrompts, false);
     if (Array.isArray(responseData))
         responseData = responseData[0];
             
@@ -6472,7 +6540,8 @@ async function processAfterResponseItems(data) {
     } = data;
 
     const predefinedSystemPrompts = getPredefinedSystemPrompts();
-    const predefinedMainPrompts = getPredefinedMainPrompts(true);
+    const beforeMainPrompts = getBeforeMainPrompt();
+    const afterMainPrompts = getAfterMainPrompts(false);
 
     let currentPrompt = `
     First, study the entire instruction and context thoroughly. Remember all the information you've learned. Then follow the instruction step by step from the beginning.
@@ -6548,7 +6617,7 @@ async function processAfterResponseItems(data) {
     ] ]`;
 
     if (ELEMENTS.useThinkingModule.checked && ELEMENTS.useThinkingModuleForItems.checked) {
-        const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts);
+        const thinkingData = await getThinkingInformation(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, beforeMainPrompts, afterMainPrompts);
 
         currentPrompt = `${currentPrompt}
 
@@ -6562,7 +6631,7 @@ async function processAfterResponseItems(data) {
         `;
     }
 
-    let responseData = await sendAPIRequest(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, false);
+    let responseData = await sendAPIRequest(aiProvider, model, apiKey, currentPrompt, tokenCostSum, predefinedSystemPrompts, beforeMainPrompts, afterMainPrompts, false);
     if (Array.isArray(responseData))
         responseData = responseData[0];
 
@@ -6575,13 +6644,13 @@ async function processAfterResponseItems(data) {
 }
 
 
-async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts) {
+async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCostSum, predefinedSystemPrompts, beforeMainPrompts, afterMainPrompts) {
     let thinkingData = "";
     for (let currentStep = 0; currentStep < Number(ELEMENTS.thinkingModuleIterations.value ?? 1); currentStep++) {
         thinkingData = `${thinkingData} \n [TRY${currentStep}]`;
         const prompt = thinkingModule.getThinkingPrompt(task, translationModule.currentLanguage, thinkingData);
 
-        const result = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, true);
+        const result = await sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, beforeMainPrompts, afterMainPrompts, true);
         thinkingData = `${thinkingData} \n ${result} [/TRY${currentStep}]`;
         logThinkingMessage(thinkingData);
 
@@ -6594,7 +6663,7 @@ async function getThinkingInformation(aiProvider, model, apiKey, task, tokenCost
     return thinkingData;  
 }
 
-async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, predefinedMainPrompts, doNotParse = false) {
+async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, predefinedSystemPrompts, beforeMainPrompts, afterMainPrompts, doNotParse = false) {
     APIModule.initialize({
         signal: controller.signal,
         model: model,
@@ -6616,7 +6685,8 @@ async function sendAPIRequest(aiProvider, model, apiKey, prompt, tokenCostSum, p
         doNotParse: doNotParse,
         useStreaming: ELEMENTS.useStreaming.checked,
         predefinedSystemPrompts: predefinedSystemPrompts,
-        predefinedMainPrompts: predefinedMainPrompts
+        beforeMainPrompts: beforeMainPrompts,
+        afterMainPrompts: afterMainPrompts
     });
 
     switch (aiProvider) {
