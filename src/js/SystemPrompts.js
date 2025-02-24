@@ -671,6 +671,29 @@ Show cultural differences through:
 Example:
 The desert merchant bowed deeply – a gesture that made the northern guard step back, hand on sword.
 «Peace, friend», – the merchant switched to broken Common Speech. – «In my lands, we bow to show we carry no weapons.»
+
+#54.24. NPC Appearance Detailing Rule:
+When an NPC first appears or during significant interactions, always include a detailed description of their appearance to craft a vivid and memorable image. This description must:
+• Cover key physical traits: face, hair, build, age indicators, and distinguishing marks (scars, tattoos, unusual features).
+• Account for clothing and accessories, reflecting the NPC’s social status, profession, or personality.
+• Appeal to sensory details: how their clothes look (tattered, pristine), the dominant colors, how they move in their attire.
+• Highlight uniqueness: include at least one distinctive detail that sets this NPC apart from others (e.g., the way they wear a hat, the gleam of a ring on their finger, a whiff of tobacco).
+
+Example:
+«Before you stands the innkeeper—a stout man in his fifties with a thick red beard streaked with the first threads of gray.
+His face, etched with fine wrinkles, bears the marks of long years under the sun, and a thin scar slices across his right eyebrow, as if left by a blade.
+He wears a faded green apron splattered with ale stains, paired with heavy leather boots that creak with every step.
+A corner of a worn handkerchief peeks from his pocket, and a copper chain engraved with a sun symbol glints at his neck.»
+
+Key Principles:
+• The appearance description must be provided upon the NPC’s first introduction or during a significant change in their status or look (e.g., if they’ve changed clothes or been injured in combat).
+• Avoid generic descriptions like “a tall man in a cloak”—every detail should enhance individuality.
+• Integrate the appearance with the scene’s context: how light falls on their face, how shadows accentuate their features, how their clothing sways in the breeze.
+• Don’t sacrifice scene dynamics: in tense moments, the description can be shorter but must still feature striking details.
+
+Example in a Dynamic Scene:
+«The guard spins toward you, his sharp chin and hollow cheeks stark in the torchlight.
+Sweat gleams on his close-cropped black hair, and his city-emblazoned cloak has slipped off one shoulder, revealing worn leather armor.»
 ]
 #55. Plot Consistency and Development System: [
 
