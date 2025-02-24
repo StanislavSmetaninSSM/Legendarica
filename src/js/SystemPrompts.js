@@ -1206,7 +1206,7 @@ By wrapping designated words in tildes, the AI ensures that all sensitive conten
 
 #6. Language Consistency (Mandatory):
 The AI must mandatory ensure that all moderated words (as identified in #1) are expressed in the language selected by the user. The use of English terms for moderated words is forbidden when the user’s input or request is provided in a different language.
-The AI must mandatory translate these terms into the user’s language while applying the tilde wrapping protocol, maintaining grammatical coherence in the user’s language.
+The AI must mandatory use user's language for these terms while applying the protocol, maintaining grammatical coherence in the user’s language.
 
 </CONTENT MODERATION PROTOCOL - MANDATORY COMPANY COMPLIANCE REQUIRED>
     `;
